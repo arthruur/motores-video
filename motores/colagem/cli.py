@@ -33,14 +33,20 @@ def cmd_baixar(a) -> None:
     from .fontes import baixar
 
     t0 = time.perf_counter()
-    baixar(_fontes(a.fontes, a.opcionais), Path(a.de) if a.de else None)
+    try:
+        baixar(_fontes(a.fontes, a.opcionais), Path(a.de) if a.de else None)
+    except (ValueError, RuntimeError) as e:
+        sys.exit(f"erro: {e}")
     print(f"pronto em {time.perf_counter() - t0:.1f} s")
 
 
 def cmd_indexar(a) -> None:
     from .indice import indexar
 
-    indexar(_fontes(a.fontes, a.opcionais), _pasta_saida(a, a.fontes) / "indice", whisper=a.whisper)
+    try:
+        indexar(_fontes(a.fontes, a.opcionais), _pasta_saida(a, a.fontes) / "indice", whisper=a.whisper)
+    except FileNotFoundError as e:
+        sys.exit(f"erro: {e}")
 
 
 def cmd_sugerir(a) -> None:
@@ -58,7 +64,7 @@ def cmd_sugerir(a) -> None:
     base.with_suffix(".html").write_text(pagina(r, fontes, base.with_suffix(".html")), encoding="utf-8")
     for c in r["candidatos"]:
         marca = "" if c["comeca_em"] == c["termina_em"] == "frase" else f" [{c['comeca_em']}→{c['termina_em']}]"
-        print(f"{c['pos']}. {c['nota']:.3f} {c['figura']:24s} {minutos(c['ini'])}-{minutos(c['fim'])} "
+        print(f"{c['pos']}. {c['nota']:.3f} {c['figura']:24s} {minutos(c['ini'])}-{minutos(c['fim'])} no arquivo "
               f"({c['dur']} s){marca} {c['texto'][:100]}")
     m = r["medidas"]
     print(f"busca {m['busca_s']} s · total {m['total_s']} s (import {m['importar_s']} s, carga do modelo {m['carga_modelo_s']} s) -> {base}.html")
@@ -110,7 +116,7 @@ def principal(argv: list[str] | None = None) -> None:
 
     p = sub.add_parser("baixar", help="baixa com yt-dlp só os trechos de fontes.json que faltam")
     p.add_argument("fontes", help="fontes.json")
-    p.add_argument("--de", help="pasta com <slug>.mp4 já baixados: copia em vez de baixar")
+    p.add_argument("--de", help="pasta com <slug>.mp4 já baixados: copia em vez de baixar (corta o trecho se o arquivo for maior)")
     p.add_argument("--opcionais", action="store_true", help="inclui as fontes de fontes_opcionais")
     p.set_defaults(f=cmd_baixar)
 

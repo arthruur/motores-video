@@ -149,6 +149,7 @@ Medidos num notebook Ryzen 7 5700U (8 núcleos / 16 threads, sem GPU dedicada), 
 | `exemplos/karaoke-discurso` (23 s): download do trecho de 30 s / alinhar → MP4 | 21,6 s / 31,2 s (17,5 s com o alinhamento em cache); 38 de 39 palavras com tempo exato |
 | `exemplos/colagem-democracia`: download dos 4 trechos (32 MB) / `montar` (66 s de vídeo) | 62,3 s / 64,4–147,3 s; −14,1 LUFS, pico −1,4 dBTP |
 | Colagem: `indexar` de 7 falas sem cache (Whisper + EmbeddingGemma 2) | 403,6 s, quase tudo transcrição |
+| Colagem: `indexar` / `sugerir` das 4 falas do exemplo (transcrição pronta em `palavras/`) | 32,7 s / 22,8 s (a busca em si: 0,26 s) |
 
 Detalhes e o que ficou de fora em [docs/render.md](docs/render.md), [docs/voz.md](docs/voz.md), [docs/legenda.md](docs/legenda.md) e no [README da colagem](motores/colagem/README.md).
 

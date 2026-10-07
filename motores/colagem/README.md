@@ -13,13 +13,13 @@ python -m motores.colagem.cli folha   saida/colagem-democracia/colagem-o-que-e-d
 python -m motores.colagem.cli <subcomando> --help
 ```
 
-A saída vai para `saida/<nome da pasta do JSON>/` (mude com `--saida`).
+A saída vai para `saida/<nome da pasta do JSON>/` (mude com `--saida`). O `montar` deixa os intermediários (cartões e fragmentos já renderizados, ~36 MB no exemplo) em `tmp-<tema>/`; pode apagar.
 
 ## O que cada passo faz
 
 | Passo | Arquivo | O que faz | Reusa |
 |---|---|---|---|
-| baixar | `fontes.py` | yt-dlp baixa só `trecho.ini`–`trecho.fim` de cada fonte para `arquivo` (padrão `entrada/<slug>.mp4`). `--de PASTA` copia `<slug>.mp4` já baixados | — |
+| baixar | `fontes.py` | yt-dlp baixa só `trecho.ini`–`trecho.fim` de cada fonte para `arquivo` (padrão `entrada/<slug>.mp4`). `--de PASTA` copia `<slug>.mp4` já baixados; se o arquivo for maior que o trecho, corta com o ffmpeg (onde ele começa no original vem do `fontes.json` de `PASTA` ou da pasta acima; sem ele, conta como vídeo inteiro) | — |
 | indexar | `indice.py` | Palavras com tempo pelo Whisper (VAD; repete sem VAD se sair pouca palavra), ou lidas de `palavras` se a fonte já trouxer. Janelas de 15 s com passo de 5 s. As `frases` conhecidas são achadas na transcrição pelo texto e entram junto da janela (corrigem o ouvido do Whisper sem mexer no modelo). Cada janela vira um vetor do EmbeddingGemma 2 (prefixo `Document`). Cache por fonte | `motores/voz` (Whisper) |
 | sugerir | `sugerir.py` | O tema vira vetor (prefixo `SearchQuery`); MMR entre relevância e diversidade, no máximo 2 por fonte, sem janelas sobrepostas; cada candidato é levado à fronteira de frase. Grava `candidatos-<tema>.json` e uma página `.html` com player em cada trecho | `frases.py` |
 | montar | `montar.py` | Para cada fragmento do `colagem.json`: o texto de `revisao/<id>.txt` alinhado aos tempos do Whisper (o texto manda), legenda karaokê, vídeo 16:9 sobre o fundo desfocado dele mesmo, etiqueta com nome, data, ocasião e fonte, áudio original a −14 LUFS (loudnorm em 2 passagens). Cartão de abertura, 0,4 s de textura entre fragmentos e cartão final com **todas** as fontes e "montagem de <autor>". Saída: `colagem-<tema>.mp4`, `.srt`/`.vtt` da colagem inteira e `ficha-<tema>.json` | `casar()` de `motores/voz/alinhar.py`, `gerar()` de `motores/legenda`, `filtro_legenda()` de `queimar.py` |
@@ -88,7 +88,9 @@ Medidos no notebook do README (Ryzen 7 5700U, sem GPU), com `exemplos/colagem-de
 | Carga do EmbeddingGemma 2 (só texto, offline) | 22,8 s aqui, com a CPU dividida (3,8 s no laboratório de origem) |
 | Vetores | 6,1–24,8 s por fonte; 340 janelas de 15 s nas 7 fontes |
 | Frases conhecidas achadas na transcrição | 20 de 21 |
-| `baixar --de` (copiar vídeos já baixados) | 1,7 s |
+| `indexar` das 4 fontes do exemplo, com `palavras/` (sem Whisper) | 32,7 s: import 16,3 s, carga do modelo 6,6 s, vetores 9,6 s (76 janelas) |
+| `sugerir "o que é democracia"` com o índice pronto | 22,8 s, quase tudo import e carga do modelo; a busca em si, 0,26 s |
+| `baixar --de` (copiar vídeos já baixados) | 1,7 s só copiando; 4,9 s cortando 2 trechos de vídeos inteiros |
 
 O passo caro é a transcrição. Por isso o exemplo traz `palavras/` pronto: o `montar` roda sem Whisper e sem o EmbeddingGemma, só com o `requirements.txt` da raiz.
 

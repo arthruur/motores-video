@@ -18,12 +18,13 @@ Rode da raiz do repositório, com o venv ativo (`pip install -r requirements.txt
 Para experimentar a **busca por tema**, instale os opcionais do motor (`pip install -r motores/colagem/requisitos.txt`, ~1,5 GB de modelo na 1ª vez) e:
 
 ```bash
-python -m motores.colagem.cli indexar exemplos/colagem-democracia/fontes.json --opcionais    # + Krenak, Brizola, Carolina
+python exemplos/colagem-democracia/baixar.py --opcionais                                     # + Krenak, Brizola, Carolina (vídeos inteiros ou de 3-4 min)
+python -m motores.colagem.cli indexar exemplos/colagem-democracia/fontes.json --opcionais
 python -m motores.colagem.cli sugerir exemplos/colagem-democracia/fontes.json "o que é democracia" --opcionais
 #   abra saida/colagem-democracia/candidatos-o-que-e-democracia.html, ouça, escolha e edite o colagem.json
 ```
 
-Com `--opcionais`, o `baixar` também traz as outras 3 falas, e o `indexar` transcreve as que não têm `palavras/` (o passo caro: o Whisper `small` levou de 0,5 a 1,5× a duração do áudio no notebook do README).
+Sem `--opcionais`, `indexar` e `sugerir` usam só as 4 falas da colagem, que já têm `palavras/`: não roda Whisper, só o EmbeddingGemma 2. Com `--opcionais`, o `indexar` transcreve as 3 outras (o passo caro: o Whisper `small` levou de 0,5 a 1,5× a duração do áudio no notebook do README).
 
 ## Mídia de terceiros: crédito e direito de citação
 
@@ -49,7 +50,7 @@ O vídeo do Ulysses já é **uma montagem da TV Câmara** (2023): fotos de arqui
 | `colagem.json` | A montagem: abertura, os 4 fragmentos (tempos dentro do trecho baixado), o porquê de cada um, cartão final e nota de ética |
 | `revisao/<id>.txt` | O texto que vai para a legenda. Conferido contra um segundo Whisper (`large-v3-turbo`) e, no Ulysses, contra o discurso publicado; **ainda não de ouvido** |
 | `palavras/<slug>.json` | Transcrição palavra a palavra (Whisper `small`) de cada trecho, para o `montar` não precisar transcrever |
-| `baixar.py` | Atalho para `python -m motores.colagem.cli baixar` com este `fontes.json` (`--de PASTA` copia vídeos já baixados) |
+| `baixar.py` | Atalho para `python -m motores.colagem.cli baixar` com este `fontes.json`. `--de PASTA` copia vídeos já baixados; se um deles for maior que o trecho, corta o trecho (o início do arquivo no original vem do `fontes.json` dessa pasta ou da de cima, se houver; senão, conta como vídeo inteiro) |
 
 O `autor` do `colagem.json` é "Claude (simulando o criador)": no laboratório, quem escolheu e ordenou foi o Claude, a partir da página de candidatos. Numa oficina, quem monta escreve o próprio `colagem.json` e assina.
 
