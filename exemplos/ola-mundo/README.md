@@ -7,4 +7,4 @@ node motores/render/render.mjs exemplos/ola-mundo --teste 0.3,0.8,1.5,2.8,4,5.5 
 node motores/render/render.mjs exemplos/ola-mundo --saida saida/ola-mundo.mp4             # vídeo
 ```
 
-Leva ~7 s num notebook Ryzen 7 sem GPU dedicada (180 quadros, 118 fotos). Os elementos ficam dentro da zona segura 9:16 (ver `motores/render/CONTRATO.md`). Fonte: Barlow Condensed (OFL), servida em `/_fontes/`.
+Leva 7–8 s num notebook Ryzen 7 sem GPU dedicada (180 quadros, 118 fotos). Os elementos ficam dentro da zona segura 9:16 (ver `motores/render/CONTRATO.md`). Fonte: Barlow Condensed (OFL), servida em `/_fontes/`.

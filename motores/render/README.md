@@ -37,7 +37,7 @@ Máquina: notebook Ryzen 7 5700U (8 núcleos / 16 threads, Radeon integrada), 19
 
 | Configuração | Fotos | Tempo total |
 |---|---|---|
-| 4 workers + pulo de quadros (padrão) | 118 | 6,8–7,5 s (5 rodadas) |
+| 4 workers + pulo de quadros (padrão) | 118 | 6,8–7,5 s (5 rodadas); 8,0–8,3 s em 3 rodadas de outro dia |
 | 2 workers + pulo | 118 | 7,9 s |
 | 1 worker + pulo | 117 | 9,6–10,9 s |
 | 4 workers, `--sem-dedup` | 180 | 7,7 s |

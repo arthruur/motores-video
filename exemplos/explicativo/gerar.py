@@ -242,4 +242,7 @@ def main(argv=None) -> dict:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except RuntimeError as e:   # provedor sem pacote ou chave, gatilho fora da fala...: mensagem curta, sem traceback
+        raise SystemExit(f"erro: {e}\n(provedores e o que falta para cada um: python -m motores.voz.cli provedores)")

@@ -40,8 +40,8 @@ Notebook Ryzen 7 5700U (16 threads, sem GPU dedicada), 19 GB, Windows 11, Chrome
 |---|---|---|
 | Fala | 30,6 s, 105 palavras, tempos nativos | 27,8 s, 105 palavras, tempos do alinhador |
 | Voz | 3,7–8,3 s (rede) | 80,4 s (síntese + alinhador Whisper `small`, com carga dos modelos) |
-| Render (998 / 913 quadros, 4 workers) | 24,7–29,6 s, 649 fotos | 22,9–23,3 s, 636 fotos |
-| Mixagem (2 passagens, em paralelo com o render) | 5,5–6,2 s | 6,0 s |
+| Render (998 / 913 quadros, 4 workers) | 24,7–30,2 s, 649 fotos | 22,9–23,3 s, 636 fotos |
+| Mixagem (2 passagens, em paralelo com o render) | 5,5–8,2 s | 6,0 s |
 | Legenda (.ass/.srt/.vtt) | 0,2 s | — |
 | Queimar + juntar | ~6 s | — |
 | **Total** | **39,4–50,9 s** com voz nova; **35,3–36,0 s** com a voz reaproveitada | 113,8 s com voz nova; 32,6 s reaproveitada |

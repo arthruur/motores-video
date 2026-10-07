@@ -24,12 +24,11 @@ python exemplos/explicativo/gerar.py
 
 Gera `saida/explicativo/explicativo.mp4`: "Por que o céu é azul?", 33 s, 1080×1920, narrado (edge-tts), com legenda palavra a palavra, trilha sintetizada com *ducking* e loudness em −14 LUFS. As cenas entram na palavra em que são ditas. Leva 40–50 s (~35 s com a voz já gerada). Detalhes em [exemplos/explicativo](exemplos/explicativo).
 
-<!-- GIF da demonstração: gere com
-     ffmpeg -ss 2 -t 8 -i saida/explicativo/explicativo.mp4 -vf "fps=12,scale=360:-1:flags=lanczos" docs/img/demo.gif
-     e descomente a linha abaixo. -->
-<!-- ![Por que o céu é azul? Quadros do exemplo explicativo](docs/img/demo.gif) -->
+<!-- GIF refeito com:
+     ffmpeg -ss 2 -t 8 -i saida/explicativo/explicativo.mp4 -vf "fps=12,scale=360:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" docs/img/demo.gif -->
+![Por que o céu é azul? 8 s do exemplo explicativo, sem som](docs/img/demo.gif)
 
-Um caminho mais curto, só o render: `node motores/render/render.mjs exemplos/ola-mundo` (6 s de vídeo em ~7 s).
+Um caminho mais curto, só o render: `node motores/render/render.mjs exemplos/ola-mundo` (6 s de vídeo em 7–8 s).
 
 ## Instalação
 
@@ -38,12 +37,15 @@ Você precisa de **Node 20+**, **Python 3.10+**, **Chrome ou Edge** instalado e 
 ### Windows
 
 ```powershell
-winget install OpenJS.NodeJS.LTS Python.Python.3.13 Gyan.FFmpeg    # o build do gyan.dev traz libass
+winget install OpenJS.NodeJS.LTS
+winget install Python.Python.3.13
+winget install Gyan.FFmpeg                    # o build do gyan.dev traz libass
+# feche e abra o terminal para o PATH novo valer (node, python, ffmpeg)
 git clone <url-do-repositório> motores-video
 cd motores-video
 npm install                                   # só o playwright-core: usa o Chrome/Edge já instalado
 python -m venv .venv
-.venv\Scripts\activate
+.venv\Scripts\activate                        # se o PowerShell bloquear: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 pip install -r requirements.txt
 ```
 
@@ -81,14 +83,16 @@ node motores/render/render.mjs exemplos/ola-mundo --saida saida/ola-mundo.mp4
 
 # voz: texto -> WAV + tempo de cada palavra (+ nota de precisão pelo Whisper)
 python -m motores.voz.cli sintetizar exemplos/voz/frase.txt --provedor edge --saida saida/voz/frase.wav --qa
-python -m motores.voz.cli alinhar minha-gravacao.m4a meu-texto.txt          # tempos para a sua própria voz
+python -m motores.voz.cli alinhar saida/voz/frase.wav exemplos/voz/frase.txt --json saida/voz/frase-alinhada.json
+#   troque pelo seu áudio e o seu texto para ter os tempos da sua própria voz (sem --json, grava ao lado do áudio)
 
 # legenda: palavras -> .ass (queimada) + .srt/.vtt
 python motores/legenda/gerar.py exemplos/legenda/palavras.json -o saida/legenda/lua.ass
-python motores/legenda/queimar.py meu-video.mp4 saida/legenda/lua.ass -o saida/legenda/final.mp4
+python motores/legenda/queimar.py saida/ola-mundo.mp4 saida/legenda/lua.ass -o saida/legenda/final.mp4   # ou o seu vídeo
 
 # tudo junto
-python exemplos/explicativo/gerar.py --provedor kokoro --voz pm_alex
+python exemplos/explicativo/gerar.py                                   # edge-tts: precisa de internet
+python exemplos/explicativo/gerar.py --provedor kokoro --voz pm_alex   # offline, depois de instalar o Kokoro (README da voz)
 ```
 
 Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (`renderizar()` em JS; `sintetizar()`, `alinhar()`, `avaliar()`, `gerar()`, `queimar()` em Python). Como os motores conversam: [docs/arquitetura.md](docs/arquitetura.md).
@@ -113,8 +117,8 @@ Medidos num notebook Ryzen 7 5700U (8 núcleos / 16 threads, sem GPU dedicada), 
 | O quê | Resultado |
 |---|---|
 | Render de uma cena de 47 s (1.407 quadros, com textura), no laboratório de origem | **~25 min → 28 s** (JPEG por CDP, 4 processos, pulo de quadros) |
-| `exemplos/ola-mundo` (6 s, 180 quadros) | 6,8–7,5 s |
-| `exemplos/explicativo` (33 s): render das cenas, 998 quadros, 649 fotos | 24,7–29,6 s |
+| `exemplos/ola-mundo` (6 s, 180 quadros) | 6,8–8,3 s |
+| `exemplos/explicativo` (33 s): render das cenas, 998 quadros, 649 fotos | 24,7–30,2 s |
 | `exemplos/explicativo` de ponta a ponta (voz edge nova → MP4 final) | 39,4–50,9 s; 35,3–36,0 s com a voz reaproveitada |
 | Mesmo exemplo com Kokoro local (síntese + alinhamento pelo Whisper) | 113,8 s |
 | Legenda: gerar .ass/.srt/.vtt | 0,2–0,45 s |

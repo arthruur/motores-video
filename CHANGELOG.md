@@ -2,6 +2,15 @@
 
 Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versões seguem [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Corrigido
+
+- **`exemplos/legenda`**: o texto dizia que "cerca de 60% da face oculta nunca aparece daqui", o que está errado. Com a libração, vemos ~59% da superfície da Lua; ~41% nunca aparece. O texto agora diz "cerca de quarenta por cento da superfície dela", e o `palavras.json` foi refeito com o edge-tts (72 palavras e 24 s, como antes). O QC mudou pouco: 2 curtos e 6 encolhidos.
+- **`exemplos/explicativo/gerar.py`**: provedor sem pacote ou sem chave agora dá uma mensagem curta, sem traceback.
+- **README**: o `winget` instala um pacote por linha, com aviso para reabrir o terminal e sobre a política de scripts do PowerShell. Os exemplos de `alinhar` e `queimar` agora rodam com arquivos do próprio repositório. O exemplo com Kokoro avisa que precisa da instalação opcional. O GIF da demonstração foi incluído (`docs/img/demo.gif`, 415 KB).
+- **Números**: as faixas medidas foram atualizadas com a verificação feita num clone limpo. `ola-mundo` ficou em 8,0–8,3 s, o render do explicativo em 30,2 s e a mixagem em 8,2 s.
+
 ## [0.1.0] - 2026-10-07
 
 Primeira versão pública. Os motores foram separados dos laboratórios da Fábrica de reels, generalizados e documentados.

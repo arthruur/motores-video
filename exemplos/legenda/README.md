@@ -24,5 +24,5 @@ O resultado esperado, na zona universal:
 
 ```
 A LUA LEVA CERCA | DE 27 DIAS PARA | DAR UMA VOLTA | COMPLETA EM TORNO | DA TERRA. | NESSE CAMINHO, | ...
-numeros: vinte e sete -> 27, trezentos e oitenta e quatro mil -> 384.000, sessenta por cento -> 60%
+numeros: vinte e sete -> 27, trezentos e oitenta e quatro mil -> 384.000, quarenta por cento -> 40%
 ```

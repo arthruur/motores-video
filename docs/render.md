@@ -45,7 +45,7 @@ Notebook Ryzen 7 5700U (8 núcleos / 16 threads, Radeon integrada), 19 GB, Windo
 
 | Cena | Quadros | Fotos | Configuração | Tempo |
 |---|---|---|---|---|
-| `exemplos/ola-mundo` (6 s) | 180 | 118 | 4 workers + pulo (padrão) | 6,8–7,5 s |
+| `exemplos/ola-mundo` (6 s) | 180 | 118 | 4 workers + pulo (padrão) | 6,8–8,3 s |
 | `exemplos/ola-mundo` | 180 | 180 | 4 workers, `--sem-dedup` | 7,7 s |
 | `exemplos/ola-mundo` | 180 | 117 | 1 worker + pulo | 9,6–10,9 s |
 | `exemplos/ola-mundo` | 180 | 180 | 1 worker, `--sem-dedup` | 14,2–14,4 s |

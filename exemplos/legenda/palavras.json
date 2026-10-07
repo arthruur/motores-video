@@ -244,71 +244,71 @@
   {
    "texto": "média",
    "inicio": 15.787,
-   "fim": 16.175
+   "fim": 16.163
   },
   {
    "texto": "até",
-   "inicio": 16.188,
+   "inicio": 16.175,
    "fim": 16.375
   },
   {
    "texto": "lá",
    "inicio": 16.387,
-   "fim": 16.587
+   "fim": 16.575
   },
   {
    "texto": "é",
-   "inicio": 16.6,
-   "fim": 16.675
+   "inicio": 16.587,
+   "fim": 16.662
   },
   {
    "texto": "de",
-   "inicio": 16.688,
-   "fim": 16.812
+   "inicio": 16.675,
+   "fim": 16.788
   },
   {
    "texto": "trezentos",
-   "inicio": 16.825,
-   "fim": 17.312
+   "inicio": 16.8,
+   "fim": 17.288
   },
   {
    "texto": "e",
-   "inicio": 17.325,
-   "fim": 17.412
+   "inicio": 17.3,
+   "fim": 17.387
   },
   {
    "texto": "oitenta",
-   "inicio": 17.425,
-   "fim": 17.788
+   "inicio": 17.4,
+   "fim": 17.762
   },
   {
    "texto": "e",
-   "inicio": 17.8,
-   "fim": 17.85
+   "inicio": 17.775,
+   "fim": 17.825
   },
   {
    "texto": "quatro",
-   "inicio": 17.863,
-   "fim": 18.188
+   "inicio": 17.837,
+   "fim": 18.162
   },
   {
    "texto": "mil",
-   "inicio": 18.2,
-   "fim": 18.387
+   "inicio": 18.175,
+   "fim": 18.375
   },
   {
    "texto": "quilômetros,",
-   "inicio": 18.4,
-   "fim": 19.112
+   "inicio": 18.387,
+   "fim": 19.1
   },
   {
    "texto": "e",
-   "inicio": 19.413,
-   "fim": 19.463
+   "inicio": 19.4,
+   "fim": 19.45
   },
   {
    "texto": "cerca",
-   "inicio": 19.475,
+   "inicio": 19.462,
    "fim": 19.825
   },
   {
@@ -317,49 +317,49 @@
    "fim": 19.925
   },
   {
-   "texto": "sessenta",
+   "texto": "quarenta",
    "inicio": 19.938,
-   "fim": 20.438
+   "fim": 20.35
   },
   {
    "texto": "por",
-   "inicio": 20.45,
-   "fim": 20.6
+   "inicio": 20.363,
+   "fim": 20.512
   },
   {
    "texto": "cento",
-   "inicio": 20.613,
-   "fim": 20.963
+   "inicio": 20.525,
+   "fim": 20.862
   },
   {
    "texto": "da",
-   "inicio": 20.975,
-   "fim": 21.113
+   "inicio": 20.875,
+   "fim": 20.975
   },
   {
-   "texto": "face",
-   "inicio": 21.125,
-   "fim": 21.488
+   "texto": "superfície",
+   "inicio": 20.988,
+   "fim": 21.7
   },
   {
-   "texto": "oculta",
-   "inicio": 21.5,
-   "fim": 21.913
+   "texto": "dela",
+   "inicio": 21.712,
+   "fim": 21.975
   },
   {
    "texto": "nunca",
-   "inicio": 21.925,
-   "fim": 22.25
+   "inicio": 21.988,
+   "fim": 22.325
   },
   {
    "texto": "aparece",
-   "inicio": 22.262,
-   "fim": 22.7
+   "inicio": 22.337,
+   "fim": 22.775
   },
   {
    "texto": "daqui.",
-   "inicio": 22.712,
-   "fim": 23.112
+   "inicio": 22.788,
+   "fim": 23.163
   }
  ]
 }

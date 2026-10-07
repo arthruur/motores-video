@@ -131,8 +131,8 @@ Exemplo `exemplos/legenda` (72 palavras, 24 s de fala, edge-tts `pt-BR-Francisca
 | O quê | Resultado |
 |---|---|
 | `gerar.py` (processo inteiro: Python, Pillow, .ass, .srt, .vtt) | 0,43–0,45 s (3 rodadas). A função `gerar()` sozinha: 0,12 s |
-| Blocos (zona universal) | 24 blocos, 1 órfão, 3 curtos, 1 quebra ruim (`DE 384.000 \| QUILÔMETROS,`: a 84 px não cabe nem encolhida), 5 encolhidos (menor 0,881), 0 fora da zona, 0 sobreposições |
-| Blocos (`--zona reels`, 950 px) | 20 blocos, 1 órfão, 0 quebras ruins, 1 encolhido |
+| Blocos (zona universal) | 24 blocos, 1 órfão, 2 curtos, 1 quebra ruim (`DE 384.000 \| QUILÔMETROS,`: a 84 px não cabe nem encolhida), 6 encolhidos (menor 0,881), 0 fora da zona, 0 sobreposições |
+| Blocos (`--zona reels`, 950 px) | 20 blocos, 1 órfão, 0 quebras ruins, 2 encolhidos |
 | `.srt` | 6 cues, maior linha com 39 caracteres, 0 acima de 17 cps |
 | Queimar 24 s em 1080×1920 (`testsrc2`, x264 `veryfast` crf 19, áudio copiado, com a conferência de fonte) | 5,4 s. Sobre fundo liso: 3,8–4,7 s. Sobre o MP4 de 6 s do `exemplos/ola-mundo`: 2,3 s |
 | Custo do libass sozinho (decodificar com e sem o filtro, 714 quadros) | 1,1–1,6 s × 2,4–2,6 s: **~1,2 s, ou ~1,7 ms por quadro**. O que pesa é o reencode x264 (5,2–5,6 s sem legenda) |
