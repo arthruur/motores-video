@@ -172,6 +172,27 @@ Crédito de cada fonte no README e no `fontes.json` de cada exemplo; ver também
 - **Rótulo de IA e fonte visível.** Voz sintética é de narrador e vem com rótulo pronto. **Nunca** imitar voz ou rosto de pessoa real. Fala real só entra com o som original, a frase inteira, quem, quando e a fonte na tela.
 - **Licenças limpas.** O núcleo usa Apache-2.0 e dependências permissivas ou LGPL; o que é GPL (Piper, e o Kokoro via espeak-ng) é opcional. Ver [THIRD_PARTY.md](THIRD_PARTY.md).
 
+## Ideias para construir 🚀
+
+Estes motores são **base**, não produto acabado. O convite é para a comunidade de software livre construir em cima deles as **ferramentas de criação facilitada de vídeo com IA** que hoje só existem fechadas, pagas e em dólar. Ferramentas para qualquer pessoa transformar uma ideia, uma aula ou um discurso em vídeo que circula, rodando no próprio computador.
+
+Cada ideia abaixo virou uma issue com ponto de partida e critério de "pronto". Comente na issue antes de começar, para a gente alinhar.
+
+| Ideia | Issue |
+|---|---|
+| **Discurso → cortes virais:** achar e cortar os melhores momentos de uma fala longa, prontos para postar | [#1](https://github.com/arthruur/motores-video/issues/1) |
+| **Tela dividida de retenção:** conteúdo em cima, vídeo satisfatório embaixo (gameplay, sabão, slime…), com licenças em ordem | [#2](https://github.com/arthruur/motores-video/issues/2) |
+| **Exportação multiplataforma:** TikTok, YouTube Shorts, Kwai, Reels e status de WhatsApp, cada um no formato certo | [#3](https://github.com/arthruur/motores-video/issues/3) |
+| **Templates de gancho e formatos virais:** "você sabia?", POV, lista, edit no beat | [#4](https://github.com/arthruur/motores-video/issues/4) |
+| **Interface web amigável:** para quem não programa, rodando local | [#5](https://github.com/arthruur/motores-video/issues/5) |
+| **Emoção na voz sintética** | [#6](https://github.com/arthruur/motores-video/issues/6) |
+| **Prévia ao vivo fiel ao export** | [#7](https://github.com/arthruur/motores-video/issues/7) |
+| **Medir num PC modesto** (boa primeira issue) | [#8](https://github.com/arthruur/motores-video/issues/8) |
+| **Acessibilidade:** legendas para surdos e Libras | [#9](https://github.com/arthruur/motores-video/issues/9) |
+| **[Pesquisa] Testbed ético de agentes sintéticos** | [#10](https://github.com/arthruur/motores-video/issues/10) |
+
+Todas as issues: [github.com/arthruur/motores-video/issues](https://github.com/arthruur/motores-video/issues). As regras valem para tudo o que for construído aqui: **fonte visível** quando for fato, **rótulo de IA** quando houver voz ou conteúdo sintético, e **nunca** imitar voz ou rosto de pessoa real.
+
 ## Direções
 
 O repositório aponta para dois lados. O texto completo está em [docs/direcoes.md](docs/direcoes.md).
