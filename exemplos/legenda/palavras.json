@@ -1,0 +1,365 @@
+{
+ "origem": "texto.txt narrado pelo edge-tts 7.2.8 (pt-BR-FranciscaNeural); tempos do WordBoundary, grafia do texto",
+ "palavras": [
+  {
+   "texto": "A",
+   "inicio": 0.1,
+   "fim": 0.175
+  },
+  {
+   "texto": "Lua",
+   "inicio": 0.188,
+   "fim": 0.475
+  },
+  {
+   "texto": "leva",
+   "inicio": 0.487,
+   "fim": 0.775
+  },
+  {
+   "texto": "cerca",
+   "inicio": 0.787,
+   "fim": 1.175
+  },
+  {
+   "texto": "de",
+   "inicio": 1.188,
+   "fim": 1.3
+  },
+  {
+   "texto": "vinte",
+   "inicio": 1.312,
+   "fim": 1.575
+  },
+  {
+   "texto": "e",
+   "inicio": 1.587,
+   "fim": 1.612
+  },
+  {
+   "texto": "sete",
+   "inicio": 1.625,
+   "fim": 1.975
+  },
+  {
+   "texto": "dias",
+   "inicio": 1.988,
+   "fim": 2.375
+  },
+  {
+   "texto": "para",
+   "inicio": 2.388,
+   "fim": 2.613
+  },
+  {
+   "texto": "dar",
+   "inicio": 2.625,
+   "fim": 2.812
+  },
+  {
+   "texto": "uma",
+   "inicio": 2.825,
+   "fim": 3.0
+  },
+  {
+   "texto": "volta",
+   "inicio": 3.013,
+   "fim": 3.375
+  },
+  {
+   "texto": "completa",
+   "inicio": 3.388,
+   "fim": 3.925
+  },
+  {
+   "texto": "em",
+   "inicio": 3.938,
+   "fim": 4.05
+  },
+  {
+   "texto": "torno",
+   "inicio": 4.062,
+   "fim": 4.388
+  },
+  {
+   "texto": "da",
+   "inicio": 4.4,
+   "fim": 4.538
+  },
+  {
+   "texto": "Terra.",
+   "inicio": 4.562,
+   "fim": 4.975
+  },
+  {
+   "texto": "Nesse",
+   "inicio": 5.237,
+   "fim": 5.537
+  },
+  {
+   "texto": "caminho,",
+   "inicio": 5.55,
+   "fim": 6.087
+  },
+  {
+   "texto": "ela",
+   "inicio": 6.162,
+   "fim": 6.337
+  },
+  {
+   "texto": "mostra",
+   "inicio": 6.35,
+   "fim": 6.75
+  },
+  {
+   "texto": "fases",
+   "inicio": 6.763,
+   "fim": 7.125
+  },
+  {
+   "texto": "diferentes:",
+   "inicio": 7.138,
+   "fim": 7.85
+  },
+  {
+   "texto": "nova,",
+   "inicio": 8.1,
+   "fim": 8.5
+  },
+  {
+   "texto": "crescente,",
+   "inicio": 8.537,
+   "fim": 9.137
+  },
+  {
+   "texto": "cheia",
+   "inicio": 9.162,
+   "fim": 9.537
+  },
+  {
+   "texto": "e",
+   "inicio": 9.55,
+   "fim": 9.6
+  },
+  {
+   "texto": "minguante.",
+   "inicio": 9.613,
+   "fim": 10.263
+  },
+  {
+   "texto": "A",
+   "inicio": 10.525,
+   "fim": 10.625
+  },
+  {
+   "texto": "luz",
+   "inicio": 10.637,
+   "fim": 10.912
+  },
+  {
+   "texto": "que",
+   "inicio": 10.925,
+   "fim": 11.025
+  },
+  {
+   "texto": "a",
+   "inicio": 11.037,
+   "fim": 11.1
+  },
+  {
+   "texto": "gente",
+   "inicio": 11.113,
+   "fim": 11.425
+  },
+  {
+   "texto": "vê",
+   "inicio": 11.438,
+   "fim": 11.588
+  },
+  {
+   "texto": "não",
+   "inicio": 11.6,
+   "fim": 11.762
+  },
+  {
+   "texto": "é",
+   "inicio": 11.775,
+   "fim": 11.838
+  },
+  {
+   "texto": "dela,",
+   "inicio": 11.85,
+   "fim": 12.25
+  },
+  {
+   "texto": "é",
+   "inicio": 12.525,
+   "fim": 12.638
+  },
+  {
+   "texto": "a",
+   "inicio": 12.65,
+   "fim": 12.7
+  },
+  {
+   "texto": "luz",
+   "inicio": 12.713,
+   "fim": 12.938
+  },
+  {
+   "texto": "do",
+   "inicio": 12.95,
+   "fim": 13.05
+  },
+  {
+   "texto": "Sol",
+   "inicio": 13.062,
+   "fim": 13.3
+  },
+  {
+   "texto": "refletida",
+   "inicio": 13.312,
+   "fim": 13.925
+  },
+  {
+   "texto": "na",
+   "inicio": 13.938,
+   "fim": 14.037
+  },
+  {
+   "texto": "superfície.",
+   "inicio": 14.05,
+   "fim": 14.863
+  },
+  {
+   "texto": "A",
+   "inicio": 15.125,
+   "fim": 15.238
+  },
+  {
+   "texto": "distância",
+   "inicio": 15.25,
+   "fim": 15.775
+  },
+  {
+   "texto": "média",
+   "inicio": 15.787,
+   "fim": 16.175
+  },
+  {
+   "texto": "até",
+   "inicio": 16.188,
+   "fim": 16.375
+  },
+  {
+   "texto": "lá",
+   "inicio": 16.387,
+   "fim": 16.587
+  },
+  {
+   "texto": "é",
+   "inicio": 16.6,
+   "fim": 16.675
+  },
+  {
+   "texto": "de",
+   "inicio": 16.688,
+   "fim": 16.812
+  },
+  {
+   "texto": "trezentos",
+   "inicio": 16.825,
+   "fim": 17.312
+  },
+  {
+   "texto": "e",
+   "inicio": 17.325,
+   "fim": 17.412
+  },
+  {
+   "texto": "oitenta",
+   "inicio": 17.425,
+   "fim": 17.788
+  },
+  {
+   "texto": "e",
+   "inicio": 17.8,
+   "fim": 17.85
+  },
+  {
+   "texto": "quatro",
+   "inicio": 17.863,
+   "fim": 18.188
+  },
+  {
+   "texto": "mil",
+   "inicio": 18.2,
+   "fim": 18.387
+  },
+  {
+   "texto": "quilômetros,",
+   "inicio": 18.4,
+   "fim": 19.112
+  },
+  {
+   "texto": "e",
+   "inicio": 19.413,
+   "fim": 19.463
+  },
+  {
+   "texto": "cerca",
+   "inicio": 19.475,
+   "fim": 19.825
+  },
+  {
+   "texto": "de",
+   "inicio": 19.837,
+   "fim": 19.925
+  },
+  {
+   "texto": "sessenta",
+   "inicio": 19.938,
+   "fim": 20.438
+  },
+  {
+   "texto": "por",
+   "inicio": 20.45,
+   "fim": 20.6
+  },
+  {
+   "texto": "cento",
+   "inicio": 20.613,
+   "fim": 20.963
+  },
+  {
+   "texto": "da",
+   "inicio": 20.975,
+   "fim": 21.113
+  },
+  {
+   "texto": "face",
+   "inicio": 21.125,
+   "fim": 21.488
+  },
+  {
+   "texto": "oculta",
+   "inicio": 21.5,
+   "fim": 21.913
+  },
+  {
+   "texto": "nunca",
+   "inicio": 21.925,
+   "fim": 22.25
+  },
+  {
+   "texto": "aparece",
+   "inicio": 22.262,
+   "fim": 22.7
+  },
+  {
+   "texto": "daqui.",
+   "inicio": 22.712,
+   "fim": 23.112
+  }
+ ]
+}

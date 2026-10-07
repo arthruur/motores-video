@@ -1,0 +1,11 @@
+{
+  "_comentario": "Grafia que a VOZ recebe; a legenda continua com o texto original. 'todos' vale para qualquer motor sintético; a seção do motor vem depois e pode sobrescrever. A mesma troca pode consertar um motor e quebrar outro: 'sús' conserta o Kokoro e piora o Piper (lab 02). Teste com 'python -m motores.voz.cli qa' antes de acrescentar.",
+  "todos": {},
+  "edge": {},
+  "azure": {},
+  "elevenlabs": {},
+  "kokoro": {
+    "SUS": "sús"
+  },
+  "piper": {}
+}

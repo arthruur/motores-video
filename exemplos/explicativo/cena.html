@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Por que o céu é azul?</title>
+<style>
+  @font-face { font-family: 'Barlow Condensed'; src: url('/_fontes/BarlowCondensed-ExtraBold.ttf'); font-weight: 800; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #0b1630; }
+  body { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; color: #fff; }
+  /* zona útil: x 120–780 (botões da direita) e y 300–1090 (a legenda ocupa ~1130–1240) */
+  .camada, .cena { position: absolute; inset: 0; }
+  .abs { position: absolute; }
+  .rotulo { position: absolute; left: 120px; width: 660px; text-align: center; font-size: 64px; line-height: 1.05;
+    text-transform: uppercase; letter-spacing: 1px; }
+  .pequeno { font-size: 44px; color: #d9e6f5; }
+  .raio { position: absolute; height: 14px; border-radius: 7px; transform-origin: 0 50%; }
+  .ponto { position: absolute; border-radius: 50%; background: #cfe0f2; }
+  .cartao { position: absolute; left: 150px; width: 600px; padding: 26px 0; border-radius: 22px; text-align: center;
+    background: rgba(255,255,255,.12); border: 3px solid rgba(255,255,255,.35); font-size: 56px; line-height: 1.05; }
+  svg { position: absolute; left: 0; top: 0; overflow: visible; }
+</style>
+</head>
+<body>
+<div id="ceu" class="camada"></div>
+<div id="chao" class="abs" style="left:0;top:1090px;width:1080px;height:830px;background:#081022"></div>
+<div id="sol" class="abs" style="width:180px;height:180px;margin:-90px 0 0 -90px;border-radius:50%;background:#ffe9a8"></div>
+
+<!-- 1. pergunta -->
+<div id="c-pergunta" class="cena">
+  <div class="rotulo" style="top:380px;font-size:150px;line-height:.98" id="titulo"><span>POR QUE</span><br><span>O CÉU É</span><br><span id="azul">AZUL?</span></div>
+  <div class="rotulo pequeno" style="top:900px" id="resto">e não branco ou violeta?</div>
+</div>
+
+<!-- 2. luz: o raio branco se abre em cores -->
+<div id="c-luz" class="cena">
+  <div id="feixe" class="raio" style="background:#fff;height:22px;border-radius:11px"></div>
+  <div id="leque"></div>
+  <div class="rotulo" style="top:960px" id="l-luz">luz branca =<br>todas as cores</div>
+</div>
+
+<!-- 3. ar: moléculas minúsculas e a onda de luz, bem maior -->
+<div id="c-ar" class="cena">
+  <div id="moleculas"></div>
+  <svg width="1080" height="1920"><path id="onda-ar" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/></svg>
+  <div class="rotulo pequeno" style="top:420px" id="l-mol">moléculas do ar</div>
+  <div class="rotulo" style="top:960px" id="l-onda">muito menores<br>que a onda</div>
+</div>
+
+<!-- 4. azul: a molécula espalha o azul para todo lado; o vermelho passa reto -->
+<div id="c-azul" class="cena">
+  <svg width="1080" height="1920">
+    <path id="onda-azul" fill="none" stroke="#6cc4ff" stroke-width="9" stroke-linecap="round"/>
+    <path id="onda-verm" fill="none" stroke="#ff6a55" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+  <div id="espalhados"></div>
+  <div id="molecula" class="ponto" style="left:432px;top:542px;width:36px;height:36px;background:#fff"></div>
+  <div class="rotulo pequeno" style="top:340px;color:#9fd8ff" id="l-azul">azul: espalha</div>
+  <div class="rotulo pequeno" style="top:870px;color:#ffb1a5" id="l-verm">vermelho: segue reto</div>
+  <div class="rotulo" style="top:980px" id="l-ceu">o céu inteiro brilha</div>
+</div>
+
+<!-- 5. violeta -->
+<div id="c-violeta" class="cena">
+  <div class="abs" id="espectro" style="left:150px;top:400px;width:600px;height:70px;border-radius:35px;
+    background:linear-gradient(90deg,#7a3cff,#3d6bff,#2fc0ff,#3ddc84,#ffe04a,#ff9a3c,#ff4b3c)"></div>
+  <div class="abs" id="seta" style="left:180px;top:490px;width:0;height:0;border-left:28px solid transparent;
+    border-right:28px solid transparent;border-bottom:40px solid #c9a6ff;margin-left:-28px"></div>
+  <div class="rotulo pequeno" style="top:540px;color:#d7c2ff" id="l-viol">o violeta espalha ainda mais</div>
+  <div class="cartao" style="top:650px" id="k-sol">o sol emite<br>menos violeta</div>
+  <div class="cartao" style="top:850px" id="k-olho">o olho é pouco<br>sensível a ele</div>
+</div>
+
+<!-- 6. tarde -->
+<div id="c-tarde" class="cena">
+  <svg width="1080" height="1920"><path id="caminho" fill="none" stroke="#ffd9a0" stroke-width="8" stroke-dasharray="4 22" stroke-linecap="round"/></svg>
+  <div class="rotulo pequeno" style="top:380px" id="l-ar">mais ar no caminho</div>
+  <div class="rotulo" style="top:520px;color:#ffe2b8;font-size:84px" id="l-lar">sobra o laranja</div>
+</div>
+
+<!-- fim: cartão com a resposta, a fonte e o rótulo de IA -->
+<div id="c-fim" class="cena" style="background:#0b1630">
+  <div class="rotulo pequeno" style="top:430px">por que o céu é azul?</div>
+  <div class="rotulo" style="top:520px;font-size:96px;color:#8fd3ff" id="f-resp">espalhamento<br>de rayleigh</div>
+  <div class="rotulo pequeno" style="top:780px;font-size:40px;text-transform:none;color:#b8c7da" id="f-fonte"></div>
+  <div class="rotulo pequeno" style="top:880px;font-size:40px;text-transform:none;color:#b8c7da" id="f-ia"></div>
+  <div class="rotulo pequeno" style="top:1070px;font-size:40px;text-transform:none;color:#7f93ad">feito com motores-video</div>
+</div>
+
+<script>
+// Tudo na tela é função de t (contrato do motores/render). Os tempos vêm de dados.json, que o gerar.py
+// escreve a partir da voz: cada cena entra na sua primeira palavra e os detalhes entram na palavra-gatilho.
+let D, CENA = {}
+const $ = id => document.getElementById(id)
+const lim = x => Math.min(1, Math.max(0, x))
+const fase = (t, ini, dur) => lim((t - ini) / dur)
+const suave = x => x * x * (3 - 2 * x)
+const mix = (a, b, p) => a + (b - a) * p
+const r = (x, c = 2) => +x.toFixed(c)
+const misturar = (a, b, p) => a.map((v, i) => mix(v, b[i], p))
+const cor = (a, b, p) => `rgb(${misturar(a, b, p).map(Math.round).join(',')})`
+let K = []   // chave de estado: todo número que vai para a tela entra aqui
+const pôr = (el, prop, v) => { el.style[prop] = v; K.push(v) }
+
+// gerador com semente: posições "aleatórias" iguais em todo processo do render
+function semente(s) { return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 2 ** 32) }
+
+// senoide como path SVG: de x0 a x1 em y, comprimento de onda L, amplitude A, fase em px
+function senoide(x0, x1, y, L, A, desl) {
+  let d = ''
+  for (let x = x0; x <= x1; x += 6) d += (d ? 'L' : 'M') + x + ' ' + r(y + A * Math.sin(2 * Math.PI * (x - desl) / L), 1)
+  return d
+}
+
+// opacidade de uma cena: entra na 1ª palavra (−0,15 s) e sai quando a próxima entra
+function presenca(id, t) {
+  const i = D.cenas.findIndex(c => c.id === id), c = D.cenas[i], prox = D.cenas[i + 1]
+  const ini = i === 0 ? -1 : c.inicio - 0.15
+  const fim = prox ? prox.inicio - 0.15 : D.fala_s + 0.4
+  return r(fase(t, ini, 0.25) * (1 - fase(t, fim, 0.25)), 3)
+}
+const g = (cena, nome) => CENA[cena].gatilhos[nome]
+
+function montar() {
+  // leque de 7 cores
+  const cores = ['#ff4b3c', '#ff9a3c', '#ffe04a', '#3ddc84', '#2fc0ff', '#3d6bff', '#7a3cff']
+  cores.forEach(c => { const e = document.createElement('div'); e.className = 'raio'; e.style.background = c; $('leque').appendChild(e) })
+  // moléculas: pares de pontos em posições com semente
+  const rnd = semente(7)
+  for (let i = 0; i < 34; i++) {
+    const x = 150 + rnd() * 580, y = 500 + rnd() * 380, a = rnd() * Math.PI
+    for (const s of [-1, 1]) {
+      const e = document.createElement('div'); e.className = 'ponto'
+      Object.assign(e.style, { left: r(x + s * 7 * Math.cos(a) - 6) + 'px', top: r(y + s * 7 * Math.sin(a) - 6) + 'px', width: '12px', height: '12px' })
+      e.dataset.i = i; $('moleculas').appendChild(e)
+    }
+  }
+  // 14 raios azuis espalhados pela molécula
+  for (let i = 0; i < 14; i++) { const e = document.createElement('div'); e.className = 'raio'; e.style.background = '#6cc4ff'; e.style.height = '8px'; $('espalhados').appendChild(e) }
+  $('f-fonte').textContent = 'Fonte: ' + D.fonte
+  $('f-ia').textContent = D.rotulo
+}
+
+function seek(t) {
+  K = []
+  // céu: noite azul-escura -> azul quando o azul se espalha "de todos os lados" -> laranja no fim da tarde
+  const azul = suave(fase(t, g('azul', 'ceu'), 1.2)), tarde = suave(fase(t, g('tarde', 'perde'), 1.5))
+  const topo = cor(misturar([11, 22, 48], [38, 112, 205], azul), [62, 40, 92], tarde)
+  const base = cor(misturar([18, 38, 74], [128, 196, 245], azul), [255, 150, 70], tarde)
+  pôr($('ceu'), 'background', `linear-gradient(180deg, ${topo} 0%, ${base} 57%)`)
+
+  // sol: no alto à esquerda; no fim da tarde desce até o horizonte e fica laranja
+  const desce = suave(fase(t, g('tarde', 'ar'), 2.5)), lar = suave(fase(t, g('tarde', 'laranja'), 0.6))
+  pôr($('sol'), 'left', r(mix(230, 640, desce)) + 'px')
+  pôr($('sol'), 'top', r(mix(380, 960, desce)) + 'px')
+  pôr($('sol'), 'background', cor([255, 233, 168], [255, 128, 48], lar))
+  const solVisivel = Math.max(presenca('luz', t), presenca('tarde', t))
+  pôr($('sol'), 'opacity', solVisivel)
+
+  // 1. pergunta
+  pôr($('c-pergunta'), 'opacity', presenca('pergunta', t))
+  ;[...$('titulo').children].filter(e => e.tagName === 'SPAN').forEach((s, i) => {
+    const p = suave(fase(t, 0.05 + i * 0.25, 0.4))
+    pôr(s, 'opacity', r(p, 3)); pôr(s, 'transform', `translateY(${r((1 - p) * 60, 1)}px)`); s.style.display = 'inline-block'
+  })
+  pôr($('azul'), 'color', cor([255, 255, 255], [111, 196, 255], fase(t, g('pergunta', 'azul'), 0.3)))
+  pôr($('resto'), 'opacity', r(fase(t, g('pergunta', 'resto'), 0.3), 3))
+
+  // 2. luz: feixe branco do sol até o centro; na palavra "mistura" ele se abre em 7 cores
+  pôr($('c-luz'), 'opacity', presenca('luz', t))
+  const sx = 230, sy = 380, cx = 430, cy = 640, ang = Math.atan2(cy - sy, cx - sx), comp = Math.hypot(cx - sx, cy - sy) - 80
+  const pf = suave(fase(t, CENA.luz.inicio, 0.8))
+  pôr($('feixe'), 'left', r(sx + 80 * Math.cos(ang)) + 'px'); pôr($('feixe'), 'top', r(sy + 80 * Math.sin(ang) - 11) + 'px')
+  pôr($('feixe'), 'width', r(comp * pf) + 'px'); $('feixe').style.transform = `rotate(${r(ang * 180 / Math.PI)}deg)`
+  const abre = suave(fase(t, g('luz', 'cores'), 0.9))
+  ;[...$('leque').children].forEach((e, i) => {
+    const a = 18 + (i - 3) * 7 * abre
+    pôr(e, 'left', cx + 'px'); pôr(e, 'top', cy - 7 + 'px')
+    pôr(e, 'width', r(330 * lim(abre * 1.4)) + 'px'); pôr(e, 'transform', `rotate(${r(a)}deg)`)
+  })
+  pôr($('l-luz'), 'opacity', r(fase(t, g('luz', 'cores'), 0.4), 3))
+
+  // 3. ar: as moléculas aparecem na palavra; a onda de luz passa (fase anda com t)
+  pôr($('c-ar'), 'opacity', presenca('ar', t))
+  const pm = fase(t, g('ar', 'moleculas'), 0.6)
+  ;[...$('moleculas').children].forEach(e => pôr(e, 'opacity', r(lim(pm * 2 - e.dataset.i / 34), 2)))
+  pôr($('l-mol'), 'opacity', r(pm, 3))
+  const desl = presenca('ar', t) ? r((t - CENA.ar.inicio) * 180, 0) : 0   // parada fora da cena: o motor pula os quadros
+  $('onda-ar').setAttribute('d', senoide(130, 770, 690, 320, 70, desl)); K.push(desl)
+  pôr($('onda-ar'), 'opacity', r(0.85 * suave(fase(t, CENA.ar.inicio, 0.5)), 3))
+  pôr($('l-onda'), 'opacity', r(fase(t, g('ar', 'ondas'), 0.4), 3))
+
+  // 4. azul: onda curta azul chega e se espalha em raios; a onda longa vermelha passa reta
+  pôr($('c-azul'), 'opacity', presenca('azul', t))
+  const ca = suave(fase(t, CENA.azul.inicio, 0.7)), ea = suave(fase(t, g('azul', 'azul'), 0.9))
+  const da = presenca('azul', t) ? r((t - CENA.azul.inicio) * 160, 0) : 0
+  $('onda-azul').setAttribute('d', senoide(130, r(mix(130, 430, ca)), 560, 70, 24, da)); K.push(da)
+  ;[...$('espalhados').children].forEach((e, i) => {
+    const a = i * 360 / 14 + 8
+    pôr(e, 'left', '450px'); pôr(e, 'top', '556px')
+    pôr(e, 'width', r(40 + 210 * ea * (0.75 + 0.25 * Math.sin(i * 1.7))) + 'px')
+    pôr(e, 'transform', `rotate(${r(a)}deg)`); pôr(e, 'opacity', r(ea, 3))
+  })
+  pôr($('l-azul'), 'opacity', r(ea, 3))
+  const ev = suave(fase(t, g('azul', 'vermelho'), 0.9))
+  $('onda-verm').setAttribute('d', senoide(130, r(mix(130, 770, ev)), 820, 230, 26, da))
+  pôr($('l-verm'), 'opacity', r(ev, 3))
+  pôr($('l-ceu'), 'opacity', r(fase(t, g('azul', 'ceu'), 0.5), 3))
+
+  // 5. violeta
+  pôr($('c-violeta'), 'opacity', presenca('violeta', t))
+  const pv = suave(fase(t, CENA.violeta.inicio, 0.6))
+  pôr($('espectro'), 'transform', `scaleX(${r(pv, 3)})`)
+  pôr($('seta'), 'opacity', r(fase(t, CENA.violeta.inicio + 0.4, 0.3), 3))
+  pôr($('l-viol'), 'opacity', r(fase(t, CENA.violeta.inicio + 0.4, 0.3), 3))
+  for (const [id, nome] of [['k-sol', 'sol'], ['k-olho', 'olho']]) {
+    const p = suave(fase(t, g('violeta', nome), 0.4))
+    pôr($(id), 'opacity', r(p, 3)); pôr($(id), 'transform', `translateY(${r((1 - p) * 40, 1)}px)`)
+  }
+
+  // 6. tarde: caminho longo da luz rasante; texto final na palavra "laranja"
+  pôr($('c-tarde'), 'opacity', presenca('tarde', t))
+  const sxp = mix(230, 640, desce), syp = mix(380, 960, desce)
+  $('caminho').setAttribute('d', `M${r(sxp)} ${r(syp)} L 150 ${r(mix(900, 1000, desce))}`)
+  pôr($('caminho'), 'opacity', r(fase(t, g('tarde', 'ar'), 0.5), 3))
+  pôr($('l-ar'), 'opacity', r(fase(t, g('tarde', 'ar'), 0.5), 3))
+  pôr($('l-lar'), 'opacity', r(lar, 3))
+
+  // fim: cartão depois da última palavra
+  const pfim = suave(fase(t, D.fala_s + 0.3, 0.5))
+  pôr($('c-fim'), 'opacity', r(pfim, 3))
+  pôr($('f-resp'), 'transform', `scale(${r(mix(0.9, 1, pfim), 3)})`)
+  return K.join('|')
+}
+
+;(async () => {
+  D = await (await fetch('dados.json')).json()
+  D.cenas.forEach(c => (CENA[c.id] = c))
+  montar()
+  await document.fonts.load('800 100px "Barlow Condensed"')
+  await document.fonts.ready
+  window.DURACAO = D.duracao
+  window.seek = seek
+  seek(0)
+  window.pronto = true
+})()
+</script>
+</body>
+</html>

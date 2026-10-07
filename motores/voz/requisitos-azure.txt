@@ -1,0 +1,3 @@
+# Azure AI Speech (SDK proprietário da Microsoft, gratuito para uso com uma conta Azure).
+# Exige AZURE_SPEECH_KEY e AZURE_SPEECH_REGION; a camada F0 tem 0,5 M caracteres/mês grátis.
+azure-cognitiveservices-speech>=1.40

@@ -1,0 +1,4 @@
+# Kokoro-82M local (pesos Apache-2.0). O kokoro-onnx (MIT) depende do phonemizer e do
+# espeak-ng (via espeakng-loader), ambos GPL-3.0: por isso fica fora do núcleo.
+kokoro-onnx>=0.4
+soundfile>=0.12         # BSD-3

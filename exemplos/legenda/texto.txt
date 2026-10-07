@@ -1,0 +1,1 @@
+A Lua leva cerca de vinte e sete dias para dar uma volta completa em torno da Terra. Nesse caminho, ela mostra fases diferentes: nova, crescente, cheia e minguante. A luz que a gente vê não é dela, é a luz do Sol refletida na superfície. A distância média até lá é de trezentos e oitenta e quatro mil quilômetros, e cerca de sessenta por cento da face oculta nunca aparece daqui.

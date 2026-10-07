@@ -1,0 +1,40 @@
+{
+ "titulo": "Por que o céu é azul?",
+ "voz": { "provedor": "edge", "voz": "pt-BR-FranciscaNeural", "velocidade": 1.05 },
+ "trilha": { "volume": 0.06, "ducking": true },
+ "lufs": -14,
+ "segurar_fim": 2.6,
+ "fonte": "livros de física básica, capítulo de óptica",
+ "cenas": [
+  {
+   "id": "pergunta",
+   "fala": "Por que o céu é azul, e não branco ou violeta?",
+   "gatilhos": { "azul": "azul", "resto": "branco" }
+  },
+  {
+   "id": "luz",
+   "fala": "A luz do Sol parece branca, mas é uma mistura de todas as cores.",
+   "gatilhos": { "branca": "branca", "cores": "mistura" }
+  },
+  {
+   "id": "ar",
+   "fala": "No caminho, ela bate nas moléculas do ar, muito menores que as ondas de luz.",
+   "gatilhos": { "moleculas": "moléculas", "ondas": "menores" }
+  },
+  {
+   "id": "azul",
+   "fala": "Elas espalham as ondas curtas, como o azul, bem mais que as longas, como o vermelho. Esse azul espalhado chega de todos os lados.",
+   "gatilhos": { "azul": "azul", "vermelho": "vermelho", "ceu": "todos" }
+  },
+  {
+   "id": "violeta",
+   "fala": "O violeta se espalha ainda mais, mas o Sol emite menos dele, e o nosso olho é pouco sensível a ele.",
+   "gatilhos": { "sol": "emite", "olho": "olho" }
+  },
+  {
+   "id": "tarde",
+   "fala": "No fim da tarde, a luz cruza muito mais ar, o azul se perde no caminho e sobra o laranja.",
+   "gatilhos": { "ar": "cruza", "perde": "perde", "laranja": "laranja" }
+  }
+ ]
+}

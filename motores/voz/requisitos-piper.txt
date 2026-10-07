@@ -1,0 +1,3 @@
+# Piper local. O pacote piper-tts (piper1-gpl) é GPL-3.0-or-later: OPCIONAL, nunca dependência
+# obrigatória deste repositório (Apache-2.0). Os áudios gerados não herdam a GPL.
+piper-tts>=1.3

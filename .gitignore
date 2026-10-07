@@ -1,0 +1,17 @@
+# dependências
+node_modules/
+.venv/
+
+# modelos de voz locais (Kokoro, Piper): baixados, nunca versionados
+modelos/
+__pycache__/
+*.pyc
+
+# saídas geradas
+saida/
+*.mp4
+*.partes/
+
+# sistema
+.DS_Store
+Thumbs.db

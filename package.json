@@ -1,0 +1,24 @@
+{
+  "name": "motores-video",
+  "version": "0.1.0",
+  "description": "Motores locais e grátis para vídeo vertical: render de cenas HTML, voz sintética e legenda.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Arthur Teles",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "motores-render": "motores/render/render.mjs"
+  },
+  "exports": {
+    "./render": "./motores/render/render.mjs"
+  },
+  "scripts": {
+    "render": "node motores/render/render.mjs",
+    "exemplo": "node motores/render/render.mjs exemplos/ola-mundo --saida saida/ola-mundo.mp4"
+  },
+  "dependencies": {
+    "playwright-core": "^1.63.0"
+  }
+}

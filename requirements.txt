@@ -1,0 +1,15 @@
+# Dependências Python dos motores.
+# O motor de render (motores/render) é Node + ffmpeg e não precisa de Python.
+
+# --- motores/voz: núcleo (licenças permissivas ou LGPL, sem GPL) ---
+numpy>=1.26             # BSD-3
+faster-whisper>=1.1     # MIT; alinhador e QA (baixa o modelo Whisper na 1ª vez)
+num2words>=0.5.13       # LGPL-2.1; números por extenso na comparação
+edge-tts>=7.2           # LGPL-3.0; ATENÇÃO: serviço não oficial, sem termos de uso. Só protótipo.
+# Opcionais da voz (instale só o que usar):
+#   pip install -r motores/voz/requisitos-kokoro.txt   # Kokoro local (puxa phonemizer/espeak-ng, GPL-3.0)
+#   pip install -r motores/voz/requisitos-piper.txt    # Piper local (GPL-3.0)
+#   pip install -r motores/voz/requisitos-azure.txt    # Azure AI Speech (SDK da Microsoft)
+
+# --- motores/legenda (Python 3.10+; ffmpeg com libass no PATH) ---
+pillow>=10.1            # MIT-CMU (HPND); mede a largura do texto na fonte real e monta a folha de contato
