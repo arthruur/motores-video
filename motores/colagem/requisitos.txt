@@ -1,0 +1,9 @@
+# Opcionais do motor de colagem (além do requirements.txt da raiz).
+# pip install -r motores/colagem/requisitos.txt
+#
+# torch só para CPU (evita baixar ~2 GB de CUDA). Instale ANTES do resto:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch>=2.4                  # BSD-3
+sentence-transformers>=6.1  # Apache-2.0; carrega o EmbeddingGemma 2 (testado com 6.1.0 + transformers 5.19)
+yt-dlp>=2025.1              # Unlicense; baixa só o trecho de cada fonte (subcomando baixar)
+# O modelo google/embeddinggemma-2 (Apache-2.0, ~1,5 GB no disco) é baixado do Hugging Face na 1ª vez.

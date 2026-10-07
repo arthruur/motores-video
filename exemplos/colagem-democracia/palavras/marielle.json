@@ -1,0 +1,340 @@
+{
+"modelo": "faster-whisper small int8 (transcrição do arquivo original, recortada ao trecho)",
+"palavras": [
+{
+"texto": "da",
+"inicio": 0.22,
+"fim": 0.4
+},
+{
+"texto": "gente",
+"inicio": 0.4,
+"fim": 0.8
+},
+{
+"texto": "reivindicar",
+"inicio": 0.8,
+"fim": 2.12
+},
+{
+"texto": "que",
+"inicio": 2.12,
+"fim": 2.84
+},
+{
+"texto": "esse",
+"inicio": 2.84,
+"fim": 3.02
+},
+{
+"texto": "8",
+"inicio": 3.02,
+"fim": 3.16
+},
+{
+"texto": "de",
+"inicio": 3.16,
+"fim": 3.34
+},
+{
+"texto": "março",
+"inicio": 3.34,
+"fim": 3.96
+},
+{
+"texto": "começa",
+"inicio": 3.96,
+"fim": 4.78
+},
+{
+"texto": "muito",
+"inicio": 4.78,
+"fim": 5.44
+},
+{
+"texto": "antes,",
+"inicio": 5.44,
+"fim": 5.98
+},
+{
+"texto": "como",
+"inicio": 6.6,
+"fim": 6.8
+},
+{
+"texto": "diria",
+"inicio": 6.8,
+"fim": 7.2
+},
+{
+"texto": "Rosa,",
+"inicio": 7.2,
+"fim": 7.5
+},
+{
+"texto": "aniversariante",
+"inicio": 7.78,
+"fim": 8.34
+},
+{
+"texto": "do",
+"inicio": 8.34,
+"fim": 8.52
+},
+{
+"texto": "dia",
+"inicio": 8.52,
+"fim": 8.72
+},
+{
+"texto": "5,",
+"inicio": 8.72,
+"fim": 9.14
+},
+{
+"texto": "né?",
+"inicio": 9.42,
+"fim": 9.5
+},
+{
+"texto": "Nós",
+"inicio": 10.32,
+"fim": 10.56
+},
+{
+"texto": "mulheres",
+"inicio": 10.56,
+"fim": 11.18
+},
+{
+"texto": "lutamos",
+"inicio": 11.18,
+"fim": 13.02
+},
+{
+"texto": "por",
+"inicio": 13.02,
+"fim": 13.64
+},
+{
+"texto": "um",
+"inicio": 13.64,
+"fim": 13.78
+},
+{
+"texto": "mundo",
+"inicio": 13.78,
+"fim": 14.16
+},
+{
+"texto": "onde",
+"inicio": 14.16,
+"fim": 14.76
+},
+{
+"texto": "nós",
+"inicio": 14.76,
+"fim": 14.96
+},
+{
+"texto": "sejamos",
+"inicio": 14.96,
+"fim": 15.38
+},
+{
+"texto": "socialmente",
+"inicio": 15.38,
+"fim": 16.14
+},
+{
+"texto": "igual,",
+"inicio": 16.14,
+"fim": 16.52
+},
+{
+"texto": "humanamente",
+"inicio": 17.28,
+"fim": 17.88
+},
+{
+"texto": "diferente",
+"inicio": 17.88,
+"fim": 18.38
+},
+{
+"texto": "e",
+"inicio": 18.38,
+"fim": 19.06
+},
+{
+"texto": "totalmente",
+"inicio": 19.06,
+"fim": 19.52
+},
+{
+"texto": "livre",
+"inicio": 19.52,
+"fim": 20.16
+},
+{
+"texto": "na",
+"inicio": 20.16,
+"fim": 21.02
+},
+{
+"texto": "sua",
+"inicio": 21.02,
+"fim": 21.34
+},
+{
+"texto": "diversidade,",
+"inicio": 21.34,
+"fim": 22.34
+},
+{
+"texto": "mas",
+"inicio": 22.52,
+"fim": 22.84
+},
+{
+"texto": "na",
+"inicio": 22.84,
+"fim": 22.98
+},
+{
+"texto": "sua",
+"inicio": 22.98,
+"fim": 23.34
+},
+{
+"texto": "resistência.",
+"inicio": 23.34,
+"fim": 24.58
+},
+{
+"texto": "Inclusive,",
+"inicio": 24.58,
+"fim": 25.38
+},
+{
+"texto": "nesse",
+"inicio": 25.48,
+"fim": 25.58
+},
+{
+"texto": "momento",
+"inicio": 25.58,
+"fim": 25.96
+},
+{
+"texto": "onde",
+"inicio": 25.96,
+"fim": 26.36
+},
+{
+"texto": "a",
+"inicio": 26.36,
+"fim": 26.46
+},
+{
+"texto": "democracia",
+"inicio": 26.46,
+"fim": 27.14
+},
+{
+"texto": "se",
+"inicio": 27.14,
+"fim": 27.34
+},
+{
+"texto": "coloca",
+"inicio": 27.34,
+"fim": 27.6
+},
+{
+"texto": "frágil,",
+"inicio": 27.6,
+"fim": 28.66
+},
+{
+"texto": "onde",
+"inicio": 28.78,
+"fim": 29.04
+},
+{
+"texto": "se",
+"inicio": 29.04,
+"fim": 29.26
+},
+{
+"texto": "questiona",
+"inicio": 29.26,
+"fim": 29.72
+},
+{
+"texto": "se",
+"inicio": 29.72,
+"fim": 29.88
+},
+{
+"texto": "vai",
+"inicio": 29.88,
+"fim": 29.98
+},
+{
+"texto": "ter",
+"inicio": 29.98,
+"fim": 30.1
+},
+{
+"texto": "processo",
+"inicio": 30.1,
+"fim": 30.34
+},
+{
+"texto": "eleitoral",
+"inicio": 30.34,
+"fim": 31.08
+},
+{
+"texto": "ou",
+"inicio": 31.08,
+"fim": 31.24
+},
+{
+"texto": "não,",
+"inicio": 31.24,
+"fim": 31.46
+},
+{
+"texto": "onde",
+"inicio": 32.24,
+"fim": 32.62
+},
+{
+"texto": "a",
+"inicio": 32.62,
+"fim": 32.72
+},
+{
+"texto": "gente",
+"inicio": 32.72,
+"fim": 32.92
+},
+{
+"texto": "vê",
+"inicio": 32.92,
+"fim": 33.46
+},
+{
+"texto": "todos",
+"inicio": 33.46,
+"fim": 34.2
+},
+{
+"texto": "os",
+"inicio": 34.2,
+"fim": 34.58
+}
+]
+}

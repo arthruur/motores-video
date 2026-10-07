@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mudar o quê?</title>
+<style>
+  /* 1080x1920. Topo 288-330 (rótulo de IA) · visual 340-1125 · legenda ~1130-1240 (queimada depois, motores/legenda).
+     Zona livre: y 288-1248, x 120-888 (x 120-780 abaixo de y 840: botões do TikTok). */
+  @font-face { font-family: 'Barlow Condensed'; src: url('/_fontes/BarlowCondensed-ExtraBold.ttf'); font-weight: 800; }
+  :root { --papel:#F4EEE2; --tinta:#15213B; --azul:#1F4BB8; --ouro:#E2A400; --cinza:#6B6A66; --branco:#fff; }
+  * { box-sizing:border-box; margin:0; }
+  html, body { width:1080px; height:1920px; overflow:hidden; background:var(--papel); }
+  body { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; color:var(--tinta); position:relative; }
+  .abs { position:absolute; }
+  .centro { left:0; right:0; text-align:center; }
+  .faixa { left:120px; right:300px; text-align:center; }
+  #fundo { inset:0; background: radial-gradient(1200px 900px at 50% 38%, #fffaf0 0%, var(--papel) 60%, #e9e0cf 100%); }
+  /* grão com semente fixa: é imagem estática, não muda com o tempo */
+  #grao { inset:0; opacity:.07; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' seed='3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  /* rótulo de IA sempre visível, dentro da zona livre (no lab ficava em y 72, embaixo da interface do app) */
+  #topo { top:292px; left:120px; right:192px; display:flex; justify-content:space-between; font-size:30px; letter-spacing:2px; color:var(--cinza); }
+
+  .gigante { line-height:.9; }
+  .cartao { left:120px; right:300px; height:124px; border-radius:22px; background:var(--branco);
+    box-shadow:0 10px 30px rgba(21,33,59,.12); display:flex; align-items:center; justify-content:space-between;
+    padding:0 40px; border-left:14px solid var(--azul); }
+  .cartao b { font-size:62px; }
+  .cartao span { font-size:34px; color:var(--cinza); }
+  .carimbo { border:12px solid #C0262D; color:#C0262D; border-radius:24px; padding:10px 46px; }
+
+  #citacao { left:120px; right:192px; top:360px; background:var(--branco); border-radius:28px; padding:60px 90px 50px 64px;
+    box-shadow:0 18px 50px rgba(21,33,59,.18); }
+  #citacao .aspas { font-size:200px; line-height:.6; color:var(--ouro); font-family:Georgia,serif; }
+  #citacao .texto { font-size:50px; line-height:1.18; font-family:Georgia,serif; font-weight:400; margin-top:10px; }
+  #citacao .quem { font-size:42px; margin-top:36px; }
+  #citacao .fonte { font-size:32px; color:var(--cinza); margin-top:10px; }
+
+  #cheque { left:120px; right:300px; top:560px; height:420px; background:#E9F2E4; border:4px solid #7FA474; border-radius:18px;
+    padding:46px 54px; font-size:40px; color:#2F5130; box-shadow:0 18px 50px rgba(21,33,59,.2); }
+  #cheque .linha { border-bottom:3px dashed #7FA474; height:62px; margin:8px 0 26px; font-size:32px; color:#7FA474; }
+  #cheque .assin { position:absolute; right:60px; bottom:44px; font-family:'Segoe Script','Brush Script MT',cursive; font-weight:400; font-size:46px; }
+
+  #fim { inset:0; background:var(--tinta); color:#fff; padding:350px 300px 0 120px; }
+  #fim h2 { font-size:140px; line-height:.95; }
+  #fim .cta { margin-top:44px; display:inline-block; background:var(--ouro); color:var(--tinta); font-size:48px;
+    padding:24px 40px; border-radius:60px; }
+  #fim .fontes { margin-top:56px; font-size:30px; line-height:1.35; color:#c9cfdb; }
+  #fim .ia { margin-top:24px; font-size:28px; line-height:1.3; color:#c9cfdb; }
+</style>
+</head>
+<body>
+<div id="fundo" class="abs"></div>
+<div id="palco" class="abs" style="inset:0"></div>
+<div id="grao" class="abs"></div>
+<div id="topo" class="abs"><span>CONSTITUIÇÃO DE 1988</span><span>NARRAÇÃO GERADA POR IA</span></div>
+
+<script>
+// Contrato do motor de render: window.DURACAO, window.seek(t) -> chave de estado, window.pronto.
+// Tudo é função de t; os tempos vêm de dados.json, escrito pelo gerar.py a partir das palavras da voz.
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const lerp = (a, b, k) => a + (b - a) * k
+const easeOut = k => 1 - Math.pow(1 - k, 3)
+const pop = k => k <= 0 ? 0 : k >= 1 ? 1 : (k < .7 ? easeOut(k / .7) * 1.08 : lerp(1.08, 1, (k - .7) / .3))
+const prog = (t, t0, dur) => clamp((t - t0) / dur)
+const el = html => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild }
+const r2 = x => Math.round(x * 100) / 100
+
+let D, C = {}
+const palco = document.getElementById('palco')
+// instante da palavra-gatilho (ou o início da cena, se a cena não tem esse gatilho)
+const g = (cena, nome) => C[cena].gatilhos[nome] ?? C[cena].inicio
+
+const E = {}
+function montar() {
+  const add = (k, html) => (E[k] = palco.appendChild(el(html)))
+  add('n13', `<div class="abs centro gigante" style="top:440px;font-size:440px;color:var(--azul)">13º</div>`)
+  add('n13sub', `<div class="abs centro" style="top:960px;font-size:72px">SALÁRIO</div>`)
+  add('presente', `<div class="abs centro" style="top:1040px;font-size:48px;color:var(--cinza)">não é presente do patrão</div>`)
+  add('lei', `<div class="abs" style="left:0;right:0;top:360px;display:flex;justify-content:center"><div class="carimbo gigante" style="font-size:190px">É LEI</div></div>`)
+  add('livro', `<div class="abs" style="left:390px;top:620px;width:300px;height:400px;border-radius:12px 24px 24px 12px;background:var(--tinta);
+     box-shadow:inset 18px 0 0 #0c1427, 0 24px 50px rgba(21,33,59,.35);color:var(--ouro);text-align:center;padding-top:110px">
+     <div style="font-size:38px;letter-spacing:3px">CONSTITUIÇÃO</div>
+     <div style="width:120px;height:3px;background:var(--ouro);margin:18px auto"></div>
+     <div style="font-size:72px">1988</div></div>`)
+  add('artigo', `<div class="abs centro" style="top:1050px;font-size:44px;color:var(--cinza)">art. 7º, VIII</div>`)
+
+  // cartões de direitos: um por item do roteiro; entram na palavra-gatilho (o 1º, no começo da cena)
+  E.cartoes = D.itens.map((c, i) => ({ ...c, i, t: c.gatilho ? g('lista', c.gatilho) : C.lista.inicio,
+    el: palco.appendChild(el(`<div class="abs cartao"><b>${c.titulo}</b><span>${c.rotulo}</span></div>`)) }))
+
+  add('anos', `<div class="abs centro gigante" style="top:440px;font-size:80px;color:var(--azul)">${D.anos} anos de direitos</div>`)
+
+  const q = D.citacao
+  add('citacao', `<div id="citacao" class="abs"><div class="aspas">“</div><div class="texto">${q.texto}</div>
+     <div class="quem">${q.quem}</div><div class="fonte">${q.fonte}</div></div>`)
+
+  add('mudar', `<div class="abs centro gigante" style="top:470px;font-size:200px">MUDAR<br>O QUÊ?</div>`)
+  add('naodisse', `<div class="abs faixa" style="top:880px;display:flex;justify-content:center"><div class="carimbo" style="font-size:76px">ELE NÃO DISSE</div></div>`)
+
+  add('cheque', `<div id="cheque" class="abs"><div style="letter-spacing:2px">CHEQUE · CONSTITUIÇÃO FEDERAL</div>
+     <div style="margin-top:34px">Pague-se o que quiser:</div><div class="linha">em branco</div>
+     <div>Mudar o quê:</div><div class="linha">em branco</div><div class="assin">assine aqui</div></div>`)
+  add('direitos', `<div class="abs centro gigante" style="top:350px;font-size:82px">OS SEUS DIREITOS<br><span style="color:var(--azul)">ESTÃO AQUI</span></div>`)
+
+  const f = D.cartao
+  add('fim', `<div id="fim" class="abs"><div style="font-size:48px;color:#c9cfdb">${f.chamada}</div>
+     <h2 style="margin-top:24px">${f.titulo}</h2><div class="cta">${f.cta}</div>
+     <div class="fontes">Fontes<br>${f.fontes.join('<br>')}</div>
+     <div class="ia">${D.rotulo}</div></div>`)
+}
+
+// só estilo inline, arredondado: a chave de estado sai dele
+function estilo(e, { o = 1, x = 0, y = 0, s = 1, r = 0 } = {}) {
+  o = r2(o)
+  e.style.opacity = o
+  e.style.transform = `translate(${r2(x)}px,${r2(y)}px) scale(${r2(s)}) rotate(${r2(r)}deg)`
+  e.style.visibility = o <= 0.001 ? 'hidden' : 'visible'
+}
+
+function seek(t) {
+  // gancho: 13º gigante
+  { const k = pop(prog(t, g('gancho', 'numero') - 0.15, 0.4)), sai = prog(t, C.lei.inicio - 0.2, 0.3)
+    estilo(E.n13, { o: k * (1 - sai), s: k ? 0.6 + 0.4 * k : 0, y: -200 * sai })
+    estilo(E.n13sub, { o: prog(t, g('gancho', 'salario'), 0.3) * (1 - sai), y: -200 * sai })
+    const kp = prog(t, g('gancho', 'presente'), 0.3)
+    estilo(E.presente, { o: kp * (1 - sai), y: 20 * (1 - kp) - 200 * sai }) }
+
+  // lei: carimbo + livro
+  { const tl = g('lei', 'carimbo') - 0.08
+    const kc = pop(prog(t, tl, 0.25)), sai = prog(t, C.lista.inicio - 0.25, 0.3)
+    estilo(E.lei, { o: (kc > 0) * (1 - sai), s: kc ? lerp(2.2, 1, easeOut(prog(t, tl, 0.2))) : 0, r: -7 })
+    const kl = pop(prog(t, g('lei', 'livro') - 0.1, 0.4))
+    // o livro some na lista e volta na cena "livro"
+    const volta = pop(prog(t, C.livro.inicio - 0.1, 0.45)), sai2 = prog(t, C.fala.inicio - 0.3, 0.3)
+    const kLivro = t < C.lista.inicio - 0.25 ? kl : volta
+    const saiLivro = t < C.lista.inicio ? sai : sai2
+    estilo(E.livro, { o: kLivro * (1 - saiLivro), y: lerp(60, 0, kLivro), s: 0.85 + 0.15 * kLivro })
+    estilo(E.artigo, { o: kl * (1 - sai) }) }
+
+  // lista: cartões empilhando; na cena "livro" voam para dentro do livro; no "cheque" voltam
+  { const topo = 350, passo = 150, entra = C.livro.inicio + 0.6
+    E.cartoes.forEach(c => {
+      const k = pop(prog(t, c.t - 0.1, 0.35))
+      const kv = easeOut(prog(t, entra + c.i * 0.12, 0.45))
+      const naCheque = prog(t, g('cheque', 'direitos') - 0.1 + c.i * 0.08, 0.35) * (1 - prog(t, C.fecho.inicio - 0.3, 0.3))
+      let o = (t >= C.lista.inicio - 0.1 && t < C.fala.inicio) ? k * (1 - kv) : 0
+      let y = lerp(topo + c.i * passo, 740, kv), s = lerp(1, 0.25, kv)
+      if (naCheque > 0) { o = naCheque; y = 525 + c.i * 118 + 20 * (1 - naCheque); s = 0.92 }  // último acaba em ~1112, acima da legenda
+      estilo(c.el, { o, y, s, x: (c.i % 2 ? 1 : -1) * 18 * (1 - k) + 90 * kv * (naCheque <= 0) })  // +90: o livro está em 540, o cartão em 450
+    })
+    const ka = prog(t, g('livro', 'anos'), 0.4) * (1 - prog(t, C.fala.inicio - 0.3, 0.3))
+    estilo(E.anos, { o: ka, y: 30 * (1 - ka) }) }
+
+  // fala: citação literal com data e fonte
+  { const k = pop(prog(t, C.fala.inicio - 0.05, 0.4)), sai = prog(t, C.pergunta.inicio - 0.2, 0.25)
+    estilo(E.citacao, { o: k * (1 - sai), y: lerp(80, 0, k) - 60 * sai, s: 0.96 + 0.04 * k }) }
+
+  // pergunta: MUDAR O QUÊ? + carimbo ELE NÃO DISSE
+  { const k = pop(prog(t, C.pergunta.inicio - 0.05, 0.3)), sai = prog(t, C.cheque.inicio - 0.2, 0.3)
+    estilo(E.mudar, { o: k * (1 - sai), s: k ? lerp(1.4, 1, easeOut(prog(t, C.pergunta.inicio - 0.05, 0.25))) : 0 })
+    const kn = prog(t, g('pergunta', 'carimbo') - 0.05, 0.2)
+    estilo(E.naodisse, { o: (kn > 0) * (1 - sai), s: kn ? lerp(2, 1, easeOut(kn)) : 0, r: -5 }) }
+
+  // cheque em branco; depois os direitos aparecem ("é nela que estão os seus direitos")
+  { const k = pop(prog(t, C.cheque.inicio, 0.4)), kd = prog(t, g('cheque', 'direitos') - 0.2, 0.35)
+    const sai = prog(t, C.fecho.inicio - 0.3, 0.3)
+    estilo(E.cheque, { o: k * (1 - kd) * (1 - sai), r: lerp(-6, -2, k), s: 0.9 + 0.1 * k, y: -40 * kd })
+    estilo(E.direitos, { o: kd * (1 - sai), y: 20 * (1 - kd) }) }
+
+  // cartão final: fica até o último quadro
+  { const k = prog(t, C.fecho.inicio - 0.2, 0.35)
+    estilo(E.fim, { o: k, y: 40 * (1 - easeOut(k)) }) }
+
+  return [...palco.children].map(e => e.style.cssText).join(';')
+}
+
+;(async () => {
+  D = await (await fetch('dados.json')).json()
+  D.cenas.forEach(c => (C[c.id] = c))
+  montar()
+  await document.fonts.load('800 100px "Barlow Condensed"')
+  await document.fonts.ready
+  window.DURACAO = D.duracao
+  window.seek = seek
+  seek(0)
+  window.pronto = true
+})()
+</script>
+</body>
+</html>

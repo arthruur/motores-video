@@ -12,6 +12,9 @@ saida/
 *.mp4
 *.partes/
 
+# mídia de terceiros dos exemplos: baixada por quem roda, nunca versionada
+exemplos/*/entrada/
+
 # sistema
 .DS_Store
 Thumbs.db

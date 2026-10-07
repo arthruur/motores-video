@@ -1,0 +1,240 @@
+{
+ "_leia": "Fontes do exemplo, versão reduzida: só as 4 falas que entram na colagem, com trechos curtos em volta dos fragmentos. Os vídeos NÃO estão no repositório: baixar.py baixa os trechos em entrada/ (ignorada pelo git). trecho.ini/fim em segundos do vídeo original (fim null = vídeo inteiro); tempos dentro do arquivo + trecho.ini = tempo no original. palavras: transcrição palavra a palavra (Whisper small) já feita, para o exemplo não precisar transcrever. frases: falas conferidas contra transcrição publicada, com tempo aproximado no arquivo (no_trecho); ajudam a busca, não vão para a legenda. fontes_opcionais: outras 3 falas para experimentar o sugerir (baixar/indexar/sugerir com --opcionais; transcreve na 1ª vez). Os direitos dos vídeos são dos titulares (README).",
+ "fontes": [
+  {
+   "slug": "ulysses",
+   "figura": "Ulysses Guimarães",
+   "data": "1988-10-05",
+   "ocasiao": "Discurso na sessão solene de promulgação da Constituição Federal",
+   "rotulo": "Promulgação da Constituição",
+   "local": "Plenário da Câmara dos Deputados, Brasília",
+   "aviso": "áudio em trechos e fotos de arquivo: montagem da TV Câmara (2023)",
+   "url": "https://www.youtube.com/watch?v=B-kYyLSJ3mY",
+   "creditos": {
+    "canal": "Câmara dos Deputados",
+    "titulo": "Discurso Ulysses Guimarães na promulgação da Constituição Federal de 1988 - 06/10/23",
+    "publicado": "2023-10-06"
+   },
+   "trecho": {
+    "ini": 0,
+    "fim": null
+   },
+   "arquivo": "entrada/ulysses.mp4",
+   "frases": [
+    {
+     "id": "ulysses-odio-e-nojo",
+     "texto": "Temos ódio à ditadura. Ódio e nojo.",
+     "no_trecho": 103.0
+    },
+    {
+     "id": "ulysses-descumprir-jamais",
+     "texto": "Quanto a ela, discordar, sim. Divergir, sim. Descumprir, jamais. Afrontá-la, nunca.",
+     "no_trecho": 61.0
+    },
+    {
+     "id": "ulysses-traidor-da-constituicao",
+     "texto": "Traidor da Constituição é traidor da Pátria.",
+     "no_trecho": 86.0
+    },
+    {
+     "id": "ulysses-caminho-maldito",
+     "texto": "Conhecemos o caminho maldito: rasgar a Constituição, trancar as portas do Parlamento, garrotear a liberdade, mandar os patriotas para a cadeia, o exílio, o cemitério.",
+     "no_trecho": 89.0
+    },
+    {
+     "id": "ulysses-nacao-quer-mudar",
+     "texto": "A Nação quer mudar, a Nação deve mudar, a Nação vai mudar.",
+     "no_trecho": 120.0
+    },
+    {
+     "id": "ulysses-lamparina",
+     "texto": "Será luz, ainda que de lamparina, na noite dos desgraçados.",
+     "no_trecho": 108.0
+    }
+   ],
+   "palavras": "palavras/ulysses.json"
+  },
+  {
+   "slug": "lelia",
+   "figura": "Lélia Gonzalez",
+   "data": "1983-11-20",
+   "ocasiao": "Marcha do Movimento Negro no Dia da Consciência Negra (ainda na ditadura)",
+   "rotulo": "Marcha da Consciência Negra",
+   "local": "Rio de Janeiro",
+   "url": "https://www.youtube.com/watch?v=BFnvKcsLqJI",
+   "creditos": {
+    "canal": "Cultne",
+    "titulo": "CULTNE - Lélia Gonzalez - 20 de Novembro de 1983",
+    "publicado": "2012-11-14"
+   },
+   "trecho": {
+    "ini": 0,
+    "fim": null
+   },
+   "arquivo": "entrada/lelia.mp4",
+   "frases": [
+    {
+     "id": "lelia-democracia-racial-tem-que-ser-democracia",
+     "texto": "Para ser uma democracia racial, este país tem que ser efetivamente uma democracia.",
+     "no_trecho": 7.0
+    },
+    {
+     "id": "lelia-palmares-primeiro-estado-livre",
+     "texto": "Não sabem que o primeiro estado livre de todo o continente americano surgiu no Brasil e foi criado pelos negros.",
+     "no_trecho": 54.0
+    }
+   ],
+   "palavras": "palavras/lelia.json"
+  },
+  {
+   "slug": "marielle",
+   "figura": "Marielle Franco",
+   "data": "2018-03-08",
+   "ocasiao": "Grande expediente do Dia Internacional da Mulher, uma semana antes de seu assassinato",
+   "rotulo": "Câmara Municipal do Rio",
+   "local": "Câmara Municipal do Rio de Janeiro",
+   "url": "https://www.youtube.com/watch?v=fl8czAgJGUE",
+   "creditos": {
+    "canal": "Instituto Marielle Franco",
+    "titulo": "NÃO SEREI INTERROMPIDA | 08/03/2018",
+    "publicado": "2022-05-11"
+   },
+   "trecho": {
+    "ini": 265,
+    "fim": 300
+   },
+   "arquivo": "entrada/marielle.mp4",
+   "frases": [
+    {
+     "id": "marielle-socialmente-iguais",
+     "texto": "Nós, mulheres, lutamos por um mundo onde nós sejamos socialmente iguais, humanamente diferentes e totalmente livres.",
+     "no_trecho": 1.0
+    }
+   ],
+   "palavras": "palavras/marielle.json"
+  },
+  {
+   "slug": "freire",
+   "figura": "Paulo Freire",
+   "data": "1997-04-17",
+   "ocasiao": "Última entrevista, concedida à TV PUC-SP (jornalista Luciana Burlamaqui)",
+   "rotulo": "Última entrevista, TV PUC-SP",
+   "local": "Casa de Freire no Alto do Sumaré, São Paulo",
+   "url": "https://www.youtube.com/watch?v=LN43PJCBG2M",
+   "creditos": {
+    "canal": "Daniel Caires",
+    "titulo": "Última entrevista de Paulo Freire (HD remasterizada, 1997)",
+    "publicado": "2018-12-29",
+    "producao": "TV PUC-SP"
+   },
+   "trecho": {
+    "ini": 255,
+    "fim": 280
+   },
+   "arquivo": "entrada/freire.mp4",
+   "frases": [],
+   "palavras": "palavras/freire.json"
+  }
+ ],
+ "fontes_opcionais": [
+  {
+   "slug": "krenak",
+   "figura": "Ailton Krenak",
+   "data": "1987-09-04",
+   "ocasiao": "Defesa da emenda popular dos povos indígenas na Comissão de Sistematização da Assembleia Nacional Constituinte",
+   "rotulo": "Constituinte, emenda indígena",
+   "local": "Congresso Nacional, Brasília",
+   "aviso": "trecho do filme Índio Cidadão?, com narração",
+   "url": "https://www.youtube.com/watch?v=kWMHiwdbM_Q",
+   "creditos": {
+    "canal": "ÍNDIO CIDADÃO? - O FILME",
+    "titulo": "ÍNDIO CIDADÃO? - Grito 3 Ailton Krenak",
+    "publicado": "2014-09-04"
+   },
+   "trecho": {
+    "ini": 0,
+    "fim": null
+   },
+   "arquivo": "entrada/krenak.mp4",
+   "frases": [
+    {
+     "id": "krenak-regado-com-sangue",
+     "texto": "O povo indígena tem regado com sangue cada hectare dos oito milhões de quilômetros quadrados do Brasil.",
+     "no_trecho": 167.0
+    },
+    {
+     "id": "krenak-espero-nao-agredir",
+     "texto": "Espero não agredir, com a minha manifestação, o protocolo desta Casa.",
+     "no_trecho": 7.0
+    },
+    {
+     "id": "krenak-jeito-de-pensar",
+     "texto": "O povo indígena tem um jeito de pensar, tem um jeito de viver.",
+     "no_trecho": 58.0
+    },
+    {
+     "id": "krenak-parcela-mais-fragil",
+     "texto": "Somos talvez a parcela mais frágil nesse processo de luta de interesses que se tem manifestado extremamente brutal, extremamente desrespeitosa, extremamente aética.",
+     "no_trecho": 0
+    }
+   ]
+  },
+  {
+   "slug": "brizola",
+   "figura": "Leonel Brizola",
+   "data": "1961-08-28",
+   "ocasiao": "Discurso pela Cadeia da Legalidade",
+   "rotulo": "Rádio da Legalidade",
+   "local": "Porão do Palácio Piratini, Porto Alegre",
+   "url": "https://www.youtube.com/watch?v=vPbB7PH8A-U",
+   "creditos": {
+    "canal": "História Interativa 12",
+    "titulo": "Discurso de Brizola na rádio, contra o golpe de 1961, em 28 de agosto de 1961",
+    "publicado": "2015-09-20"
+   },
+   "trecho": {
+    "ini": 0,
+    "fim": 240
+   },
+   "arquivo": "entrada/brizola.mp4",
+   "frases": [
+    {
+     "id": "brizola-atencao-povo-de-porto-alegre",
+     "texto": "Atenção, povo de Porto Alegre! Atenção, Rio Grande do Sul! Atenção, Brasil!",
+     "no_trecho": 22.0
+    },
+    {
+     "id": "brizola-piratini-cidadela",
+     "texto": "O Palácio Piratini, meus patrícios, está aqui transformado numa cidadela que há de ser heroica, da liberdade, dos direitos humanos, da civilização, da ordem jurídica.",
+     "no_trecho": 163.0
+    }
+   ]
+  },
+  {
+   "slug": "carolina",
+   "figura": "Carolina Maria de Jesus",
+   "data": null,
+   "ocasiao": "Entrevista em vídeo no sítio de Parelheiros (data exata não identificada, anos 1970)",
+   "rotulo": "Entrevista em Parelheiros",
+   "local": "Parelheiros, São Paulo",
+   "url": "https://www.youtube.com/watch?v=c0zqmaOY8IM",
+   "creditos": {
+    "canal": "Site Carolina Maria de Jesus",
+    "titulo": "Carolina Maria de Jesus em Parelheiros",
+    "publicado": "2024-02-21"
+   },
+   "trecho": {
+    "ini": 0,
+    "fim": 180
+   },
+   "arquivo": "entrada/carolina.mp4",
+   "frases": [
+    {
+     "id": "carolina-catar-papel-escrever-melhorar",
+     "texto": "É o meu caso: catar papel, procurar melhorar, escrever por intermédio do livro, conseguir melhorar bem a minha vida.",
+     "no_trecho": 4.0
+    }
+   ]
+  }
+ ]
+}

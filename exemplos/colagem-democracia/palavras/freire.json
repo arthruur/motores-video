@@ -1,0 +1,210 @@
+{
+"modelo": "faster-whisper small int8 (transcrição do arquivo original, recortada ao trecho)",
+"palavras": [
+{
+"texto": "Por",
+"inicio": 0.2,
+"fim": 0.26
+},
+{
+"texto": "exemplo,",
+"inicio": 0.26,
+"fim": 0.54
+},
+{
+"texto": "a",
+"inicio": 0.74,
+"fim": 0.8
+},
+{
+"texto": "marcha",
+"inicio": 0.8,
+"fim": 1.18
+},
+{
+"texto": "pela",
+"inicio": 1.18,
+"fim": 1.36
+},
+{
+"texto": "decência,",
+"inicio": 1.36,
+"fim": 2.26
+},
+{
+"texto": "a",
+"inicio": 2.92,
+"fim": 2.98
+},
+{
+"texto": "marcha",
+"inicio": 2.98,
+"fim": 3.38
+},
+{
+"texto": "pela",
+"inicio": 3.38,
+"fim": 3.6
+},
+{
+"texto": "superação",
+"inicio": 3.6,
+"fim": 4.8
+},
+{
+"texto": "da",
+"inicio": 4.8,
+"fim": 5.0
+},
+{
+"texto": "sem",
+"inicio": 5.0,
+"fim": 5.26
+},
+{
+"texto": "vergonhice",
+"inicio": 5.26,
+"fim": 6.22
+},
+{
+"texto": "que",
+"inicio": 6.22,
+"fim": 6.48
+},
+{
+"texto": "se",
+"inicio": 6.48,
+"fim": 6.66
+},
+{
+"texto": "democratizou",
+"inicio": 6.66,
+"fim": 7.62
+},
+{
+"texto": "terrívelmente",
+"inicio": 7.62,
+"fim": 8.9
+},
+{
+"texto": "desse",
+"inicio": 8.9,
+"fim": 9.22
+},
+{
+"texto": "país.",
+"inicio": 9.22,
+"fim": 9.5
+},
+{
+"texto": "Quer",
+"inicio": 10.2,
+"fim": 10.22
+},
+{
+"texto": "dizer,",
+"inicio": 10.22,
+"fim": 10.36
+},
+{
+"texto": "eu",
+"inicio": 10.7,
+"fim": 10.78
+},
+{
+"texto": "acho",
+"inicio": 10.78,
+"fim": 11.2
+},
+{
+"texto": "que",
+"inicio": 11.2,
+"fim": 11.34
+},
+{
+"texto": "essas",
+"inicio": 11.34,
+"fim": 11.62
+},
+{
+"texto": "marchas",
+"inicio": 11.62,
+"fim": 12.68
+},
+{
+"texto": "nos",
+"inicio": 12.68,
+"fim": 13.18
+},
+{
+"texto": "afirmam",
+"inicio": 13.18,
+"fim": 14.08
+},
+{
+"texto": "como",
+"inicio": 14.08,
+"fim": 14.78
+},
+{
+"texto": "gente,",
+"inicio": 14.78,
+"fim": 15.24
+},
+{
+"texto": "como",
+"inicio": 15.62,
+"fim": 15.64
+},
+{
+"texto": "sociedade,",
+"inicio": 15.64,
+"fim": 16.12
+},
+{
+"texto": "querendo",
+"inicio": 16.3,
+"fim": 16.84
+},
+{
+"texto": "democratizar",
+"inicio": 16.84,
+"fim": 17.68
+},
+{
+"texto": "-se.",
+"inicio": 17.68,
+"fim": 18.04
+},
+{
+"texto": "Indiscutivamente,",
+"inicio": 21.91,
+"fim": 22.61
+},
+{
+"texto": "do",
+"inicio": 23.09,
+"fim": 23.35
+},
+{
+"texto": "ponto",
+"inicio": 23.35,
+"fim": 23.55
+},
+{
+"texto": "de",
+"inicio": 23.55,
+"fim": 23.69
+},
+{
+"texto": "vista",
+"inicio": 23.69,
+"fim": 23.91
+},
+{
+"texto": "até",
+"inicio": 23.91,
+"fim": 24.15
+}
+]
+}

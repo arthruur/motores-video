@@ -4,6 +4,18 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+## [0.2.0] - 2026-10-07
+
+### Adicionado
+
+- **`motores/colagem`**: o quarto motor. Colagem por sentido: fragmentos de falas reais achados por tema, cortados entre frases e montados em 9:16. Subcomandos `baixar` (yt-dlp, só o trecho; `--de` copia vídeos já baixados), `indexar` (Whisper do `motores/voz`, com VAD e repetição sem VAD; janelas de 15 s; frases conferidas localizadas pelo texto; vetores do EmbeddingGemma 2 com cache), `sugerir` (MMR, no máximo 2 por fonte, corte em fronteira de frase, página HTML para ouvir e escolher), `montar` e `folha`. O `montar` reusa `casar()` do `motores/voz` (o texto revisado manda, o Whisper empresta os tempos), `gerar()` e `filtro_legenda()` do `motores/legenda`, e faz etiqueta com nome, data, ocasião e fonte (link e minuto), cartões de abertura e final com todas as fontes e o autor da montagem, loudnorm em 2 passagens, `.srt`/`.vtt` da colagem inteira e `ficha.json` com o porquê de cada escolha. Dependências pesadas (torch, sentence-transformers) são opcionais, em `motores/colagem/requisitos.txt`.
+- **`exemplos/colagem-democracia`**: "O que é democracia?", 66,3 s, com Ulysses Guimarães, Lélia Gonzalez, Marielle Franco e Paulo Freire. Traz a transcrição pronta (`palavras/`), então o `montar` roda só com o núcleo; mais 3 falas em `fontes_opcionais` para experimentar a busca.
+- **`exemplos/karaoke-discurso`**: 23 s do discurso de Ulysses Guimarães na promulgação da Constituição, com legenda palavra a palavra alinhada ao áudio original, crédito, fonte e aviso de montagem na tela.
+- **`exemplos/mudar-o-que`**: "Mudar o quê?", explicativo de opinião de 47 s com a fonte de cada fato na tela, rótulo de IA e nota de contexto (feito em 06/10/2026, período eleitoral). A cena segue o contrato do render.
+- **Mídia de terceiros**: os vídeos dos exemplos são baixados em `exemplos/*/entrada/` (ignorada pelo git) e nunca versionados; o crédito de cada um fica no `fontes.json`, e os READMEs explicam o direito de citação. Seção nova no README e em `THIRD_PARTY.md`.
+- **Documentação**: `docs/colagem.md` (conceito, caminho e ética da montagem), `motores/colagem/README.md` (formatos e números) e a colagem em `docs/arquitetura.md`.
+- **Dependências opcionais registradas**: yt-dlp (Unlicense), sentence-transformers (Apache-2.0), torch (BSD-3-Clause) e os pesos do EmbeddingGemma 2 (Apache-2.0).
+
 ### Corrigido
 
 - **`exemplos/legenda`**: o texto dizia que "cerca de 60% da face oculta nunca aparece daqui", o que está errado. Com a libração, vemos ~59% da superfície da Lua; ~41% nunca aparece. O texto agora diz "cerca de quarenta por cento da superfície dela", e o `palavras.json` foi refeito com o edge-tts (72 palavras e 24 s, como antes). O QC mudou pouco: 2 curtos e 6 encolhidos.

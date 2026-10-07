@@ -1,0 +1,23 @@
+{
+ "fontes": [
+  {
+   "id": "ulysses-1988",
+   "quem": "Ulysses Guimarães",
+   "ocasiao": "Discurso na sessão solene de promulgação da Constituição Federal",
+   "data": "1988-10-05",
+   "local": "Plenário da Câmara dos Deputados, Brasília",
+   "credito": "TV Câmara",
+   "url": "https://www.youtube.com/watch?v=B-kYyLSJ3mY",
+   "trecho": { "ini": "00:01:38", "fim": "00:02:08" },
+   "arquivo": "entrada/ulysses-1988.mp4",
+   "aviso": "O vídeo da TV Câmara (2023) é uma montagem: fotos de arquivo e o áudio do discurso em trechos, fora da ordem original.",
+   "direitos": "Os direitos do vídeo são dos seus titulares. O trecho é usado como citação, com crédito e fonte na tela (Lei 9.610/98, art. 46, III).",
+   "na_tela": {
+    "data": "5 de outubro de 1988 · Promulgação da Constituição",
+    "nome": "Ulysses Guimarães",
+    "aviso": "áudio em trechos e fotos de arquivo: montagem da TV Câmara",
+    "fonte": "Fonte: TV Câmara · youtube.com/watch?v=B-kYyLSJ3mY"
+   }
+  }
+ ]
+}

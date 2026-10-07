@@ -41,6 +41,21 @@ O edge-tts é uma biblioteca livre, mas o **serviço** que ela chama é o endpoi
 
 Os áudios gerados por Piper ou Kokoro **não herdam** a GPL: ela se aplica ao programa, não à saída. Se você redistribuir um programa que inclua Piper ou phonemizer/espeak-ng, esse programa fica sujeito à GPL-3.0.
 
+### Motor de colagem e exemplos com vídeo de terceiros
+
+Instalados por `pip install -r motores/colagem/requisitos.txt` (busca por tema) ou só `pip install yt-dlp` (download dos exemplos). O `montar` da colagem usa apenas o núcleo.
+
+| Pacote / modelo | Versão testada | Licença | Usado por | Observação |
+|---|---|---|---|---|
+| yt-dlp | 2026.8.19 | Unlicense (domínio público) | `colagem baixar`, `exemplos/karaoke-discurso/baixar.py`, `exemplos/colagem-democracia/baixar.py` | Baixa só o trecho citado. Usar o yt-dlp não dá direito sobre o vídeo: ver abaixo |
+| sentence-transformers | 6.1.0 | Apache-2.0 | `colagem indexar`, `sugerir` | Puxa transformers e huggingface-hub (Apache-2.0), scikit-learn e scipy (BSD-3-Clause) |
+| torch (build para CPU) | 2.14.1 | BSD-3-Clause (licença do PyTorch); o metadado do pacote declara também Apache-2.0, BSD-2-Clause, BSL-1.0 e MIT dos componentes embutidos | `colagem indexar`, `sugerir` | Instale pelo índice CPU para não baixar ~2 GB de CUDA |
+| google/embeddinggemma-2 (pesos) | — | Apache-2.0 (cartão do modelo no Hugging Face) | `colagem indexar`, `sugerir` | ~1,5 GB, baixado do Hugging Face na 1ª vez; usado só o codificador de texto |
+
+## Mídia de terceiros nos exemplos
+
+Os exemplos `karaoke-discurso` e `colagem-democracia` usam trechos de vídeos publicados por terceiros (Câmara dos Deputados/TV Câmara, Cultne, Instituto Marielle Franco, Daniel Caires/TV PUC-SP e, nas fontes opcionais da colagem, os canais listados no `fontes.json`). **Esses vídeos não são redistribuídos**: não estão no repositório, são baixados por quem roda o exemplo para `exemplos/*/entrada/` (ignorada pelo git), e **os direitos são dos seus titulares**. O repositório traz só texto: URL, trecho, crédito, a fala conferida (`revisao`) e, na colagem, a transcrição automática dos trechos (`palavras/`). O uso pretendido é a citação para estudo, com crédito e origem na tela (Lei 9.610/98, art. 46, III); o README de cada exemplo explica.
+
 ## Ferramentas externas (instaladas por você, não redistribuídas)
 
 | Ferramenta | Licença | Observação |

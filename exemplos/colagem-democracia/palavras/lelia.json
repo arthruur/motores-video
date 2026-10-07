@@ -1,0 +1,1420 @@
+{
+"modelo": "faster-whisper small int8 (transcrição do arquivo original, recortada ao trecho)",
+"palavras": [
+{
+"texto": "Vamos",
+"inicio": 7.04,
+"fim": 7.64
+},
+{
+"texto": "à",
+"inicio": 7.64,
+"fim": 7.94
+},
+{
+"texto": "luta,",
+"inicio": 7.94,
+"fim": 8.22
+},
+{
+"texto": "companheiro,",
+"inicio": 8.34,
+"fim": 8.86
+},
+{
+"texto": "para",
+"inicio": 9.32,
+"fim": 9.62
+},
+{
+"texto": "que",
+"inicio": 9.62,
+"fim": 9.98
+},
+{
+"texto": "a",
+"inicio": 9.98,
+"fim": 10.62
+},
+{
+"texto": "exploração",
+"inicio": 10.62,
+"fim": 11.7
+},
+{
+"texto": "e",
+"inicio": 11.7,
+"fim": 11.88
+},
+{
+"texto": "a",
+"inicio": 11.88,
+"fim": 11.96
+},
+{
+"texto": "opressão",
+"inicio": 11.96,
+"fim": 12.54
+},
+{
+"texto": "perdirem",
+"inicio": 12.54,
+"fim": 13.06
+},
+{
+"texto": "nesse",
+"inicio": 13.06,
+"fim": 13.32
+},
+{
+"texto": "país.",
+"inicio": 13.32,
+"fim": 13.86
+},
+{
+"texto": "Para",
+"inicio": 14.04,
+"fim": 14.52
+},
+{
+"texto": "que",
+"inicio": 14.52,
+"fim": 14.74
+},
+{
+"texto": "esse",
+"inicio": 14.74,
+"fim": 14.92
+},
+{
+"texto": "país",
+"inicio": 14.92,
+"fim": 15.48
+},
+{
+"texto": "além",
+"inicio": 15.48,
+"fim": 16.16
+},
+{
+"texto": "de",
+"inicio": 16.16,
+"fim": 16.38
+},
+{
+"texto": "vir",
+"inicio": 16.38,
+"fim": 16.64
+},
+{
+"texto": "a",
+"inicio": 16.64,
+"fim": 16.82
+},
+{
+"texto": "ser",
+"inicio": 16.82,
+"fim": 17.06
+},
+{
+"texto": "uma",
+"inicio": 17.06,
+"fim": 17.6
+},
+{
+"texto": "efetiva",
+"inicio": 17.6,
+"fim": 18.2
+},
+{
+"texto": "demografia",
+"inicio": 18.2,
+"fim": 19.0
+},
+{
+"texto": "racial,",
+"inicio": 19.0,
+"fim": 19.7
+},
+{
+"texto": "é",
+"inicio": 19.88,
+"fim": 20.12
+},
+{
+"texto": "isso",
+"inicio": 20.12,
+"fim": 20.36
+},
+{
+"texto": "nós",
+"inicio": 20.36,
+"fim": 20.86
+},
+{
+"texto": "porque",
+"inicio": 20.86,
+"fim": 21.7
+},
+{
+"texto": "para",
+"inicio": 21.7,
+"fim": 22.0
+},
+{
+"texto": "ser",
+"inicio": 22.0,
+"fim": 22.28
+},
+{
+"texto": "uma",
+"inicio": 22.28,
+"fim": 22.5
+},
+{
+"texto": "demografia",
+"inicio": 22.5,
+"fim": 23.2
+},
+{
+"texto": "racial,",
+"inicio": 23.2,
+"fim": 23.78
+},
+{
+"texto": "esse",
+"inicio": 23.94,
+"fim": 24.28
+},
+{
+"texto": "país",
+"inicio": 24.28,
+"fim": 24.64
+},
+{
+"texto": "tem",
+"inicio": 24.64,
+"fim": 24.88
+},
+{
+"texto": "que",
+"inicio": 24.88,
+"fim": 25.08
+},
+{
+"texto": "ser",
+"inicio": 25.08,
+"fim": 25.22
+},
+{
+"texto": "efetiva",
+"inicio": 25.22,
+"fim": 25.86
+},
+{
+"texto": "mesmo",
+"inicio": 25.86,
+"fim": 26.12
+},
+{
+"texto": "uma",
+"inicio": 26.12,
+"fim": 26.68
+},
+{
+"texto": "demografia.",
+"inicio": 26.68,
+"fim": 27.52
+},
+{
+"texto": "Movimento",
+"inicio": 27.52,
+"fim": 28.28
+},
+{
+"texto": "negro",
+"inicio": 28.28,
+"fim": 28.7
+},
+{
+"texto": "do",
+"inicio": 28.7,
+"fim": 28.94
+},
+{
+"texto": "Rio",
+"inicio": 28.94,
+"fim": 29.08
+},
+{
+"texto": "de",
+"inicio": 29.08,
+"fim": 29.18
+},
+{
+"texto": "Janeiro",
+"inicio": 29.18,
+"fim": 29.4
+},
+{
+"texto": "na",
+"inicio": 29.4,
+"fim": 29.68
+},
+{
+"texto": "rua,",
+"inicio": 29.68,
+"fim": 30.08
+},
+{
+"texto": "essa",
+"inicio": 30.68,
+"fim": 30.88
+},
+{
+"texto": "é",
+"inicio": 30.88,
+"fim": 31.06
+},
+{
+"texto": "Márcia",
+"inicio": 31.06,
+"fim": 31.5
+},
+{
+"texto": "Zumbi",
+"inicio": 31.5,
+"fim": 32.22
+},
+{
+"texto": "dos",
+"inicio": 32.22,
+"fim": 32.88
+},
+{
+"texto": "Palmares.",
+"inicio": 32.88,
+"fim": 33.62
+},
+{
+"texto": "Márcia",
+"inicio": 34.12,
+"fim": 34.88
+},
+{
+"texto": "Zumbi!",
+"inicio": 34.88,
+"fim": 35.52
+},
+{
+"texto": "Herói",
+"inicio": 36.2,
+"fim": 36.86
+},
+{
+"texto": "nacional",
+"inicio": 36.86,
+"fim": 37.58
+},
+{
+"texto": "foi",
+"inicio": 37.58,
+"fim": 38.36
+},
+{
+"texto": "liquidado",
+"inicio": 38.36,
+"fim": 39.06
+},
+{
+"texto": "pela",
+"inicio": 39.06,
+"fim": 39.5
+},
+{
+"texto": "traição",
+"inicio": 39.5,
+"fim": 40.14
+},
+{
+"texto": "das",
+"inicio": 40.14,
+"fim": 40.82
+},
+{
+"texto": "forças",
+"inicio": 40.82,
+"fim": 41.42
+},
+{
+"texto": "colonialistas.",
+"inicio": 41.42,
+"fim": 42.68
+},
+{
+"texto": "Um",
+"inicio": 43.32,
+"fim": 43.6
+},
+{
+"texto": "grande",
+"inicio": 43.6,
+"fim": 44.06
+},
+{
+"texto": "líder",
+"inicio": 44.06,
+"fim": 44.62
+},
+{
+"texto": "do",
+"inicio": 44.62,
+"fim": 45.58
+},
+{
+"texto": "primeiro",
+"inicio": 45.58,
+"fim": 46.08
+},
+{
+"texto": "estado",
+"inicio": 46.08,
+"fim": 46.76
+},
+{
+"texto": "livre",
+"inicio": 46.76,
+"fim": 47.38
+},
+{
+"texto": "de",
+"inicio": 47.38,
+"fim": 47.62
+},
+{
+"texto": "todas",
+"inicio": 47.62,
+"fim": 47.9
+},
+{
+"texto": "as",
+"inicio": 47.9,
+"fim": 48.28
+},
+{
+"texto": "Américas,",
+"inicio": 48.28,
+"fim": 48.78
+},
+{
+"texto": "coisa",
+"inicio": 49.16,
+"fim": 49.82
+},
+{
+"texto": "que",
+"inicio": 49.82,
+"fim": 50.3
+},
+{
+"texto": "não",
+"inicio": 50.3,
+"fim": 50.5
+},
+{
+"texto": "se",
+"inicio": 50.5,
+"fim": 50.72
+},
+{
+"texto": "encema",
+"inicio": 50.72,
+"fim": 51.32
+},
+{
+"texto": "às",
+"inicio": 51.32,
+"fim": 51.7
+},
+{
+"texto": "nossas",
+"inicio": 51.7,
+"fim": 51.98
+},
+{
+"texto": "crianças",
+"inicio": 51.98,
+"fim": 52.48
+},
+{
+"texto": "nas",
+"inicio": 52.48,
+"fim": 52.92
+},
+{
+"texto": "escolas.",
+"inicio": 52.92,
+"fim": 53.48
+},
+{
+"texto": "As",
+"inicio": 53.48,
+"fim": 54.18
+},
+{
+"texto": "nossas",
+"inicio": 54.18,
+"fim": 54.5
+},
+{
+"texto": "crianças",
+"inicio": 54.5,
+"fim": 54.96
+},
+{
+"texto": "não",
+"inicio": 54.96,
+"fim": 55.9
+},
+{
+"texto": "sabem.",
+"inicio": 55.9,
+"fim": 56.48
+},
+{
+"texto": "E",
+"inicio": 56.76,
+"fim": 56.86
+},
+{
+"texto": "quando",
+"inicio": 56.86,
+"fim": 57.1
+},
+{
+"texto": "eu",
+"inicio": 57.1,
+"fim": 57.34
+},
+{
+"texto": "falo",
+"inicio": 57.34,
+"fim": 57.64
+},
+{
+"texto": "de",
+"inicio": 57.64,
+"fim": 57.78
+},
+{
+"texto": "nossas",
+"inicio": 57.78,
+"fim": 58.04
+},
+{
+"texto": "crianças,",
+"inicio": 58.04,
+"fim": 58.58
+},
+{
+"texto": "estou",
+"inicio": 59.06,
+"fim": 59.22
+},
+{
+"texto": "falando",
+"inicio": 59.22,
+"fim": 59.62
+},
+{
+"texto": "de",
+"inicio": 59.62,
+"fim": 59.92
+},
+{
+"texto": "crianças",
+"inicio": 59.92,
+"fim": 60.3
+},
+{
+"texto": "negras,",
+"inicio": 60.3,
+"fim": 61.3
+},
+{
+"texto": "francas,",
+"inicio": 61.52,
+"fim": 61.88
+},
+{
+"texto": "amarelas,",
+"inicio": 62.04,
+"fim": 62.52
+},
+{
+"texto": "não",
+"inicio": 62.78,
+"fim": 63.24
+},
+{
+"texto": "sabem",
+"inicio": 63.24,
+"fim": 63.8
+},
+{
+"texto": "que",
+"inicio": 63.8,
+"fim": 64.48
+},
+{
+"texto": "o",
+"inicio": 64.48,
+"fim": 65.2
+},
+{
+"texto": "primeiro",
+"inicio": 65.2,
+"fim": 65.74
+},
+{
+"texto": "estado",
+"inicio": 65.74,
+"fim": 66.3
+},
+{
+"texto": "livre",
+"inicio": 66.3,
+"fim": 66.88
+},
+{
+"texto": "de",
+"inicio": 66.88,
+"fim": 67.1
+},
+{
+"texto": "todo",
+"inicio": 67.1,
+"fim": 67.42
+},
+{
+"texto": "o",
+"inicio": 67.42,
+"fim": 67.66
+},
+{
+"texto": "continente",
+"inicio": 67.66,
+"fim": 68.22
+},
+{
+"texto": "americano",
+"inicio": 68.22,
+"fim": 69.0
+},
+{
+"texto": "surgiu",
+"inicio": 69.0,
+"fim": 69.94
+},
+{
+"texto": "no",
+"inicio": 69.94,
+"fim": 70.46
+},
+{
+"texto": "Brasil",
+"inicio": 70.46,
+"fim": 71.16
+},
+{
+"texto": "e",
+"inicio": 71.16,
+"fim": 71.76
+},
+{
+"texto": "foi",
+"inicio": 71.76,
+"fim": 72.0
+},
+{
+"texto": "criado",
+"inicio": 72.0,
+"fim": 72.62
+},
+{
+"texto": "pelos",
+"inicio": 72.62,
+"fim": 73.18
+},
+{
+"texto": "negros,",
+"inicio": 73.18,
+"fim": 73.88
+},
+{
+"texto": "pelos",
+"inicio": 74.12,
+"fim": 74.44
+},
+{
+"texto": "negros",
+"inicio": 74.44,
+"fim": 74.96
+},
+{
+"texto": "que",
+"inicio": 74.96,
+"fim": 75.16
+},
+{
+"texto": "resistiram,",
+"inicio": 75.16,
+"fim": 76.12
+},
+{
+"texto": "resistindo",
+"inicio": 76.16,
+"fim": 77.04
+},
+{
+"texto": "a",
+"inicio": 77.04,
+"fim": 77.16
+},
+{
+"texto": "escravidão",
+"inicio": 77.16,
+"fim": 77.96
+},
+{
+"texto": "e",
+"inicio": 77.96,
+"fim": 78.56
+},
+{
+"texto": "dirigiram",
+"inicio": 78.56,
+"fim": 79.24
+},
+{
+"texto": "para",
+"inicio": 79.24,
+"fim": 80.32
+},
+{
+"texto": "o",
+"inicio": 80.32,
+"fim": 80.6
+},
+{
+"texto": "Sul",
+"inicio": 80.6,
+"fim": 80.9
+},
+{
+"texto": "da",
+"inicio": 80.9,
+"fim": 81.08
+},
+{
+"texto": "Capitania",
+"inicio": 81.08,
+"fim": 81.6
+},
+{
+"texto": "de",
+"inicio": 81.6,
+"fim": 81.92
+},
+{
+"texto": "Pernambuco,",
+"inicio": 81.92,
+"fim": 82.94
+},
+{
+"texto": "atual",
+"inicio": 83.04,
+"fim": 83.48
+},
+{
+"texto": "estado",
+"inicio": 83.48,
+"fim": 84.16
+},
+{
+"texto": "de",
+"inicio": 84.16,
+"fim": 84.38
+},
+{
+"texto": "Alacoas,",
+"inicio": 84.38,
+"fim": 85.06
+},
+{
+"texto": "a",
+"inicio": 85.36,
+"fim": 85.62
+},
+{
+"texto": "fim",
+"inicio": 85.62,
+"fim": 85.76
+},
+{
+"texto": "de",
+"inicio": 85.76,
+"fim": 85.96
+},
+{
+"texto": "criar",
+"inicio": 85.96,
+"fim": 86.28
+},
+{
+"texto": "uma",
+"inicio": 86.28,
+"fim": 86.82
+},
+{
+"texto": "sociedade",
+"inicio": 86.82,
+"fim": 87.46
+},
+{
+"texto": "livre",
+"inicio": 87.46,
+"fim": 88.22
+},
+{
+"texto": "de",
+"inicio": 88.22,
+"fim": 88.54
+},
+{
+"texto": "guaritária,",
+"inicio": 88.54,
+"fim": 89.3
+},
+{
+"texto": "uma",
+"inicio": 89.64,
+"fim": 89.84
+},
+{
+"texto": "sociedade",
+"inicio": 89.84,
+"fim": 90.42
+},
+{
+"texto": "alternativa",
+"inicio": 90.42,
+"fim": 92.14
+},
+{
+"texto": "onde",
+"inicio": 92.14,
+"fim": 92.94
+},
+{
+"texto": "negros,",
+"inicio": 92.94,
+"fim": 93.88
+},
+{
+"texto": "índios",
+"inicio": 94.26,
+"fim": 94.6
+},
+{
+"texto": "e",
+"inicio": 94.6,
+"fim": 94.94
+},
+{
+"texto": "brancos",
+"inicio": 94.94,
+"fim": 95.6
+},
+{
+"texto": "pobres",
+"inicio": 95.6,
+"fim": 96.14
+},
+{
+"texto": "viviam",
+"inicio": 96.14,
+"fim": 97.18
+},
+{
+"texto": "numa",
+"inicio": 97.18,
+"fim": 97.64
+},
+{
+"texto": "arresteita",
+"inicio": 97.64,
+"fim": 98.74
+},
+{
+"texto": "proprietária",
+"inicio": 98.74,
+"fim": 99.78
+},
+{
+"texto": "da",
+"inicio": 99.78,
+"fim": 100.1
+},
+{
+"texto": "terra",
+"inicio": 100.1,
+"fim": 100.54
+},
+{
+"texto": "de",
+"inicio": 100.54,
+"fim": 101.04
+},
+{
+"texto": "senhores",
+"inicio": 101.04,
+"fim": 101.58
+},
+{
+"texto": "do",
+"inicio": 101.58,
+"fim": 102.02
+},
+{
+"texto": "produto",
+"inicio": 102.02,
+"fim": 102.5
+},
+{
+"texto": "do",
+"inicio": 102.5,
+"fim": 102.72
+},
+{
+"texto": "seu",
+"inicio": 102.72,
+"fim": 102.9
+},
+{
+"texto": "trabalho.",
+"inicio": 102.9,
+"fim": 103.36
+},
+{
+"texto": "Polares",
+"inicio": 103.36,
+"fim": 104.78
+},
+{
+"texto": "é",
+"inicio": 104.78,
+"fim": 105.24
+},
+{
+"texto": "um",
+"inicio": 105.24,
+"fim": 105.36
+},
+{
+"texto": "exemplo",
+"inicio": 105.36,
+"fim": 105.76
+},
+{
+"texto": "livre,",
+"inicio": 105.76,
+"fim": 106.28
+},
+{
+"texto": "livre",
+"inicio": 106.72,
+"fim": 107.3
+},
+{
+"texto": "típico",
+"inicio": 107.3,
+"fim": 108.04
+},
+{
+"texto": "de",
+"inicio": 108.04,
+"fim": 108.44
+},
+{
+"texto": "uma",
+"inicio": 108.44,
+"fim": 108.62
+},
+{
+"texto": "nacionalidade",
+"inicio": 108.62,
+"fim": 109.52
+},
+{
+"texto": "brasileira",
+"inicio": 109.52,
+"fim": 110.38
+},
+{
+"texto": "que",
+"inicio": 110.38,
+"fim": 110.78
+},
+{
+"texto": "ainda",
+"inicio": 110.78,
+"fim": 111.22
+},
+{
+"texto": "está",
+"inicio": 111.22,
+"fim": 111.64
+},
+{
+"texto": "por",
+"inicio": 111.64,
+"fim": 111.98
+},
+{
+"texto": "se",
+"inicio": 111.98,
+"fim": 112.12
+},
+{
+"texto": "constituir",
+"inicio": 112.12,
+"fim": 112.94
+},
+{
+"texto": "nacionalidade",
+"inicio": 112.94,
+"fim": 114.52
+},
+{
+"texto": "esta,",
+"inicio": 114.52,
+"fim": 115.0
+},
+{
+"texto": "onde",
+"inicio": 115.38,
+"fim": 115.64
+},
+{
+"texto": "negros,",
+"inicio": 115.64,
+"fim": 116.16
+},
+{
+"texto": "brancos",
+"inicio": 116.44,
+"fim": 116.88
+},
+{
+"texto": "vão",
+"inicio": 116.88,
+"fim": 117.46
+},
+{
+"texto": "a",
+"inicio": 117.46,
+"fim": 117.72
+},
+{
+"texto": "ser",
+"inicio": 117.72,
+"fim": 117.88
+},
+{
+"texto": "de",
+"inicio": 117.88,
+"fim": 118.04
+},
+{
+"texto": "momento",
+"inicio": 118.04,
+"fim": 118.44
+},
+{
+"texto": "lutando",
+"inicio": 118.44,
+"fim": 119.64
+},
+{
+"texto": "para",
+"inicio": 119.64,
+"fim": 120.14
+},
+{
+"texto": "que",
+"inicio": 120.14,
+"fim": 120.44
+},
+{
+"texto": "esse",
+"inicio": 120.44,
+"fim": 120.78
+},
+{
+"texto": "país",
+"inicio": 120.78,
+"fim": 121.22
+},
+{
+"texto": "se",
+"inicio": 121.22,
+"fim": 122.4
+},
+{
+"texto": "transforme",
+"inicio": 122.4,
+"fim": 123.2
+},
+{
+"texto": "efetivamente",
+"inicio": 123.2,
+"fim": 123.96
+},
+{
+"texto": "numa",
+"inicio": 123.96,
+"fim": 124.9
+},
+{
+"texto": "terra",
+"inicio": 124.9,
+"fim": 125.56
+},
+{
+"texto": "classica.",
+"inicio": 125.56,
+"fim": 127.1
+},
+{
+"texto": "Adel,",
+"inicio": 127.1,
+"fim": 128.08
+},
+{
+"texto": "adeus",
+"inicio": 129.36,
+"fim": 129.98
+},
+{
+"texto": "Cedala,",
+"inicio": 129.98,
+"fim": 130.84
+},
+{
+"texto": "de",
+"inicio": 131.56,
+"fim": 131.72
+},
+{
+"texto": "grava",
+"inicio": 131.72,
+"fim": 132.02
+},
+{
+"texto": "madrugada",
+"inicio": 132.02,
+"fim": 132.92
+},
+{
+"texto": "canaveal",
+"inicio": 132.92,
+"fim": 134.12
+},
+{
+"texto": "da",
+"inicio": 134.12,
+"fim": 134.3
+},
+{
+"texto": "panacara",
+"inicio": 134.3,
+"fim": 135.3
+},
+{
+"texto": "de",
+"inicio": 135.88,
+"fim": 136.58
+},
+{
+"texto": "grava",
+"inicio": 136.58,
+"fim": 136.82
+},
+{
+"texto": "madrugada",
+"inicio": 136.82,
+"fim": 137.84
+},
+{
+"texto": "canaveal",
+"inicio": 137.84,
+"fim": 139.22
+},
+{
+"texto": "adel",
+"inicio": 139.22,
+"fim": 140.86
+},
+{
+"texto": "Adel,",
+"inicio": 140.86,
+"fim": 141.42
+},
+{
+"texto": "adeus",
+"inicio": 141.62,
+"fim": 142.06
+},
+{
+"texto": "Cedala,",
+"inicio": 142.06,
+"fim": 143.02
+},
+{
+"texto": "adel,",
+"inicio": 143.58,
+"fim": 145.26
+},
+{
+"texto": "adeus",
+"inicio": 146.1,
+"fim": 146.78
+},
+{
+"texto": "Cedala",
+"inicio": 146.78,
+"fim": 147.98
+},
+{
+"texto": "de",
+"inicio": 147.98,
+"fim": 148.54
+},
+{
+"texto": "grava",
+"inicio": 148.54,
+"fim": 148.84
+},
+{
+"texto": "madrugada",
+"inicio": 148.84,
+"fim": 149.7
+},
+{
+"texto": "canaveal",
+"inicio": 149.7,
+"fim": 150.8
+},
+{
+"texto": "da",
+"inicio": 150.8,
+"fim": 151.18
+},
+{
+"texto": "panacara",
+"inicio": 151.18,
+"fim": 153.1
+},
+{
+"texto": "de",
+"inicio": 153.1,
+"fim": 153.18
+},
+{
+"texto": "grava",
+"inicio": 153.18,
+"fim": 153.48
+},
+{
+"texto": "madrugada",
+"inicio": 153.48,
+"fim": 154.22
+},
+{
+"texto": "canaveal",
+"inicio": 154.22,
+"fim": 157.18
+},
+{
+"texto": "da",
+"inicio": 157.18,
+"fim": 157.32
+},
+{
+"texto": "panacara",
+"inicio": 157.32,
+"fim": 157.32
+},
+{
+"texto": "Adel,",
+"inicio": 157.32,
+"fim": 157.64
+},
+{
+"texto": "adeus",
+"inicio": 157.66,
+"fim": 159.4
+},
+{
+"texto": "Cedala,",
+"inicio": 159.4,
+"fim": 160.04
+},
+{
+"texto": "adel,",
+"inicio": 160.96,
+"fim": 162.78
+},
+{
+"texto": "adeus",
+"inicio": 163.46,
+"fim": 163.94
+},
+{
+"texto": "Cedala",
+"inicio": 163.94,
+"fim": 164.5
+},
+{
+"texto": "de",
+"inicio": 164.5,
+"fim": 164.5
+},
+{
+"texto": "grava",
+"inicio": 164.5,
+"fim": 164.5
+},
+{
+"texto": "madrugada",
+"inicio": 164.5,
+"fim": 164.5
+},
+{
+"texto": "canaveal",
+"inicio": 164.5,
+"fim": 168.16
+},
+{
+"texto": "da",
+"inicio": 168.16,
+"fim": 168.32
+},
+{
+"texto": "panacara",
+"inicio": 168.32,
+"fim": 169.96
+},
+{
+"texto": "de",
+"inicio": 169.96,
+"fim": 170.26
+},
+{
+"texto": "grava",
+"inicio": 170.26,
+"fim": 170.62
+},
+{
+"texto": "madrugada",
+"inicio": 170.62,
+"fim": 171.46
+},
+{
+"texto": "canaveal",
+"inicio": 171.46,
+"fim": 172.58
+},
+{
+"texto": "da",
+"inicio": 172.58,
+"fim": 172.9
+},
+{
+"texto": "panacara",
+"inicio": 172.9,
+"fim": 173.88
+},
+{
+"texto": "Adel,",
+"inicio": 173.88,
+"fim": 175.34
+},
+{
+"texto": "adeus",
+"inicio": 176.16,
+"fim": 176.74
+},
+{
+"texto": "Cedala,",
+"inicio": 176.74,
+"fim": 177.66
+},
+{
+"texto": "adel,",
+"inicio": 178.34,
+"fim": 180.12
+},
+{
+"texto": "adeus",
+"inicio": 180.46,
+"fim": 181.28
+},
+{
+"texto": "Cedala",
+"inicio": 181.28,
+"fim": 182.14
+},
+{
+"texto": "Siga",
+"inicio": 212.14,
+"fim": 212.52
+},
+{
+"texto": "madrugada,",
+"inicio": 212.52,
+"fim": 213.58
+},
+{
+"texto": "canabria,",
+"inicio": 213.78,
+"fim": 214.44
+},
+{
+"texto": "autopana",
+"inicio": 214.7,
+"fim": 215.26
+},
+{
+"texto": "cara",
+"inicio": 215.26,
+"fim": 215.86
+},
+{
+"texto": "Siga",
+"inicio": 215.86,
+"fim": 217.06
+},
+{
+"texto": "madrugada,",
+"inicio": 217.06,
+"fim": 218.04
+},
+{
+"texto": "canabria",
+"inicio": 218.38,
+"fim": 218.96
+}
+]
+}

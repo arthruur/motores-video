@@ -1,10 +1,10 @@
 # motores-video
 
 Motores locais e grátis para fazer vídeo vertical (Reels, TikTok, Shorts) com código, num PC comum, sem GPU dedicada.
-São três peças independentes: **render** (cena HTML → MP4), **voz** (texto → narração com o tempo de cada palavra) e **legenda** (palavras → legenda queimada + .srt/.vtt).
+São quatro motores: três peças independentes, **render** (cena HTML → MP4), **voz** (texto → narração com o tempo de cada palavra) e **legenda** (palavras → legenda queimada + .srt/.vtt), e a **colagem**, que monta fragmentos de falas reais por tema, cortados entre frases e com a fonte de cada um na tela, em cima da voz e da legenda.
 Código e documentação em português do Brasil. Licença Apache-2.0.
 
-> **In English:** local, free engines for vertical video on a CPU-only PC: an HTML-scene renderer (parallel headless Chrome → ffmpeg), a voice engine with swappable TTS providers and per-word timing, and a caption engine (burned-in ASS via libass + SRT/VTT).
+> **In English:** local, free engines for vertical video on a CPU-only PC: an HTML-scene renderer (parallel headless Chrome → ffmpeg), a voice engine with swappable TTS providers and per-word timing, a caption engine (burned-in ASS via libass + SRT/VTT), and a collage engine that finds fragments of real speeches by topic (Whisper + EmbeddingGemma 2), cuts them between sentences and assembles a credited 9:16 reel.
 > A 33 s narrated, captioned explainer goes from script to final MP4 in 40–50 s on a Ryzen 7 laptop without a dedicated GPU.
 > Code and docs are in Brazilian Portuguese. Apache-2.0.
 
@@ -29,6 +29,16 @@ Gera `saida/explicativo/explicativo.mp4`: "Por que o céu é azul?", 33 s, 1080�
 ![Por que o céu é azul? 8 s do exemplo explicativo, sem som](docs/img/demo.gif)
 
 Um caminho mais curto, só o render: `node motores/render/render.mjs exemplos/ola-mundo` (6 s de vídeo em 7–8 s).
+
+Outros três exemplos de ponta a ponta:
+
+| Exemplo | O que sai | Comando |
+|---|---|---|
+| [`mudar-o-que`](exemplos/mudar-o-que) | "Mudar o quê?": explicativo de opinião de 47 s, com a fonte de cada fato na tela e rótulo de IA | `python exemplos/mudar-o-que/gerar.py` |
+| [`karaoke-discurso`](exemplos/karaoke-discurso) | 23 s do discurso de Ulysses Guimarães na promulgação da Constituição (1988), com legenda palavra a palavra alinhada ao áudio original | `python exemplos/karaoke-discurso/gerar.py` |
+| [`colagem-democracia`](exemplos/colagem-democracia) | "O que é democracia?": colagem de 66 s com Ulysses Guimarães, Lélia Gonzalez, Marielle Franco e Paulo Freire | `python exemplos/colagem-democracia/baixar.py` e depois `python -m motores.colagem.cli montar exemplos/colagem-democracia/colagem.json` |
+
+Os dois últimos usam vídeos de terceiros, que **não estão no repositório**: ver [Exemplos com material de terceiros](#exemplos-com-material-de-terceiros).
 
 ## Instalação
 
@@ -93,9 +103,15 @@ python motores/legenda/queimar.py saida/ola-mundo.mp4 saida/legenda/lua.ass -o s
 # tudo junto
 python exemplos/explicativo/gerar.py                                   # edge-tts: precisa de internet
 python exemplos/explicativo/gerar.py --provedor kokoro --voz pm_alex   # offline, depois de instalar o Kokoro (README da voz)
+
+# colagem: fontes.json -> trechos -> índice -> candidatos por tema -> (você escreve o colagem.json) -> MP4
+python -m motores.colagem.cli baixar  exemplos/colagem-democracia/fontes.json      # precisa do yt-dlp
+python -m motores.colagem.cli indexar exemplos/colagem-democracia/fontes.json      # opcionais: motores/colagem/requisitos.txt
+python -m motores.colagem.cli sugerir exemplos/colagem-democracia/fontes.json "o que é democracia"
+python -m motores.colagem.cli montar  exemplos/colagem-democracia/colagem.json
 ```
 
-Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (`renderizar()` em JS; `sintetizar()`, `alinhar()`, `avaliar()`, `gerar()`, `queimar()` em Python). Como os motores conversam: [docs/arquitetura.md](docs/arquitetura.md).
+Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (`renderizar()` em JS; `sintetizar()`, `alinhar()`, `avaliar()`, `gerar()`, `queimar()`, `indexar()`, `sugerir()`, `montar()` em Python). Como os motores conversam: [docs/arquitetura.md](docs/arquitetura.md).
 
 ## Mapa do repositório
 
@@ -104,10 +120,14 @@ Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (
 | [`motores/render/`](motores/render) | Cena HTML → MP4: N processos Chrome, captura JPEG por CDP, ffmpeg por stdin, pulo de quadros, cor BT.709. [Contrato da cena](motores/render/CONTRATO.md) |
 | [`motores/voz/`](motores/voz) | Provedores trocáveis (edge, Kokoro, Piper, Azure, ElevenLabs, gravação), alinhador pelo Whisper, QA, pronúncia por motor |
 | [`motores/legenda/`](motores/legenda) | Blocos medidos com a fonte, destaque da palavra, zona segura, calibração do libass, .srt/.vtt, QC |
+| [`motores/colagem/`](motores/colagem) | Fragmentos de falas reais por tema: download só do trecho (yt-dlp), índice (Whisper + EmbeddingGemma 2), sugestão com MMR e corte entre frases, montagem 9:16 com a fonte em cada fragmento e ficha |
 | [`exemplos/ola-mundo/`](exemplos/ola-mundo) | A cena mínima (6 s) |
 | [`exemplos/voz/`](exemplos/voz), [`exemplos/legenda/`](exemplos/legenda) | Entradas de teste dos motores |
 | [`exemplos/explicativo/`](exemplos/explicativo) | O exemplo de ponta a ponta: roteiro → voz → cena → render → legenda → mixagem |
-| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [direções](docs/direcoes.md) |
+| [`exemplos/mudar-o-que/`](exemplos/mudar-o-que) | Explicativo de opinião com fontes e rótulo de IA (feito em período eleitoral; ver a nota de contexto) |
+| [`exemplos/karaoke-discurso/`](exemplos/karaoke-discurso) | Discurso de arquivo com legenda alinhada ao áudio original; vídeo baixado em `entrada/` |
+| [`exemplos/colagem-democracia/`](exemplos/colagem-democracia) | Colagem de quatro falas com o motor de colagem; vídeos baixados em `entrada/` |
+| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md) |
 | `fontes/` | Barlow Condensed ExtraBold (OFL), servida às cenas em `/_fontes/` e usada pela legenda |
 
 ## Números
@@ -125,8 +145,22 @@ Medidos num notebook Ryzen 7 5700U (8 núcleos / 16 threads, sem GPU dedicada), 
 | Legenda: custo do libass ao queimar | ~1,7 ms por quadro |
 | Alinhador (Whisper `small`) contra os tempos nativos do edge | mediana de 47–50 ms no início da palavra |
 | Loudness do final (alvo −14 LUFS, 2 passagens) | −14,2 LUFS (edge), −14,9 LUFS (Kokoro); pico −1,5 dBTP |
+| `exemplos/mudar-o-que` (47 s) de ponta a ponta | 60,3 s com voz nova e QA pelo Whisper; 40,8 s com a voz reaproveitada |
+| `exemplos/karaoke-discurso` (23 s): download do trecho de 30 s / alinhar → MP4 | 21,6 s / 31,2 s (17,5 s com o alinhamento em cache); 38 de 39 palavras com tempo exato |
+| `exemplos/colagem-democracia`: download dos 4 trechos (32 MB) / `montar` (66 s de vídeo) | 62,3 s / 64,4–147,3 s; −14,1 LUFS, pico −1,4 dBTP |
+| Colagem: `indexar` de 7 falas sem cache (Whisper + EmbeddingGemma 2) | 403,6 s, quase tudo transcrição |
 
-Detalhes e o que ficou de fora em [docs/render.md](docs/render.md), [docs/voz.md](docs/voz.md) e [docs/legenda.md](docs/legenda.md).
+Detalhes e o que ficou de fora em [docs/render.md](docs/render.md), [docs/voz.md](docs/voz.md), [docs/legenda.md](docs/legenda.md) e no [README da colagem](motores/colagem/README.md).
+
+## Exemplos com material de terceiros
+
+`karaoke-discurso` e `colagem-democracia` usam trechos de vídeos publicados por outras pessoas e instituições (TV Câmara, Cultne, Instituto Marielle Franco, TV PUC-SP).
+
+- **Os vídeos não estão no repositório.** O `baixar.py` de cada exemplo baixa só o trecho usado, com o yt-dlp (`pip install yt-dlp`), para `exemplos/<exemplo>/entrada/`, que o git ignora. O repositório guarda só texto: URL, trecho, crédito e a fala conferida.
+- **Os direitos são dos titulares.** Os trechos são curtos e usados como citação, para estudo, com quem fala, a data, a ocasião e a origem na tela (Lei 9.610/98, art. 46, III). Isto não é orientação jurídica: se for publicar, mantenha os créditos e respeite os termos da plataforma.
+- **O arquivo pode já vir editado.** O vídeo do Ulysses é uma montagem da TV Câmara, com fotos de arquivo e trechos emendados, e os dois exemplos avisam isso na tela.
+
+Crédito de cada fonte no README e no `fontes.json` de cada exemplo; ver também [THIRD_PARTY.md](THIRD_PARTY.md).
 
 ## Princípios
 
@@ -134,7 +168,7 @@ Detalhes e o que ficou de fora em [docs/render.md](docs/render.md), [docs/voz.md
 - **Determinismo.** Mesma entrada, mesmo vídeo. A cena é função do tempo: é isso que permite paralelizar, pular quadros e testar.
 - **Medir antes de afirmar.** Os números deste README foram medidos; o que não foi testado está escrito como não testado.
 - **O criador decide.** Prévia rápida (folha de contato em ~3 s), legenda refeita sem renderizar de novo, voz trocada com um parâmetro.
-- **Rótulo de IA e fonte visível.** Voz sintética é de narrador e vem com rótulo pronto. **Nunca** imitar voz ou rosto de pessoa real.
+- **Rótulo de IA e fonte visível.** Voz sintética é de narrador e vem com rótulo pronto. **Nunca** imitar voz ou rosto de pessoa real. Fala real só entra com o som original, a frase inteira, quem, quando e a fonte na tela.
 - **Licenças limpas.** O núcleo usa Apache-2.0 e dependências permissivas ou LGPL; o que é GPL (Piper, e o Kokoro via espeak-ng) é opcional. Ver [THIRD_PARTY.md](THIRD_PARTY.md).
 
 ## Direções

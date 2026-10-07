@@ -13,3 +13,8 @@ edge-tts>=7.2           # LGPL-3.0; ATENÇÃO: serviço não oficial, sem termos
 
 # --- motores/legenda (Python 3.10+; ffmpeg com libass no PATH) ---
 pillow>=10.1            # MIT-CMU (HPND); mede a largura do texto na fonte real e monta a folha de contato
+
+# --- opcionais: motores/colagem e exemplos com vídeo de terceiros ---
+#   pip install yt-dlp                                  # Unlicense; baixa os trechos (karaoke-discurso, colagem-democracia)
+#   pip install -r motores/colagem/requisitos.txt       # busca por tema: torch CPU, sentence-transformers, yt-dlp
+#   (o montar da colagem só precisa do núcleo acima)

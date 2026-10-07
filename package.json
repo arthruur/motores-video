@@ -1,7 +1,7 @@
 {
   "name": "motores-video",
-  "version": "0.1.0",
-  "description": "Motores locais e grátis para vídeo vertical: render de cenas HTML, voz sintética e legenda.",
+  "version": "0.2.0",
+  "description": "Motores locais e grátis para vídeo vertical: render de cenas HTML, voz sintética, legenda e colagem de falas reais.",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Arthur Teles",

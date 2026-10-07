@@ -1,0 +1,995 @@
+{
+"modelo": "faster-whisper small int8 (transcrição do arquivo original, recortada ao trecho)",
+"palavras": [
+{
+"texto": "Senhoras",
+"inicio": 2.42,
+"fim": 3.38
+},
+{
+"texto": "e",
+"inicio": 3.38,
+"fim": 3.54
+},
+{
+"texto": "senhores",
+"inicio": 3.54,
+"fim": 3.82
+},
+{
+"texto": "constituintes,",
+"inicio": 3.82,
+"fim": 4.82
+},
+{
+"texto": "hoje,",
+"inicio": 5.6,
+"fim": 5.98
+},
+{
+"texto": "5",
+"inicio": 7.04,
+"fim": 7.36
+},
+{
+"texto": "de",
+"inicio": 7.36,
+"fim": 7.52
+},
+{
+"texto": "outubro",
+"inicio": 7.52,
+"fim": 7.92
+},
+{
+"texto": "de",
+"inicio": 7.92,
+"fim": 8.1
+},
+{
+"texto": "1988,",
+"inicio": 8.1,
+"fim": 8.9
+},
+{
+"texto": "no",
+"inicio": 10.4,
+"fim": 10.5
+},
+{
+"texto": "que",
+"inicio": 10.5,
+"fim": 10.6
+},
+{
+"texto": "tanja",
+"inicio": 10.6,
+"fim": 10.94
+},
+{
+"texto": "a",
+"inicio": 10.94,
+"fim": 11.12
+},
+{
+"texto": "Constituição,",
+"inicio": 11.12,
+"fim": 11.68
+},
+{
+"texto": "a",
+"inicio": 12.62,
+"fim": 12.72
+},
+{
+"texto": "nação",
+"inicio": 12.72,
+"fim": 12.98
+},
+{
+"texto": "mudou.",
+"inicio": 12.98,
+"fim": 13.34
+},
+{
+"texto": "A",
+"inicio": 17.84,
+"fim": 18.26
+},
+{
+"texto": "Constituição",
+"inicio": 18.26,
+"fim": 19.02
+},
+{
+"texto": "mudou",
+"inicio": 19.02,
+"fim": 19.52
+},
+{
+"texto": "na",
+"inicio": 19.52,
+"fim": 19.72
+},
+{
+"texto": "sua",
+"inicio": 19.72,
+"fim": 19.96
+},
+{
+"texto": "elaboração,",
+"inicio": 19.96,
+"fim": 20.74
+},
+{
+"texto": "mudou",
+"inicio": 21.72,
+"fim": 22.6
+},
+{
+"texto": "na",
+"inicio": 22.6,
+"fim": 22.82
+},
+{
+"texto": "definição",
+"inicio": 22.82,
+"fim": 23.32
+},
+{
+"texto": "dos",
+"inicio": 23.32,
+"fim": 23.56
+},
+{
+"texto": "poderes,",
+"inicio": 23.56,
+"fim": 24.4
+},
+{
+"texto": "mudou",
+"inicio": 25.4,
+"fim": 25.84
+},
+{
+"texto": "restaurando",
+"inicio": 25.84,
+"fim": 26.46
+},
+{
+"texto": "a",
+"inicio": 26.46,
+"fim": 26.56
+},
+{
+"texto": "federação,",
+"inicio": 26.56,
+"fim": 27.22
+},
+{
+"texto": "mudou",
+"inicio": 28.34,
+"fim": 29.26
+},
+{
+"texto": "quando",
+"inicio": 29.26,
+"fim": 29.88
+},
+{
+"texto": "quer",
+"inicio": 29.88,
+"fim": 30.36
+},
+{
+"texto": "mudar",
+"inicio": 30.36,
+"fim": 30.84
+},
+{
+"texto": "o",
+"inicio": 30.84,
+"fim": 31.02
+},
+{
+"texto": "homem",
+"inicio": 31.02,
+"fim": 31.26
+},
+{
+"texto": "cidadão",
+"inicio": 31.26,
+"fim": 31.88
+},
+{
+"texto": "e",
+"inicio": 31.88,
+"fim": 33.26
+},
+{
+"texto": "é",
+"inicio": 33.26,
+"fim": 33.44
+},
+{
+"texto": "só",
+"inicio": 33.44,
+"fim": 33.58
+},
+{
+"texto": "cidadão",
+"inicio": 33.58,
+"fim": 34.16
+},
+{
+"texto": "quem",
+"inicio": 34.16,
+"fim": 34.36
+},
+{
+"texto": "ganha",
+"inicio": 34.36,
+"fim": 34.72
+},
+{
+"texto": "justo",
+"inicio": 34.72,
+"fim": 35.08
+},
+{
+"texto": "e",
+"inicio": 35.08,
+"fim": 35.28
+},
+{
+"texto": "suficiente",
+"inicio": 35.28,
+"fim": 35.6
+},
+{
+"texto": "salário.",
+"inicio": 35.6,
+"fim": 36.28
+},
+{
+"texto": "Leia",
+"inicio": 36.88,
+"fim": 37.62
+},
+{
+"texto": "e",
+"inicio": 37.62,
+"fim": 37.84
+},
+{
+"texto": "escreve,",
+"inicio": 37.84,
+"fim": 38.22
+},
+{
+"texto": "mora,",
+"inicio": 38.74,
+"fim": 39.04
+},
+{
+"texto": "tem",
+"inicio": 39.54,
+"fim": 39.7
+},
+{
+"texto": "hospital",
+"inicio": 39.7,
+"fim": 40.08
+},
+{
+"texto": "e",
+"inicio": 40.08,
+"fim": 40.32
+},
+{
+"texto": "remédio,",
+"inicio": 40.32,
+"fim": 40.8
+},
+{
+"texto": "lazer",
+"inicio": 41.28,
+"fim": 41.74
+},
+{
+"texto": "quando",
+"inicio": 41.74,
+"fim": 42.0
+},
+{
+"texto": "descansa.",
+"inicio": 42.0,
+"fim": 42.56
+},
+{
+"texto": "Chegamos,",
+"inicio": 43.04,
+"fim": 43.48
+},
+{
+"texto": "esperamos",
+"inicio": 44.28,
+"fim": 45.18
+},
+{
+"texto": "a",
+"inicio": 45.18,
+"fim": 45.4
+},
+{
+"texto": "Constituição",
+"inicio": 45.4,
+"fim": 46.06
+},
+{
+"texto": "como",
+"inicio": 46.06,
+"fim": 47.14
+},
+{
+"texto": "vigia",
+"inicio": 47.14,
+"fim": 47.58
+},
+{
+"texto": "a",
+"inicio": 47.58,
+"fim": 47.88
+},
+{
+"texto": "espera",
+"inicio": 47.88,
+"fim": 47.88
+},
+{
+"texto": "aurora.",
+"inicio": 47.88,
+"fim": 48.3
+},
+{
+"texto": "A",
+"inicio": 48.9,
+"fim": 49.36
+},
+{
+"texto": "nação",
+"inicio": 49.36,
+"fim": 49.8
+},
+{
+"texto": "nos",
+"inicio": 49.8,
+"fim": 49.98
+},
+{
+"texto": "mandou",
+"inicio": 49.98,
+"fim": 50.4
+},
+{
+"texto": "executar",
+"inicio": 50.4,
+"fim": 50.98
+},
+{
+"texto": "um",
+"inicio": 50.98,
+"fim": 51.1
+},
+{
+"texto": "serviço,",
+"inicio": 51.1,
+"fim": 51.76
+},
+{
+"texto": "nós",
+"inicio": 52.0,
+"fim": 52.7
+},
+{
+"texto": "o",
+"inicio": 52.7,
+"fim": 52.88
+},
+{
+"texto": "fizemos",
+"inicio": 52.88,
+"fim": 53.28
+},
+{
+"texto": "com",
+"inicio": 53.28,
+"fim": 53.46
+},
+{
+"texto": "amor,",
+"inicio": 53.46,
+"fim": 53.86
+},
+{
+"texto": "aplicação",
+"inicio": 54.56,
+"fim": 55.5
+},
+{
+"texto": "e",
+"inicio": 55.5,
+"fim": 56.86
+},
+{
+"texto": "sem",
+"inicio": 56.86,
+"fim": 57.02
+},
+{
+"texto": "medo.",
+"inicio": 57.02,
+"fim": 57.32
+},
+{
+"texto": "A",
+"inicio": 61.62,
+"fim": 61.88
+},
+{
+"texto": "Constituição",
+"inicio": 61.88,
+"fim": 62.72
+},
+{
+"texto": "certamente",
+"inicio": 62.72,
+"fim": 63.52
+},
+{
+"texto": "não",
+"inicio": 63.52,
+"fim": 63.74
+},
+{
+"texto": "é",
+"inicio": 63.74,
+"fim": 63.86
+},
+{
+"texto": "perfeita",
+"inicio": 63.86,
+"fim": 64.42
+},
+{
+"texto": "pela",
+"inicio": 64.42,
+"fim": 65.82
+},
+{
+"texto": "própria,",
+"inicio": 65.82,
+"fim": 66.28
+},
+{
+"texto": "eu",
+"inicio": 66.44,
+"fim": 66.44
+},
+{
+"texto": "confesso,",
+"inicio": 66.44,
+"fim": 66.98
+},
+{
+"texto": "ao",
+"inicio": 67.82,
+"fim": 68.42
+},
+{
+"texto": "admitir",
+"inicio": 68.42,
+"fim": 68.96
+},
+{
+"texto": "a",
+"inicio": 68.96,
+"fim": 69.08
+},
+{
+"texto": "reforma.",
+"inicio": 69.08,
+"fim": 69.78
+},
+{
+"texto": "Quanto",
+"inicio": 69.78,
+"fim": 70.44
+},
+{
+"texto": "a",
+"inicio": 70.44,
+"fim": 70.6
+},
+{
+"texto": "ela,",
+"inicio": 70.6,
+"fim": 70.86
+},
+{
+"texto": "discordar",
+"inicio": 71.58,
+"fim": 72.66
+},
+{
+"texto": "sim,",
+"inicio": 72.66,
+"fim": 73.4
+},
+{
+"texto": "divergir",
+"inicio": 73.98,
+"fim": 75.18
+},
+{
+"texto": "sim,",
+"inicio": 75.18,
+"fim": 76.16
+},
+{
+"texto": "descomprir",
+"inicio": 76.96,
+"fim": 78.42
+},
+{
+"texto": "jamais,",
+"inicio": 78.42,
+"fim": 79.2
+},
+{
+"texto": "afrontá",
+"inicio": 81.61,
+"fim": 82.39
+},
+{
+"texto": "-la",
+"inicio": 82.39,
+"fim": 82.77
+},
+{
+"texto": "nunca.",
+"inicio": 82.77,
+"fim": 84.83
+},
+{
+"texto": "Traidor",
+"inicio": 87.84,
+"fim": 88.14
+},
+{
+"texto": "da",
+"inicio": 88.14,
+"fim": 88.48
+},
+{
+"texto": "Constituição",
+"inicio": 88.48,
+"fim": 89.18
+},
+{
+"texto": "e",
+"inicio": 89.18,
+"fim": 89.34
+},
+{
+"texto": "traidor",
+"inicio": 89.34,
+"fim": 89.64
+},
+{
+"texto": "da",
+"inicio": 89.64,
+"fim": 89.88
+},
+{
+"texto": "Pátria,",
+"inicio": 89.88,
+"fim": 90.26
+},
+{
+"texto": "conhecemos",
+"inicio": 90.36,
+"fim": 90.88
+},
+{
+"texto": "o",
+"inicio": 90.88,
+"fim": 91.06
+},
+{
+"texto": "caminho",
+"inicio": 91.06,
+"fim": 91.3
+},
+{
+"texto": "mal",
+"inicio": 91.3,
+"fim": 91.56
+},
+{
+"texto": "dito.",
+"inicio": 91.56,
+"fim": 91.88
+},
+{
+"texto": "As",
+"inicio": 92.58,
+"fim": 92.86
+},
+{
+"texto": "caras",
+"inicio": 92.86,
+"fim": 93.08
+},
+{
+"texto": "de",
+"inicio": 93.08,
+"fim": 93.18
+},
+{
+"texto": "Constituição,",
+"inicio": 93.18,
+"fim": 93.74
+},
+{
+"texto": "trancar",
+"inicio": 94.46,
+"fim": 95.0
+},
+{
+"texto": "as",
+"inicio": 95.0,
+"fim": 95.18
+},
+{
+"texto": "portas",
+"inicio": 95.18,
+"fim": 95.54
+},
+{
+"texto": "do",
+"inicio": 95.54,
+"fim": 95.66
+},
+{
+"texto": "Parlamento,",
+"inicio": 95.66,
+"fim": 96.22
+},
+{
+"texto": "carotear",
+"inicio": 96.82,
+"fim": 97.36
+},
+{
+"texto": "a",
+"inicio": 97.36,
+"fim": 97.44
+},
+{
+"texto": "liberdade,",
+"inicio": 97.44,
+"fim": 97.98
+},
+{
+"texto": "mandar",
+"inicio": 98.82,
+"fim": 99.16
+},
+{
+"texto": "os",
+"inicio": 99.16,
+"fim": 99.46
+},
+{
+"texto": "patriotas",
+"inicio": 99.46,
+"fim": 100.06
+},
+{
+"texto": "para",
+"inicio": 100.06,
+"fim": 100.28
+},
+{
+"texto": "a",
+"inicio": 100.28,
+"fim": 100.38
+},
+{
+"texto": "cadeia,",
+"inicio": 100.38,
+"fim": 100.8
+},
+{
+"texto": "o",
+"inicio": 101.12,
+"fim": 101.22
+},
+{
+"texto": "exílio",
+"inicio": 101.22,
+"fim": 101.64
+},
+{
+"texto": "e",
+"inicio": 101.64,
+"fim": 101.88
+},
+{
+"texto": "o",
+"inicio": 101.88,
+"fim": 101.96
+},
+{
+"texto": "cemitério.",
+"inicio": 101.96,
+"fim": 102.46
+},
+{
+"texto": "Temos",
+"inicio": 104.55,
+"fim": 104.95
+},
+{
+"texto": "ódio",
+"inicio": 104.95,
+"fim": 105.43
+},
+{
+"texto": "a",
+"inicio": 105.43,
+"fim": 105.61
+},
+{
+"texto": "ditadura,",
+"inicio": 105.61,
+"fim": 106.21
+},
+{
+"texto": "ódio",
+"inicio": 106.47,
+"fim": 106.73
+},
+{
+"texto": "e",
+"inicio": 106.73,
+"fim": 106.83
+},
+{
+"texto": "nojo,",
+"inicio": 106.83,
+"fim": 107.19
+},
+{
+"texto": "não",
+"inicio": 108.97,
+"fim": 109.63
+},
+{
+"texto": "é",
+"inicio": 109.63,
+"fim": 109.81
+},
+{
+"texto": "a",
+"inicio": 109.81,
+"fim": 109.89
+},
+{
+"texto": "Constituição",
+"inicio": 109.89,
+"fim": 110.25
+},
+{
+"texto": "perfeita,",
+"inicio": 110.25,
+"fim": 110.93
+},
+{
+"texto": "mas",
+"inicio": 111.41,
+"fim": 111.93
+},
+{
+"texto": "será",
+"inicio": 111.93,
+"fim": 112.13
+},
+{
+"texto": "útil.",
+"inicio": 112.13,
+"fim": 112.47
+},
+{
+"texto": "Pioneira,",
+"inicio": 113.21,
+"fim": 113.93
+},
+{
+"texto": "esbravadora,",
+"inicio": 114.83,
+"fim": 115.41
+},
+{
+"texto": "será",
+"inicio": 116.33,
+"fim": 116.65
+},
+{
+"texto": "luz,",
+"inicio": 116.65,
+"fim": 117.09
+},
+{
+"texto": "ainda",
+"inicio": 118.03,
+"fim": 118.51
+},
+{
+"texto": "que",
+"inicio": 118.51,
+"fim": 118.93
+},
+{
+"texto": "de",
+"inicio": 118.93,
+"fim": 119.05
+},
+{
+"texto": "lamparina,",
+"inicio": 119.05,
+"fim": 119.65
+},
+{
+"texto": "na",
+"inicio": 120.23,
+"fim": 120.59
+},
+{
+"texto": "noite",
+"inicio": 120.59,
+"fim": 120.83
+},
+{
+"texto": "dos",
+"inicio": 120.83,
+"fim": 121.01
+},
+{
+"texto": "desgraçados.",
+"inicio": 121.01,
+"fim": 121.75
+},
+{
+"texto": "A",
+"inicio": 122.37,
+"fim": 122.57
+},
+{
+"texto": "nação",
+"inicio": 122.57,
+"fim": 122.81
+},
+{
+"texto": "quer",
+"inicio": 122.81,
+"fim": 123.01
+},
+{
+"texto": "mudar,",
+"inicio": 123.01,
+"fim": 123.35
+},
+{
+"texto": "a",
+"inicio": 123.85,
+"fim": 123.97
+},
+{
+"texto": "nação",
+"inicio": 123.97,
+"fim": 124.33
+},
+{
+"texto": "deve",
+"inicio": 124.33,
+"fim": 124.59
+},
+{
+"texto": "mudar,",
+"inicio": 124.59,
+"fim": 124.95
+},
+{
+"texto": "a",
+"inicio": 125.39,
+"fim": 125.43
+},
+{
+"texto": "nação",
+"inicio": 125.43,
+"fim": 125.73
+},
+{
+"texto": "vai",
+"inicio": 125.73,
+"fim": 125.97
+},
+{
+"texto": "mudar.",
+"inicio": 125.97,
+"fim": 126.29
+},
+{
+"texto": "Que",
+"inicio": 126.67,
+"fim": 126.85
+},
+{
+"texto": "a",
+"inicio": 126.85,
+"fim": 126.95
+},
+{
+"texto": "promulgação",
+"inicio": 126.95,
+"fim": 127.57
+},
+{
+"texto": "seja",
+"inicio": 127.57,
+"fim": 127.77
+},
+{
+"texto": "o",
+"inicio": 127.77,
+"fim": 127.91
+},
+{
+"texto": "nosso",
+"inicio": 127.91,
+"fim": 128.05
+},
+{
+"texto": "grito,",
+"inicio": 128.05,
+"fim": 128.41
+},
+{
+"texto": "mudar",
+"inicio": 128.85,
+"fim": 129.19
+},
+{
+"texto": "para",
+"inicio": 129.19,
+"fim": 129.55
+},
+{
+"texto": "vencer.",
+"inicio": 129.55,
+"fim": 129.97
+},
+{
+"texto": "Muda,",
+"inicio": 130.71,
+"fim": 130.87
+},
+{
+"texto": "Brasil!",
+"inicio": 130.91,
+"fim": 131.13
+}
+]
+}

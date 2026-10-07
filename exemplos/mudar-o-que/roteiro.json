@@ -1,0 +1,73 @@
+{
+ "titulo": "Mudar o quê?",
+ "data": "2026-10-06",
+ "voz": { "provedor": "edge", "voz": "pt-BR-AntonioNeural", "velocidade": 1.06 },
+ "trilha": { "volume": 0.06, "ducking": true },
+ "lufs": -14,
+ "segurar_fim": 1.6,
+ "fontes": [
+  { "id": "cf88-art7", "titulo": "Constituição Federal de 1988, art. 7º (VIII, XVII, XXIV)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" },
+  { "id": "cf88-art14", "titulo": "Constituição Federal de 1988, art. 14", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" },
+  { "id": "cf88-art196", "titulo": "Constituição Federal de 1988, art. 196", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" },
+  { "id": "meio-0610", "titulo": "Meio News, 06/10/2026 (ato com Ronaldo Caiado, Goiânia)", "url": null, "situacao": "a conferir" },
+  { "id": "tribuna-jundiai-0610", "titulo": "Tribuna de Jundiaí, 06/10/2026", "url": null, "situacao": "a conferir" }
+ ],
+ "cenas": [
+  {
+   "id": "gancho", "tipo": "gancho",
+   "fala": "Sabe o seu décimo terceiro? Ele não é presente do patrão.",
+   "gatilhos": { "numero": "décimo", "salario": "terceiro", "presente": "presente" }
+  },
+  {
+   "id": "lei", "tipo": "fato", "fontes": ["cf88-art7"],
+   "fala": "É lei. Tá na Constituição.",
+   "gatilhos": { "carimbo": "lei", "livro": "constituição" }
+  },
+  {
+   "id": "lista", "tipo": "fato", "fontes": ["cf88-art7", "cf88-art14", "cf88-art196"],
+   "fala": "As férias com um terço a mais, também. O SUS, também. A aposentadoria, também. Até o voto aos dezesseis anos.",
+   "gatilhos": { "ferias": "férias", "sus": "SUS", "aposentadoria": "aposentadoria", "voto": "voto" },
+   "itens": [
+    { "titulo": "13º salário", "rotulo": "art. 7º, VIII" },
+    { "gatilho": "ferias", "titulo": "Férias + 1/3", "rotulo": "art. 7º, XVII" },
+    { "gatilho": "sus", "titulo": "SUS", "rotulo": "art. 196" },
+    { "gatilho": "aposentadoria", "titulo": "Aposentadoria", "rotulo": "art. 7º, XXIV" },
+    { "gatilho": "voto", "titulo": "Voto aos 16", "rotulo": "art. 14" }
+   ]
+  },
+  {
+   "id": "livro", "tipo": "fato", "fontes": ["cf88-art7", "cf88-art14", "cf88-art196"],
+   "fala": "Tudo isso tá escrito na Constituição de mil novecentos e oitenta e oito.",
+   "gatilhos": { "anos": "mil" }
+  },
+  {
+   "id": "fala", "tipo": "fato", "fontes": ["meio-0610", "tribuna-jundiai-0610"],
+   "fala": "Nesta terça, em Goiânia, Flávio Bolsonaro disse que quer maioria no Congresso pra mudar a Constituição.",
+   "citacao": {
+    "texto": "Com a maioria no Senado, com a maioria na Câmara (...) pra gente mudar a Constituição e redemocratizar esse país.",
+    "quem": "Flávio Bolsonaro · Goiânia, 06/10/2026",
+    "fonte": "Fonte: Meio News · Tribuna de Jundiaí"
+   }
+  },
+  {
+   "id": "pergunta", "tipo": "fato", "fontes": ["meio-0610", "tribuna-jundiai-0610"],
+   "fala": "Mudar o quê? Ele não disse.",
+   "gatilhos": { "carimbo": "ele" }
+  },
+  {
+   "id": "cheque", "tipo": "opiniao",
+   "fala": "Mudar a Constituição sem dizer o quê é pedir um cheque em branco. E é nela que estão os seus direitos.",
+   "gatilhos": { "direitos": "nela" }
+  },
+  {
+   "id": "fecho", "tipo": "chamada", "legenda": false,
+   "fala": "Antes de votar, pergunte: mudar o quê? Manda esse vídeo pra quem tem carteira assinada.",
+   "cartao": {
+    "chamada": "Antes de votar, pergunte:",
+    "titulo": "MUDAR<br>O QUÊ?",
+    "cta": "Manda pra quem tem carteira assinada",
+    "fontes": ["Constituição Federal: arts. 7º (VIII, XVII, XXIV), 14 e 196", "Fala: Meio News e Tribuna de Jundiaí, 06/10/2026"]
+   }
+  }
+ ]
+}

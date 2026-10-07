@@ -1,0 +1,55 @@
+{
+ "tema": "o que é democracia",
+ "autor": "Claude (simulando o criador)",
+ "nota": "Quem escolheu, ordenou e cortou foi o Claude, fazendo o papel do criador, a partir da página de candidatos do tema. Numa oficina, este arquivo é escrito pela pessoa que monta, e 'autor' passa a ser ela.",
+ "fontes": "fontes.json",
+ "revisao": "revisao",
+ "abertura": {
+  "texto": [
+   "O QUE É",
+   "DEMOCRACIA?"
+  ],
+  "sub": "quatro vozes, 1983–2018",
+  "dur": 2.5
+ },
+ "fragmentos": [
+  {
+   "id": "1-ulysses",
+   "fonte": "ulysses",
+   "ini": 5.3,
+   "fim": 13.9,
+   "porque": "A promessa: 'a Nação mudou', no dia da Constituição. Começa em 'Hoje' (fala a partir de 5,6 s; antes, 0,8 s de trilha a -35 dB) e termina em 'mudou.', com 4,5 s de pausa depois. Uma versão anterior começava no vocativo 'Senhoras e senhores constituintes', mas este vídeo é uma montagem da TV Câmara: no discurso publicado, entre o vocativo e o 'Hoje' vêm 'Dois de fevereiro de 1987 [...] São palavras constantes do discurso de posse'. O vocativo colado no 'Hoje' é corte de terceiros; por isso o fragmento ficou só com a frase inteira, e a etiqueta avisa que o áudio vem em trechos."
+  },
+  {
+   "id": "2-lelia",
+   "fonte": "lelia",
+   "ini": 6.85,
+   "fim": 30.35,
+   "porque": "A condição: cinco anos antes, na rua e ainda na ditadura, Lélia diz que sem democracia de fato não há democracia racial. Achado pela frase conhecida (o Whisper ouviu 'demografia racial'). O corte sugerido começava em 'Para que esse país', que continua o 'Vamos à luta... para que' anterior, e terminava colado em 'Movimento negro', sem pausa; foi esticado de 'Vamos à luta' (logo depois de uma emenda de silêncio digital no próprio vídeo) até 'na rua', onde há 0,5 s de respiro."
+  },
+  {
+   "id": "3-marielle",
+   "fonte": "marielle",
+   "ini": 10.02,
+   "fim": 24.72,
+   "porque": "A exigência: igual, diferente e livre. O fim passou de 24,58 para 24,72 s no trecho (4:49,72 no original) porque a cauda de 'resistência' só some em ~24,65 s. A legenda segue o que ela diz no vídeo ('socialmente igual'), não o texto de catálogo ('iguais')."
+  },
+  {
+   "id": "4-freire",
+   "fonte": "freire",
+   "ini": 9.9,
+   "fim": 18.64,
+   "porque": "O movimento: a sociedade que se democratiza marchando. Fecha a colagem com um verbo."
+  }
+ ],
+ "final": {
+  "dur": 6.5,
+  "aviso": [
+   "Colagem: falas de ocasiões diferentes, postas lado a lado.",
+   "Cada fragmento é uma frase inteira, sem edição dentro dela.",
+   "O sentido do conjunto é da montagem, não de quem falou.",
+   "Trechos citados para estudo; os direitos são dos titulares."
+  ]
+ },
+ "etica": "Nenhuma frase foi editada por dentro; cada corte cai entre frases. A ordem (promessa, condição, exigência, movimento) cria um argumento que nenhuma das quatro pessoas fez junto: o cartão final diz isso e lista as fontes com o tempo."
+}

@@ -1,6 +1,8 @@
-# Arquitetura: como os três motores se encaixam
+# Arquitetura: como os quatro motores se encaixam
 
 Os motores são **independentes**: cada um tem a sua CLI, funciona sozinho e troca dados com os outros por **arquivos simples** (JSON, HTML, ASS, WAV, MP4). Não há um "framework" no meio. O `exemplos/explicativo/gerar.py` é um exemplo de orquestração, com ~250 linhas, não uma peça obrigatória.
+
+Render, voz e legenda são as três peças de base. O quarto motor, **colagem**, é de outro tipo: não desenha cena nenhuma, monta vídeo de terceiros, e por isso é construído **em cima** da voz e da legenda (ver [Onde entra a colagem](#onde-entra-a-colagem)).
 
 ## Visão geral
 
@@ -112,6 +114,36 @@ Os passos 2 e 3 são o que muda de formato para formato. O resto é o mesmo.
 
 Um provedor é uma função `(texto_falado, voz, wav, opcoes) -> marcas | None` registrada em `PROVEDORES` (`motores/voz/provedores.py`). Devolva as marcas `[{texto, inicio, fim}]` se o serviço der tempos; devolva `None` e o alinhador cuida do resto. Declare o pacote, a chave de ambiente e se pode cobrar.
 
+## Onde entra a colagem
+
+O `motores/colagem` não tem roteiro nem voz sintética: a fala já existe, em vídeos de arquivo. O que ele precisa dos outros motores é o mesmo formato central, **palavras com tempo**, e por isso reusa as peças em vez de copiar:
+
+```
+fontes.json ─► baixar (yt-dlp, só o trecho) ─► entrada/<slug>.mp4
+                 │
+                 ▼
+            indexar ── Whisper do motores/voz ──► palavras-<slug>.json  (mesmo formato do voz.json)
+                 │      + janelas de 15 s ── EmbeddingGemma 2 ──► índice (vetores)
+                 ▼
+            sugerir "tema" ──► candidatos-<tema>.html  ──►  quem monta escreve colagem.json + revisao/<id>.txt
+                                                                      │
+                                                                      ▼
+            montar, por fragmento:  casar() de motores/voz/alinhar.py   (o texto revisado manda, o Whisper empresta os tempos)
+                                    gerar() de motores/legenda           (legenda karaokê na zona universal)
+                                    filtro_legenda() de motores/legenda/queimar.py
+                                    + ffmpeg: fundo desfocado, etiqueta ASS, loudnorm em 2 passagens
+                    no fim:         cartões, concat, .srt/.vtt da colagem inteira (gerar() de novo) e ficha.json
+            folha ── folha_de_contato() de motores/legenda
+```
+
+- **Não passa pelo render.** Cartões, etiqueta e legenda são ASS; a textura vem do `lavfi`. Não precisa de Chrome.
+- **A voz aqui é a do arquivo.** O mesmo alinhador que cronometra uma gravação própria cronometra o discurso de 1988: o texto conferido por uma pessoa é a legenda, o Whisper só dá os tempos.
+- **As dependências pesadas são opcionais.** Só `indexar` e `sugerir` precisam de torch e sentence-transformers. O `montar` roda com o núcleo quando as palavras já estão prontas (o exemplo traz `palavras/`).
+
+Os exemplos `karaoke-discurso` (um trecho de discurso com legenda palavra a palavra) e `mudar-o-que` (explicativo com fonte de cada fato) usam as mesmas peças. Hoje `mixar()` e `loudness()` moram em `exemplos/explicativo/gerar.py` e são importados pelos outros dois exemplos; o lugar natural deles é um módulo comum de áudio.
+
+Conceito e ética da montagem em [colagem.md](colagem.md).
+
 ## Linguagens e dependências
 
 | Motor | Linguagem | Precisa de |
@@ -119,5 +151,6 @@ Um provedor é uma função `(texto_falado, voz, wav, opcoes) -> marcas | None` 
 | render | Node 20+ (ESM) | `playwright-core` (só o protocolo; usa o Chrome/Edge instalado), ffmpeg |
 | voz | Python 3.10+ | núcleo: faster-whisper, num2words, numpy, edge-tts; opcionais por provedor; ffmpeg |
 | legenda | Python 3.10+ | Pillow; ffmpeg com libass |
+| colagem | Python 3.10+ | voz e legenda; ffmpeg com libass; opcionais: yt-dlp (baixar), torch + sentence-transformers + EmbeddingGemma 2 (indexar, sugerir) |
 
 A divisão Node × Python segue o que cada ecossistema faz melhor: o controle do Chrome é nativo em Node; Whisper, TTS e medição de fonte são nativos em Python. Os dois conversam por arquivo e subprocesso.

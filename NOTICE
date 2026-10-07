@@ -5,7 +5,7 @@ Este produto inclui software desenvolvido por Arthur Teles, licenciado sob a
 Apache License, Version 2.0 (ver LICENSE).
 
 O código nasceu dos laboratórios da Fábrica de reels (projeto reels-fabric):
-render de cenas HTML, vozes sintéticas e legendas, generalizados aqui como
+render de cenas HTML, vozes sintéticas, legendas e colagem de falas, generalizados aqui como
 motores reutilizáveis.
 
 Componentes de terceiros distribuídos neste repositório:
