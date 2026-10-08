@@ -10,6 +10,8 @@ __pycache__/
 # saídas geradas
 saida/
 app/dist/
+app/public/acervo/*.mp4
+app/public/acervo/folha.png
 *.mp4
 *.partes/
 

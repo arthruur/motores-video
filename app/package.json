@@ -13,6 +13,7 @@
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",
     "@mediabunny/aac-encoder": "^1.61.3",
+    "@shiguredo/rnnoise-wasm": "^2025.1.5",
     "mediabunny": "^1.61.3"
   },
   "devDependencies": {

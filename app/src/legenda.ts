@@ -143,3 +143,36 @@ export function gerarSrt(blocos: Bloco[]): string {
   };
   return blocos.map((b, i) => `${i + 1}\n${ts(b.ini)} --> ${ts(b.fim)}\n${b.palavras.map((w) => w.texto).join(' ')}\n`).join('\n');
 }
+
+export type EstiloLegenda = 'bloco' | 'palavra';
+
+/** uma palavra por vez, grande e com contorno; números e palavras longas em destaque */
+export function desenharPalavra(ctx: CanvasRenderingContext2D, blocos: Bloco[], t: number, faixa: Faixa) {
+  const b = blocos.find((b) => t >= b.ini && t < b.fim);
+  if (!b) return;
+  let i = b.palavras.findIndex((w, k) => t >= w.inicio && (k + 1 === b.palavras.length || t < b.palavras[k + 1].inicio));
+  if (i < 0) i = 0;
+  const w = b.palavras[i];
+  const texto = w.texto.toUpperCase().replace(/[.,;:!?…]+$/u, '');
+  const forte = /\d/.test(texto) || limpa(texto).length >= 7 || /[!?]$/.test(w.texto);
+  const pop = Math.min(1, 0.75 + 0.25 * ((t - w.inicio) / 0.1));
+  ctx.save();
+  let corpo = 132;
+  ctx.font = `${corpo}px "${FONTE}"`;
+  const largMax = faixa.dir - faixa.esq;
+  const L = ctx.measureText(texto).width;
+  if (L > largMax) { corpo *= largMax / L; ctx.font = `${corpo}px "${FONTE}"`; }
+  const cx = (faixa.esq + faixa.dir) / 2;
+  const y = faixa.base - 20;
+  ctx.translate(cx, y);
+  ctx.scale(pop, pop);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = corpo * 0.16;
+  ctx.strokeStyle = '#000';
+  ctx.strokeText(texto, 0, 0);
+  ctx.fillStyle = forte ? COR_ATUAL : COR_TEXTO;
+  ctx.fillText(texto, 0, 0);
+  ctx.restore();
+}

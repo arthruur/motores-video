@@ -38,9 +38,13 @@ Diferente dos motores, o app **é redistribuído** quando alguém publica o `app
 | @mediabunny/aac-encoder | 1.61.3 | MPL-2.0 | AAC quando o navegador não codifica | Só carregado se preciso. Embute o codificador AAC do **FFmpeg** compilado em WASM (LGPL-2.1-or-later) |
 | @huggingface/transformers | 4.3.1 | Apache-2.0 | Whisper no navegador | Puxa onnxruntime-web (MIT) e @huggingface/jinja (MIT) |
 | Whisper `base` (onnx-community/whisper-base_timestamped) | 8 bits | MIT (pesos da OpenAI) | Legenda | Baixado do Hugging Face pelo navegador na 1ª vez; não vai no build |
+| @shiguredo/rnnoise-wasm | 2025.1.5 | Apache-2.0 | "Som limpo" (remoção de ruído da voz) | Embute o **RNNoise** (Xiph.Org, BSD-3-Clause), com os pesos, compilado em WASM |
+| Audio FXtor (arquivos em `app/src/fxtor/`) | commit `5872183` | Apache-2.0, por permissão do autor | Loudness, limitador, reamostragem, RNNoise | De Matheus Teles, [audio-fxtor](https://github.com/matheustdo/audio-fxtor). Origem de cada arquivo em `app/src/fxtor/README.md` |
 | vite, typescript | 7, 5 | MIT, Apache-2.0 | Só desenvolvimento | Não vão no build |
 
 A fonte Barlow Condensed (OFL) é copiada para `app/public/fontes/` com o texto da licença.
+
+**Acervo de vídeos de retenção** (`app/public/acervo/`): clipes do Wikimedia Commons, só com CC0, domínio público ou CC BY. O crédito e a licença de cada um ficam no `acervo.json` e aparecem na tela quando o clipe é usado. O git guarda só o `acervo.json`; os vídeos são refeitos com `python ferramentas/acervo/coletar.py --restaurar`. Detalhes em [docs/acervo.md](docs/acervo.md).
 
 ## Opcionais (fora do `requirements.txt`)
 

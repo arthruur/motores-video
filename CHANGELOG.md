@@ -4,6 +4,24 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: interface fácil, receitas, som do Audio FXtor e acervo
+
+- **Interface refeita para levar menos de 40 s de atenção depois do vídeo:**
+  - Fluxo em 3 telas: um botão para escolher o vídeo, depois receita, gancho, fonte e **Prensar**, e por fim compartilhar.
+  - Onboarding de 3 passos na 1ª visita e janela "Por que Prensa?", com a história da prensa (Gutenberg, a Reforma, o *Malleus Maleficarum*, a Impressão Régia de 1808) e a regra da fonte visível.
+  - Trecho, vídeo de baixo, estilo de legenda e redes ficam em "Mais opções".
+- **7 receitas** (Corte direto, Você sabia?, Dica rápida, Estímulo duplo, Mito ou fato, Frase de impacto, Cívico), escolhidas pela evidência. O porquê e as fontes estão em `docs/receitas.md`.
+- **Gancho:** sugerido a partir de frases da própria fala, com banco de modelos com lacuna. Fica grande por 4 s e depois vira título fixo.
+- **Legenda:** novo estilo "palavra por palavra", com as palavras de peso em destaque.
+- **Tela dividida:** passa a 58/42, com a legenda na junção.
+- **Som do Audio FXtor** (`app/src/fxtor/`, Apache-2.0 por permissão do autor):
+  - loudness BS.1770 em −14 LUFS com limitador de pico real em −1 dBTP (antes era uma aproximação por RMS);
+  - "Som limpo" com RNNoise na voz;
+  - saída sempre em estéreo.
+- **Retenção sem direito autoral de terceiros:** animações geradas na hora (Pêndulos, Bolinhas, Tinta, Encaixe) e um **acervo de clipes do Wikimedia Commons** com licença livre.
+  - O coletor `ferramentas/acervo/coletar.py` busca, filtra a licença, corta em 9:16, gera a folha de contato e só publica o que uma pessoa aprovou.
+  - O plano, as fontes possíveis e por que não usar o Google Drive estão em `docs/acervo.md`.
+
 ### Adicionado
 
 - **`app/`: Prensa**, o app para quem não programa (issues #2, #3, #4 e #5, primeira versão). Vídeo → trecho → formato → plataformas → MP4 9:16 → compartilhar, tudo no navegador do aparelho: decodifica e codifica com WebCodecs (mediabunny), transcreve com o Whisper `base` 8 bits (transformers.js, num worker, 77 MB baixados uma vez) e desenha cada quadro num canvas. Layouts tela cheia (fundo desfocado para vídeo deitado) e tela dividida (vídeo de retenção embaixo, com crédito); ganchos "Você sabia?", "POV", "Manchete" e "Lista"; fonte sempre visível; legenda palavra a palavra portada do `motores/legenda` (mesmas regras de quebra, cores e faixa segura), mais `.srt`. A legenda começa assim que o trecho é escolhido e aparece na prévia, que usa a mesma função de desenho do export. Exporta para TikTok, Reels, Shorts, Kwai e status do WhatsApp: um render, cortado ou dividido em partes por plataforma. Instalável (PWA), funciona offline depois da 1ª visita e, no Android, recebe vídeo pelo menu Compartilhar.

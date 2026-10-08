@@ -48,7 +48,9 @@ Os dois últimos usam vídeos de terceiros, que **não estão no repositório**:
 cd app && npm install && npm run dev      # abra o endereço no celular, na mesma rede, e "Adicionar à tela inicial"
 ```
 
-Vídeo → trecho → formato (tela cheia ou dividida; gancho "Você sabia?", "POV", "Manchete" ou "Lista") → plataformas → **Prensar** → compartilhar. A legenda (Whisper, no próprio aparelho) começa a ser feita assim que o trecho é escolhido. Com ela pronta, um vídeo de 33 s vira 5 arquivos em 15,9 s num notebook sem GPU. A prévia usa o mesmo desenho do export. Detalhes, números e limites no [README do app](app/README.md); limites de cada plataforma, com fonte, em [docs/plataformas.md](docs/plataformas.md).
+Escolher vídeo → tocar numa receita (Corte direto, Você sabia?, Dica rápida, Estímulo duplo, Mito ou fato, Frase de impacto, Cívico) → **Prensar** → compartilhar. A legenda (Whisper, no próprio aparelho) começa assim que o vídeo chega, e o gancho já vem sugerido a partir da própria fala. O som passa pelo motor do [Audio FXtor](https://github.com/matheustdo/audio-fxtor) (−14 LUFS, remoção de ruído). Com a legenda pronta, um vídeo de 33 s vira 5 arquivos em 16 a 26 s num notebook sem GPU.
+
+Detalhes e números no [README do app](app/README.md). As receitas e a evidência por trás de cada uma estão em [docs/receitas.md](docs/receitas.md), o acervo de vídeos de retenção com licença livre em [docs/acervo.md](docs/acervo.md) e os limites de cada rede em [docs/plataformas.md](docs/plataformas.md).
 
 ## Instalação
 
@@ -138,7 +140,8 @@ Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (
 | [`exemplos/karaoke-discurso/`](exemplos/karaoke-discurso) | Discurso de arquivo com legenda alinhada ao áudio original; vídeo baixado em `entrada/` |
 | [`exemplos/colagem-democracia/`](exemplos/colagem-democracia) | Colagem de quatro falas com o motor de colagem; vídeos baixados em `entrada/` |
 | [`app/`](app) | **Prensa**: o app no navegador (mediabunny + transformers.js), tudo no aparelho. [README](app/README.md) |
-| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md), [plataformas](docs/plataformas.md) |
+| [`ferramentas/acervo/`](ferramentas/acervo) | Coletor do acervo de vídeos de retenção (Wikimedia Commons, licença livre, revisão humana) |
+| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md), [plataformas](docs/plataformas.md), [receitas](docs/receitas.md), [acervo](docs/acervo.md) |
 | `fontes/` | Barlow Condensed ExtraBold (OFL), servida às cenas em `/_fontes/` e usada pela legenda |
 
 ## Números

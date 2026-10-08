@@ -1,0 +1,150 @@
+{
+  "clipes": [
+    {
+      "id": "areia-01",
+      "categoria": "areia",
+      "arquivo": "areia-01.mp4",
+      "titulo": "Very soothing and relaxing ｜ Oddly Satisfying kineticsand 42",
+      "credito": "Serenity In sand, via Wikimedia Commons",
+      "licenca": "CC BY 3.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "f0f7af1cc11d3246016a5b03dac3c5ca28009072b431f815489c775d540bf959",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Very_soothing_and_relaxing_%EF%BD%9C_Oddly_Satisfying_kineticsand_421.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/5/54/Very_soothing_and_relaxing_%EF%BD%9C_Oddly_Satisfying_kineticsand_421.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "bolinhas-01",
+      "categoria": "bolinhas",
+      "arquivo": "bolinhas-01.mp4",
+      "titulo": "NASA - Earth from Orbit 2012 sckOSMf-LpY",
+      "credito": "NASA Goddard, via Wikimedia Commons",
+      "licenca": "Public domain",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "445ebecd6a8d665ee559f7895ca6ead47a2b3e32f65221c4cb04801612bd9b2f",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:NASA_-_Earth_from_Orbit_2012_sckOSMf-LpY.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/7/7a/NASA_-_Earth_from_Orbit_2012_sckOSMf-LpY.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "maquinas-02",
+      "categoria": "maquinas",
+      "arquivo": "maquinas-02.mp4",
+      "titulo": "Hydraulic aggregate for the calender",
+      "credito": "barbara.grilc; Sound: Dušan Oblak, Photo: Irena Marušič, Vid, via Wikimedia Commons",
+      "licenca": "CC BY 3.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "9ab2e02bf8b035c0c8b1246736700cb6b523b706b9b3965d3c0305f59c97b7d9",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Hydraulic_aggregate_for_the_calender.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Hydraulic_aggregate_for_the_calender.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "natureza-01",
+      "categoria": "natureza",
+      "arquivo": "natureza-01.mp4",
+      "titulo": "Cascade de Syratu",
+      "credito": "Arie m den toom, via Wikimedia Commons",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "b76d98463d8af9a5f27b0d6bc4c3a531a0d6533a759efc182075dbdb2e9541f9",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Cascade_de_Syratu.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/9/94/Cascade_de_Syratu.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "natureza-02",
+      "categoria": "natureza",
+      "arquivo": "natureza-02.mp4",
+      "titulo": "Waterfall in Huascarán National Park - Peru",
+      "credito": "CorraleH, via Wikimedia Commons",
+      "licenca": "CC0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "59e2a95403e9130d7ee8c0bcf21e283eccbf5e205b4f82c17387bf60f7866dfe",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Waterfall_in_Huascar%C3%A1n_National_Park_-_Peru.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/f/f7/Waterfall_in_Huascar%C3%A1n_National_Park_-_Peru.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "viagem-02",
+      "categoria": "viagem",
+      "arquivo": "viagem-02.mp4",
+      "titulo": "Ezh cab ride Krylatskoe-Strogino",
+      "credito": "Александр Гончаренко, via Wikimedia Commons",
+      "licenca": "CC BY 3.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "9d6dcb7a1f91ddfde74a536c756fff05ba5dd01bf05a6e3d8a17b9ffef6e149a",
+      "origem": {
+        "fonte": "wikimedia-commons",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Ezh_cab_ride_Krylatskoe-Strogino.webm",
+        "arquivo_original": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Ezh_cab_ride_Krylatskoe-Strogino.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0",
+      "share_alike": false,
+      "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
+      "coletado_em": "2026-10-08"
+    }
+  ],
+  "rejeitados": [
+    "https://commons.wikimedia.org/wiki/File:Sludge_content_Camp_Camp.webm",
+    "https://commons.wikimedia.org/wiki/File:Disruption-Induced-Mucus-Secretion-Repair-and-Protection-pbio.0040276.sv001.ogv",
+    "https://commons.wikimedia.org/wiki/File:Disruption-Induced-Mucus-Secretion-Repair-and-Protection-pbio.0040276.sv002.ogv",
+    "https://commons.wikimedia.org/wiki/File:Painter_2021._Accelerate_your_art..webm",
+    "https://commons.wikimedia.org/wiki/File:Westinghouse_Hydraulic_Elevator_at_the_South_Carolina_State_Capitol.webm",
+    "https://commons.wikimedia.org/wiki/File:%D0%9D%D1%96%D0%BC%D1%84%D0%B5%D1%83%D0%BC_%D0%90%D0%B4%D1%80%D1%96%D0%B0%D0%BD%D0%B0_11.webm",
+    "https://commons.wikimedia.org/wiki/File:Fracking_banner_drop,_state_capitol_of_Illinois..webm",
+    "https://commons.wikimedia.org/wiki/File:PotteryShaping.ogv",
+    "https://commons.wikimedia.org/wiki/File:Moving_clouds_timelapse_1152x694x10fps.ogv",
+    "https://commons.wikimedia.org/wiki/File:2011-08-05_21-45-00-timelapse-clouds-seloncourt.ogv",
+    "https://commons.wikimedia.org/wiki/File:CDC-_Tips_From_Former_Smokers_-_Brian%27s_Stroke_and_Slow_Recovery.webm",
+    "https://commons.wikimedia.org/wiki/File:DR1B_cab_ride.webm"
+  ]
+}

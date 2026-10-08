@@ -5,6 +5,7 @@ import {
   Input, type InputAudioTrack, type InputVideoTrack, Mp4OutputFormat, Output, canEncodeAudio, canEncodeVideo,
 } from 'mediabunny';
 import { A, L, type Fonte, type Quadro, desenharQuadro } from './formatos';
+import { tratarSom } from './fxtor/som';
 import type { Plataforma } from './plataformas';
 
 export const FPS = 30;
@@ -65,28 +66,12 @@ export async function audioParaFala(m: Midia, ini: number, fim: number): Promise
   return (await ctx.startRendering()).getChannelData(0);
 }
 
-/** volume parelho entre vídeos: alvo ~-15 dBFS RMS nos trechos com fala, pico até -1 dBFS (aproximação de -14 LUFS) */
-function nivelar(canais: Float32Array<ArrayBuffer>[], taxa: number) {
-  const bloco = Math.round(taxa * 0.4);
-  const rms: number[] = [];
-  let pico = 0;
-  for (let i = 0; i + bloco <= canais[0].length; i += bloco) {
-    let s = 0;
-    for (const c of canais) for (let j = i; j < i + bloco; j++) { s += c[j] * c[j]; pico = Math.max(pico, Math.abs(c[j])); }
-    rms.push(Math.sqrt(s / (bloco * canais.length)));
-  }
-  const vivos = rms.filter((r) => r > 0.003); // ignora silêncio (< -50 dBFS)
-  if (!vivos.length || pico === 0) return;
-  const media = Math.sqrt(vivos.reduce((a, r) => a + r * r, 0) / vivos.length);
-  const ganho = Math.min(10 ** (-15 / 20) / media, 0.89 / pico, 8);
-  for (const c of canais) for (let j = 0; j < c.length; j++) c[j] *= ganho;
-}
-
 export type Pedido = Quadro & {
   principal: Midia;
   baixo: Midia | null;
   ini: number;
   fim: number;
+  somLimpo: boolean; // remove ruído da voz (RNNoise, do Audio FXtor)
 };
 
 export type Progresso = (fracao: number) => void;
@@ -124,7 +109,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   const sinkP = new CanvasSink(p.principal.video, { poolSize: 3, ...tamanho(p.principal) });
   const itP = sinkP.canvasesAtTimestamps(tempos);
   let itB: AsyncGenerator<{ canvas: HTMLCanvasElement | OffscreenCanvas } | null> | null = null;
-  if (p.layout === 'dividida' && p.baixo) {
+  if (p.layout === 'dividida' && p.baixo && !p.gerador) {
     const b = p.baixo;
     const sinkB = new CanvasSink(b.video, { poolSize: 3, ...tamanho(b) });
     itB = sinkB.canvasesAtTimestamps(tempos.map((_, i) => b.inicio + ((i / FPS) % Math.max(0.1, b.dur - 0.05))));
@@ -147,8 +132,10 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   if (itB) await itB.return(undefined);
 
   if (fonteAudio) {
-    const { canais, taxa } = await lerAudio(p.principal, p.ini, p.fim);
-    nivelar(canais, taxa);
+    const lido = await lerAudio(p.principal, p.ini, p.fim);
+    const taxa = lido.taxa;
+    const canais = (await tratarSom(lido.canais, taxa, { limpar: p.somLimpo, sinal })).map((c) => new Float32Array(c));
+    if (canais.length === 1) canais.push(new Float32Array(canais[0])); // sai sempre estéreo: o -14 LUFS foi medido assim
     const ab = new AudioBuffer({ length: canais[0].length, numberOfChannels: canais.length, sampleRate: taxa });
     canais.forEach((c, i) => ab.copyToChannel(c, i));
     await fonteAudio.add(ab);

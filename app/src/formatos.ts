@@ -1,12 +1,13 @@
 // Formatos: como cada quadro 1080x1920 é desenhado. A prévia e o export usam esta mesma função,
 // então o que você vê é o que sai.
-import { type Bloco, type Faixa, FONTE, desenharLegenda } from './legenda';
+import { type Bloco, type EstiloLegenda, type Faixa, FONTE, desenharLegenda, desenharPalavra } from './legenda';
+import { GERADORES } from './retencao';
 
 export const L = 1080;
 export const A = 1920;
 
 export type Layout = 'cheio' | 'dividida';
-export type EstiloGancho = 'nenhum' | 'voce-sabia' | 'pov' | 'manchete' | 'lista';
+export type EstiloGancho = 'nenhum' | 'titulo' | 'voce-sabia' | 'pov' | 'manchete' | 'lista';
 
 export const LAYOUTS: { id: Layout; nome: string; dica: string }[] = [
   { id: 'cheio', nome: 'Tela cheia', dica: 'Vídeo deitado ganha fundo desfocado' },
@@ -15,6 +16,7 @@ export const LAYOUTS: { id: Layout; nome: string; dica: string }[] = [
 
 export const GANCHOS: { id: EstiloGancho; nome: string; exemplo: string }[] = [
   { id: 'nenhum', nome: 'Sem gancho', exemplo: '' },
+  { id: 'titulo', nome: 'Título', exemplo: 'a frase mais forte do vídeo' },
   { id: 'voce-sabia', nome: 'Você sabia?', exemplo: 'que o céu não é azul de verdade' },
   { id: 'pov', nome: 'POV', exemplo: 'você descobriu como o céu funciona' },
   { id: 'manchete', nome: 'Manchete', exemplo: 'ninguém te contou isso' },
@@ -23,9 +25,12 @@ export const GANCHOS: { id: EstiloGancho; nome: string; exemplo: string }[] = [
 
 // Faixa segura comum a TikTok, Reels e Shorts (ver docs/plataformas.md): o mesmo arquivo serve em todas.
 export const FAIXA_LEGENDA: Faixa = { esq: 120, dir: 780, base: 1248 };
-const FAIXA_LEGENDA_DIVIDIDA: Faixa = { esq: 120, dir: 780, base: 1010 };
+// Tela dividida: fala em 58% de cima, retenção embaixo; a legenda fica na junção
+export const CORTE = Math.round(A * 0.58);
+const FAIXA_LEGENDA_DIVIDIDA: Faixa = { esq: 120, dir: 780, base: CORTE + 50 };
 const TOPO = 270; // Meta: 14% do topo livre (abas Seguindo / Para você)
 const MARGEM = 72;
+const GANCHO_S = 4;
 
 export type Fonte = { img: CanvasImageSource; w: number; h: number };
 
@@ -35,6 +40,8 @@ export type Quadro = {
   fonte: string; // quem fala / de onde veio: sempre visível quando preenchido
   creditoBaixo: string;
   legenda: Bloco[] | null;
+  estiloLegenda: EstiloLegenda;
+  gerador: string | null; // tela dividida com animação gerada (id em GERADORES) em vez de vídeo
 };
 
 const fundoPequeno = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(27, 48) : null;
@@ -92,13 +99,19 @@ function desenharGancho(ctx: CanvasRenderingContext2D, g: Quadro['gancho'], t: n
   const texto = g.texto.trim();
   if (g.estilo === 'nenhum' || !texto) return TOPO;
   const pop = Math.min(1, 0.85 + 0.15 * (t / 0.25));
+  // grande nos primeiros 4 s; depois vira título fixo, menor (ajuda quem entra no meio do loop)
+  const encolhe = 1 - 0.3 * Math.min(1, Math.max(0, (t - GANCHO_S) / 0.3));
+  const k = pop * encolhe;
   ctx.save();
   ctx.translate(L / 2, TOPO);
-  ctx.scale(pop, pop);
+  ctx.scale(k, k);
   ctx.translate(-L / 2, -TOPO);
   const larg = L - 2 * MARGEM - 60;
   let y = TOPO;
-  if (g.estilo === 'voce-sabia') {
+  if (g.estilo === 'titulo') {
+    ctx.font = `72px "${FONTE}"`;
+    y = placa(ctx, quebrar(ctx, texto.toUpperCase(), larg), y, 72, '#FFFFFF', '#111');
+  } else if (g.estilo === 'voce-sabia') {
     ctx.font = `64px "${FONTE}"`;
     y = placa(ctx, ['VOCÊ SABIA?'], y, 64, '#FFD633', '#111', 14) + 10;
     ctx.font = `72px "${FONTE}"`;
@@ -122,7 +135,7 @@ function desenharGancho(ctx: CanvasRenderingContext2D, g: Quadro['gancho'], t: n
     y = placa(ctx, quebrar(ctx, texto.toUpperCase(), larg), y, 76, '#111827', '#FFD633', 22);
   }
   ctx.restore();
-  return y;
+  return TOPO + (y - TOPO) * k;
 }
 
 function rotulo(ctx: CanvasRenderingContext2D, texto: string, x: number, y: number) {
@@ -148,11 +161,13 @@ export function desenharQuadro(ctx: CanvasRenderingContext2D, q: Quadro, t: numb
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, L, A);
   if (q.layout === 'dividida') {
-    if (principal) cobrir(ctx, principal, 0, 0, L, A / 2);
-    if (baixo) cobrir(ctx, baixo, 0, A / 2, L, A / 2);
-    else { ctx.fillStyle = '#1b2233'; ctx.fillRect(0, A / 2, L, A / 2); }
+    if (principal) cobrir(ctx, principal, 0, 0, L, CORTE);
+    const g = q.gerador ? GERADORES.find((g) => g.id === q.gerador) : null;
+    if (g) g.desenhar(ctx, t, 0, CORTE, L, A - CORTE);
+    else if (baixo) cobrir(ctx, baixo, 0, CORTE, L, A - CORTE);
+    else { ctx.fillStyle = '#1b2233'; ctx.fillRect(0, CORTE, L, A - CORTE); }
     ctx.fillStyle = '#000';
-    ctx.fillRect(0, A / 2 - 3, L, 6);
+    ctx.fillRect(0, CORTE - 3, L, 6);
   } else if (principal) {
     if (principal.w / principal.h > 0.7) { // deitado ou quadrado: fundo desfocado + vídeo inteiro
       fundoDesfocado(ctx, principal);
@@ -162,8 +177,12 @@ export function desenharQuadro(ctx: CanvasRenderingContext2D, q: Quadro, t: numb
   }
   const y = desenharGancho(ctx, q.gancho, t);
   rotulo(ctx, q.fonte ? `Fonte: ${q.fonte}` : '', MARGEM, y + 14);
-  if (q.layout === 'dividida') rotulo(ctx, q.creditoBaixo ? `Vídeo de baixo: ${q.creditoBaixo}` : '', MARGEM, A / 2 + 90);
-  if (q.legenda) desenharLegenda(ctx, q.legenda, t, q.layout === 'dividida' ? FAIXA_LEGENDA_DIVIDIDA : FAIXA_LEGENDA);
+  if (q.layout === 'dividida' && !q.gerador) rotulo(ctx, q.creditoBaixo ? `Vídeo de baixo: ${q.creditoBaixo}` : '', MARGEM, CORTE + 150);
+  if (q.legenda) {
+    const f = faixaLegenda(q.layout);
+    if (q.estiloLegenda === 'palavra') desenharPalavra(ctx, q.legenda, t, f);
+    else desenharLegenda(ctx, q.legenda, t, f);
+  }
 }
 
 export function faixaLegenda(layout: Layout): Faixa {

@@ -13,89 +13,156 @@
 </head>
 <body>
   <header class="topo">
-    <h1>Prensa</h1>
-    <p>Seu vídeo vira reels prontos para postar. Tudo no seu aparelho: nada é enviado.</p>
+    <h1 class="marca">Prensa</h1>
+    <nav class="links">
+      <button type="button" class="texto" id="abrir-ajuda">Como funciona</button>
+      <button type="button" class="texto" id="abrir-historia">Por que "Prensa"?</button>
+    </nav>
   </header>
 
-  <main class="grade">
-    <div class="passos">
-      <section class="passo" id="passo-video">
-        <h2><span>1</span> Vídeo</h2>
-        <label class="soltar" id="soltar">
-          <input type="file" accept="video/*" id="arquivo" hidden>
-          <strong>Escolher vídeo</strong>
-          <small>ou arraste para cá</small>
-        </label>
-        <div id="trecho" hidden>
-          <video id="video" controls playsinline preload="auto"></video>
-          <div class="linha">
-            <button type="button" id="marca-ini">⟦ Começa aqui</button>
-            <button type="button" id="marca-fim">Termina aqui ⟧</button>
-          </div>
-          <p class="nota" id="trecho-info"></p>
-          <button type="button" class="texto" id="trocar">Trocar vídeo</button>
-        </div>
-      </section>
+  <!-- 1. começo: um botão só -->
+  <main id="tela-inicio" class="inicio">
+    <p class="chamada">Seu vídeo vira reels<br>em <mark>3 toques</mark>.</p>
+    <label class="soltar" id="soltar">
+      <input type="file" accept="video/*" id="arquivo" hidden>
+      <span class="botao-grande">Escolher vídeo</span>
+      <small>ou arraste para cá · nada sai do seu aparelho</small>
+    </label>
+    <ol class="tres">
+      <li><b>1</b> Escolha o vídeo</li>
+      <li><b>2</b> Toque numa receita</li>
+      <li><b>3</b> Prensar e compartilhar</li>
+    </ol>
+  </main>
 
-      <section class="passo" id="passo-formato">
-        <h2><span>2</span> Formato</h2>
-        <div class="fichas" id="layouts" role="radiogroup" aria-label="Layout"></div>
-        <div id="baixo-campos" hidden>
-          <label class="campo">Vídeo de baixo (retenção)
-            <input type="file" accept="video/*" id="arquivo-baixo">
-          </label>
-          <label class="campo">Crédito do vídeo de baixo
-            <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana, licença livre">
-          </label>
-          <p class="nota">Use vídeo gravado por você ou de licença livre (Pexels, Pixabay, Wikimedia). Gameplay e vídeo de outros criadores costumam cair em direitos autorais.</p>
-        </div>
-        <div class="fichas" id="ganchos" role="radiogroup" aria-label="Gancho"></div>
-        <label class="campo" id="campo-gancho">Texto do gancho
-          <input type="text" id="gancho" maxlength="90">
-        </label>
-        <label class="campo">Fonte: quem fala, onde e quando
-          <input type="text" id="fonte" placeholder="ex.: Ulysses Guimarães, Câmara, 05/10/1988">
-        </label>
-        <label class="marcar"><input type="checkbox" id="legenda" checked> Legenda automática palavra a palavra</label>
-        <p class="nota" id="legenda-estado" aria-live="polite"></p>
-      </section>
+  <!-- 2. criar: receita, gancho, fonte, prensar -->
+  <main id="tela-criar" class="criar" hidden>
+    <section class="previa">
+      <canvas id="previa" width="1080" height="1920" aria-label="Prévia do reel. Toque para tocar ou pausar."></canvas>
+      <p class="nota" id="previa-nota">Toque na prévia para ver tocando. O arquivo sai igual.</p>
+    </section>
 
-      <section class="passo" id="passo-saida">
-        <h2><span>3</span> Para onde</h2>
-        <div class="fichas" id="plataformas"></div>
-        <button type="button" class="principal" id="prensar" disabled>Prensar</button>
-        <div id="andamento" hidden>
-          <p id="andamento-texto"></p>
-          <progress id="andamento-barra" max="1" value="0"></progress>
-          <button type="button" class="texto" id="cancelar">Cancelar</button>
-        </div>
-        <p class="erro" id="erro" role="alert" hidden></p>
-      </section>
+    <section class="painel">
+      <h2>Escolha a receita</h2>
+      <div class="receitas" id="receitas" role="radiogroup" aria-label="Receita"></div>
+      <p class="nota dica" id="receita-dica"></p>
 
-      <section class="passo" id="passo-pronto" hidden>
-        <h2><span>✓</span> Pronto</h2>
-        <ul class="arquivos" id="arquivos"></ul>
-        <label class="campo">Texto do post
-          <textarea id="post" rows="4"></textarea>
-        </label>
+      <div class="campo" id="campo-gancho">
+        <label for="gancho">Gancho <small>(os 3 primeiros segundos decidem)</small></label>
+        <div class="linha-campo">
+          <input type="text" id="gancho" maxlength="80" autocomplete="off">
+          <button type="button" id="outra-ideia" title="Outra ideia de gancho">Outra ideia</button>
+        </div>
+        <button type="button" class="sugestao" id="da-fala" hidden></button>
+      </div>
+
+      <div class="campo">
+        <label for="fonte">De onde é o vídeo? <small>(aparece na tela)</small></label>
+        <input type="text" id="fonte" placeholder="ex.: Fulana, TV Câmara, 05/10/1988" autocomplete="off">
+        <p class="nota aviso" id="aviso-fonte" hidden>Se o vídeo não é seu, diga quem fala e de onde veio. Fonte na tela protege você e quem assiste.</p>
+      </div>
+
+      <div class="chaves">
+        <label class="chave"><input type="checkbox" id="legenda" checked><span>Legenda</span></label>
+        <label class="chave"><input type="checkbox" id="som-limpo" checked><span>Som limpo</span></label>
+      </div>
+      <p class="nota" id="legenda-estado" aria-live="polite"></p>
+
+      <button type="button" class="principal" id="prensar">Prensar</button>
+      <div id="andamento" hidden>
+        <p id="andamento-texto"></p>
+        <progress id="andamento-barra" max="1" value="0"></progress>
+        <button type="button" class="texto" id="cancelar">Cancelar</button>
+      </div>
+      <p class="erro" id="erro" role="alert" hidden></p>
+
+      <details class="mais">
+        <summary>Mais opções</summary>
+
+        <h3>Trecho</h3>
+        <video id="video" controls playsinline preload="auto"></video>
         <div class="linha">
-          <button type="button" id="copiar">Copiar texto</button>
-          <button type="button" id="srt" hidden>Legenda .srt</button>
+          <button type="button" id="marca-ini">⟦ Começa aqui</button>
+          <button type="button" id="marca-fim">Termina aqui ⟧</button>
         </div>
-        <p class="nota">Ao postar, mantenha o crédito. A legenda .srt pode ser enviada como legenda nativa (acessibilidade).</p>
-      </section>
-    </div>
+        <p class="nota" id="trecho-info"></p>
 
-    <aside class="previa">
-      <canvas id="previa" width="1080" height="1920" aria-label="Prévia do reel"></canvas>
-      <video id="video-baixo" muted loop playsinline hidden></video>
-      <p class="nota">Prévia fiel: o arquivo sai igual a isto.</p>
-    </aside>
+        <h3>Vídeo de baixo (tela dividida)</h3>
+        <div class="fichas" id="retencoes" role="radiogroup" aria-label="Vídeo de baixo"></div>
+        <div class="acervo" id="acervo" hidden></div>
+        <label class="campo">Ou envie o seu
+          <input type="file" accept="video/*" id="arquivo-baixo">
+        </label>
+        <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo
+          <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana">
+        </label>
+
+        <h3>Legenda</h3>
+        <div class="fichas" id="estilos-legenda" role="radiogroup" aria-label="Estilo da legenda"></div>
+
+        <h3>Plataformas</h3>
+        <div class="fichas" id="plataformas"></div>
+
+        <button type="button" class="texto" id="trocar">Trocar o vídeo</button>
+      </details>
+    </section>
+  </main>
+
+  <!-- 3. pronto -->
+  <main id="tela-pronta" class="pronta" hidden>
+    <h2 id="pronto-titulo">Pronto!</h2>
+    <ul class="arquivos" id="arquivos"></ul>
+    <label class="campo">Texto do post
+      <textarea id="post" rows="3"></textarea>
+    </label>
+    <div class="linha">
+      <button type="button" id="copiar">Copiar texto</button>
+      <button type="button" id="srt" hidden>Legenda .srt</button>
+      <button type="button" id="voltar">Ajustar este</button>
+      <button type="button" id="novo">Fazer outro</button>
+    </div>
+    <p class="nota">Ao postar, mantenha a fonte. A legenda .srt pode ser enviada como legenda nativa (acessibilidade).</p>
   </main>
 
   <footer class="rodape">
-    <a href="https://github.com/arthruur/motores-video">motores-video</a> · software livre (Apache-2.0)
+    <a href="https://github.com/arthruur/motores-video">Prensa · motores-video</a> · software livre (Apache-2.0) · som pelo <a href="https://github.com/matheustdo/audio-fxtor">Audio FXtor</a>
   </footer>
+
+  <dialog id="ajuda" class="janela" aria-labelledby="ajuda-titulo">
+    <div class="slides" id="slides">
+      <section class="slide">
+        <p class="slide-num">1 de 3</p>
+        <h2 id="ajuda-titulo">Escolha um vídeo</h2>
+        <p>Uma fala, uma aula, uma entrevista. A Prensa começa na hora a ouvir a fala para fazer a legenda. Tudo acontece no seu aparelho: o vídeo não vai para servidor nenhum.</p>
+      </section>
+      <section class="slide" hidden>
+        <p class="slide-num">2 de 3</p>
+        <h2>Toque numa receita</h2>
+        <p>Cada receita junta o que funciona nos vídeos curtos: gancho nos 3 primeiros segundos, legenda dinâmica, tela dividida. O gancho já vem sugerido a partir da própria fala. Troque se quiser.</p>
+      </section>
+      <section class="slide" hidden>
+        <p class="slide-num">3 de 3</p>
+        <h2>Prensar e compartilhar</h2>
+        <p>Sai um arquivo para cada rede (TikTok, Reels, Shorts, Kwai, status do WhatsApp), com o texto do post. Uma regra só: <b>diga de onde veio o vídeo</b>. A fonte aparece na tela.</p>
+      </section>
+    </div>
+    <div class="linha fim">
+      <button type="button" class="texto" id="ajuda-pular">Pular</button>
+      <button type="button" class="principal curto" id="ajuda-proximo">Próximo</button>
+    </div>
+  </dialog>
+
+  <dialog id="historia" class="janela historia" aria-labelledby="historia-titulo">
+    <h2 id="historia-titulo" tabindex="-1">Por que "Prensa"?</h2>
+    <p>Por volta de <b>1450</b>, em Mainz, <b>Johannes Gutenberg</b> juntou tipos móveis de metal, uma tinta que gruda no metal e uma prensa parecida com a de espremer uva. Tipos móveis já existiam na China (século XI) e na Coreia (o <i>Jikji</i>, de 1377), mas a combinação de Gutenberg barateou a cópia a ponto de mudar a Europa: até 1500 já circulavam milhões de livros impressos.</p>
+    <p>Quem podia imprimir passou a falar com muita gente. Em <b>1517</b>, as teses de Martinho Lutero se espalharam em semanas, em folhetos baratos. Jornais, panfletos e revoluções vieram depois.</p>
+    <p>A prensa também espalhou mentira: o <i>Malleus Maleficarum</i> (1487), um manual de caça às bruxas, teve dezenas de edições. Imprimir nunca foi neutro. O que separa informação de boato é <b>dizer de onde veio</b>.</p>
+    <p>No Brasil, a Coroa portuguesa proibiu tipografias na colônia. Só em <b>1808</b>, com a chegada da corte, nasceu a Impressão Régia e a <i>Gazeta do Rio de Janeiro</i>. No mesmo ano, Hipólito José da Costa lançou em Londres o <i>Correio Braziliense</i>, fora do alcance da censura.</p>
+    <p>Hoje a prensa é o celular, e o vídeo curto é o folheto. A Prensa é software livre para que qualquer pessoa possa usar essa linguagem sem pagar ferramenta fechada, com a mesma regra de sempre: <b>fonte visível</b>.</p>
+    <div class="linha fim"><button type="button" class="principal curto" id="historia-fechar">Fechar</button></div>
+  </dialog>
+
+  <video id="video-baixo" muted loop playsinline hidden></video>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>
