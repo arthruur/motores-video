@@ -1,0 +1,18 @@
+{
+  "name": "Prensa: vídeo vira reels",
+  "short_name": "Prensa",
+  "description": "Transforma um vídeo em reels prontos para TikTok, Reels, Shorts, Kwai e status do WhatsApp. Tudo no seu aparelho.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1420",
+  "theme_color": "#0f1420",
+  "icons": [{ "src": "icone.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }],
+  "share_target": {
+    "action": "./receber",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": { "title": "titulo", "text": "texto", "url": "link", "files": [{ "name": "video", "accept": ["video/*"] }] }
+  }
+}

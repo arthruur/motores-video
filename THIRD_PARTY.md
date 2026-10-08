@@ -28,6 +28,20 @@ As dependências LGPL (edge-tts, num2words) são usadas como bibliotecas importa
 
 O edge-tts é uma biblioteca livre, mas o **serviço** que ela chama é o endpoint de leitura em voz alta do navegador Microsoft Edge. Não é uma API oficial e não tem termos de uso comercial publicados: pode mudar, limitar ou parar sem aviso. Use para protótipo, estudo e projetos sem fins comerciais. Para produção, troque de provedor (Kokoro local, Azure AI Speech, ElevenLabs ou gravação própria): é um parâmetro.
 
+## Prensa (`app/`, instalado por `cd app && npm install`)
+
+Diferente dos motores, o app **é redistribuído** quando alguém publica o `app/dist/`: o build empacota estas bibliotecas no JavaScript e no WASM servidos ao navegador.
+
+| Pacote | Versão testada | Licença | Usado para | Observação |
+|---|---|---|---|---|
+| mediabunny | 1.61.3 | MPL-2.0 | Ler e gravar MP4 (WebCodecs) | Copyleft fraco, por arquivo: usado sem modificação |
+| @mediabunny/aac-encoder | 1.61.3 | MPL-2.0 | AAC quando o navegador não codifica | Só carregado se preciso. Embute o codificador AAC do **FFmpeg** compilado em WASM (LGPL-2.1-or-later) |
+| @huggingface/transformers | 4.3.1 | Apache-2.0 | Whisper no navegador | Puxa onnxruntime-web (MIT) e @huggingface/jinja (MIT) |
+| Whisper `base` (onnx-community/whisper-base_timestamped) | 8 bits | MIT (pesos da OpenAI) | Legenda | Baixado do Hugging Face pelo navegador na 1ª vez; não vai no build |
+| vite, typescript | 7, 5 | MIT, Apache-2.0 | Só desenvolvimento | Não vão no build |
+
+A fonte Barlow Condensed (OFL) é copiada para `app/public/fontes/` com o texto da licença.
+
 ## Opcionais (fora do `requirements.txt`)
 
 | Pacote | Licença | Arquivo | Observação |

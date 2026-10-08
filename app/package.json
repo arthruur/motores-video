@@ -1,0 +1,22 @@
+{
+  "name": "prensa",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Prensa: vídeo -> reels prontos para cada plataforma, tudo no aparelho.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.1",
+    "@mediabunny/aac-encoder": "^1.61.3",
+    "mediabunny": "^1.61.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.3.7"
+  }
+}

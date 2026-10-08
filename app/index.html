@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prensa</title>
+  <meta name="description" content="Transforma um vídeo em reels prontos para TikTok, Reels, Shorts, Kwai e status do WhatsApp. Tudo no seu aparelho, sem enviar nada.">
+  <meta name="theme-color" content="#0f1420">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icone.svg">
+  <link rel="stylesheet" href="./src/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <h1>Prensa</h1>
+    <p>Seu vídeo vira reels prontos para postar. Tudo no seu aparelho: nada é enviado.</p>
+  </header>
+
+  <main class="grade">
+    <div class="passos">
+      <section class="passo" id="passo-video">
+        <h2><span>1</span> Vídeo</h2>
+        <label class="soltar" id="soltar">
+          <input type="file" accept="video/*" id="arquivo" hidden>
+          <strong>Escolher vídeo</strong>
+          <small>ou arraste para cá</small>
+        </label>
+        <div id="trecho" hidden>
+          <video id="video" controls playsinline preload="auto"></video>
+          <div class="linha">
+            <button type="button" id="marca-ini">⟦ Começa aqui</button>
+            <button type="button" id="marca-fim">Termina aqui ⟧</button>
+          </div>
+          <p class="nota" id="trecho-info"></p>
+          <button type="button" class="texto" id="trocar">Trocar vídeo</button>
+        </div>
+      </section>
+
+      <section class="passo" id="passo-formato">
+        <h2><span>2</span> Formato</h2>
+        <div class="fichas" id="layouts" role="radiogroup" aria-label="Layout"></div>
+        <div id="baixo-campos" hidden>
+          <label class="campo">Vídeo de baixo (retenção)
+            <input type="file" accept="video/*" id="arquivo-baixo">
+          </label>
+          <label class="campo">Crédito do vídeo de baixo
+            <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana, licença livre">
+          </label>
+          <p class="nota">Use vídeo gravado por você ou de licença livre (Pexels, Pixabay, Wikimedia). Gameplay e vídeo de outros criadores costumam cair em direitos autorais.</p>
+        </div>
+        <div class="fichas" id="ganchos" role="radiogroup" aria-label="Gancho"></div>
+        <label class="campo" id="campo-gancho">Texto do gancho
+          <input type="text" id="gancho" maxlength="90">
+        </label>
+        <label class="campo">Fonte: quem fala, onde e quando
+          <input type="text" id="fonte" placeholder="ex.: Ulysses Guimarães, Câmara, 05/10/1988">
+        </label>
+        <label class="marcar"><input type="checkbox" id="legenda" checked> Legenda automática palavra a palavra</label>
+        <p class="nota" id="legenda-estado" aria-live="polite"></p>
+      </section>
+
+      <section class="passo" id="passo-saida">
+        <h2><span>3</span> Para onde</h2>
+        <div class="fichas" id="plataformas"></div>
+        <button type="button" class="principal" id="prensar" disabled>Prensar</button>
+        <div id="andamento" hidden>
+          <p id="andamento-texto"></p>
+          <progress id="andamento-barra" max="1" value="0"></progress>
+          <button type="button" class="texto" id="cancelar">Cancelar</button>
+        </div>
+        <p class="erro" id="erro" role="alert" hidden></p>
+      </section>
+
+      <section class="passo" id="passo-pronto" hidden>
+        <h2><span>✓</span> Pronto</h2>
+        <ul class="arquivos" id="arquivos"></ul>
+        <label class="campo">Texto do post
+          <textarea id="post" rows="4"></textarea>
+        </label>
+        <div class="linha">
+          <button type="button" id="copiar">Copiar texto</button>
+          <button type="button" id="srt" hidden>Legenda .srt</button>
+        </div>
+        <p class="nota">Ao postar, mantenha o crédito. A legenda .srt pode ser enviada como legenda nativa (acessibilidade).</p>
+      </section>
+    </div>
+
+    <aside class="previa">
+      <canvas id="previa" width="1080" height="1920" aria-label="Prévia do reel"></canvas>
+      <video id="video-baixo" muted loop playsinline hidden></video>
+      <p class="nota">Prévia fiel: o arquivo sai igual a isto.</p>
+    </aside>
+  </main>
+
+  <footer class="rodape">
+    <a href="https://github.com/arthruur/motores-video">motores-video</a> · software livre (Apache-2.0)
+  </footer>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

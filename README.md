@@ -4,6 +4,8 @@ Motores locais e grátis para fazer vídeo vertical (Reels, TikTok, Shorts) com 
 São quatro motores: três peças independentes, **render** (cena HTML → MP4), **voz** (texto → narração com o tempo de cada palavra) e **legenda** (palavras → legenda queimada + .srt/.vtt), e a **colagem**, que monta fragmentos de falas reais por tema, cortados entre frases e com a fonte de cada um na tela, em cima da voz e da legenda.
 Código e documentação em português do Brasil. Licença Apache-2.0.
 
+**Novo: [Prensa](app), o app para quem não programa.** Escolha um vídeo no celular, marque o trecho, escolha o formato e aperte Prensar: saem reels prontos para TikTok, Reels, Shorts, Kwai e status do WhatsApp, com legenda palavra a palavra, gancho e fonte na tela. Roda inteira no aparelho, no navegador, sem enviar nada para servidor.
+
 > **In English:** local, free engines for vertical video on a CPU-only PC: an HTML-scene renderer (parallel headless Chrome → ffmpeg), a voice engine with swappable TTS providers and per-word timing, a caption engine (burned-in ASS via libass + SRT/VTT), and a collage engine that finds fragments of real speeches by topic (Whisper + EmbeddingGemma 2), cuts them between sentences and assembles a credited 9:16 reel.
 > A 33 s narrated, captioned explainer goes from script to final MP4 in 40–50 s on a Ryzen 7 laptop without a dedicated GPU.
 > Code and docs are in Brazilian Portuguese. Apache-2.0.
@@ -39,6 +41,14 @@ Outros três exemplos de ponta a ponta:
 | [`colagem-democracia`](exemplos/colagem-democracia) | "O que é democracia?": colagem de 66 s com Ulysses Guimarães, Lélia Gonzalez, Marielle Franco e Paulo Freire | `python exemplos/colagem-democracia/baixar.py` e depois `python -m motores.colagem.cli montar exemplos/colagem-democracia/colagem.json` |
 
 Os dois últimos usam vídeos de terceiros, que **não estão no repositório**: ver [Exemplos com material de terceiros](#exemplos-com-material-de-terceiros).
+
+## Prensa: o app
+
+```bash
+cd app && npm install && npm run dev      # abra o endereço no celular, na mesma rede, e "Adicionar à tela inicial"
+```
+
+Vídeo → trecho → formato (tela cheia ou dividida; gancho "Você sabia?", "POV", "Manchete" ou "Lista") → plataformas → **Prensar** → compartilhar. A legenda (Whisper, no próprio aparelho) começa a ser feita assim que o trecho é escolhido. Com ela pronta, um vídeo de 33 s vira 5 arquivos em 15,9 s num notebook sem GPU. A prévia usa o mesmo desenho do export. Detalhes, números e limites no [README do app](app/README.md); limites de cada plataforma, com fonte, em [docs/plataformas.md](docs/plataformas.md).
 
 ## Instalação
 
@@ -127,7 +137,8 @@ Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (
 | [`exemplos/mudar-o-que/`](exemplos/mudar-o-que) | Explicativo de opinião com fontes e rótulo de IA (feito em período eleitoral; ver a nota de contexto) |
 | [`exemplos/karaoke-discurso/`](exemplos/karaoke-discurso) | Discurso de arquivo com legenda alinhada ao áudio original; vídeo baixado em `entrada/` |
 | [`exemplos/colagem-democracia/`](exemplos/colagem-democracia) | Colagem de quatro falas com o motor de colagem; vídeos baixados em `entrada/` |
-| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md) |
+| [`app/`](app) | **Prensa**: o app no navegador (mediabunny + transformers.js), tudo no aparelho. [README](app/README.md) |
+| [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md), [plataformas](docs/plataformas.md) |
 | `fontes/` | Barlow Condensed ExtraBold (OFL), servida às cenas em `/_fontes/` e usada pela legenda |
 
 ## Números
@@ -181,15 +192,16 @@ Cada ideia abaixo virou uma issue com ponto de partida e critério de "pronto". 
 | Ideia | Issue |
 |---|---|
 | **Discurso → cortes virais:** achar e cortar os melhores momentos de uma fala longa, prontos para postar | [#1](https://github.com/arthruur/motores-video/issues/1) |
-| **Tela dividida de retenção:** conteúdo em cima, vídeo satisfatório embaixo (gameplay, sabão, slime…), com licenças em ordem | [#2](https://github.com/arthruur/motores-video/issues/2) |
-| **Exportação multiplataforma:** TikTok, YouTube Shorts, Kwai, Reels e status de WhatsApp, cada um no formato certo | [#3](https://github.com/arthruur/motores-video/issues/3) |
-| **Templates de gancho e formatos virais:** "você sabia?", POV, lista, edit no beat | [#4](https://github.com/arthruur/motores-video/issues/4) |
-| **Interface web amigável:** para quem não programa, rodando local | [#5](https://github.com/arthruur/motores-video/issues/5) |
+| **Tela dividida de retenção:** conteúdo em cima, vídeo satisfatório embaixo (gameplay, sabão, slime…), com licenças em ordem | [#2](https://github.com/arthruur/motores-video/issues/2) · 1ª versão na [Prensa](app) |
+| **Exportação multiplataforma:** TikTok, YouTube Shorts, Kwai, Reels e status de WhatsApp, cada um no formato certo | [#3](https://github.com/arthruur/motores-video/issues/3) · 1ª versão na [Prensa](app) |
+| **Templates de gancho e formatos virais:** "você sabia?", POV, lista, edit no beat | [#4](https://github.com/arthruur/motores-video/issues/4) · 1ª versão na [Prensa](app) |
+| **Interface web amigável:** para quem não programa, rodando local | [#5](https://github.com/arthruur/motores-video/issues/5) · 1ª versão na [Prensa](app) |
 | **Emoção na voz sintética** | [#6](https://github.com/arthruur/motores-video/issues/6) |
 | **Prévia ao vivo fiel ao export** | [#7](https://github.com/arthruur/motores-video/issues/7) |
 | **Medir num PC modesto** (boa primeira issue) | [#8](https://github.com/arthruur/motores-video/issues/8) |
 | **Acessibilidade:** legendas para surdos e Libras | [#9](https://github.com/arthruur/motores-video/issues/9) |
 | **[Pesquisa] Testbed ético de agentes sintéticos** | [#10](https://github.com/arthruur/motores-video/issues/10) |
+| **Prensa: receber vídeo por link** (X, Instagram, TikTok, YouTube) | [#11](https://github.com/arthruur/motores-video/issues/11) |
 
 Todas as issues: [github.com/arthruur/motores-video/issues](https://github.com/arthruur/motores-video/issues). As regras valem para tudo o que for construído aqui: **fonte visível** quando for fato, **rótulo de IA** quando houver voz ou conteúdo sintético, e **nunca** imitar voz ou rosto de pessoa real.
 

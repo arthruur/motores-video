@@ -4,6 +4,12 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Adicionado
+
+- **`app/`: Prensa**, o app para quem não programa (issues #2, #3, #4 e #5, primeira versão). Vídeo → trecho → formato → plataformas → MP4 9:16 → compartilhar, tudo no navegador do aparelho: decodifica e codifica com WebCodecs (mediabunny), transcreve com o Whisper `base` 8 bits (transformers.js, num worker, 77 MB baixados uma vez) e desenha cada quadro num canvas. Layouts tela cheia (fundo desfocado para vídeo deitado) e tela dividida (vídeo de retenção embaixo, com crédito); ganchos "Você sabia?", "POV", "Manchete" e "Lista"; fonte sempre visível; legenda palavra a palavra portada do `motores/legenda` (mesmas regras de quebra, cores e faixa segura), mais `.srt`. A legenda começa assim que o trecho é escolhido e aparece na prévia, que usa a mesma função de desenho do export. Exporta para TikTok, Reels, Shorts, Kwai e status do WhatsApp: um render, cortado ou dividido em partes por plataforma. Instalável (PWA), funciona offline depois da 1ª visita e, no Android, recebe vídeo pelo menu Compartilhar.
+- **Issue [#11](https://github.com/arthruur/motores-video/issues/11)**: receber vídeo por link na Prensa (atalho no celular, instância própria do cobalt ou yt-dlp no PC). Hoje o navegador não pode baixar de outro site (CORS), então o vídeo entra como arquivo.
+- **`docs/plataformas.md`**: duração, tamanho, codificação e faixa segura de cada plataforma, com a fonte de cada número e o que não foi confirmado.
+
 ## [0.2.0] - 2026-10-07
 
 ### Adicionado

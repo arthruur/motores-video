@@ -9,6 +9,7 @@ __pycache__/
 
 # saídas geradas
 saida/
+app/dist/
 *.mp4
 *.partes/
 
