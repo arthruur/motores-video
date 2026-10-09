@@ -4,6 +4,12 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: fila em grade, para dezenas de vídeos
+
+- **A fila virou grade:** com mais de um vídeo, cada um aparece com capa, número e situação (pendente, pronto ✓, não abriu !, fora do lote). Filtros Todos / Pendentes / Prontos, e a grade rola sozinha, sem empurrar o resto da tela.
+- **Ajustar um por um:** tocar num vídeo abre ele; o gancho, a fonte e o trecho ficam guardados por vídeo e voltam quando ele é reaberto. "Próximo pendente" pula os prontos.
+- **Lote:** "Prensar os pendentes" faz todos os que faltam com as escolhas atuais (receita, som, redes), respeitando o que foi ajustado em cada um, e pode parar no meio. O ⨯ tira um vídeo do lote.
+
 ### Prensa: Aventura do Mangaio
 
 - **Aventura do Mangaio** como vídeo de baixo (`app/src/mangaio/`): o cesto do Mangaio, mascote do TCC sobre venda direta da agricultura familiar de Serrinha (BA), anda, pula e vende, desenhado em código a partir do SVG do site, como os outros geradores de retenção.
