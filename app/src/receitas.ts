@@ -17,6 +17,13 @@ export type Receita = {
 
 export const RECEITAS: Receita[] = [
   {
+    id: 'mangaio', nome: 'Aventura do Mangaio', para: 'Fala com o cesto embaixo',
+    ideal: 'Fala sobre feira, comida e quem produz: o Mangaio anda, pula e vende embaixo.',
+    dica: 'Ponha o "Baião do Mangaio" no som: os pulos e as piruetas caem na batida.',
+    layout: 'dividida', gancho: 'titulo', legenda: 'bloco', gerador: 'mangaio-aventura',
+    modelos: ['Quem planta ___ mora mais perto do que você pensa', 'O caminho de ___ até a sua mesa', 'Ninguém te conta que ___'],
+  },
+  {
     id: 'direto', nome: 'Corte direto', para: 'Fala, dica, opinião',
     ideal: 'Alguém falando para a câmera: opinião, dica, explicação curta.',
     dica: 'Comece na frase mais forte e corte o "oi, gente": os 3 primeiros segundos decidem.',

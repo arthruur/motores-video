@@ -37,6 +37,7 @@ O mesmo motor que faz um vídeo circular (emoção, novidade, "nós contra eles"
 
 | Receita | Para | Layout | Gancho | Legenda |
 |---|---|---|---|---|
+| Aventura do Mangaio | Fala com o cesto embaixo | Dividida 58/42, com a Aventura do Mangaio embaixo | Título | Bloco |
 | Corte direto (padrão) | Fala, dica, opinião | Tela cheia | Título com a frase mais forte | Bloco |
 | Você sabia? | Curiosidade, explicação | Tela cheia | "Você sabia?" | Bloco |
 | Dica rápida | "3 erros", "5 passos" | Tela cheia | Lista | Palavra |

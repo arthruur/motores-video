@@ -1,15 +1,19 @@
 // Trilhas geradas na hora: sintetizadas no próprio aparelho (Web Audio), sem gravação de ninguém e sem
 // direito autoral de terceiros. Cada uma é um laço de 8 compassos que se repete o quanto precisar.
+import { SONS, BPM as BPM_MANGAIO } from './mangaio/aventura';
 
-export type Trilha = { id: string; nome: string; clima: string; bpm: number; acordes: number[][]; batida: 'nenhuma' | 'lofi' | 'pulso' | 'reta' };
+export type Trilha = { id: string; nome: string; clima: string; bpm: number; acordes: number[][]; batida: 'nenhuma' | 'lofi' | 'pulso' | 'reta' | 'baiao' };
 
 // acordes em semitons a partir de A2 (110 Hz)
-const AM = [0, 3, 7], F = [-4, 0, 3], C = [3, 7, 10], G = [-2, 2, 5], DM = [5, 8, 12], E = [7, 11, 14];
+const AM = [0, 3, 7], F = [-4, 0, 3], C = [3, 7, 10], G = [-2, 2, 5], DM = [5, 8, 12], E = [7, 11, 14], A7 = [0, 4, 7, 10];
 export const TRILHAS: Trilha[] = [
   { id: 'calma', nome: 'Calma', clima: 'pad suave, para explicar', bpm: 70, acordes: [AM, F, C, G], batida: 'nenhuma' },
   { id: 'lofi', nome: 'Lo-fi', clima: 'batida leve, para conversar', bpm: 82, acordes: [F, AM, DM, E], batida: 'lofi' },
   { id: 'tensao', nome: 'Tensão', clima: 'grave e pulso, para revelar', bpm: 120, acordes: [AM, AM, F, E], batida: 'pulso' },
   { id: 'animada', nome: 'Animada', clima: 'pra cima, para listas', bpm: 112, acordes: [C, G, AM, F], batida: 'reta' },
+  // o laço (8 compassos de 4/4 = 32 batidas) tem a duração exata de um ciclo da Aventura do Mangaio,
+  // e os pulos, pousos e plins dela estão gravados dentro: escolhendo os dois, tudo cai junto
+  { id: 'baiao-mangaio', nome: 'Baião do Mangaio', clima: 'zabumba e triângulo, casa com a Aventura do Mangaio', bpm: BPM_MANGAIO, acordes: [DM, DM, A7, A7, G, G, A7, DM], batida: 'baiao' },
 ];
 
 const hz = (semitom: number) => 110 * 2 ** (semitom / 12);
@@ -61,6 +65,56 @@ function chiado(ctx: BaseAudioContext, destino: AudioNode, ruidoBuf: AudioBuffer
   s.stop(t + dur + 0.02);
 }
 
+// O baião em 2/4, dividido em 8 semicolcheias (dois compassos de baião por compasso de 4/4):
+//   zabumba    X . . X . . . .   a "pisada": colcheia pontuada + semicolcheia
+//   bacalhau   . . . . X . X .   o agudo da zabumba
+//   triângulo  x x X x x x X x   fechado o tempo todo, aberto nos contratempos
+//   baixo      X . . X . . X .   fundamental, fundamental, quinta
+//   sanfona    . . X . . . X .   acorde curto no contratempo
+const BAIAO = { zabumba: [0, 3], bacalhau: [4, 6], aberto: [2, 6], baixo: [0, 3, 6], sanfona: [2, 6] };
+
+function baiao(ctx: BaseAudioContext, filtro: AudioNode, mestre: AudioNode, ruidoBuf: AudioBuffer, t0: number, tempo: number, acorde: number[]) {
+  const passo = tempo / 4;
+  for (let metade = 0; metade < 2; metade++) {
+    const base = t0 + metade * 2 * tempo;
+    for (let k = 0; k < 8; k++) {
+      const t = base + k * passo;
+      if (BAIAO.zabumba.includes(k)) bumbo(ctx, mestre, t, 0.55);
+      if (BAIAO.bacalhau.includes(k)) chiado(ctx, mestre, ruidoBuf, t, 0.05, 0.12, 2500);
+      chiado(ctx, mestre, ruidoBuf, t, BAIAO.aberto.includes(k) ? 0.14 : 0.03, BAIAO.aberto.includes(k) ? 0.06 : 0.03, 8000);
+      if (BAIAO.baixo.includes(k)) nota(ctx, filtro, hz(acorde[0] - 12 + (k === 6 ? 7 : 0)), t, passo * 2.5, 'triangle', 0.16, 0.01);
+      if (BAIAO.sanfona.includes(k)) for (const s of acorde) nota(ctx, filtro, hz(s + 12), t, passo * 1.6, 'sawtooth', 0.022, 0.01);
+    }
+  }
+}
+
+/** os sons da aventura, no mesmo laço: o roteiro (mangaio/aventura.ts) diz em que batida cai cada um */
+function sonsDaAventura(ctx: BaseAudioContext, destino: AudioNode, ruidoBuf: AudioBuffer, tempo: number, acordes: number[][]) {
+  for (const s of SONS) {
+    const t = s.batida * tempo;
+    if (s.tipo === 'pulo' || s.tipo === 'pirueta') {
+      // "boing": senoide que sobe de afinação (a pirueta sobe mais)
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(220, t);
+      o.frequency.exponentialRampToValueAtTime(s.tipo === 'pirueta' ? 990 : 660, t + 0.16);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.22, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      o.connect(g).connect(destino); o.start(t); o.stop(t + 0.25);
+    } else if (s.tipo === 'pouso') {
+      bumbo(ctx, destino, t, 0.35);
+      chiado(ctx, destino, ruidoBuf, t, 0.18, 0.1, 600);
+    } else {
+      // "plim": uma nota do acorde que está soando, subindo o arpejo a cada umbu
+      const acorde = acordes[Math.floor(s.batida / 4) % acordes.length];
+      const grau = s.grau ?? 0;
+      const semitom = acorde[grau % acorde.length] + 24 + 12 * Math.floor(grau / acorde.length);
+      nota(ctx, destino, hz(semitom), t, 0.35, 'triangle', 0.18, 0.005);
+    }
+  }
+}
+
 /** renderiza o laço (8 compassos 4/4) em estéreo na taxa pedida */
 export async function gerarTrilha(id: string, taxa = 48000): Promise<AudioBuffer> {
   const tr = TRILHAS.find((t) => t.id === id) ?? TRILHAS[0];
@@ -79,6 +133,7 @@ export async function gerarTrilha(id: string, taxa = 48000): Promise<AudioBuffer
   for (let c = 0; c < 8; c++) {
     const t0 = c * compasso;
     const acorde = tr.acordes[c % tr.acordes.length];
+    if (tr.batida === 'baiao') { baiao(ctx, filtro, mestre, ruidoBuf, t0, tempo, acorde); continue; }
     // pad: três vozes um pouco desafinadas entre si (fica mais "cheio")
     for (const s of acorde) {
       nota(ctx, filtro, hz(s), t0, compasso, 'triangle', 0.06, tr.batida === 'nenhuma' ? 1.2 : 0.25);
@@ -96,6 +151,7 @@ export async function gerarTrilha(id: string, taxa = 48000): Promise<AudioBuffer
       if (tr.batida === 'pulso' && b % 2 === 0) bumbo(ctx, mestre, t, 0.45);
     }
   }
+  if (tr.batida === 'baiao') sonsDaAventura(ctx, mestre, ruidoBuf, tempo, tr.acordes);
   if (tr.batida === 'lofi') { // chiado de vinil, bem baixo
     const v = ctx.createBufferSource();
     v.buffer = ruidoBuf; v.loop = true;

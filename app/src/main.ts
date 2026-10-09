@@ -19,12 +19,15 @@ type EscolhaBaixo = { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado';
 type Saida = { titulo: string; arquivos: Arquivo[]; mestre: Blob; post: string; srt: string; segundos: number };
 type PassoId = 'receita' | 'gancho' | 'fonte' | 'baixo' | 'som' | 'legenda' | 'prensar';
 
+// a Aventura do Mangaio vem primeiro na lista, mas quem abre a Prensa começa no Corte direto
+const RECEITA_PADRAO = RECEITAS.find((r) => r.id === 'direto') ?? RECEITAS[0];
+
 const estado = {
   principal: null as Midia | null,
   baixo: null as Midia | null,
   ini: 0,
   fim: 0,
-  receita: RECEITAS[0],
+  receita: RECEITA_PADRAO,
   escolhaBaixo: { tipo: 'receita' } as EscolhaBaixo,
   estiloLegenda: null as EstiloLegenda | null, // null = o da receita
   plataformas: new Set(PLATAFORMAS.map((p) => p.id)),
@@ -1238,7 +1241,7 @@ dlgContato.addEventListener('click', (e) => {
   await document.fonts.load(`84px "${FONTE}"`).catch(() => {});
   demo = criarDemo($<HTMLCanvasElement>('demo'));
   irPassoDemo(0);
-  aplicarReceita(RECEITAS[0]);
+  aplicarReceita(RECEITA_PADRAO);
   carregarAcervo();
   // link recebido pelo menu Compartilhar (Android) ou pela URL
   const linkRecebido = new URLSearchParams(location.search).get('link');

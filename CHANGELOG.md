@@ -4,6 +4,12 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: Aventura do Mangaio
+
+- **Aventura do Mangaio** como vídeo de baixo (`app/src/mangaio/`): o cesto do Mangaio, mascote do TCC sobre venda direta da agricultura familiar de Serrinha (BA), anda, pula e vende, desenhado em código a partir do SVG do site, como os outros geradores de retenção.
+- **Trilha "Baião do Mangaio"**: zabumba, triângulo, baixo e sanfona sintetizados a 116 BPM, com os pulos e as piruetas da aventura caindo na batida.
+- **Receita "Aventura do Mangaio"**, a primeira da lista: tela dividida com a aventura embaixo. Quem abre a Prensa continua começando no Corte direto.
+
 ### Prensa: link direto, música do acervo, efeitos e mais impacto
 
 - **Colar um link** (X, Instagram, TikTok, YouTube, Kwai…) na página inicial ou compartilhar o link para a Prensa (Android). Um serviço pequeno, `servidor/baixador` (FastAPI + yt-dlp), traz o vídeo em MP4 e não guarda nada. A fonte já vem preenchida ("@perfil · X"), e o texto do post ganha "Original: link". O campo só aparece quando o app é construído com `VITE_BAIXADOR_URL`.

@@ -1,5 +1,6 @@
 // Vídeos de retenção gerados na hora: cada um é uma função do tempo (mesmo t, mesmo quadro),
 // desenhada direto no canvas. Sem download, sem direito autoral de terceiros, funciona offline.
+import { desenharAventura } from './mangaio/aventura';
 
 export type Gerador = { id: string; nome: string; desenhar: (ctx: CanvasRenderingContext2D, t: number, x: number, y: number, w: number, h: number) => void };
 
@@ -96,4 +97,5 @@ export const GERADORES: Gerador[] = [
   { id: 'bolinhas', nome: 'Bolinhas', desenhar: bolinhas },
   { id: 'tinta', nome: 'Tinta', desenhar: tinta },
   { id: 'encaixe', nome: 'Encaixe', desenhar: encaixe },
+  { id: 'mangaio-aventura', nome: 'Aventura do Mangaio', desenhar: desenharAventura },
 ];
