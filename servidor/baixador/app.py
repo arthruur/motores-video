@@ -26,9 +26,11 @@ from starlette.background import BackgroundTask
 try:
     from . import youtube
     from . import transcritor
+    from . import gerador_titulos
 except (ImportError, ValueError):
     import youtube
     import transcritor
+    import gerador_titulos
 
 ORIGENS = [o.strip() for o in os.environ.get(
     "ORIGENS", "https://arthruur-prensa.static.hf.space,https://localhost:5173,https://localhost:5179,http://localhost:5173,http://127.0.0.1:5173,https://127.0.0.1:5173").split(",") if o.strip()]
@@ -202,3 +204,20 @@ async def transcrever(
         raise
     except Exception as e:
         raise HTTPException(500, f"Erro ao transcrever com GPU: {e}")
+
+
+class PedidoTitulos(BaseModel):
+    transcricao: str
+    contexto: str = ""
+
+
+@app.post("/gerar-titulos")
+def rota_gerar_titulos(pedido: PedidoTitulos):
+    try:
+        resultado = gerador_titulos.gerar_titulos_e_hooks(
+            transcricao=pedido.transcricao,
+            contexto=pedido.contexto,
+        )
+        return {"ok": True, **resultado}
+    except Exception as e:
+        raise HTTPException(500, f"Erro ao gerar títulos com LLM: {e}")

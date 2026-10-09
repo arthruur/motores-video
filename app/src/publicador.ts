@@ -61,3 +61,25 @@ export async function publicarParaYouTube(
 
   return await res.json();
 }
+
+export type IdeiasVirais = {
+  ok: boolean;
+  hook: string;
+  titulos: string[];
+  descricao: string;
+  hashtags: string;
+};
+
+export async function gerarIdeiasVirais(transcricao: string, contexto = ''): Promise<IdeiasVirais | null> {
+  try {
+    const res = await fetch(`${BASE_URL}/gerar-titulos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transcricao, contexto }),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}

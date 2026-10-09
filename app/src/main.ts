@@ -1,6 +1,6 @@
 import { type ClipeAcervo, type MusicaAcervo, baixarClipe, baixarMusica, carregarManifesto, carregarMusicas, urlDoClipe } from './acervo';
 import { BAIXADOR, baixarLink } from './baixador';
-import { checarStatusYouTube, publicarParaYouTube } from './publicador';
+import { checarStatusYouTube, publicarParaYouTube, gerarIdeiasVirais } from './publicador';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
 import { type Passo, criarDemo } from './demo';
@@ -408,23 +408,50 @@ function montarIdeias() {
   const daFala = palavras ? ganchosDaFala(palavras) : [];
   if (!estado.ganchoMexido) campoGancho.value = daFala[0] ?? '';
   campoGancho.placeholder = estado.receita.modelos[0] ? `ex.: ${estado.receita.modelos[0]}` : 'a frase mais forte do vídeo';
-  const chips = [...daFala.map((t) => ({ t, fala: true })), ...estado.receita.modelos.map((t) => ({ t, fala: false }))];
-  $('ideias').replaceChildren(...chips.map(({ t, fala }) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = fala ? 'ideia da-fala' : 'ideia';
-    b.textContent = t;
-    b.title = t;
-    b.addEventListener('click', () => {
-      campoGancho.value = t;
-      estado.ganchoMexido = true;
-      campoGancho.focus();
-      const lacuna = t.indexOf('___'); // seleciona a lacuna: é só digitar por cima
-      if (lacuna >= 0) campoGancho.setSelectionRange(lacuna, lacuna + 3);
-      redesenhar();
-    });
-    return b;
-  }));
+  const chips = [...daFala.map((t) => ({ t, fala: true, llm: false })), ...estado.receita.modelos.map((t) => ({ t, fala: false, llm: false }))];
+  const containerIdeias = $('ideias');
+  
+  const renderChips = (lista: { t: string; fala: boolean; llm: boolean }[]) => {
+    containerIdeias.replaceChildren(...lista.map(({ t, fala, llm }) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = llm ? 'ideia da-fala' : (fala ? 'ideia da-fala' : 'ideia');
+      if (llm) b.style.borderColor = 'var(--cor-destaque, #f59e0b)';
+      b.textContent = llm ? `⚡ ${t}` : t;
+      b.title = t;
+      b.addEventListener('click', () => {
+        campoGancho.value = t;
+        estado.ganchoMexido = true;
+        campoGancho.focus();
+        const lacuna = t.indexOf('___'); // seleciona a lacuna: é só digitar por cima
+        if (lacuna >= 0) campoGancho.setSelectionRange(lacuna, lacuna + 3);
+        redesenhar();
+      });
+      return b;
+    }));
+  };
+
+  renderChips(chips);
+
+  // Se tivermos texto falado, consulta o LLM local (Qwen na GPU) para hooks virais extras
+  if (palavras && palavras.length > 3) {
+    const textoCompleto = palavras.map((p) => p.texto).join(' ');
+    gerarIdeiasVirais(textoCompleto, estado.receita.nome).then((ideias) => {
+      if (!ideias || !ideias.ok) return;
+      const extras: { t: string; fala: boolean; llm: boolean }[] = [];
+      if (ideias.hook) extras.push({ t: ideias.hook, fala: true, llm: true });
+      if (Array.isArray(ideias.titulos)) {
+        for (const tit of ideias.titulos) {
+          if (tit && !extras.some((x) => x.t === tit)) {
+            extras.push({ t: tit, fala: true, llm: true });
+          }
+        }
+      }
+      if (extras.length > 0) {
+        renderChips([...extras, ...chips]);
+      }
+    }).catch(() => {});
+  }
 }
 campoGancho.addEventListener('input', () => { estado.ganchoMexido = true; redesenhar(); });
 
