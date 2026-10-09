@@ -34,6 +34,12 @@ export const RECEITAS: Receita[] = [
     modelos: ['___ erros comuns em ___', '___ coisas que eu queria saber antes de ___', 'O passo a passo de ___ em ___ etapas', 'Em ___ segundos: como ___'],
   },
   {
+    id: 'resposta', nome: 'Pergunta e resposta', para: 'Responder uma dúvida',
+    dica: 'A pergunta no topo e o vídeo como resposta: a promessa se cumpre na hora. Use perguntas de verdade, do seu público.',
+    layout: 'cheio', gancho: 'pergunta', legenda: 'bloco', gerador: null,
+    modelos: ['Por que ___?', 'Como ___?', 'Vale a pena ___?', 'O que acontece se ___?'],
+  },
+  {
     id: 'duplo', nome: 'Estímulo duplo', para: 'Podcast, história longa',
     dica: 'Tela dividida não atrapalha a compreensão, mas também não prova que retém mais. Evite em política e em vídeo para crianças.',
     layout: 'dividida', gancho: 'voce-sabia', legenda: 'bloco', gerador: 'bolinhas',

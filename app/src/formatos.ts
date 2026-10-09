@@ -7,7 +7,7 @@ export const L = 1080;
 export const A = 1920;
 
 export type Layout = 'cheio' | 'dividida';
-export type EstiloGancho = 'nenhum' | 'titulo' | 'voce-sabia' | 'pov' | 'manchete' | 'lista';
+export type EstiloGancho = 'nenhum' | 'titulo' | 'voce-sabia' | 'pov' | 'manchete' | 'lista' | 'pergunta';
 
 export const LAYOUTS: { id: Layout; nome: string; dica: string }[] = [
   { id: 'cheio', nome: 'Tela cheia', dica: 'Vídeo deitado ganha fundo desfocado' },
@@ -21,6 +21,7 @@ export const GANCHOS: { id: EstiloGancho; nome: string; exemplo: string }[] = [
   { id: 'pov', nome: 'POV', exemplo: 'você descobriu como o céu funciona' },
   { id: 'manchete', nome: 'Manchete', exemplo: 'ninguém te contou isso' },
   { id: 'lista', nome: 'Lista', exemplo: '3 coisas que mudam tudo' },
+  { id: 'pergunta', nome: 'Pergunta', exemplo: 'por que isso acontece?' },
 ];
 
 // Faixa segura comum a TikTok, Reels e Shorts (ver docs/plataformas.md): o mesmo arquivo serve em todas.
@@ -130,6 +131,24 @@ function desenharGancho(ctx: CanvasRenderingContext2D, g: Quadro['gancho'], t: n
   } else if (g.estilo === 'manchete') {
     ctx.font = `78px "${FONTE}"`;
     y = placa(ctx, quebrar(ctx, texto.toUpperCase(), larg), y, 78, '#E0242B', '#FFFFFF', 8);
+  } else if (g.estilo === 'pergunta') {
+    // balão de pergunta: o vídeo é a resposta
+    ctx.font = `66px "${FONTE}"`;
+    const linhas = quebrar(ctx, texto, larg - 40);
+    const alt = linhas.length * 70 + 96;
+    const lb = Math.min(larg + 40, Math.max(...linhas.map((l) => ctx.measureText(l).width)) + 80, L - 2 * MARGEM);
+    const x0 = L / 2 - lb / 2;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath(); ctx.roundRect(x0, y, lb, alt, 28); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x0 + 70, y + alt - 2); ctx.lineTo(x0 + 60, y + alt + 34); ctx.lineTo(x0 + 110, y + alt - 2); ctx.fill();
+    ctx.fillStyle = '#D7301F';
+    ctx.font = `34px "${FONTE}"`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('PERGUNTA', x0 + 40, y + 22);
+    ctx.fillStyle = '#16130F';
+    ctx.font = `66px "${FONTE}"`;
+    linhas.forEach((l, i) => ctx.fillText(l, x0 + 40, y + 66 + i * 70));
+    y += alt + 40;
   } else if (g.estilo === 'lista') {
     ctx.font = `76px "${FONTE}"`;
     y = placa(ctx, quebrar(ctx, texto.toUpperCase(), larg), y, 76, '#111827', '#FFD633', 22);

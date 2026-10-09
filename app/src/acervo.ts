@@ -11,6 +11,7 @@ export type ClipeAcervo = {
   revisado: boolean;
   categoria?: string;
   sha256?: string;
+  share_alike?: boolean;
 };
 
 export type CatalogoAcervo = {
@@ -20,6 +21,11 @@ export type CatalogoAcervo = {
 // URL padrão do dataset no Hugging Face (pode ser sobrescrita)
 export const HF_DATASET_URL = 'https://huggingface.co/datasets/arthruur/prensa-acervo/resolve/main';
 const CACHE_NOME = 'prensa-acervo';
+// servidor de páginas costuma devolver o index.html (200) para arquivo que não existe: só vale se for vídeo de verdade
+const ehVideo = (r: Response) => r.ok && (r.headers.get('content-type') ?? '').startsWith('video/');
+
+/** revisados primeiro; os não revisados vêm depois e a interface os mostra à parte, com a licença não confirmada */
+const ordenar = (clipes: ClipeAcervo[]) => [...clipes.filter((c) => c.revisado), ...clipes.filter((c) => !c.revisado)];
 
 /** Busca o manifesto acervo.json local ou remotamente no Hugging Face Datasets */
 export async function carregarManifesto(): Promise<ClipeAcervo[]> {
@@ -28,7 +34,7 @@ export async function carregarManifesto(): Promise<ClipeAcervo[]> {
     const rLocal = await fetch('./acervo/acervo.json');
     if (rLocal.ok) {
       const dados = (await rLocal.json()) as CatalogoAcervo;
-      if (dados.clipes?.length) return dados.clipes.filter((c) => c.revisado);
+      if (dados.clipes?.length) return ordenar(dados.clipes);
     }
   } catch {
     // continua para o remoto
@@ -39,7 +45,7 @@ export async function carregarManifesto(): Promise<ClipeAcervo[]> {
     const rRemoto = await fetch(`${HF_DATASET_URL}/acervo.json`, { mode: 'cors' });
     if (rRemoto.ok) {
       const dados = (await rRemoto.json()) as CatalogoAcervo;
-      return (dados.clipes || []).filter((c) => c.revisado);
+      return ordenar(dados.clipes || []);
     }
   } catch {
     // sem rede e sem acervo local
@@ -56,15 +62,14 @@ export async function baixarClipe(clipe: ClipeAcervo, onProgresso?: (msg: string
   // 1. Checa no cache local do navegador (offline-first)
   if (cache) {
     const respCache = await cache.match(chaveCache);
-    if (respCache) {
-      return respCache.blob();
-    }
+    if (respCache && ehVideo(respCache)) return respCache.blob();
+    if (respCache) await cache.delete(chaveCache); // entrada estragada de uma versão anterior
   }
 
   // 2. Tenta servidor local
   try {
     const respLocal = await fetch(chaveCache);
-    if (respLocal.ok) {
+    if (ehVideo(respLocal)) {
       if (cache) await cache.put(chaveCache, respLocal.clone());
       return respLocal.blob();
     }
@@ -82,7 +87,7 @@ export async function baixarClipe(clipe: ClipeAcervo, onProgresso?: (msg: string
   for (const url of urlsRemotas) {
     try {
       const respRemota = await fetch(url, { mode: 'cors' });
-      if (respRemota.ok) {
+      if (ehVideo(respRemota)) {
         if (cache) await cache.put(chaveCache, respRemota.clone());
         return respRemota.blob();
       }

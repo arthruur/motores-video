@@ -139,7 +139,7 @@ def processar_tudo():
                 "titulo": arq.stem.replace("_", " ").replace("-", " ")[:60],
                 "credito": "Acervo Comunitário (Drive)",
                 "licenca": "CC BY 4.0",
-                "revisado": True,  # marcamos para disponibilizar no acervo HF
+                "revisado": False,  # licença não declarada por quem enviou: entra como não revisado
                 "largura": 720,
                 "altura": 1280,
                 "duracao_s": DUR_CLIPE,

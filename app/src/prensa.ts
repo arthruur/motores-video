@@ -22,15 +22,29 @@ export type Midia = {
   h: number;
 };
 
+/** o navegador não decodifica esse arquivo (ou o som dele): dá para converter com o conversor de segurança */
+export class FormatoNaoLido extends Error {
+  constructor(public detalhe: string) {
+    super(`Este navegador não lê ${detalhe}.`);
+  }
+}
+
 export async function abrir(arquivo: File): Promise<Midia> {
   const input = new Input({ source: new BlobSource(arquivo), formats: ALL_FORMATS });
-  const video = await input.getPrimaryVideoTrack();
+  let video: InputVideoTrack | null;
+  try {
+    video = await input.getPrimaryVideoTrack();
+  } catch {
+    throw new FormatoNaoLido(`o formato do arquivo (${arquivo.name.split('.').pop()?.toUpperCase()})`);
+  }
   if (!video) throw new Error('Esse arquivo não tem vídeo.');
-  if (!(await video.canDecode())) throw new Error('Este navegador não consegue ler esse vídeo. Tente outro arquivo ou o Chrome.');
+  const codigo = async (t: InputVideoTrack | InputAudioTrack, oque: string) => { const c = await t.getCodec(); return c ? `${oque} em ${c.toUpperCase()}` : `esse tipo de ${oque}`; };
+  if (!(await video.canDecode())) throw new FormatoNaoLido(await codigo(video, 'vídeo'));
   const audio = await input.getPrimaryAudioTrack();
+  if (audio && !(await audio.canDecode())) throw new FormatoNaoLido(await codigo(audio, 'som'));
   const inicio = await input.getFirstTimestamp();
   const dur = (await input.computeDuration()) - inicio;
-  return { arquivo, input, video, audio: audio && (await audio.canDecode()) ? audio : null, inicio, dur, w: video.displayWidth, h: video.displayHeight };
+  return { arquivo, input, video, audio, inicio, dur, w: video.displayWidth, h: video.displayHeight };
 }
 
 /** áudio do trecho [ini, fim) como canais Float32 na taxa original */

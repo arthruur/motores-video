@@ -40,6 +40,7 @@ O mesmo motor que faz um vídeo circular (emoção, novidade, "nós contra eles"
 | Corte direto (padrão) | Fala, dica, opinião | Tela cheia | Título com a frase mais forte | Bloco |
 | Você sabia? | Curiosidade, explicação | Tela cheia | "Você sabia?" | Bloco |
 | Dica rápida | "3 erros", "5 passos" | Tela cheia | Lista | Palavra |
+| Pergunta e resposta | Responder uma dúvida | Tela cheia | Balão com a pergunta | Bloco |
 | Estímulo duplo | Podcast, história longa | Dividida 58/42 | "Você sabia?" | Bloco |
 | Mito ou fato | Ciência, checagem | Tela cheia | Manchete | Bloco |
 | Frase de impacto | Trecho marcante | Tela cheia | Título com a própria frase | Palavra |
@@ -55,6 +56,24 @@ Ficam em `app/src/receitas.ts`, por receita. A lacuna `___` se preenche **com o 
 - "Fulano admitiu que…" sem a fala;
 - "Isso vai ser apagado";
 - números inventados.
+
+## Outros formatos: o que serve a quem parte de uma fala real
+
+Segunda pesquisa, de 08/10/2026. Os tempos "segundo a segundo" que circulam vêm de blogs de fornecedores (evidência fraca). Nenhum formato abaixo usa voz sintética nem imita alguém.
+
+| Formato | Estrutura | Serve para a Prensa? |
+|---|---|---|
+| **Pergunta e resposta** | 0–2 s: balão com a pergunta. Em seguida, a resposta falada. No fim, "mande a sua" | **Sim. Já é uma receita.** É a promessa cumprida na hora |
+| **Storytime** | 0–3 s: a frase mais intrigante do trecho, posta na frente. Depois a narrativa com legenda dinâmica. Final com desfecho ou "parte 2?" | Sim. Precisa detectar o trecho narrativo e montar o teaser |
+| **Tutorial em 3 passos** | 0–3 s: o resultado. Depois três blocos de 8 a 12 s marcados "1/3, 2/3, 3/3" e uma recapitulação de 2 s | Sim. Precisa de um contador de passos na tela |
+| **X vs Y** | 0–2 s: "X ou Y?". Rótulo e cor para cada lado e um veredito | Sim, quando a fala compara |
+| **Quiz** | 0–3 s: a pergunta. Cronômetro de 3 a 5 s, a resposta falada, loop | Sim. Combina com "Mito ou fato" |
+| **Série ("parte N")** | Termina em suspense, com "parte 2" fixo na tela | Sim, é barato de fazer. Evidência anedótica |
+| **Contagem regressiva / Top N** | Números de 5 a 1, com o melhor por último | Sim. É uma variante de "Dica rápida" |
+| Tier list | Grade S–D com os itens entrando enquanto são citados | Parcial: só texto. Imagens de terceiros esbarram em direitos |
+| Antes e depois | Abre com o "depois" e revela o "antes" | Parcial: depende de a pessoa ter as duas imagens |
+| Reddit stories | Post de outra pessoa lido em voz sintética, com gameplay embaixo | **Não**: voz sintética e texto alheio |
+| Reação | Vídeo alheio em cima, rosto embaixo | **Não**, por direitos (só com material livre) |
 
 ## Ainda não está na Prensa (próximos passos)
 

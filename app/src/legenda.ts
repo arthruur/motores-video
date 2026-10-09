@@ -101,7 +101,7 @@ export function desenharLegenda(ctx: CanvasRenderingContext2D, blocos: Bloco[], 
   ctx.font = `${CORPO}px "${FONTE}"`;
   ctx.textBaseline = 'alphabetic';
   const textos = b.palavras.map((w) => w.texto.toUpperCase());
-  const esp = ctx.measureText(' ').width;
+  const esp = ctx.measureText(' ').width * 1.5; // folga: a palavra destacada cresce 6% e não pode encostar na vizinha
   const larg = textos.map((s) => ctx.measureText(s).width);
   const L = larg.reduce((a, x) => a + x, 0) + esp * (textos.length - 1);
   const escala = Math.min(1, largMax / (L * DESTAQUE));

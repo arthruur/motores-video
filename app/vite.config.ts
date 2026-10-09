@@ -12,6 +12,6 @@ export default defineConfig({
   server: { headers: isolamento, host: true },
   preview: { headers: isolamento, host: true },
   worker: { format: 'es' },
-  optimizeDeps: { exclude: ['@huggingface/transformers'] },
+  optimizeDeps: { exclude: ['@huggingface/transformers', '@ffmpeg/ffmpeg', '@ffmpeg/util'] },
   build: { target: 'es2022' },
 });

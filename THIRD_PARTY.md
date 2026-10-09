@@ -40,11 +40,14 @@ Diferente dos motores, o app **é redistribuído** quando alguém publica o `app
 | Whisper `base` (onnx-community/whisper-base_timestamped) | 8 bits | MIT (pesos da OpenAI) | Legenda | Baixado do Hugging Face pelo navegador na 1ª vez; não vai no build |
 | @shiguredo/rnnoise-wasm | 2025.1.5 | Apache-2.0 | "Som limpo" (remoção de ruído da voz) | Embute o **RNNoise** (Xiph.Org, BSD-3-Clause), com os pesos, compilado em WASM |
 | Audio FXtor (arquivos em `app/src/fxtor/`) | commit `5872183` | Apache-2.0, por permissão do autor | Loudness, limitador, reamostragem, RNNoise | De Matheus Teles, [audio-fxtor](https://github.com/matheustdo/audio-fxtor). Origem de cada arquivo em `app/src/fxtor/README.md` |
+| @ffmpeg/ffmpeg, @ffmpeg/util | 0.12.15, 0.12.2 | MIT | Conversor de segurança (carregador) | Só o carregador vai no build |
+| **@ffmpeg/core** (ffmpeg.wasm) | 0.12.10 | **GPL-2.0-or-later** | Conversor de segurança: vídeo que o navegador não lê (MPEG-4 Part 2, 3GP, ProRes, AVI, HEVC sem suporte) | **Não vai no build nem no repositório.** O navegador baixa do CDN jsdelivr (~31 MB) só quando aparece um vídeo assim, como os componentes GPL opcionais dos motores |
+| @fontsource-variable/fraunces | 5.2.8 | OFL-1.1 | Fonte serifada da interface e da história | Vai no build (woff2) |
 | vite, typescript | 7, 5 | MIT, Apache-2.0 | Só desenvolvimento | Não vão no build |
 
 A fonte Barlow Condensed (OFL) é copiada para `app/public/fontes/` com o texto da licença.
 
-**Acervo de vídeos de retenção** (`app/public/acervo/`): clipes do Wikimedia Commons, só com CC0, domínio público ou CC BY. O crédito e a licença de cada um ficam no `acervo.json` e aparecem na tela quando o clipe é usado. O git guarda só o `acervo.json`; os vídeos são refeitos com `python ferramentas/acervo/coletar.py --restaurar`. Detalhes em [docs/acervo.md](docs/acervo.md).
+**Acervo de vídeos de retenção** (`app/public/acervo/` ou o dataset no Hugging Face): clipes do Wikimedia Commons e da NASA, só com CC0, domínio público ou CC BY (CC BY-SA só marcado à parte). O crédito e a licença de cada um ficam no `acervo.json` e aparecem na tela quando o clipe é usado. O git guarda só o `acervo.json`; os vídeos são refeitos com `python ferramentas/acervo/coletar.py --restaurar`. Detalhes em [docs/acervo.md](docs/acervo.md).
 
 ## Opcionais (fora do `requirements.txt`)
 

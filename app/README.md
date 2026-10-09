@@ -19,15 +19,25 @@ No celular, abra o endereço e use **"Adicionar à tela inicial"**: a Prensa vir
 
 ## O que ela faz
 
-**Tela 1:** um botão, "Escolher vídeo". Na 1ª visita, um onboarding de 3 passos ("Como funciona") e a janela "Por que Prensa?", com a história da prensa e o papel dela na informação.
+**Tela 1: a prensa.** O nome em tipos móveis, um botão vermelho que afunda quando apertado ("Escolher vídeo") e, logo abaixo, **"Como funciona" como demonstração ao vivo**: um celular toca um reel de exemplo desenhado pelo mesmo motor do export, e os 3 passos comandam o que ele mostra (o vídeo cru → a receita aplicada → uma folha para cada rede). Não tem janela de tutorial para fechar.
 
-**Tela 2: a receita.** Assim que o vídeo chega, a Prensa começa a ouvir a fala em segundo plano. Uma receita já vem marcada. Quando a legenda fica pronta, o **gancho já aparece sugerido a partir da própria fala**. Falta só dizer de onde é o vídeo e apertar **Prensar**. O resto fica em "Mais opções": trecho, vídeo de baixo, estilo da legenda e redes.
+**"Por que Prensa?"** abre uma história em tela cheia, com cara de jornal ("Gazeta da Prensa"): o nome montado em tipos espelhados que se desviram, e capítulos que entram com a rolagem (Mainz, 1450; milhões de livros até 1500; Lutero, 1517; o *Malleus Maleficarum* como contraponto; a Impressão Régia e o *Correio Braziliense*, 1808; hoje). Fecha com a regra "Fonte visível" e o botão "Fazer o meu".
+
+**Formato que o navegador não lê?** MPEG-4 Part 2, 3GP, ProRes, AVI, som AC-3 ou HEVC num aparelho sem suporte: a Prensa converte ali mesmo, uma vez, com o ffmpeg.wasm, e segue. O conversor (~31 MB, GPL) só é baixado quando precisa.
+
+**Tela 2: a mesa de composição.** O celular com a prévia à esquerda (toque para tocar; "Mostrar onde a rede cobre" desenha as áreas que a interface do TikTok/Reels/Shorts tapa) e três etapas numeradas:
+1. **Receita:** cada cartão mostra **o seu próprio vídeo já naquela receita**, não um ícone.
+2. **Gancho:** sugerido a partir da própria fala assim que a legenda fica pronta (ela começa a ser feita quando o vídeo chega). As ideias aparecem como fichas: primeiro as frases da fala, depois os modelos com lacuna da receita.
+3. **De onde é o vídeo?**
+
+Depois, **Prensar**: enquanto trabalha, a prensa mostra uma folha por rede sendo carimbada. O resto fica em "Mais opções": trecho, vídeo de baixo, estilo da legenda e redes.
 
 | Receita | Para | O que monta |
 |---|---|---|
 | Corte direto (padrão) | Fala, dica, opinião | Tela cheia, título com a frase mais forte, legenda em bloco |
 | Você sabia? | Curiosidade | Gancho "Você sabia?" |
 | Dica rápida | "3 erros", "5 passos" | Gancho de lista, legenda palavra por palavra |
+| Pergunta e resposta | Responder uma dúvida | Balão com a pergunta; o vídeo é a resposta |
 | Estímulo duplo | Podcast, história longa | Tela dividida 58/42, vídeo de retenção embaixo |
 | Mito ou fato | Ciência, checagem | Manchete |
 | Frase de impacto | Trecho marcante | A própria frase como título, legenda palavra por palavra |
@@ -37,10 +47,10 @@ O porquê de cada escolha, com o nível de evidência e as fontes, está em [doc
 
 **Vídeo de baixo:**
 - **Animações geradas na hora** (Pêndulos, Bolinhas, Tinta, Encaixe), sem download e sem direito autoral de ninguém.
-- **Acervo de clipes reais com licença livre** (Wikimedia Commons), revisados por uma pessoa; ver [docs/acervo.md](../docs/acervo.md).
+- **Acervo de clipes reais com licença livre** (Wikimedia Commons e NASA), revisados por uma pessoa e publicados num **dataset do Hugging Face**. O app (`src/acervo.ts`) lê de `public/acervo/` e, se o vídeo não estiver ali, do dataset `arthruur/prensa-acervo`, guardando no cache para funcionar offline. Ver [docs/acervo.md](../docs/acervo.md).
 - **Ou o seu próprio vídeo.**
 
-**Tela 3:** um arquivo por rede (TikTok, Reels, Shorts, Kwai, status do WhatsApp), com Compartilhar e Baixar, mais o texto do post com a fonte e a legenda `.srt`. Limites e fontes em [docs/plataformas.md](../docs/plataformas.md).
+**Tela 3: saiu da prensa.** O reel tocando no celular e um arquivo por rede (TikTok, Reels, Shorts, Kwai, status do WhatsApp), com Compartilhar e Baixar, mais o texto do post com a fonte e a legenda `.srt`. Limites e fontes em [docs/plataformas.md](../docs/plataformas.md).
 
 A prévia usa a **mesma função de desenho** do export (`desenharQuadro` em `src/formatos.ts`): o que aparece nela é o que sai no arquivo. Toque nela para ver tocando.
 
@@ -56,6 +66,8 @@ Issues atendidas (1ª versão): [#2](https://github.com/arthruur/motores-video/i
 | `src/formatos.ts` | Layouts, ganchos (grandes por 4 s, depois título fixo), fonte e crédito. Faixa segura comum a TikTok, Reels e Shorts |
 | `src/legenda.ts` | Porte do `motores/legenda/gerar.py` (blocos por sintagma, palavra atual em amarelo) e o estilo palavra por palavra; `.srt` |
 | `src/retencao.ts` | As animações de retenção, cada uma uma função do tempo |
+| `src/demo.ts` | A demonstração da tela inicial, desenhada com o mesmo `desenharQuadro` do export |
+| `src/conversor.ts` | Conversor de segurança (ffmpeg.wasm baixado sob demanda) |
 | `src/transcrever.worker.ts` | Whisper `base` com tempo por palavra ([transformers.js](https://huggingface.co/docs/transformers.js), WASM, 8 bits), num worker |
 | `src/plataformas.ts` | Perfis de exportação |
 | `public/sw.js` | Offline e recebimento pelo menu Compartilhar (Android) |

@@ -4,6 +4,38 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: identidade de prensa, conversor de formatos e acervo no Hugging Face
+
+- **Design refeito com identidade de prensa**:
+  - **Visual:** papel e tinta, vermelho tipográfico, o nome em tipos móveis que caem um a um, marcas de registro e um botão de prensa que afunda ao toque. A fonte serifada Fraunces (OFL) vai embutida.
+  - **"Como funciona" virou demonstração ao vivo na tela inicial:** um celular toca um reel de exemplo desenhado pelo próprio motor de export, e os 3 passos comandam a demonstração (o vídeo cru, a receita aplicada, uma folha para cada rede). Não há mais janela de tutorial.
+  - **"Por que Prensa?" virou uma história em tela cheia com cara de jornal:**
+    - os tipos aparecem espelhados e se desviram;
+    - os capítulos entram com a rolagem: 1450, 1500, 1517, o contraponto do *Malleus Maleficarum*, 1808 no Brasil e hoje;
+    - as datas da Impressão Régia, da *Gazeta do Rio de Janeiro* e do *Correio Braziliense* foram conferidas.
+  - **Mesa de composição:**
+    - cada cartão de receita mostra o vídeo da própria pessoa naquela receita;
+    - as ideias de gancho aparecem como fichas (primeiro as frases da fala);
+    - "Mostrar onde a rede cobre" desenha as áreas que a interface da rede tapa;
+    - durante o Prensar, uma folha por rede é carimbada;
+    - no fim, o reel aparece tocando no celular.
+- **Correção: "Este navegador não consegue ler esse vídeo".**
+  - Vídeos em MPEG-4 Part 2, 3GP, ProRes ou AVI não abriam; HEVC também não, em aparelho sem suporte.
+  - Vídeos com som AC-3 abriam **sem som e sem legenda**, em silêncio.
+  - Agora a Prensa converte o arquivo uma vez, no próprio aparelho, com o ffmpeg.wasm. O conversor (GPL, ~31 MB) não vai no build: o navegador o baixa do CDN só quando precisa.
+  - Testado: MPEG-4 abriu em 8,6 s, 3GP em 3,0 s, AVI em 8,6 s, ProRes em 15,3 s e AC-3 em 8,7 s.
+- **Nova receita "Pergunta e resposta"**: balão com a pergunta no topo e o vídeo como resposta. Os outros formatos pesquisados (storytime, tutorial em 3 passos, X vs Y, quiz, série) estão em `docs/receitas.md`.
+- **Acervo**:
+  - **Coletor refeito com o plano da pesquisa:**
+    - categorias exatas do Commons (timelapse, espaço, água, impressão 3D, máquinas, artesanato, mecanismos, POV) e a API da NASA (domínio público);
+    - versões leves (≥720p) em vez dos originais;
+    - lista negra de títulos (bodycam, acidente, artigos científicos);
+    - balde CC BY-SA marcado à parte.
+  - A publicação no Hugging Face fica com `ferramentas/acervo/huggingface.py`, e a leitura no app com `app/src/acervo.ts`, da integração com o HF.
+  - O app avisa quando um clipe é CC BY-SA, porque o reel herda a licença.
+  - **Clipes não revisados** (os 8 "cortes-virais" vindos do Drive) continuam no app, num grupo à parte, "Não revisados · licença não confirmada". O crédito na tela diz "licença não confirmada" em vez de uma licença que ninguém declarou. O `processar_drive.py` passa a gravar os envios do Drive como não revisados.
+  - **Correção em `baixarClipe`:** quando o `.mp4` não existia na pasta local, o servidor devolvia o `index.html` com status 200. O app tratava essa página como se fosse o vídeo e a guardava no cache offline, e o resultado era "não lê o formato MP4". Agora só aceita resposta que seja vídeo e limpa a entrada estragada do cache.
+
 ### Prensa: interface fácil, receitas, som do Audio FXtor e acervo
 
 - **Interface refeita para levar menos de 40 s de atenção depois do vídeo:**
