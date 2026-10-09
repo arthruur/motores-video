@@ -959,6 +959,7 @@ function textoPost(): string {
   if (estado.origem) linhas.push(`Original: ${estado.origem}`);
   const musica = musicasAcervo.find((m) => `acervo:${m.id}` === estado.som.musica);
   if (musica) linhas.push(`Música: ${musica.credito}`);
+  linhas.push('\nFeito na Prensa (software livre) · Contato: https://github.com/arthruur');
   return linhas.join('\n');
 }
 
@@ -1082,7 +1083,11 @@ function montarBandeja() {
       grupo.append(Object.assign(document.createElement('b'), { textContent: `${a.plataforma} · ${(a.blob.size / 1e6).toFixed(0)} MB` }));
       if (navigator.canShare?.({ files: [arquivo] })) {
         const comp = Object.assign(document.createElement('button'), { type: 'button', className: 'compartilhar', textContent: 'Compartilhar' });
-        comp.addEventListener('click', () => navigator.share({ files: [arquivo], text: saida.post }).catch(() => {}));
+        comp.addEventListener('click', () => navigator.share({
+          title: saida.titulo ? `${saida.titulo} · Prensa` : 'Vídeo pronto na Prensa',
+          text: saida.post,
+          files: [arquivo],
+        }).catch(() => {}));
         grupo.append(comp);
       }
       grupo.append(Object.assign(document.createElement('a'), { href: url, download: a.nome, className: 'baixar', textContent: 'Baixar' }));

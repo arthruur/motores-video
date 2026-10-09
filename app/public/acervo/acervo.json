@@ -363,6 +363,94 @@
       "share_alike": false,
       "modificacoes": "otimização H.264 com áudio AAC",
       "coletado_em": "2026-10-09"
+    },
+    {
+      "id": "meme-meme-twitter-01",
+      "categoria": "meme",
+      "arquivo": "meme-meme-twitter-01.mp4",
+      "titulo": "meme twitter 01",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 720,
+      "duracao_s": 43.21,
+      "tem_audio": true,
+      "sha256": "f9389c03f32b7d749068399a09c8370dc0fb67c3aab54f4aa988391fc640139b",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791514819227.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "otimização H.264 com áudio AAC",
+      "coletado_em": "2026-10-09"
+    },
+    {
+      "id": "meme-meme-twitter-02",
+      "categoria": "meme",
+      "arquivo": "meme-meme-twitter-02.mp4",
+      "titulo": "meme twitter 02",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 816,
+      "duracao_s": 10.1,
+      "tem_audio": true,
+      "sha256": "f88ec823a29c99e3e59a2e5094ae79d9563110ce4be77a5714a164f2d5cbfca3",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791514940032.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "otimização H.264 com áudio AAC",
+      "coletado_em": "2026-10-09"
+    },
+    {
+      "id": "meme-meme-twitter-03",
+      "categoria": "meme",
+      "arquivo": "meme-meme-twitter-03.mp4",
+      "titulo": "meme twitter 03",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 1014,
+      "altura": 698,
+      "duracao_s": 14.34,
+      "tem_audio": true,
+      "sha256": "9af1b17dcf370a0f6c53409c41c45caa62710aefadddcbae4c2f59a391b41812",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791515016460.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "otimização H.264 com áudio AAC",
+      "coletado_em": "2026-10-09"
+    },
+    {
+      "id": "meme-meme-twitter-04",
+      "categoria": "meme",
+      "arquivo": "meme-meme-twitter-04.mp4",
+      "titulo": "meme twitter 04",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 794,
+      "duracao_s": 7.55,
+      "tem_audio": true,
+      "sha256": "2db98583a2fe566124cc17372faa10c98ad41fcf983ec5db866e6fed99c77f78",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791515117566.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "otimização H.264 com áudio AAC",
+      "coletado_em": "2026-10-09"
     }
   ],
   "rejeitados": [
