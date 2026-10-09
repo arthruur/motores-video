@@ -92,7 +92,12 @@ def baixar(p: Pedido, request: Request):
     except Exception as e:  # noqa: BLE001 — o yt-dlp levanta muitos tipos; a mensagem dele é o que importa
         shutil.rmtree(pasta, ignore_errors=True)
         msg = str(e).split("\n")[0].replace("ERROR: ", "")
-        raise HTTPException(422, f"Não consegui baixar esse link: {msg[:300]}")
+        if any(k in msg for k in ("cookies", "Sign in", "login", "not a bot", "empty media")):
+            # YouTube e Instagram costumam barrar servidores de nuvem: o caminho é enviar o arquivo
+            raise HTTPException(422, "Essa rede não deixou baixar daqui. Salve o vídeo no aparelho e envie o arquivo.")
+        if "Unsupported URL" in msg:
+            raise HTTPException(422, "Esse link não tem um vídeo que eu consiga buscar.")
+        raise HTTPException(422, f"Não consegui baixar esse link: {msg[:200]}")
     arquivos = [os.path.join(pasta, f) for f in os.listdir(pasta) if not f.endswith((".part", ".ytdl"))]
     if not arquivos:
         shutil.rmtree(pasta, ignore_errors=True)
@@ -102,7 +107,10 @@ def baixar(p: Pedido, request: Request):
         arquivo, media_type="video/mp4", filename="video.mp4",
         headers={
             "X-Titulo": cabecalho(info.get("title")),
-            "X-Autor": cabecalho(info.get("uploader") or info.get("channel") or info.get("uploader_id")),
+            # nas redes de @ (X, TikTok, Instagram) o crédito é o @, não o nome de exibição
+            "X-Autor": cabecalho(
+                info.get("uploader_id") if info.get("extractor_key") in ("Twitter", "TikTok", "Instagram") and info.get("uploader_id")
+                else info.get("uploader") or info.get("channel") or info.get("uploader_id")),
             "X-Origem": cabecalho(info.get("webpage_url") or url),
             "X-Plataforma": cabecalho(info.get("extractor_key")),
         },
