@@ -308,17 +308,17 @@
       "credito": "Comunidade",
       "licenca": "CC BY 4.0",
       "revisado": true,
-      "largura": 720,
-      "altura": 1280,
+      "largura": 480,
+      "altura": 286,
       "duracao_s": 15.0,
-      "sha256": "f93193bc1511b2552170fd16c480c7e2a78366a6c62e601aedaaf663b2189794",
+      "sha256": "53e41216ab8c274949ea375f81ed01c99488057d033f9b4be2ced1bcaeae8797",
       "origem": {
         "fonte": "importacao-direta",
         "arquivo_original": "ssstwitter.com_1791508241346.mp4"
       },
       "licenca_url": "",
       "share_alike": false,
-      "modificacoes": "recorte 9:16 720p 15s sem áudio",
+      "modificacoes": "trecho de 15s sem áudio na proporção original",
       "coletado_em": "2026-10-08"
     }
   ],

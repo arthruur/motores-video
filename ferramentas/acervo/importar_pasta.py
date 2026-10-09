@@ -48,10 +48,23 @@ def obter_duracao(caminho: Path) -> float:
         return 0.0
 
 
-def cortar_video(origem: Path, destino: Path) -> None:
+def obter_dimensoes(caminho: Path) -> tuple[int, int]:
+    cmd = ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", str(caminho)]
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        parts = res.stdout.strip().split(",")
+        return int(parts[0]), int(parts[1])
+    except Exception:
+        return 720, 1280
+
+
+def cortar_video(origem: Path, destino: Path, forcar_9_16: bool = False) -> None:
     dur = obter_duracao(origem)
     ini = max(0.0, min(dur * 0.15, dur - DUR_CLIPE)) if dur > DUR_CLIPE else 0.0
-    filtro = "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,fps=30,format=yuv420p"
+    if forcar_9_16:
+        filtro = "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,fps=30,format=yuv420p"
+    else:
+        filtro = "scale=trunc(iw/2)*2:trunc(ih/2)*2,fps=30,format=yuv420p"
     subprocess.run([
         "ffmpeg", "-v", "error", "-y", "-ss", f"{ini:.2f}", "-t", f"{DUR_CLIPE}",
         "-i", str(origem), "-vf", filtro, "-an", "-c:v", "libx264",
@@ -59,7 +72,7 @@ def cortar_video(origem: Path, destino: Path) -> None:
     ], check=True, timeout=300)
 
 
-def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: str, titulo: str | None = None, aprovar_direto: bool = False, upload_hf: bool = False, repo_hf: str = "arthruur/prensa-acervo") -> None:
+def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: str, titulo: str | None = None, aprovar_direto: bool = False, upload_hf: bool = False, repo_hf: str = "arthruur/prensa-acervo", forcar_9_16: bool = False) -> None:
     if not alvo.exists():
         sys.exit(f"Arquivo ou pasta não encontrado: {alvo}")
 
@@ -85,18 +98,22 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
         id_ = f"{categoria}-{slug}" if categoria else slug
         destino = SAIDA / f"{id_}.mp4"
 
-        print(f"  Recortando {arq.name} -> {destino.name}...")
+        print(f"  Processando {arq.name} -> {destino.name} (mantendo proporção original: {not forcar_9_16})...")
         try:
-            cortar_video(arq, destino)
+            cortar_video(arq, destino, forcar_9_16=forcar_9_16)
         except Exception as e:
             print(f"    Erro ao cortar {arq.name}: {e}")
             continue
 
+        largura, altura = obter_dimensoes(destino)
         sha = hashlib.sha256(destino.read_bytes()).hexdigest()
         if sha in existentes_sha:
             print(f"    Já existe no acervo (mesmo hash sha256). Pulando.")
             destino.unlink(missing_ok=True)
             continue
+
+        # remove versão anterior com mesmo id se houver
+        acervo["clipes"] = [c for c in acervo["clipes"] if c.get("id") != id_]
 
         acervo["clipes"].append({
             "id": id_,
@@ -106,8 +123,8 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
             "credito": autor or "Acervo colaborativo",
             "licenca": licenca or "CC BY 4.0",
             "revisado": aprovar_direto,
-            "largura": 720,
-            "altura": 1280,
+            "largura": largura,
+            "altura": altura,
             "duracao_s": DUR_CLIPE,
             "sha256": sha,
             "origem": {
@@ -116,7 +133,7 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
             },
             "licenca_url": licenca_url,
             "share_alike": "sa" in licenca.lower(),
-            "modificacoes": "recorte 9:16 720p 15s sem áudio",
+            "modificacoes": "trecho de 15s sem áudio na proporção original" if not forcar_9_16 else "recorte 9:16 720p 15s sem áudio",
             "coletado_em": date.today().isoformat()
         })
         existentes_sha.add(sha)
@@ -153,9 +170,10 @@ def main() -> None:
     ap.add_argument("--aprovar", action="store_true", help="já marca o clipe como aprovado/revisado")
     ap.add_argument("--upload", action="store_true", help="já faz upload direto para o Hugging Face")
     ap.add_argument("--repo", default="arthruur/prensa-acervo", help="repositório HF destino")
+    ap.add_argument("--forcar-9-16", action="store_true", help="força o recorte em 9:16 (720x1280) em vez de manter a proporção original")
     args = ap.parse_args()
 
-    importar(args.alvo, args.categoria, args.autor, args.licenca, args.licenca_url, args.titulo, args.aprovar, args.upload, args.repo)
+    importar(args.alvo, args.categoria, args.autor, args.licenca, args.licenca_url, args.titulo, args.aprovar, args.upload, args.repo, forcar_9_16=args.forcar_9_16)
 
 
 if __name__ == "__main__":
