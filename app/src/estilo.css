@@ -631,3 +631,8 @@ dialog#contato::backdrop {
 @media (max-width: 899px) {
   .prensar-fixo .prensar { font-size: 24px; padding: 11px; border-radius: 12px; box-shadow: 0 4px 0 var(--vermelho-escuro), 0 10px 18px -10px rgba(163, 32, 15, 0.6); }
 }
+
+/* ponte com o M20 Studio (só faz sentido no computador onde o Studio roda) */
+.para-studio { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--linha); }
+.para-studio small { color: var(--suave); font-size: 13px; }
+@media (pointer: coarse) { .para-studio { display: none; } }

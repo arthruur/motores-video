@@ -10,6 +10,7 @@ import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audi
 import { RECEITAS, type Receita, ganchosDaFala } from './receitas';
 import { GERADORES } from './retencao';
 import { EFEITOS, TRILHAS, gerarEfeito, gerarTrilha } from './trilhas';
+import { enviarAoStudio, lembrarStudio, procurarStudio, studioLigado } from './studio';
 import { transcrever } from './transcrever';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -1023,6 +1024,7 @@ async function prensarAtual(): Promise<boolean> {
     await paraODisco(arquivos);
     estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre: arquivos[0]?.blob ?? mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
     montarBandeja();
+    if (studioLigado()) paraOStudio(estado.saidas[0]);
     return true;
   } catch (e) {
     if ((e as Error).name !== 'AbortError') {
@@ -1046,7 +1048,29 @@ $('prensar').addEventListener('click', async () => {
 $('cancelar').addEventListener('click', () => estado.cancelar?.abort());
 
 /** a bandeja de saída: tudo o que já foi prensado nesta sessão, com compartilhar e baixar; a mesa continua aberta */
+// ---------------------------------------------------------------- M20 Studio: cada vídeo pronto entra na biblioteca dele
+const chaveStudio = $<HTMLInputElement>('mandar-studio');
+const estadoStudio = $('studio-estado');
+async function conferirStudio() {
+  if (!chaveStudio.checked) { estadoStudio.textContent = ''; return; }
+  estadoStudio.textContent = 'procurando o Studio…';
+  const nome = await procurarStudio();
+  estadoStudio.textContent = nome ? `ligado a ${nome}` : 'Studio não encontrado: abra o M20 Studio neste computador';
+}
+chaveStudio.checked = studioLigado();
+chaveStudio.addEventListener('change', () => { lembrarStudio(chaveStudio.checked); conferirStudio(); });
+async function paraOStudio(saida: (typeof estado.saidas)[number]) {
+  estadoStudio.textContent = 'mandando para o Studio…';
+  try {
+    await enviarAoStudio({ video: saida.mestre, titulo: saida.titulo, texto: saida.post, srt: saida.srt, origem: estado.origem, rede: saida.arquivos[0]?.plataforma ?? '' });
+    estadoStudio.textContent = `“${saida.titulo}” está na biblioteca do Studio`;
+  } catch (e) {
+    estadoStudio.textContent = `não chegou ao Studio (${(e as Error).message}). Ele está aberto?`;
+  }
+}
+
 function montarBandeja() {
+  if (chaveStudio.checked && !estadoStudio.textContent) conferirStudio();
   estado.urls.forEach((u) => URL.revokeObjectURL(u));
   estado.urls = [];
   const s = estado.saidas;
