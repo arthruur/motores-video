@@ -1,13 +1,14 @@
-import { baixarClipe, carregarManifesto } from './acervo';
+import { type ClipeAcervo, baixarClipe, carregarManifesto, urlDoClipe } from './acervo';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
 import { type Passo, criarDemo } from './demo';
 import { A, L, type Fonte, type Quadro, desenharQuadro, faixaLegenda } from './formatos';
 import { type Bloco, type EstiloLegenda, type Palavra, FONTE, gerarSrt, montarBlocos } from './legenda';
 import { PLATAFORMAS } from './plataformas';
-import { type Arquivo, FormatoNaoLido, type Midia, abrir, audioParaFala, exportar, prensar } from './prensa';
+import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audioParaFala, exportar, prensar } from './prensa';
 import { RECEITAS, type Receita, ganchosDaFala } from './receitas';
 import { GERADORES } from './retencao';
+import { TRILHAS, gerarTrilha } from './trilhas';
 import { transcrever } from './transcrever';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -18,8 +19,12 @@ const estado = {
   ini: 0,
   fim: 0,
   receita: RECEITAS[0],
-  gerador: null as string | null,     // animação escolhida (sobrepõe a da receita)
-  usarBaixoProprio: false,
+  // vídeo de baixo: o padrão da receita, nenhum, uma animação gerada ou um vídeo (do acervo ou da pessoa)
+  escolhaBaixo: { tipo: 'receita' } as { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado'; id: string } | { tipo: 'video'; chave: string },
+  som: {
+    volumeFala: 1, musica: 'nenhuma', volumeMusica: 50, abaixar: true, suave: true,
+    arquivoMusica: null as File | null, buffers: new Map<string, Promise<AudioBuffer>>(),
+  },
   estiloLegenda: null as EstiloLegenda | null, // null = o da receita
   plataformas: new Set(PLATAFORMAS.map((p) => p.id)),
   falas: new Map<string, Palavra[]>(),         // trecho -> palavras
@@ -45,11 +50,18 @@ const campoSom = $<HTMLInputElement>('som-limpo');
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 const chaveTrecho = () => `${estado.principal?.arquivo.name}|${estado.ini.toFixed(2)}|${estado.fim.toFixed(2)}`;
 const estiloLegendaDe = (r: Receita): EstiloLegenda => (r === estado.receita ? estado.estiloLegenda ?? r.legenda : r.legenda);
-const usaDividida = (r: Receita) => r.layout === 'dividida' || (r === estado.receita && estado.usarBaixoProprio);
-const geradorDe = (r: Receita) => {
-  if (!usaDividida(r) || (r === estado.receita && estado.usarBaixoProprio)) return null;
-  return (r === estado.receita ? estado.gerador : null) ?? r.gerador ?? GERADORES[0].id;
+// a escolha explícita de vídeo de baixo vale para todas as receitas; sem escolha, cada receita usa o seu padrão
+const usaDividida = (r: Receita) => {
+  const e = estado.escolhaBaixo;
+  return e.tipo === 'receita' ? r.layout === 'dividida' : e.tipo !== 'nenhum';
 };
+const geradorDe = (r: Receita): string | null => {
+  const e = estado.escolhaBaixo;
+  if (e.tipo === 'gerado') return e.id;
+  if (e.tipo === 'receita' && r.layout === 'dividida') return r.gerador ?? GERADORES[0].id;
+  return null;
+};
+const usaVideoDeBaixo = () => estado.escolhaBaixo.tipo === 'video' && !!estado.baixo;
 
 // ---------------------------------------------------------------- telas
 let demo: ReturnType<typeof criarDemo> | null = null;
@@ -179,7 +191,9 @@ function usarPrincipal(m: Midia) {
   $('faixa-conversao').hidden = true;
   prontoParaPrensar(true);
   estado.principal = m;
+  $('som-fala').hidden = !m.audio;
   video.src = URL.createObjectURL(m.arquivo);
+  video.volume = Math.min(1, estado.som.volumeFala);
   estado.ini = 0;
   estado.fim = Math.min(m.dur, 60);
   estado.ganchoMexido = !!campoGancho.value.trim(); // o que a pessoa escreveu durante a conversão fica
@@ -245,12 +259,12 @@ function montarReceitas() {
 
 function escolherReceita(r: Receita) {
   estado.receita = r;
-  estado.gerador = null;
   estado.estiloLegenda = null;
-  if (r.layout !== 'dividida') estado.usarBaixoProprio = false;
+  // receita de tela dividida "pede" o vídeo de baixo: se a pessoa tinha tirado, volta ao padrão da receita
+  if (r.layout === 'dividida' && estado.escolhaBaixo.tipo === 'nenhum') estado.escolhaBaixo = { tipo: 'receita' };
   document.querySelectorAll<HTMLButtonElement>('.receita').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.id === r.id)));
   $('receita-dica').textContent = r.dica;
-  sincRetencoes(); sincEstilos();
+  sincGaleria(); sincEstilos();
   montarIdeias();
   redesenhar();
 }
@@ -296,13 +310,6 @@ function fichas<T extends string>(caixa: HTMLElement, itens: { id: T; nome: stri
   sinc();
   return sinc;
 }
-const sincRetencoes = fichas($('retencoes'), GERADORES.map((g) => ({ id: g.id, nome: g.nome })), (id) => geradorDe(estado.receita) === id, (id) => {
-  estado.usarBaixoProprio = false;
-  forcarDividida();
-  estado.gerador = id;
-  sincRetencoes();
-  redesenhar();
-});
 const sincEstilos = fichas($('estilos-legenda'), [{ id: 'bloco' as EstiloLegenda, nome: 'Bloco (2 a 4 palavras)' }, { id: 'palavra' as EstiloLegenda, nome: 'Palavra por palavra' }], (id) => estiloLegendaDe(estado.receita) === id, (id) => {
   estado.estiloLegenda = id;
   redesenhar();
@@ -312,85 +319,287 @@ fichas($('plataformas'), PLATAFORMAS.map((p) => ({ id: p.id, nome: p.nome })), (
   $<HTMLButtonElement>('prensar').disabled = estado.plataformas.size === 0;
 }, true);
 
-/** escolher um vídeo de baixo liga a tela dividida, mesmo numa receita de tela cheia */
-function forcarDividida() {
-  if (estado.receita.layout === 'dividida') return;
-  const usarBaixoProprio = estado.usarBaixoProprio;
-  escolherReceita(RECEITAS.find((r) => r.id === 'duplo')!);
-  estado.usarBaixoProprio = usarBaixoProprio;
+// ---------------------------------------------------------------- 4. vídeo de baixo: tudo à vista, numa galeria
+const galeria = $('galeria-baixo');
+const animacoes: { ctx: CanvasRenderingContext2D; desenhar: (typeof GERADORES)[number]['desenhar'] }[] = [];
+let clipesAcervo: ClipeAcervo[] = [];
+
+function cartao(chave: string, titulo: string, sub: string, aoEscolher: () => void, classe = ''): HTMLButtonElement {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = `cartao-baixo ${classe}`.trim();
+  b.dataset.chave = chave;
+  b.setAttribute('role', 'radio');
+  const quadro = document.createElement('div');
+  quadro.className = 'quadro';
+  const t = document.createElement('strong');
+  t.textContent = titulo;
+  const sm = document.createElement('small');
+  sm.textContent = sub;
+  b.append(quadro, t, sm);
+  b.addEventListener('click', aoEscolher);
+  return b;
+}
+
+function chaveEscolha(): string {
+  const e = estado.escolhaBaixo;
+  if (e.tipo === 'video') return e.chave;
+  const g = geradorDe(estado.receita);
+  return g ? `gerado:${g}` : 'nenhum';
+}
+
+function sincGaleria() {
+  const k = chaveEscolha();
+  galeria.querySelectorAll<HTMLButtonElement>('.cartao-baixo').forEach((b) => {
+    b.setAttribute('aria-checked', String(b.dataset.chave === k || (k.startsWith('proprio:') && b.dataset.chave === 'enviar')));
+  });
+  $('campo-credito').hidden = !usaVideoDeBaixo();
+}
+
+function escolherBaixo(e: typeof estado.escolhaBaixo) {
+  estado.escolhaBaixo = e;
+  sincGaleria();
+  redesenhar();
+}
+
+/** a miniatura do clipe só é buscada quando o cartão aparece na tela */
+const observarClipe = new IntersectionObserver((es) => es.forEach(async (e) => {
+  if (!e.isIntersecting) return;
+  observarClipe.unobserve(e.target);
+  const v = e.target as HTMLVideoElement;
+  const c = clipesAcervo.find((x) => x.id === v.dataset.id);
+  const url = c ? await urlDoClipe(c) : null;
+  if (!url) return;
+  // o navegador só desenha o quadro se o tempo for pedido de verdade (o #t não basta em todo lugar)
+  v.addEventListener('loadedmetadata', () => { v.currentTime = Math.min(1.5, (v.duration || 3) / 2); }, { once: true });
+  if (url.startsWith('http')) v.crossOrigin = 'anonymous'; // a página é isolada (COEP): vídeo de outro domínio só em modo CORS
+  v.preload = 'auto';
+  v.src = url;
+}), { rootMargin: '200px' });
+
+function cartaoClipe(c: ClipeAcervo): HTMLButtonElement {
+  // não revisado: ninguém confirmou a licença, então ela não vai para a tela como se fosse certa
+  const licenca = c.revisado ? c.licenca : 'licença não confirmada';
+  const sub = `${c.credito} · ${licenca}${c.share_alike ? ' · o reel herda a CC BY-SA' : ''}`;
+  const b = cartao(`clipe:${c.id}`, c.titulo, sub, async () => {
+    b.classList.add('baixando');
+    try {
+      const blob = await baixarClipe(c);
+      await usarBaixo(new File([blob], c.arquivo, { type: blob.type || 'video/mp4' }), `${c.credito} (${licenca})`, `clipe:${c.id}`);
+    } catch (err) {
+      erro((err as Error).message);
+    } finally {
+      b.classList.remove('baixando');
+    }
+  }, c.revisado ? '' : 'nao-revisado');
+  const v = document.createElement('video');
+  v.muted = true;
+  v.playsInline = true;
+  v.preload = 'none';
+  v.dataset.id = c.id;
+  b.querySelector('.quadro')!.append(v);
+  observarClipe.observe(v);
+  return b;
+}
+
+function montarGaleria() {
+  animacoes.length = 0;
+  const nenhum = cartao('nenhum', 'Nenhum', 'tela cheia', () => escolherBaixo({ tipo: 'nenhum' }), 'sem');
+  const geradas = GERADORES.map((g) => {
+    const b = cartao(`gerado:${g.id}`, g.nome, 'animação · sem direitos de ninguém', () => escolherBaixo({ tipo: 'gerado', id: g.id }));
+    const c = document.createElement('canvas');
+    c.width = 135; c.height = 240;
+    b.querySelector('.quadro')!.append(c);
+    animacoes.push({ ctx: c.getContext('2d')!, desenhar: g.desenhar });
+    return b;
+  });
+  const revisados = clipesAcervo.filter((c) => c.revisado).map(cartaoClipe);
+  const outros = clipesAcervo.filter((c) => !c.revisado).map(cartaoClipe);
+  const enviar = cartao('enviar', 'Enviar o seu', 'um vídeo do seu aparelho', () => $<HTMLInputElement>('arquivo-baixo').click(), 'enviar');
+  enviar.querySelector('.quadro')!.textContent = '+';
+  // faixas com rolagem lateral: tudo à vista sem virar uma parede de cartões no celular
+  const faixa = (titulo: string, cartoes: HTMLElement[]) => {
+    const g = document.createElement('div');
+    g.className = 'grupo';
+    const t = Object.assign(document.createElement('p'), { className: 'galeria-titulo', textContent: titulo });
+    const f = Object.assign(document.createElement('div'), { className: 'faixa' });
+    f.append(...cartoes);
+    g.append(t, f);
+    return g;
+  };
+  galeria.replaceChildren(
+    faixa('Animações (sem direitos de ninguém) e o seu', [nenhum, enviar, ...geradas]),
+    ...(revisados.length ? [faixa(`Acervo livre, revisado (${revisados.length})`, revisados)] : []),
+    ...(outros.length ? [faixa(`Não revisados · licença não confirmada (${outros.length}): se não é seu, diga de onde veio`, outros)] : []),
+  );
+  sincGaleria();
+}
+
+/** as animações da galeria tocam de verdade, enquanto a mesa está na tela */
+function animarGaleria(agora: number) {
+  if (!$('tela-criar').hidden) {
+    for (const a of animacoes) a.desenhar(a.ctx, agora / 1000, 0, 0, 135, 240);
+  }
+  requestAnimationFrame(animarGaleria);
 }
 
 $<HTMLInputElement>('arquivo-baixo').addEventListener('change', async (e) => {
   const f = (e.target as HTMLInputElement).files?.[0];
-  if (f) await usarBaixo(f, '');
+  if (!f) return;
+  await usarBaixo(f, '', `proprio:${f.name}`);
+  galeria.querySelector('.enviar small')!.textContent = f.name;
 });
 
-async function usarBaixo(f: File, credito: string) {
+async function usarBaixo(f: File, credito: string, chave: string) {
   try {
     estado.baixo = await abrir(f);
-    forcarDividida();
-    estado.usarBaixoProprio = true;
     videoBaixo.src = URL.createObjectURL(f);
     // vídeo escondido só decodifica um quadro se for pedido: o seek força o 1º quadro para a prévia
     videoBaixo.addEventListener('loadedmetadata', () => { videoBaixo.currentTime = 0.05; }, { once: true });
     if (!video.paused) videoBaixo.play();
     campoCredito.value = credito;
-    $('campo-credito').hidden = false;
-    sincRetencoes();
-    redesenhar();
+    escolherBaixo({ tipo: 'video', chave });
   } catch (err) {
     erro((err as Error).message);
   }
 }
 videoBaixo.addEventListener('seeked', () => redesenhar());
 
-// acervo de mídias livres: pasta local, cache offline ou o dataset no Hugging Face (src/acervo.ts)
 async function carregarAcervo() {
-  try {
-    const clipes = await carregarManifesto();
-    if (!clipes.length) return;
-    const caixa = $('acervo');
-    caixa.hidden = false;
-    const botoes = clipes.map((c) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'clipe';
-      b.innerHTML = '<span></span><small></small>';
-      b.querySelector('span')!.textContent = c.titulo;
-      // não revisado: ninguém confirmou a licença, então ela não vai para a tela como se fosse certa
-      const licenca = c.revisado ? c.licenca : 'licença não confirmada';
-      if (!c.revisado) b.classList.add('nao-revisado');
-      const legenda = `${c.credito} · ${licenca}${c.share_alike ? ' · o reel herda a CC BY-SA' : ''}`;
-      b.querySelector('small')!.textContent = legenda;
-      b.addEventListener('click', async () => {
-        b.disabled = true;
-        try {
-          const blob = await baixarClipe(c, (msg) => { b.querySelector('small')!.textContent = msg; });
-          await usarBaixo(new File([blob], c.arquivo, { type: blob.type || 'video/mp4' }), `${c.credito} (${licenca})`);
-        } catch (err) {
-          erro((err as Error).message);
-        } finally {
-          b.querySelector('small')!.textContent = legenda;
-          b.disabled = false;
-        }
-      });
-      return b;
-    });
-    const revisados = botoes.filter((b) => !b.classList.contains('nao-revisado'));
-    const outros = botoes.filter((b) => b.classList.contains('nao-revisado'));
-    caixa.replaceChildren(...revisados);
-    if (outros.length) {
-      const grupo = document.createElement('details');
-      grupo.className = 'nao-revisados';
-      grupo.innerHTML = '<summary></summary><p class="nota"></p><div class="acervo"></div>';
-      grupo.querySelector('summary')!.textContent = `Não revisados · licença não confirmada (${outros.length})`;
-      grupo.querySelector('p')!.textContent = 'Ninguém confirmou que esses vídeos podem ser reusados. Se o vídeo não é seu, use por sua conta e diga de onde veio.';
-      grupo.querySelector('.acervo')!.replaceChildren(...outros);
-      caixa.append(grupo);
-    }
-  } catch { /* sem acervo: só as animações geradas */ }
+  try { clipesAcervo = await carregarManifesto(); } catch { clipesAcervo = []; }
+  montarGaleria();
 }
 
+// ---------------------------------------------------------------- 5. som: fala, música, ducking
+const MUSICAS = [
+  { id: 'nenhuma', nome: 'Sem música', clima: 'só o som do vídeo' },
+  ...TRILHAS.map((t) => ({ id: t.id, nome: t.nome, clima: t.clima })),
+  { id: 'arquivo', nome: 'Sua música', clima: 'do seu aparelho' },
+];
+const volumeMusicaDb = () => -30 + 24 * (estado.som.volumeMusica / 100); // 50 = -18 dB, o padrão de vídeo falado
+const dbLin = (db: number) => 10 ** (db / 20);
+
+function montarMusicas() {
+  $('musicas').replaceChildren(...MUSICAS.map((m) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'musica';
+    b.dataset.id = m.id;
+    b.setAttribute('role', 'radio');
+    b.innerHTML = '<strong></strong><small></small>';
+    b.querySelector('strong')!.textContent = m.nome;
+    b.querySelector('small')!.textContent = m.clima;
+    b.addEventListener('click', () => escolherMusica(m.id));
+    return b;
+  }));
+  sincMusicas();
+}
+
+function sincMusicas() {
+  const s = estado.som;
+  document.querySelectorAll<HTMLButtonElement>('#musicas .musica').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.id === s.musica)));
+  $('som-musica').hidden = s.musica === 'nenhuma';
+  if (s.arquivoMusica) document.querySelector('#musicas [data-id="arquivo"] small')!.textContent = s.arquivoMusica.name;
+  $('musica-credito').textContent = s.musica === 'arquivo'
+    ? 'Use só música que você pode usar (sua, livre ou licenciada): as redes derrubam vídeo com música de terceiros.'
+    : s.musica !== 'nenhuma' ? 'Trilha gerada pela Prensa, na hora: sem direitos de ninguém.' : '';
+  const v = s.volumeMusica;
+  $('volume-musica-valor').textContent = `${v < 30 ? 'baixa' : v < 70 ? 'média' : 'alta'} (${Math.round(volumeMusicaDb())} dB)`;
+}
+
+function escolherMusica(id: string) {
+  acordarAudio();
+  if (id === 'arquivo' && !estado.som.arquivoMusica) { $<HTMLInputElement>('arquivo-musica').click(); return; }
+  estado.som.musica = id;
+  sincMusicas();
+  bufferDaMusica(); // já começa a preparar a trilha
+  if (!video.paused) tocarMusicaNaPrevia();
+}
+$<HTMLInputElement>('arquivo-musica').addEventListener('change', (e) => {
+  const f = (e.target as HTMLInputElement).files?.[0];
+  if (!f) return;
+  estado.som.arquivoMusica = f;
+  escolherMusica('arquivo');
+});
+
+function bufferDaMusica(): Promise<AudioBuffer> | null {
+  const s = estado.som;
+  if (s.musica === 'nenhuma' || (s.musica === 'arquivo' && !s.arquivoMusica)) return null;
+  const chave = s.musica === 'arquivo' ? `arquivo:${s.arquivoMusica!.name}:${s.arquivoMusica!.size}` : s.musica;
+  if (!s.buffers.has(chave)) {
+    const p = s.musica === 'arquivo'
+      ? s.arquivoMusica!.arrayBuffer().then((b) => new OfflineAudioContext(2, 48000, 48000).decodeAudioData(b))
+      : gerarTrilha(s.musica, 48000);
+    p.catch(() => s.buffers.delete(chave));
+    s.buffers.set(chave, p);
+  }
+  return s.buffers.get(chave)!;
+}
+
+const reguaFala = $<HTMLInputElement>('volume-fala');
+reguaFala.addEventListener('input', () => {
+  estado.som.volumeFala = Number(reguaFala.value) / 100;
+  $('volume-fala-valor').textContent = `${reguaFala.value}%`;
+  video.volume = Math.min(1, estado.som.volumeFala);
+  atualizarGanhoMusica();
+});
+const reguaMusica = $<HTMLInputElement>('volume-musica');
+reguaMusica.addEventListener('input', () => { estado.som.volumeMusica = Number(reguaMusica.value); sincMusicas(); atualizarGanhoMusica(); });
+$<HTMLInputElement>('abaixar').addEventListener('change', (e) => { estado.som.abaixar = (e.target as HTMLInputElement).checked; });
+$<HTMLInputElement>('suave').addEventListener('change', (e) => { estado.som.suave = (e.target as HTMLInputElement).checked; });
+
+// prévia do som: a música toca junto com a prévia, com o volume e o ducking aproximados (a mixagem final é nivelada)
+let ctxAudio: AudioContext | null = null;
+let fonteMusica: AudioBufferSourceNode | null = null;
+let ganhoMusica: GainNode | null = null;
+let vezMusica = 0;
+
+function acordarAudio() { // no iPhone, o áudio só liga dentro de um toque
+  ctxAudio ??= new AudioContext();
+  ctxAudio.resume().catch(() => {});
+}
+
+async function tocarMusicaNaPrevia() {
+  pararMusicaNaPrevia();
+  const vez = ++vezMusica;
+  const p = bufferDaMusica();
+  if (!p || video.paused || !ctxAudio) return;
+  const buf = await p.catch(() => null);
+  if (!buf || vez !== vezMusica || video.paused) return;
+  ganhoMusica = ctxAudio.createGain();
+  ganhoMusica.gain.value = 0;
+  ganhoMusica.connect(ctxAudio.destination);
+  fonteMusica = ctxAudio.createBufferSource();
+  fonteMusica.buffer = buf;
+  fonteMusica.loop = true;
+  fonteMusica.connect(ganhoMusica);
+  fonteMusica.start(0, Math.max(0, video.currentTime - estado.ini) % buf.duration);
+  atualizarGanhoMusica();
+}
+
+function pararMusicaNaPrevia() {
+  vezMusica++;
+  try { fonteMusica?.stop(); } catch { /* já parou */ }
+  fonteMusica = null;
+  ganhoMusica = null;
+}
+
+function atualizarGanhoMusica() {
+  if (!ganhoMusica || !ctxAudio) return;
+  const s = estado.som;
+  const t = video.currentTime - estado.ini;
+  const dur = estado.fim - estado.ini;
+  let g = dbLin(volumeMusicaDb()) * 3 * Math.max(0.2, s.volumeFala);
+  if (s.abaixar && estado.principal?.audio) {
+    const palavras = estado.falas.get(chaveTrecho());
+    if (palavras?.some((w) => t >= w.inicio - 0.1 && t <= w.fim + 0.25)) g *= dbLin(-10);
+  }
+  if (s.suave) {
+    if (t < 1) g *= Math.max(0, t);
+    if (dur - t < 2) g *= Math.max(0, (dur - t) / 2);
+  }
+  ganhoMusica.gain.setTargetAtTime(g, ctxAudio.currentTime, 0.06);
+}
 // ---------------------------------------------------------------- prévia e miniaturas (a mesma função de desenho do export)
 const EXEMPLO_GANCHO: Record<string, string> = {
   titulo: 'A frase mais forte do vídeo', 'voce-sabia': 'que isso muda tudo?', lista: '3 erros que todo mundo comete',
@@ -403,7 +612,7 @@ function quadroPara(r: Receita, legenda: Bloco[] | null, exemplo = false): Quadr
     layout: usaDividida(r) ? 'dividida' : 'cheio',
     gancho: { estilo: r.gancho, texto: escrito || (exemplo ? EXEMPLO_GANCHO[r.gancho] ?? '' : '') },
     fonte: campoFonte.value.trim(),
-    creditoBaixo: campoCredito.value.trim(),
+    creditoBaixo: usaVideoDeBaixo() ? campoCredito.value.trim() : '',
     legenda,
     estiloLegenda: estiloLegendaDe(r),
     gerador: geradorDe(r),
@@ -423,7 +632,7 @@ function blocosDoTrecho(): Bloco[] | null {
 
 function fontes(): [Fonte | null, Fonte | null] {
   const p = video.readyState >= 2 ? { img: video, w: video.videoWidth, h: video.videoHeight } : null;
-  const b = estado.baixo && videoBaixo.readyState >= 2 ? { img: videoBaixo, w: videoBaixo.videoWidth, h: videoBaixo.videoHeight } : null;
+  const b = usaVideoDeBaixo() && videoBaixo.readyState >= 2 ? { img: videoBaixo, w: videoBaixo.videoWidth, h: videoBaixo.videoHeight } : null;
   return [p, b];
 }
 
@@ -451,15 +660,17 @@ function redesenhar() {
 
 function laco() {
   desenhar();
+  atualizarGanhoMusica();
   if (!video.paused) requestAnimationFrame(laco);
 }
 const celular = previa.parentElement!;
-video.addEventListener('play', () => { celular.classList.add('tocando'); if (estado.baixo) videoBaixo.play(); laco(); });
-video.addEventListener('pause', () => { celular.classList.remove('tocando'); videoBaixo.pause(); });
-video.addEventListener('seeked', () => redesenhar());
+video.addEventListener('play', () => { celular.classList.add('tocando'); if (usaVideoDeBaixo()) videoBaixo.play(); tocarMusicaNaPrevia(); laco(); });
+video.addEventListener('pause', () => { celular.classList.remove('tocando'); videoBaixo.pause(); pararMusicaNaPrevia(); });
+video.addEventListener('seeked', () => { redesenhar(); if (!video.paused) tocarMusicaNaPrevia(); });
 video.addEventListener('timeupdate', () => { if (video.currentTime > estado.fim + 0.2 && !video.paused) video.currentTime = estado.ini; });
 function alternar() {
   if (!estado.principal) return;
+  acordarAudio();
   if (video.paused) {
     if (video.currentTime < estado.ini || video.currentTime > estado.fim) video.currentTime = estado.ini;
     video.play();
@@ -473,20 +684,25 @@ campoFonte.addEventListener('input', () => { $('aviso-fonte').hidden = true; });
 campoLegenda.addEventListener('change', () => { redesenhar(); pedirLegenda().catch(() => {}); });
 
 // ---------------------------------------------------------------- legenda em segundo plano: começa assim que o vídeo chega
+function estadoLegenda(t: string) {
+  $('legenda-estado').textContent = t;
+  $('legenda-estado-2').textContent = t.replace(/ Ideias tiradas da própria fala:$/, '');
+}
+
 function avisoLegenda(texto: string, fracao?: number) {
-  $('legenda-estado').textContent = `Ouvindo a fala para sugerir o gancho e fazer a legenda… ${fracao === undefined ? '' : `${Math.round(fracao * 100)}%`}`;
+  estadoLegenda(`Ouvindo a fala para sugerir o gancho e fazer a legenda… ${fracao === undefined ? '' : `${Math.round(fracao * 100)}%`}`);
   if (estado.esperandoLegenda) andamento(texto, fracao);
 }
 
 function pedirLegenda(): Promise<Palavra[]> {
   const m = estado.principal;
   if (!m?.audio || !campoLegenda.checked) {
-    $('legenda-estado').textContent = m && !m.audio ? 'Esse vídeo não tem som: sai sem legenda.' : '';
+    estadoLegenda(m && !m.audio ? 'Esse vídeo não tem som: sai sem legenda.' : '');
     return Promise.resolve([]);
   }
   const k = chaveTrecho();
   const pronta = estado.falas.get(k);
-  if (pronta) { $('legenda-estado').textContent = 'Legenda pronta. Ideias tiradas da própria fala:'; return Promise.resolve(pronta); }
+  if (pronta) { estadoLegenda('Legenda pronta. Ideias tiradas da própria fala:'); return Promise.resolve(pronta); }
   const andando = estado.ouvindo.get(k);
   if (andando) return andando;
   const { ini, fim } = estado;
@@ -496,7 +712,7 @@ function pedirLegenda(): Promise<Palavra[]> {
     const palavras = audio ? await transcrever(audio, avisoLegenda, () => k === chaveTrecho()) : [];
     estado.falas.set(k, palavras);
     if (k === chaveTrecho()) {
-      $('legenda-estado').textContent = 'Legenda pronta. Ideias tiradas da própria fala:';
+      estadoLegenda('Legenda pronta. Ideias tiradas da própria fala:');
       montarIdeias();
       redesenhar();
     }
@@ -549,9 +765,15 @@ $('prensar').addEventListener('click', async () => {
       blocos = blocosDoTrecho();
       estado.srt = blocos ? gerarSrt(blocos) : '';
     }
-    andamento('Prensando', 0);
     const q = quadroPara(estado.receita, blocos);
-    const mestre = await prensar({ ...q, principal: m, baixo: q.gerador ? null : estado.baixo, ini: estado.ini, fim: estado.fim, somLimpo: campoSom.checked },
+    const pMusica = bufferDaMusica();
+    if (pMusica) andamento('Preparando a música');
+    const som: OpcoesDeSom = {
+      limpar: campoSom.checked, volumeFala: estado.som.volumeFala, musica: pMusica ? await pMusica : null,
+      volumeMusicaDb: volumeMusicaDb(), abaixar: estado.som.abaixar, suave: estado.som.suave,
+    };
+    andamento('Prensando', 0);
+    const mestre = await prensar({ ...q, principal: m, baixo: usaVideoDeBaixo() ? estado.baixo : null, ini: estado.ini, fim: estado.fim, som },
       (f) => andamento(`Prensando · ${Math.round(f * 100)}%`, f), estado.cancelar.signal);
     const base = slug(campoGancho.value || m.arquivo.name.replace(/\.[^.]+$/, ''));
     const arquivos = await exportar(mestre, estado.fim - estado.ini, base, plats, (f) => {
@@ -579,7 +801,7 @@ function textoPost(): string {
   const linhas = [];
   if (g && !g.includes('___')) linhas.push((prefixo[estado.receita.gancho] ?? '') + g);
   if (campoFonte.value.trim()) linhas.push(`Fonte: ${campoFonte.value.trim()}`);
-  if (usaDividida(estado.receita) && estado.usarBaixoProprio && campoCredito.value.trim()) linhas.push(`Vídeo de baixo: ${campoCredito.value.trim()}`);
+  if (usaVideoDeBaixo() && campoCredito.value.trim()) linhas.push(`Vídeo de baixo: ${campoCredito.value.trim()}`);
   return linhas.join('\n');
 }
 
@@ -663,6 +885,9 @@ $('historia-comecar').addEventListener('click', () => {
 (async () => {
   verificarRequisitos();
   montarReceitas();
+  montarMusicas();
+  montarGaleria();
+  requestAnimationFrame(animarGaleria);
   await document.fonts.load(`84px "${FONTE}"`).catch(() => {});
   demo = criarDemo($<HTMLCanvasElement>('demo'));
   irPasso(0);

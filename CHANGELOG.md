@@ -4,6 +4,21 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: som, vídeo de baixo à vista e fontes no iPhone
+
+- **Nova etapa "Som"** na mesa de composição:
+  - volume do som do vídeo (0 a 150%) e "Som limpo";
+  - **música**: sem música, quatro **trilhas geradas na hora** (Calma, Lo-fi, Tensão, Animada; sintetizadas no aparelho, sem direitos de ninguém) ou **a sua música**;
+  - volume da música (padrão −18 dB em relação à fala), "Abaixar quando alguém fala" (ducking pela energia da fala) e "Entrar e sair suave".
+  - A prévia toca a música junto. A mixagem final sai nivelada em −14 LUFS com pico real em −1 dBTP, pelo motor do Audio FXtor.
+  - Vídeo sem som também pode sair com música.
+- **Vídeo de baixo saiu de "Mais opções"** e virou a etapa 4: uma galeria em faixas com rolagem lateral. Nela estão Nenhum, Enviar o seu, as quatro animações (tocando ao vivo), o acervo revisado e os **não revisados**, marcados como "licença não confirmada". Os clipes mostram um quadro de prévia, buscado só quando o cartão aparece.
+- **"Trocar vídeo"** fica embaixo da prévia. **Legenda** (ligar e estilo) virou a etapa 6. "Mais opções" virou "Trecho e redes".
+- **Correção das fontes no iPhone** (Safari e Chrome usam o WebKit):
+  - no Space do HF, a fonte Barlow era servida por um redirecionamento para o CDN, e o WebKit a recusava pelo Cross-Origin-Resource-Policy. As fontes agora vão embutidas no CSS;
+  - a Fraunces **variável** saía sempre no peso mais grosso no WebKit. Agora é a versão estática (400, 400 itálico, 700).
+  - Conferido no WebKit no endereço publicado: todas as fontes carregam, sem nenhuma requisição recusada.
+
 ### Prensa: funcionar no celular de verdade
 
 - **Publicada em https://arthruur-prensa.static.hf.space** (Space estático do Hugging Face):

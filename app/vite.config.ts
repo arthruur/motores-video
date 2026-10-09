@@ -18,5 +18,10 @@ export default defineConfig({
   preview: { headers: isolamento, host: true },
   worker: { format: 'es' },
   optimizeDeps: { exclude: ['@huggingface/transformers', '@ffmpeg/ffmpeg', '@ffmpeg/util'] },
-  build: { target: 'es2022' },
+  build: {
+    target: 'es2022',
+    // fontes embutidas no CSS: no Space do HF todo binário vira um redirecionamento para o CDN, e o WebKit
+    // (Safari e Chrome no iPhone) recusa a fonte vinda de lá por causa do Cross-Origin-Resource-Policy
+    assetsInlineLimit: (arquivo) => (/\.(woff2?|ttf)$/.test(arquivo) ? true : undefined),
+  },
 });

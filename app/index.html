@@ -112,7 +112,8 @@
         <button type="button" class="play" id="play" aria-label="Tocar">▶</button>
       </div>
       <div class="previa-acoes">
-        <label class="chave pequena"><input type="checkbox" id="ver-zona"><span>Mostrar onde a rede cobre</span></label>
+        <button type="button" class="botao-trocar" id="trocar">Trocar vídeo</button>
+        <label class="chave pequena"><input type="checkbox" id="ver-zona"><span>Onde a rede cobre</span></label>
       </div>
     </aside>
 
@@ -141,9 +142,45 @@
         <p class="nota aviso" id="aviso-fonte" hidden>Se o vídeo não é seu, diga quem fala e de onde veio. Fonte na tela protege você e quem assiste.</p>
       </div>
 
-      <div class="chaves">
-        <label class="chave"><input type="checkbox" id="legenda" checked><span>Legenda</span></label>
-        <label class="chave"><input type="checkbox" id="som-limpo" checked><span>Som limpo</span></label>
+      <div class="etapa">
+        <h2><span class="num">4</span> Vídeo de baixo <small>tela dividida, opcional</small></h2>
+        <div class="galeria" id="galeria-baixo" role="radiogroup" aria-label="Vídeo de baixo"></div>
+        <input type="file" accept="video/*" id="arquivo-baixo" hidden>
+        <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo (aparece na tela)
+          <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana">
+        </label>
+      </div>
+
+      <div class="etapa">
+        <h2><span class="num">5</span> Som <small>toque na prévia para ouvir</small></h2>
+        <div class="som-fala" id="som-fala">
+          <label class="regua">Som do vídeo <output id="volume-fala-valor">100%</output>
+            <input type="range" id="volume-fala" min="0" max="150" step="5" value="100">
+          </label>
+          <label class="chave"><input type="checkbox" id="som-limpo" checked><span>Som limpo</span></label>
+        </div>
+        <p class="rotulo">Música</p>
+        <div class="musicas" id="musicas" role="radiogroup" aria-label="Música"></div>
+        <input type="file" accept="audio/*,video/*" id="arquivo-musica" hidden>
+        <div class="som-musica" id="som-musica" hidden>
+          <label class="regua">Volume da música <output id="volume-musica-valor">média</output>
+            <input type="range" id="volume-musica" min="0" max="100" step="5" value="50">
+          </label>
+          <div class="chaves">
+            <label class="chave"><input type="checkbox" id="abaixar" checked><span>Abaixar quando alguém fala</span></label>
+            <label class="chave"><input type="checkbox" id="suave" checked><span>Entrar e sair suave</span></label>
+          </div>
+          <p class="nota" id="musica-credito"></p>
+        </div>
+      </div>
+
+      <div class="etapa">
+        <h2><span class="num">6</span> Legenda</h2>
+        <div class="chaves">
+          <label class="chave"><input type="checkbox" id="legenda" checked><span>Legenda</span></label>
+        </div>
+        <div class="fichas" id="estilos-legenda" role="radiogroup" aria-label="Estilo da legenda"></div>
+        <p class="nota" id="legenda-estado-2"></p>
       </div>
 
       <button type="button" class="prensar" id="prensar"><span>Prensar</span></button>
@@ -156,7 +193,7 @@
       <p class="erro" id="erro" role="alert" hidden></p>
 
       <details class="mais">
-        <summary>Mais opções</summary>
+        <summary>Trecho e redes</summary>
         <h3>Trecho</h3>
         <video id="video" controls playsinline preload="auto"></video>
         <div class="linha">
@@ -165,19 +202,9 @@
         </div>
         <p class="nota" id="trecho-info"></p>
 
-        <h3>Vídeo de baixo (tela dividida)</h3>
-        <div class="fichas" id="retencoes" role="radiogroup" aria-label="Animação"></div>
-        <div class="acervo" id="acervo" hidden></div>
-        <label class="campo">Ou envie o seu <input type="file" accept="video/*" id="arquivo-baixo"></label>
-        <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana"></label>
-
-        <h3>Legenda</h3>
-        <div class="fichas" id="estilos-legenda" role="radiogroup" aria-label="Estilo da legenda"></div>
-
         <h3>Redes</h3>
         <div class="fichas" id="plataformas"></div>
 
-        <button type="button" class="link" id="trocar">Trocar o vídeo</button>
       </details>
     </section>
   </main>

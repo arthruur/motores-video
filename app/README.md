@@ -40,6 +40,9 @@ No celular, abra o endereço e use **"Adicionar à tela inicial"**: a Prensa vir
 1. **Receita:** cada cartão mostra **o seu próprio vídeo já naquela receita**, não um ícone.
 2. **Gancho:** sugerido a partir da própria fala assim que a legenda fica pronta (ela começa a ser feita quando o vídeo chega). As ideias aparecem como fichas: primeiro as frases da fala, depois os modelos com lacuna da receita.
 3. **De onde é o vídeo?**
+4. **Vídeo de baixo:** galeria em faixas com Nenhum, Enviar o seu, as animações geradas, o acervo revisado e os não revisados (com "licença não confirmada").
+5. **Som:** volume do vídeo, som limpo e música: trilhas geradas na hora (Calma, Lo-fi, Tensão, Animada) ou a sua. Tem volume da música, "abaixar quando alguém fala" e entrada e saída suaves. A prévia toca junto.
+6. **Legenda:** ligar ou desligar, bloco ou palavra por palavra.
 
 Depois, **Prensar**: enquanto trabalha, a prensa mostra uma folha por rede sendo carimbada. O resto fica em "Mais opções": trecho, vídeo de baixo, estilo da legenda e redes.
 
@@ -77,6 +80,7 @@ Issues atendidas (1ª versão): [#2](https://github.com/arthruur/motores-video/i
 | `src/formatos.ts` | Layouts, ganchos (grandes por 4 s, depois título fixo), fonte e crédito. Faixa segura comum a TikTok, Reels e Shorts |
 | `src/legenda.ts` | Porte do `motores/legenda/gerar.py` (blocos por sintagma, palavra atual em amarelo) e o estilo palavra por palavra; `.srt` |
 | `src/retencao.ts` | As animações de retenção, cada uma uma função do tempo |
+| `src/trilhas.ts` | As trilhas geradas na hora (Web Audio, sem gravação de ninguém) |
 | `src/demo.ts` | A demonstração da tela inicial, desenhada com o mesmo `desenharQuadro` do export |
 | `src/conversor.ts` | Conversor de segurança (ffmpeg.wasm baixado sob demanda) |
 | `src/transcrever.worker.ts` | Whisper `base` com tempo por palavra ([transformers.js](https://huggingface.co/docs/transformers.js), WASM, 8 bits), num worker |

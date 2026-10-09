@@ -98,3 +98,17 @@ export async function baixarClipe(clipe: ClipeAcervo, onProgresso?: (msg: string
 
   throw new Error(`Não foi possível baixar o clipe ${clipe.id}. Verifique a conexão com a internet.`);
 }
+
+/** URL de onde o clipe pode ser lido (para a miniatura da galeria): a pasta local, se ele estiver lá, senão o dataset */
+export async function urlDoClipe(clipe: ClipeAcervo): Promise<string | null> {
+  const candidatos = [`./acervo/${clipe.arquivo}`, `${HF_DATASET_URL}/clipes/${clipe.arquivo}`, `${HF_DATASET_URL}/${clipe.arquivo}`];
+  for (const url of candidatos) {
+    try {
+      const r = await fetch(url, { method: 'HEAD', mode: url.startsWith('http') ? 'cors' : 'same-origin' });
+      if (ehVideo(r)) return url;
+    } catch {
+      // tenta a próxima
+    }
+  }
+  return null;
+}

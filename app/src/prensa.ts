@@ -5,7 +5,7 @@ import {
   Input, type InputAudioTrack, type InputVideoTrack, Mp4OutputFormat, Output, canEncodeAudio, canEncodeVideo,
 } from 'mediabunny';
 import { A, L, type Fonte, type Quadro, desenharQuadro } from './formatos';
-import { tratarSom } from './fxtor/som';
+import { mixar } from './fxtor/som';
 import type { Plataforma } from './plataformas';
 
 export const FPS = 30;
@@ -96,7 +96,16 @@ export type Pedido = Quadro & {
   baixo: Midia | null;
   ini: number;
   fim: number;
-  somLimpo: boolean; // remove ruído da voz (RNNoise, do Audio FXtor)
+  som: OpcoesDeSom;
+};
+
+export type OpcoesDeSom = {
+  limpar: boolean;            // remove ruído da voz (RNNoise, do Audio FXtor)
+  volumeFala: number;         // 0 a 1.5
+  musica: AudioBuffer | null; // trilha gerada ou da pessoa
+  volumeMusicaDb: number;     // em relação à fala
+  abaixar: boolean;           // abaixa a música enquanto alguém fala
+  suave: boolean;             // entrada e saída suaves
 };
 
 export type Progresso = (fracao: number) => void;
@@ -122,7 +131,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   const fonteVideo = new CanvasSource(canvas, { codec: 'avc', bitrate: BITRATE, keyFrameInterval: 1 });
   output.addVideoTrack(fonteVideo, { frameRate: FPS });
   let fonteAudio: AudioBufferSource | null = null;
-  if (p.principal.audio) {
+  if (p.principal.audio || p.som.musica) {
     fonteAudio = new AudioBufferSource({ codec: 'aac', bitrate: 128_000 });
     output.addAudioTrack(fonteAudio);
   }
@@ -157,10 +166,13 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   if (itB) await itB.return(undefined);
 
   if (fonteAudio) {
-    const lido = await lerAudio(p.principal, p.ini, p.fim);
-    const taxa = lido.taxa;
-    const canais = (await tratarSom(lido.canais, taxa, { limpar: p.somLimpo, sinal })).map((c) => new Float32Array(c));
-    if (canais.length === 1) canais.push(new Float32Array(canais[0])); // sai sempre estéreo: o -14 LUFS foi medido assim
+    const lido = p.principal.audio ? await lerAudio(p.principal, p.ini, p.fim) : null;
+    const taxa = lido?.taxa ?? 48000;
+    const canais = (await mixar({
+      fala: lido?.canais ?? null, musica: p.som.musica, taxa, amostras: Math.ceil((p.fim - p.ini) * taxa),
+      limpar: p.som.limpar, volumeFala: p.som.volumeFala, volumeMusicaDb: p.som.volumeMusicaDb,
+      abaixar: p.som.abaixar, suave: p.som.suave, sinal,
+    })).map((c) => new Float32Array(c));
     const ab = new AudioBuffer({ length: canais[0].length, numberOfChannels: canais.length, sampleRate: taxa });
     canais.forEach((c, i) => ab.copyToChannel(c, i));
     await fonteAudio.add(await em48k(ab));

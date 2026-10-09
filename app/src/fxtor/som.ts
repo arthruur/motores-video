@@ -32,7 +32,8 @@ async function limparVoz(canais: Float32Array[], taxa: number, sinal: AbortSigna
 
 export type OpcoesSom = { limpar: boolean; sinal?: AbortSignal };
 
-export async function tratarSom(canais: Float32Array[], taxa: number, { limpar, sinal = new AbortController().signal }: OpcoesSom): Promise<Float32Array[]> {
+/** fala: tira o grave de fundo e o ruído (opcional) e nivela em -14 LUFS */
+async function prepararFala(canais: Float32Array[], taxa: number, limpar: boolean, sinal: AbortSignal): Promise<Float32Array[]> {
   let c = canais;
   if (limpar) {
     const f = highpass(PASSA_ALTA_HZ, Math.SQRT1_2, taxa);
@@ -44,10 +45,98 @@ export async function tratarSom(canais: Float32Array[], taxa: number, { limpar, 
       console.warn('RNNoise indisponível; segue sem limpar o ruído', e);
     }
   }
+  return nivelar(c, taxa);
+}
+
+function nivelar(c: Float32Array[], taxa: number, alvo = ALVO_LUFS): Float32Array[] {
   const medido = integratedLoudness(c.length === 1 ? [c[0], c[0]] : c, taxa);
-  if (Number.isFinite(medido)) {
-    const ganho = Math.min(dbParaLinear(ALVO_LUFS - medido), dbParaLinear(GANHO_MAX_DB));
-    c = c.map((x) => x.map((v) => v * ganho));
+  if (!Number.isFinite(medido)) return c;
+  const ganho = Math.min(dbParaLinear(alvo - medido), dbParaLinear(GANHO_MAX_DB));
+  return c.map((x) => x.map((v) => v * ganho));
+}
+
+const limitar = (c: Float32Array[], taxa: number) =>
+  limitTruePeak(c, { ceiling: dbParaLinear(TETO_DB), lookaheadSeconds: 0.0015, releaseSeconds: 0.05, sampleRate: taxa });
+
+/** só a fala (o comportamento de antes): limpa, nivela e limita */
+export async function tratarSom(canais: Float32Array[], taxa: number, { limpar, sinal = new AbortController().signal }: OpcoesSom): Promise<Float32Array[]> {
+  return limitar(await prepararFala(canais, taxa, limpar, sinal), taxa);
+}
+
+export type Mixagem = {
+  fala: Float32Array[] | null;   // canais da fala na taxa `taxa` (null: vídeo sem som)
+  musica: AudioBuffer | null;    // trilha em qualquer taxa; é reamostrada e repetida até cobrir o trecho
+  taxa: number;
+  amostras: number;              // duração do trecho em amostras
+  limpar: boolean;
+  volumeFala: number;            // 0 a 1.5 (1 = como veio, já nivelada)
+  volumeMusicaDb: number;        // em relação à fala: -18 dB é o padrão de vídeo falado
+  abaixar: boolean;              // abaixa a música enquanto alguém fala (ducking)
+  suave: boolean;                // entrada e saída suaves da música
+  sinal?: AbortSignal;
+};
+
+/** a música repetida até cobrir o trecho, na taxa da fala, em estéreo */
+async function musicaNoTrecho(m: AudioBuffer, taxa: number, amostras: number): Promise<Float32Array[]> {
+  const ctx = new OfflineAudioContext(2, amostras, taxa);
+  const s = ctx.createBufferSource();
+  s.buffer = m;
+  s.loop = true;
+  s.connect(ctx.destination);
+  s.start();
+  const r = await ctx.startRendering();
+  return [r.getChannelData(0), r.getChannelData(1)];
+}
+
+/** envelope de "tem gente falando" (0 ou 1, suavizado) a partir da energia da fala, de 20 em 20 ms */
+function quandoFala(fala: Float32Array[], taxa: number, amostras: number): Float32Array {
+  const passo = Math.round(taxa * 0.02);
+  const rms: number[] = [];
+  for (let i = 0; i < amostras; i += passo) {
+    let s = 0;
+    const fim = Math.min(amostras, i + passo);
+    for (let j = i; j < fim; j++) s += fala[0][j] * fala[0][j];
+    rms.push(Math.sqrt(s / Math.max(1, fim - i)));
   }
-  return limitTruePeak(c, { ceiling: dbParaLinear(TETO_DB), lookaheadSeconds: 0.0015, releaseSeconds: 0.05, sampleRate: taxa });
+  const ordenado = [...rms].sort((a, b) => a - b);
+  const limiar = Math.max(0.004, ordenado[Math.floor(ordenado.length * 0.95)] * 0.12);
+  const env = new Float32Array(amostras);
+  const ataque = Math.exp(-1 / (0.06 * taxa)), solta = Math.exp(-1 / (0.45 * taxa));
+  let g = 0, segura = 0;
+  for (let i = 0; i < amostras; i++) {
+    const quadro = Math.floor(i / passo);
+    if (rms[quadro] > limiar) segura = Math.round(0.25 * taxa); // segura um pouco entre palavras
+    const alvo = segura-- > 0 ? 1 : 0;
+    g = alvo + (g - alvo) * (alvo > g ? ataque : solta);
+    env[i] = g;
+  }
+  return env;
+}
+
+/** fala + música, com volume, ducking e entrada/saída suave; no fim, -14 LUFS e pico real em -1 dBTP */
+export async function mixar(o: Mixagem): Promise<Float32Array[]> {
+  const sinal = o.sinal ?? new AbortController().signal;
+  const n = o.amostras;
+  let fala: Float32Array[] | null = null;
+  if (o.fala) {
+    fala = (await prepararFala(o.fala, o.taxa, o.limpar, sinal)).map((c) => c.map((v) => v * o.volumeFala));
+    if (fala.length === 1) fala = [fala[0], new Float32Array(fala[0])];
+  }
+  let saida: Float32Array[] = fala ?? [new Float32Array(n), new Float32Array(n)];
+  if (o.musica) {
+    let m = nivelar(await musicaNoTrecho(o.musica, o.taxa, n), o.taxa);
+    const base = fala ? dbParaLinear(o.volumeMusicaDb) * Math.max(0.2, o.volumeFala) : 1;
+    const env = fala && o.abaixar ? quandoFala(fala, o.taxa, n) : null;
+    const abaixado = dbParaLinear(-10);
+    const entra = o.suave ? Math.round(1.0 * o.taxa) : 0, sai = o.suave ? Math.round(2.0 * o.taxa) : 0;
+    m = m.map((c) => c.map((v, i) => {
+      let g = base;
+      if (env) g *= 1 - (1 - abaixado) * env[i];
+      if (i < entra) g *= i / entra;
+      if (n - i < sai) g *= (n - i) / sai;
+      return v * g;
+    }));
+    saida = saida.map((c, k) => c.map((v, i) => v + m[k][i]));
+  }
+  return limitar(nivelar(saida, o.taxa), o.taxa);
 }
