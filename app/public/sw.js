@@ -1,5 +1,5 @@
 // Prensa: funciona offline depois da 1ª visita e recebe vídeos pelo menu Compartilhar (Android).
-const CACHE = 'prensa-v1';
+const CACHE = 'prensa-v2';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icone.svg'])));
