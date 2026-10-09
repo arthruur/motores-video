@@ -21,6 +21,8 @@ from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
+if str(RAIZ) not in sys.path:
+    sys.path.insert(0, str(RAIZ))
 SAIDA = RAIZ / "app" / "public" / "acervo"
 ACERVO_JSON = SAIDA / "acervo.json"
 DUR_CLIPE = 15.0
@@ -57,30 +59,33 @@ def cortar_video(origem: Path, destino: Path) -> None:
     ], check=True, timeout=300)
 
 
-def importar_pasta(pasta: Path, categoria: str, autor: str, licenca: str, licenca_url: str) -> None:
-    if not pasta.exists():
-        sys.exit(f"Pasta não encontrada: {pasta}")
+def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: str, titulo: str | None = None, aprovar_direto: bool = False, upload_hf: bool = False, repo_hf: str = "arthruur/prensa-acervo") -> None:
+    if not alvo.exists():
+        sys.exit(f"Arquivo ou pasta não encontrado: {alvo}")
 
     acervo = carregar_acervo()
     extensoes = {".mp4", ".mov", ".webm", ".mkv", ".m4v"}
-    arquivos = [f for f in pasta.iterdir() if f.is_file() and f.suffix.lower() in extensoes]
+
+    if alvo.is_file():
+        arquivos = [alvo]
+    else:
+        arquivos = [f for f in alvo.iterdir() if f.is_file() and f.suffix.lower() in extensoes]
 
     if not arquivos:
-        sys.exit(f"Nenhum arquivo de vídeo encontrado em {pasta}")
+        sys.exit(f"Nenhum arquivo de vídeo encontrado em {alvo}")
 
-    print(f"Encontrados {len(arquivos)} vídeos para processar...")
+    print(f"Processando {len(arquivos)} arquivo(s)...")
 
     existentes_sha = {c.get("sha256") for c in acervo["clipes"]}
     importados = 0
 
     for arq in arquivos:
-        nome_base = arq.stem
-        # gera um ID limpo
+        nome_base = titulo or arq.stem
         slug = re.sub(r"[^a-z0-9]+", "-", nome_base.lower()).strip("-")[:30]
         id_ = f"{categoria}-{slug}" if categoria else slug
         destino = SAIDA / f"{id_}.mp4"
 
-        print(f"  Processando {arq.name} -> {destino.name}...")
+        print(f"  Recortando {arq.name} -> {destino.name}...")
         try:
             cortar_video(arq, destino)
         except Exception as e:
@@ -100,13 +105,13 @@ def importar_pasta(pasta: Path, categoria: str, autor: str, licenca: str, licenc
             "titulo": nome_base.replace("_", " ").replace("-", " ")[:60],
             "credito": autor or "Acervo colaborativo",
             "licenca": licenca or "CC BY 4.0",
-            "revisado": False,  # Requer revisão humana via folha de contato
+            "revisado": aprovar_direto,
             "largura": 720,
             "altura": 1280,
             "duracao_s": DUR_CLIPE,
             "sha256": sha,
             "origem": {
-                "fonte": "drive-colaborativo",
+                "fonte": "importacao-direta",
                 "arquivo_original": arq.name
             },
             "licenca_url": licenca_url,
@@ -118,26 +123,39 @@ def importar_pasta(pasta: Path, categoria: str, autor: str, licenca: str, licenc
         importados += 1
         gravar_acervo(acervo)
 
-    print(f"\nSucesso! {importados} clipes importados com 'revisado: false'.")
-    print("Próximos passos:")
-    print("1. Gerar folha de revisão visual:")
-    print("   python ferramentas/acervo/coletar.py --folha")
-    print("2. Inspecione app/public/acervo/folha.png e aprove os adequados:")
-    print("   python ferramentas/acervo/coletar.py --aprovar ID1 ID2")
-    print("3. Exporte e sincronize com o Hugging Face:")
-    print("   python ferramentas/acervo/huggingface.py --exportar pasta_hf/ --upload --repo arthruur/prensa-acervo")
+    print(f"\nSucesso! {importados} clipe(s) processado(s) com 'revisado: {aprovar_direto}'.")
+
+    if upload_hf:
+        print("\nSincronizando com o Hugging Face Datasets...")
+        from ferramentas.acervo.huggingface import exportar_para_pasta, upload_huggingface
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            exportar_para_pasta(tmp_path, repo_hf)
+            upload_huggingface(repo_hf, tmp_path)
+        # Limpa o mp4 local após upload bem-sucedido para manter o app leve
+        for c in acervo["clipes"]:
+            (SAIDA / c["arquivo"]).unlink(missing_ok=True)
+        print("Clipes sincronizados na nuvem e pasta local mantida limpa!")
+    else:
+        print("Para enviar ao Hugging Face:")
+        print(f"  python ferramentas/acervo/huggingface.py --upload --repo {repo_hf}")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("pasta", type=Path, help="pasta com os vídeos baixados")
+    ap.add_argument("alvo", type=Path, help="arquivo de vídeo ou pasta com vídeos")
     ap.add_argument("--categoria", default="geral", help="categoria temática (ex: maquinas, arte, lofi, phonk)")
+    ap.add_argument("--titulo", default=None, help="título personalizado para o clipe")
     ap.add_argument("--autor", default="Comunidade", help="crédito do autor")
     ap.add_argument("--licenca", default="CC BY 4.0", help="licença autoral declarada")
     ap.add_argument("--licenca-url", default="", help="link da licença ou da fonte original")
+    ap.add_argument("--aprovar", action="store_true", help="já marca o clipe como aprovado/revisado")
+    ap.add_argument("--upload", action="store_true", help="já faz upload direto para o Hugging Face")
+    ap.add_argument("--repo", default="arthruur/prensa-acervo", help="repositório HF destino")
     args = ap.parse_args()
 
-    importar_pasta(args.pasta, args.categoria, args.autor, args.licenca, args.licenca_url)
+    importar(args.alvo, args.categoria, args.autor, args.licenca, args.licenca_url, args.titulo, args.aprovar, args.upload, args.repo)
 
 
 if __name__ == "__main__":

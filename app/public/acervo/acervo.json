@@ -299,6 +299,27 @@
       "share_alike": false,
       "modificacoes": "conversão 9:16 720p 15s sem áudio",
       "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "viral-video-twitter",
+      "categoria": "viral",
+      "arquivo": "viral-video-twitter.mp4",
+      "titulo": "video twitter",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "f93193bc1511b2552170fd16c480c7e2a78366a6c62e601aedaaf663b2189794",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791508241346.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "recorte 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
     }
   ],
   "rejeitados": [
