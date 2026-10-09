@@ -1,3 +1,4 @@
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import { defineConfig } from 'vite';
 
 // COOP/COEP liberam o SharedArrayBuffer: o Whisper roda em várias threads de WASM.
@@ -9,6 +10,10 @@ const isolamento = {
 
 export default defineConfig({
   base: './',
+  // HTTPS também no desenvolvimento: fora do localhost (ex.: o celular abrindo https://IP-do-PC:5173) o navegador
+  // só libera WebCodecs, threads e service worker em conexão segura. O certificado é gerado na hora:
+  // na 1ª vez o celular avisa que ele não é confiável; é só seguir ("Avançado" → "Continuar").
+  plugins: [basicSsl()],
   server: { headers: isolamento, host: true },
   preview: { headers: isolamento, host: true },
   worker: { format: 'es' },

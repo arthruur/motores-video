@@ -47,7 +47,7 @@ export async function converter(arquivo: File, aviso: Aviso): Promise<File> {
     const codigo = await ff.exec(['-i', `${pasta}/${entrada.name}`, '-t', String(MAX_S),
       '-vf', "scale='if(gt(iw,ih),min(1920,iw),-2)':'if(gt(iw,ih),-2,min(1920,ih))'",
       '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20', '-pix_fmt', 'yuv420p',
-      '-c:a', 'aac', '-b:a', '192k', '-ac', '2', '-movflags', '+faststart', 'saida.mp4']);
+      '-c:a', 'aac', '-b:a', '192k', '-ac', '2', '-ar', '48000', '-movflags', '+faststart', 'saida.mp4']);
     if (codigo !== 0) {
       const motivo = log.filter((l) => /error|invalid|not supported|unknown|could not|no such/i.test(l)).pop() ?? log.at(-1) ?? `código ${codigo}`;
       throw new Error(motivo.trim());

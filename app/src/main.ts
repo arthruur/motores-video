@@ -86,9 +86,34 @@ function convertendo(texto: string, fracao?: number) {
   barra.style.width = fracao === undefined ? '' : `${Math.round(fracao * 100)}%`;
 }
 
+const ENDERECO_OFICIAL = 'https://arthruur-prensa.static.hf.space/';
+
+/** o que a Prensa precisa do navegador; sem isso, explica o que fazer em vez de falhar no meio */
+function verificarRequisitos(): boolean {
+  let titulo = '', texto = '', link = '';
+  if (!isSecureContext) {
+    titulo = 'Abra a Prensa pelo endereço oficial.';
+    texto = `Esta página foi aberta sem conexão segura (${location.origin}), e assim o navegador desliga justamente o que a Prensa usa para ler e gravar vídeo no aparelho. O endereço oficial tem HTTPS de verdade e funciona em qualquer celular.`;
+    link = ENDERECO_OFICIAL;
+  } else if (typeof VideoEncoder === 'undefined' || typeof VideoDecoder === 'undefined') {
+    titulo = 'Este navegador ainda não sabe fazer vídeo.';
+    texto = 'A Prensa monta o vídeo no próprio aparelho com uma tecnologia chamada WebCodecs, que falta neste navegador. Use o Chrome, o Edge ou o Safari atualizados (no iPhone, iOS 17 ou mais novo).';
+  }
+  if (!titulo) return true;
+  $('requisitos').hidden = false;
+  $('requisitos-titulo').textContent = titulo;
+  $('requisitos-texto').textContent = texto;
+  const a = $<HTMLAnchorElement>('requisitos-link');
+  a.hidden = !link;
+  if (link) { a.href = link; a.textContent = 'Abrir a Prensa oficial'; }
+  $('soltar').hidden = true;
+  return false;
+}
+
 let vezArquivo = 0;
 async function carregarPrincipal(arquivo: File) {
   erro('');
+  if (!verificarRequisitos()) { mostrar('inicio'); return; }
   const vez = ++vezArquivo; // se a pessoa escolher outro vídeo no meio da conversão, a antiga é descartada
   try {
     usarPrincipal(await abrir(arquivo));
@@ -116,7 +141,11 @@ async function carregarPrincipal(arquivo: File) {
         barra.style.width = fracao === undefined ? '' : `${Math.round(fracao * 100)}%`;
       });
       if (vez !== vezArquivo) return;
-      usarPrincipal(await abrir(convertido));
+      try {
+        usarPrincipal(await abrir(convertido));
+      } catch (e3) {
+        throw new Error(`o vídeo convertido também não abriu (${(e3 as Error).message}); o navegador pode estar sem suporte a vídeo`);
+      }
     } catch (e2) {
       if (vez !== vezArquivo) return;
       estado.convertendo = null;
@@ -632,6 +661,7 @@ $('historia-comecar').addEventListener('click', () => {
 
 // ---------------------------------------------------------------- início
 (async () => {
+  verificarRequisitos();
   montarReceitas();
   await document.fonts.load(`84px "${FONTE}"`).catch(() => {});
   demo = criarDemo($<HTMLCanvasElement>('demo'));

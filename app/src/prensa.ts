@@ -80,6 +80,17 @@ export async function audioParaFala(m: Midia, ini: number, fim: number): Promise
   return (await ctx.startRendering()).getChannelData(0);
 }
 
+/** o AAC das redes (e de vários codificadores) só aceita taxas comuns: som de 8 kHz de celular antigo vira 48 kHz */
+async function em48k(ab: AudioBuffer): Promise<AudioBuffer> {
+  if (ab.sampleRate === 48000) return ab;
+  const ctx = new OfflineAudioContext(ab.numberOfChannels, Math.ceil(ab.duration * 48000), 48000);
+  const s = ctx.createBufferSource();
+  s.buffer = ab;
+  s.connect(ctx.destination);
+  s.start();
+  return ctx.startRendering();
+}
+
 export type Pedido = Quadro & {
   principal: Midia;
   baixo: Midia | null;
@@ -152,7 +163,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
     if (canais.length === 1) canais.push(new Float32Array(canais[0])); // sai sempre estéreo: o -14 LUFS foi medido assim
     const ab = new AudioBuffer({ length: canais[0].length, numberOfChannels: canais.length, sampleRate: taxa });
     canais.forEach((c, i) => ab.copyToChannel(c, i));
-    await fonteAudio.add(ab);
+    await fonteAudio.add(await em48k(ab));
   }
   progresso(0.97);
   await output.finalize();

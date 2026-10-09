@@ -8,12 +8,23 @@ Do mesmo jeito que a prensa de tipos móveis tirou a impressão das mãos de pou
 
 ## Como usar
 
+**Para usar, abra https://arthruur-prensa.static.hf.space** no celular ou no PC. É a versão publicada, com HTTPS de verdade. Para publicar uma versão nova (precisa de login no Hugging Face com permissão de escrita):
+
+```bash
+pip install huggingface_hub && hf auth login
+python ferramentas/publicar_space.py            # build + Space arthruur/prensa
+```
+
+Para desenvolver:
+
 ```bash
 cd app
 npm install
-npm run dev        # http://localhost:5173, e no celular http://<ip-do-pc>:5173 na mesma rede
+npm run dev        # https://localhost:5173, e no celular https://<ip-do-pc>:5173 na mesma rede
 npm run build      # gera app/dist/, que pode ser hospedado em qualquer lugar estático
 ```
+
+**Use sempre o endereço com `https://`.** Fora do `localhost`, o navegador só libera em conexão segura o que a Prensa usa para ler e gravar vídeo (WebCodecs), as threads do Whisper e o modo offline. Num endereço `http://` comum, todo vídeo parece "ilegível". O servidor de desenvolvimento já sobe em HTTPS, com um certificado gerado na hora. Na 1ª vez, o celular (e o navegador do PC) avisa que o certificado não é confiável: toque em "Avançado" → "Continuar". Se a página for aberta sem HTTPS, ou num navegador sem WebCodecs, a Prensa explica o que fazer logo na tela inicial.
 
 No celular, abra o endereço e use **"Adicionar à tela inicial"**: a Prensa vira um app. No Android, depois de instalada, ela aparece no menu **Compartilhar** da galeria e recebe o vídeo direto.
 

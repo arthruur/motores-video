@@ -30,6 +30,12 @@
       </h1>
       <p class="lema">Seu vídeo vira reels.<br><em>No seu celular, em três toques.</em></p>
 
+      <div class="requisitos" id="requisitos" hidden role="alert">
+        <p class="sobretitulo">Antes de começar</p>
+        <h2 id="requisitos-titulo"></h2>
+        <p id="requisitos-texto"></p>
+        <a class="botao-prensa pequeno" id="requisitos-link" hidden></a>
+      </div>
       <label class="platina" id="soltar">
         <input type="file" accept="video/*,.mov,.mkv,.avi,.3gp" id="arquivo" hidden>
         <span class="botao-prensa">Escolher vídeo</span>
@@ -67,9 +73,16 @@
       </div>
     </section>
 
-    <section class="manifesto" aria-labelledby="manifesto-titulo">
+    <section class="chamada-historia">
+      <p class="ano-grande">1450</p>
+      <p>Uma máquina mudou quem podia falar com muita gente. <button type="button" class="link" id="abrir-historia-2">Ler a história →</button></p>
+    </section>
+    <details class="manifesto">
+      <summary>
       <p class="sobretitulo">Software livre, feito em comunidade</p>
-      <h2 id="manifesto-titulo">Ferramenta que faz a informação circular não pode ter dono.</h2>
+      <h2>Ferramenta que faz a informação circular não pode ter dono.</h2>
+      <span class="abrir-manifesto">Ler o manifesto</span>
+      </summary>
       <p class="manifesto-abre">Quase todas as ferramentas que hoje decidem o que circula são fechadas, pagas e em dólar. Elas cobram pela legenda, carimbam a logo delas no seu vídeo e guardam o que você faz. A Prensa é o contrário: <strong>de graça, aberta e sua.</strong> Ela existe porque uma comunidade decidiu que a prensa de bolso também é de todo mundo.</p>
       <ol class="liberdades">
         <li><b>0</b><h3>Usar</h3><p>Para qualquer fim, sem assinatura, sem conta, sem marca d’água. Num celular comum.</p></li>
@@ -79,12 +92,8 @@
       </ol>
       <p class="ombros">De pé sobre ombros livres: <span>Whisper</span> <span>FFmpeg</span> <span>mediabunny</span> <span>transformers.js</span> <span>RNNoise</span> <span>Audio FXtor</span> <span>Wikimedia Commons</span> <span>motores-video</span></p>
       <div class="linha"><a class="botao-contorno" href="https://github.com/arthruur/motores-video/issues">Construa junto: ver as issues</a> <a class="botao-contorno" href="https://github.com/arthruur/motores-video">Ler o código</a></div>
-    </section>
+    </details>
 
-    <section class="chamada-historia">
-      <p class="ano-grande">1450</p>
-      <p>Uma máquina mudou quem podia falar com muita gente. <button type="button" class="link" id="abrir-historia-2">Ler a história →</button></p>
-    </section>
   </main>
 
   <!-- ===================================================== 2. mesa de composição -->

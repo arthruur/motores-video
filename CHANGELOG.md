@@ -4,6 +4,37 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: funcionar no celular de verdade
+
+- **Publicada em https://arthruur-prensa.static.hf.space** (Space estático do Hugging Face):
+  - HTTPS válido, sem aviso de certificado, em qualquer celular, no Wi-Fi ou no 4G;
+  - cabeçalhos COOP/COEP via `custom_headers`, para o Whisper rodar com threads.
+  - `ferramentas/publicar_space.py` gera o build, deixa os vídeos do acervo de fora (o app os busca no dataset) e publica.
+  - Testado no endereço público, com navegador zerado, incluindo o download do modelo de legenda: vídeo de celular com rotação e 3GP prontos (legenda em 21 a 24 s, Prensar em 11 a 18 s).
+- **Correção: no celular, a mesa de composição renderizava com 1044 px de largura.** A faixa de receitas com rolagem lateral esticava a coluna da grade até a largura de todos os cartões juntos. O navegador então reduzia a página inteira, e os toques erravam o alvo. As colunas agora usam `minmax(0, 1fr)`.
+- **"Abrir com https" quebrava**: o botão só trocava `http` por `https` no mesmo endereço. Agora aponta para o endereço oficial publicado.
+- No celular, o vídeo da tela de resultado fica menor, para os arquivos aparecerem logo abaixo.
+
+- **Correção do erro que impedia usar a Prensa pelo celular.**
+  - As instruções mandavam abrir `http://<ip-do-pc>:5173`, um endereço sem conexão segura.
+  - Num endereço assim, o navegador desliga o WebCodecs, as threads e o service worker. Todo vídeo, até um MP4 comum, parecia ilegível, ia para o conversor e terminava em "Não consegui converter esse vídeo".
+  - O servidor de desenvolvimento e o `preview` agora sobem em **HTTPS** (`@vitejs/plugin-basic-ssl`, certificado gerado na hora).
+  - Se a página for aberta sem HTTPS, ou num navegador sem WebCodecs, a tela inicial explica o que fazer, com o link certo, em vez de deixar escolher o vídeo e falhar depois.
+- **Correção:** vídeo com som em 8 kHz (3GP, gravações antigas) quebrava o codificador AAC. O som agora sempre sai em 48 kHz, e o conversor também entrega 48 kHz.
+- **Testado em HTTPS, com o fluxo completo** (abrir → legenda → Prensar → MP4 H.264 1080×1920 + AAC 48 kHz). Tempos de abrir, legenda pronta e Prensar:
+
+  | Vídeo | Abrir | Legenda | Prensar |
+  |---|---|---|---|
+  | Vertical com rotação de celular (metadado de −90°) | 0,2 s | 23,6 s | 14,8 s |
+  | HEVC de iPhone | 0,2 s | 22,1 s | 14,7 s |
+  | Sem som | 0,2 s | — | 6,9 s |
+  | 4K60 | 0,2 s | 18,4 s | 24,5 s |
+  | 3GP (convertido) | 2,7 s | 19,9 s | 8,8 s |
+  | Fala de 12 min | 0,2 s | 45,7 s | 40,9 s |
+
+  O mesmo fluxo passou pelo IP da rede (`https://192.168.x.x`), como o celular acessa.
+- **Manifesto do software livre:** agora fica depois de "Ler a história", recolhido.
+
 ### Prensa: identidade de prensa, conversor de formatos e acervo no Hugging Face
 
 - **Design refeito com identidade de prensa**:

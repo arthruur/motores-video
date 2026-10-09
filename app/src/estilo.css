@@ -140,6 +140,13 @@ button.primario { background: var(--tinta); color: var(--papel); border-color: v
 .platina::after { bottom: -9px; right: -9px; }
 .platina.sobre { border-color: var(--vermelho); background: color-mix(in srgb, var(--vermelho) 8%, var(--cartao)); }
 .miudo { color: var(--suave); font-size: 14px; }
+.requisitos {
+  width: min(560px, 100%); text-align: left; margin-bottom: 18px; padding: 20px 22px; border-radius: 18px;
+  background: var(--cartao); border: 2px solid var(--vermelho); box-shadow: var(--sombra);
+}
+.requisitos h2 { font: 400 28px/1.15 var(--serifa); margin: 0 0 10px; }
+.requisitos p { margin: 0 0 14px; color: var(--tinta-2); }
+.botao-prensa.pequeno { font-size: 22px; padding: 12px 22px 10px; text-decoration: none; }
 .convertendo { width: min(520px, 100%); margin-top: 18px; text-align: left; }
 .convertendo p { margin: 0 0 8px; font-weight: 600; }
 .trilho { height: 10px; border-radius: 99px; background: var(--papel-2); overflow: hidden; }
@@ -194,7 +201,14 @@ button.primario { background: var(--tinta); color: var(--papel); border-color: v
 @media (max-width: 480px) { .vitrine { --leque: 60px; } .folhas-demo li { width: 58px; font-size: 14px; } }
 .vitrine .celular { transition: transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1); }
 
-.manifesto { padding: 44px 0 40px; border-top: 1.5px solid var(--linha); }
+.manifesto { padding: 30px 0 20px; border-top: 1.5px solid var(--linha); margin-top: 26px; }
+.manifesto summary { list-style: none; cursor: pointer; }
+.manifesto summary::-webkit-details-marker { display: none; }
+.manifesto summary h2 { font-size: clamp(24px, 4.4vw, 34px) !important; margin-bottom: 10px !important; }
+.abrir-manifesto { display: inline-block; font-weight: 700; color: var(--vermelho); text-decoration: underline; text-underline-offset: 4px; }
+.abrir-manifesto::after { content: " ↓"; }
+.manifesto[open] .abrir-manifesto { display: none; }
+.manifesto[open] summary { margin-bottom: 8px; }
 .manifesto h2 { font: 400 clamp(32px, 6.6vw, 56px)/1.04 var(--serifa); margin: 0 0 18px; max-width: 16em; letter-spacing: -0.5px; }
 .manifesto-abre { font: 400 clamp(18px, 2.4vw, 21px)/1.55 var(--serifa); max-width: 40em; margin: 0 0 28px; color: var(--tinta-2); }
 .manifesto-abre strong { color: var(--tinta); }
@@ -215,8 +229,11 @@ a.botao-contorno:hover { background: var(--tinta); color: var(--papel); }
 .ano-grande { font: clamp(64px, 16vw, 140px)/0.85 var(--exibicao) !important; color: var(--vermelho); letter-spacing: -1px; }
 
 /* ===================================================== 2. mesa */
-.mesa { display: grid; gap: 22px; padding-top: 8px; padding-bottom: 32px; }
-@media (min-width: 900px) { .mesa { grid-template-columns: 340px 1fr; align-items: start; } .previa { position: sticky; top: 14px; } }
+.mesa { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; padding-top: 8px; padding-bottom: 32px; }
+/* item de grid não encolhe abaixo do conteúdo por padrão: a faixa de receitas com rolagem lateral
+   esticava a coluna (e a página inteira) até a largura de todos os cartões juntos */
+.mesa > *, .painel > *, .pronta > * { min-width: 0; }
+@media (min-width: 900px) { .mesa { grid-template-columns: 340px minmax(0, 1fr); align-items: start; } .previa { position: sticky; top: 14px; } }
 .previa { display: grid; justify-items: center; gap: 10px; }
 @media (max-width: 899px) { .previa .celular.grande { max-width: 210px; } }
 .play {
@@ -231,7 +248,7 @@ a.botao-contorno:hover { background: var(--tinta); color: var(--papel); }
 .zona text { fill: #fff; font: 44px var(--exibicao); text-anchor: middle; text-transform: uppercase; }
 .previa-acoes { display: flex; gap: 8px; }
 
-.painel { display: grid; gap: 4px; }
+.painel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
 .faixa-conversao {
   margin-bottom: 14px; padding: 14px 16px; border-radius: 14px;
   background: color-mix(in srgb, var(--vermelho) 9%, var(--cartao)); border: 1.5px solid color-mix(in srgb, var(--vermelho) 35%, transparent);
@@ -321,9 +338,10 @@ a.botao-contorno:hover { background: var(--tinta); color: var(--papel); }
 .erro { color: var(--erro); font-weight: 600; }
 
 /* ===================================================== 3. pronta */
-.pronta { display: grid; gap: 28px; padding-top: 10px; padding-bottom: 32px; }
-@media (min-width: 860px) { .pronta { grid-template-columns: 340px 1fr; align-items: start; } }
+.pronta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 10px; padding-bottom: 32px; }
+@media (min-width: 860px) { .pronta { grid-template-columns: 340px minmax(0, 1fr); align-items: start; } }
 .pronta > .celular { justify-self: center; }
+@media (max-width: 859px) { .pronta > .celular { max-width: 220px; } }
 .pronta h2 { font: 400 clamp(36px, 8vw, 56px)/1 var(--serifa); margin: 0 0 18px; }
 .arquivos { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 10px; }
 .arquivos li {

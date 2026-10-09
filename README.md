@@ -4,7 +4,7 @@ Motores locais e grátis para fazer vídeo vertical (Reels, TikTok, Shorts) com 
 São quatro motores: três peças independentes, **render** (cena HTML → MP4), **voz** (texto → narração com o tempo de cada palavra) e **legenda** (palavras → legenda queimada + .srt/.vtt), e a **colagem**, que monta fragmentos de falas reais por tema, cortados entre frases e com a fonte de cada um na tela, em cima da voz e da legenda.
 Código e documentação em português do Brasil. Licença Apache-2.0.
 
-**Novo: [Prensa](app), o app para quem não programa.** Escolha um vídeo no celular, marque o trecho, escolha o formato e aperte Prensar: saem reels prontos para TikTok, Reels, Shorts, Kwai e status do WhatsApp, com legenda palavra a palavra, gancho e fonte na tela. Roda inteira no aparelho, no navegador, sem enviar nada para servidor.
+**Novo: [Prensa](app), o app para quem não programa. Use em https://arthruur-prensa.static.hf.space.** Escolha um vídeo no celular, marque o trecho, escolha o formato e aperte Prensar: saem reels prontos para TikTok, Reels, Shorts, Kwai e status do WhatsApp, com legenda palavra a palavra, gancho e fonte na tela. Roda inteira no aparelho, no navegador, sem enviar nada para servidor.
 
 > **In English:** local, free engines for vertical video on a CPU-only PC: an HTML-scene renderer (parallel headless Chrome → ffmpeg), a voice engine with swappable TTS providers and per-word timing, a caption engine (burned-in ASS via libass + SRT/VTT), and a collage engine that finds fragments of real speeches by topic (Whisper + EmbeddingGemma 2), cuts them between sentences and assembles a credited 9:16 reel.
 > A 33 s narrated, captioned explainer goes from script to final MP4 in 40–50 s on a Ryzen 7 laptop without a dedicated GPU.
