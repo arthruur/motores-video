@@ -378,5 +378,127 @@
     "https://commons.wikimedia.org/wiki/File:2011-08-05_21-45-00-timelapse-clouds-seloncourt.ogv",
     "https://commons.wikimedia.org/wiki/File:CDC-_Tips_From_Former_Smokers_-_Brian%27s_Stroke_and_Slow_Recovery.webm",
     "https://commons.wikimedia.org/wiki/File:DR1B_cab_ride.webm"
+  ],
+  "musicas": [
+    {
+      "id": "the-return-of-the-king-5f49e4",
+      "arquivo": "the-return-of-the-king-5f49e4.m4a",
+      "titulo": "The return of the king",
+      "credito": "The return of the king — zero-project (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1901345",
+      "fonte_id": "5f49e44a-f2bb-478c-8405-d2135485873e",
+      "clima": "épica · para virada",
+      "revisado": true
+    },
+    {
+      "id": "upbeat-corporate-3b4580",
+      "arquivo": "upbeat-corporate-3b4580.m4a",
+      "titulo": "Upbeat Corporate",
+      "credito": "Upbeat Corporate — Soundrider/Dope (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1670486",
+      "fonte_id": "3b4580e1-1454-4b4c-a03a-e03bf4af0849",
+      "clima": "animada · para listas",
+      "revisado": true
+    },
+    {
+      "id": "upbeat-lounge-background-fb1328",
+      "arquivo": "upbeat-lounge-background-fb1328.m4a",
+      "titulo": "Upbeat Lounge Background",
+      "credito": "Upbeat Lounge Background — Soundrider/Dope (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1670563",
+      "fonte_id": "fb1328d9-b765-46bd-9895-da3dfd8c0d5b",
+      "clima": "animada · para listas",
+      "revisado": true
+    },
+    {
+      "id": "electronique-beat-hip-hop-d71fa1",
+      "arquivo": "electronique-beat-hip-hop-d71fa1.m4a",
+      "titulo": "electronique beat hip hop",
+      "credito": "electronique beat hip hop — dj beck (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/290808",
+      "fonte_id": "d71fa1cd-d9f8-4e3f-aafe-8eec666c177b",
+      "clima": "batida · para opinião",
+      "revisado": true
+    },
+    {
+      "id": "groove-avec-yollon-pie-funk-f525e0",
+      "arquivo": "groove-avec-yollon-pie-funk-f525e0.m4a",
+      "titulo": "Groove avec yollon pie funK",
+      "credito": "Groove avec yollon pie funK — GASNOPROD (CC BY 2.0, jamendo)",
+      "licenca": "CC BY 2.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/2.0/fr/",
+      "fonte": "https://www.jamendo.com/track/178308",
+      "fonte_id": "f525e0a2-65bd-4972-955a-961e7da087ec",
+      "clima": "batida · para opinião",
+      "revisado": true
+    },
+    {
+      "id": "apocalypse-1a7675",
+      "arquivo": "apocalypse-1a7675.m4a",
+      "titulo": "Apocalypse",
+      "credito": "Apocalypse — Hyperreal (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1076987",
+      "fonte_id": "1a767512-5d64-4486-b6a4-5e052b4f48f5",
+      "clima": "épica · para virada",
+      "revisado": true
+    },
+    {
+      "id": "emotional-piano-instrumental-8b18b3",
+      "arquivo": "emotional-piano-instrumental-8b18b3.m4a",
+      "titulo": "Emotional - Piano Instrumental",
+      "credito": "Emotional - Piano Instrumental — E. Erkut (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1320221",
+      "fonte_id": "8b18b336-5aa4-471d-9ad7-51683f13ff7d",
+      "clima": "emoção · para história",
+      "revisado": true
+    },
+    {
+      "id": "disabled-emotions-suite-part-1-249c06",
+      "arquivo": "disabled-emotions-suite-part-1-249c06.m4a",
+      "titulo": "Disabled emotions suite - Part 1",
+      "credito": "Disabled emotions suite - Part 1 — zero-project (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/202926",
+      "fonte_id": "249c0616-3749-42d5-a9b0-e511777562c7",
+      "clima": "emoção · para história",
+      "revisado": true
+    },
+    {
+      "id": "the-dance-of-the-electrons-d6cf79",
+      "arquivo": "the-dance-of-the-electrons-d6cf79.m4a",
+      "titulo": "The Dance Of The Electrons",
+      "credito": "The Dance Of The Electrons — SBUT (CC BY 2.0, jamendo)",
+      "licenca": "CC BY 2.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/2.0/de/",
+      "fonte": "https://www.jamendo.com/track/499186",
+      "fonte_id": "d6cf7913-793d-4a5f-8944-6a301e153a5e",
+      "clima": "eletrônica · para ritmo",
+      "revisado": true
+    },
+    {
+      "id": "ultraviolet-trance-dance-electronic-7c97f8",
+      "arquivo": "ultraviolet-trance-dance-electronic-7c97f8.m4a",
+      "titulo": "Ultraviolet - Trance Dance Electronic",
+      "credito": "Ultraviolet - Trance Dance Electronic — Eddy J (CC BY 3.0, jamendo)",
+      "licenca": "CC BY 3.0",
+      "licenca_url": "https://creativecommons.org/licenses/by/3.0/",
+      "fonte": "https://www.jamendo.com/track/1208876",
+      "fonte_id": "7c97f89c-0481-4be7-ae43-f9005fd5ae8a",
+      "clima": "eletrônica · para ritmo",
+      "revisado": true
+    }
   ]
 }

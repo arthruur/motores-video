@@ -150,6 +150,11 @@ button.primario { background: var(--tinta); color: var(--papel); border-color: v
 .requisitos h2 { font: 400 28px/1.15 var(--serifa); margin: 0 0 10px; }
 .requisitos p { margin: 0 0 14px; color: var(--tinta-2); }
 .botao-prensa.pequeno { font-size: 22px; padding: 12px 22px 10px; text-decoration: none; }
+.colar-link { width: min(520px, 100%); margin-top: 16px; display: grid; gap: 8px; }
+.colar-link .ou { color: var(--suave); font-size: 14px; }
+.linha-link { display: flex; gap: 8px; }
+.linha-link input { flex: 1; min-width: 0; font: 16px var(--ui); padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--linha); background: var(--cartao); color: var(--tinta); }
+.linha-link button { min-height: 48px; padding: 10px 18px; border-radius: 12px; border: 0; background: var(--tinta); color: var(--papel); font-weight: 800; }
 .convertendo { width: min(520px, 100%); margin-top: 18px; text-align: left; }
 .convertendo p { margin: 0 0 8px; font-weight: 600; }
 .trilho { height: 10px; border-radius: 99px; background: var(--papel-2); overflow: hidden; }

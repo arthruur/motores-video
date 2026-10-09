@@ -53,11 +53,27 @@ Software livre (Apache-2.0): use, estude, mude e compartilhe. Código em
 """
 
 
+def publicar_baixador(space: str) -> None:
+    """o serviço que deixa a Prensa aceitar links: um Space Docker com o yt-dlp (servidor/baixador)"""
+    from huggingface_hub import HfApi
+    api = HfApi()
+    api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+    api.upload_folder(folder_path=str(RAIZ / "servidor" / "baixador"), repo_id=space, repo_type="space",
+                      commit_message="Prensa: baixador de links", ignore_patterns=["__pycache__/*"])
+    dono, nome = space.split("/", 1)
+    print(f"pronto: https://huggingface.co/spaces/{space} (o build leva alguns minutos)")
+    print(f"endereço do serviço: https://{dono}-{nome}.hf.space".lower())
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--space", default="arthruur/prensa", help="USUARIO/NOME do Space")
     ap.add_argument("--sem-build", action="store_true", help="usa o app/dist já existente")
+    ap.add_argument("--baixador", metavar="USUARIO/NOME", help="publica o baixador de links (Space Docker) em vez do app")
     a = ap.parse_args()
+    if a.baixador:
+        publicar_baixador(a.baixador)
+        return
     try:
         from huggingface_hub import HfApi
     except ImportError:
@@ -75,7 +91,7 @@ def main() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         pasta = Path(tmp) / "space"
         # vídeos do acervo e a folha de revisão ficam de fora: o app busca os clipes no dataset
-        shutil.copytree(dist, pasta, ignore=shutil.ignore_patterns("*.mp4", "folha.png"))
+        shutil.copytree(dist, pasta, ignore=shutil.ignore_patterns("*.mp4", "*.m4a", "folha.png"))
         (pasta / "README.md").write_text(CARTAO.replace("{direto}", direto), "utf-8")
         tamanho = sum(f.stat().st_size for f in pasta.rglob("*") if f.is_file()) / 1e6
         print(f"subindo {tamanho:.1f} MB para o Space {a.space}…")

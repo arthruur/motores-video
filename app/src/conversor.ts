@@ -60,5 +60,8 @@ export async function converter(arquivo: File, aviso: Aviso): Promise<File> {
     await ff.unmount(pasta).catch(() => {});
     await ff.deleteDir(pasta).catch(() => {});
     await ff.deleteFile('saida.mp4').catch(() => {});
+    // o ffmpeg.wasm ocupa centenas de MB: solta depois de cada conversão (o download fica no cache do navegador)
+    ff.terminate();
+    carregado = null;
   }
 }

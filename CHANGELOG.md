@@ -4,6 +4,25 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: link direto, música do acervo, efeitos e mais impacto
+
+- **Colar um link** (X, Instagram, TikTok, YouTube, Kwai…) na página inicial ou compartilhar o link para a Prensa (Android). Um serviço pequeno, `servidor/baixador` (FastAPI + yt-dlp), traz o vídeo em MP4 e não guarda nada. A fonte já vem preenchida ("@perfil · X"), e o texto do post ganha "Original: link". O campo só aparece quando o app é construído com `VITE_BAIXADOR_URL`.
+- **Música do acervo:**
+  - faixas instrumentais CC0/CC BY do Jamendo, encontradas pelo Openverse e coletadas por `ferramentas/acervo/coletar_audio.py`;
+  - cada faixa tem ~75 s, sai nivelada em −14 LUFS e tem um clima ("animada · para listas", "tensão · para revelar"…);
+  - o crédito entra sozinho no texto do post;
+  - as faixas ficam no dataset, em `audio/` (chave `musicas` do `acervo.json`).
+- **Música mais alta:** a régua vai de −20 a +4 dB em relação à fala, com padrão −4 dB. A música ainda abaixa 8 dB quando alguém fala.
+- **Efeito na entrada do gancho:** Whoosh (padrão), Impacto ou Pop, gerados no aparelho, tocando junto com o carimbo do gancho.
+- **Câmera viva:** zoom lento contínuo e um "soco" de zoom quando o gancho entra.
+- **Só o acervo revisado** aparece no app.
+- **Menos memória no celular** (a página recarregava sozinha no iPhone):
+  - o som AAC é extraído só do trecho, não do arquivo inteiro;
+  - os quadros da galeria viram imagem e o vídeo é solto;
+  - o conversor é encerrado depois do uso;
+  - os vídeos prontos vão para o disco do navegador (OPFS);
+  - a transcrição usa no máximo 4 threads.
+
 ### Prensa: passo a passo guiado, produção em escala e legenda editável
 
 - **A mesa virou um passo a passo:**

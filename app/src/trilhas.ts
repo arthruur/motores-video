@@ -104,3 +104,56 @@ export async function gerarTrilha(id: string, taxa = 48000): Promise<AudioBuffer
   }
   return ctx.startRendering();
 }
+
+// ---------------------------------------------------------------- efeitos sonoros, também gerados na hora
+export type Efeito = { id: string; nome: string };
+export const EFEITOS: Efeito[] = [
+  { id: 'whoosh', nome: 'Whoosh' },
+  { id: 'impacto', nome: 'Impacto' },
+  { id: 'pop', nome: 'Pop' },
+];
+
+/** um efeito curto (até ~1 s), em estéreo */
+export async function gerarEfeito(id: string, taxa = 48000): Promise<AudioBuffer> {
+  const dur = id === 'pop' ? 0.25 : id === 'impacto' ? 1.2 : 0.9;
+  const ctx = new OfflineAudioContext(2, Math.ceil(dur * taxa), taxa);
+  if (id === 'whoosh') {
+    // ruído passando por um filtro que sobe e desce: o "vento" que acompanha o gancho entrando
+    const s = ctx.createBufferSource();
+    s.buffer = ruido(ctx, dur);
+    const f = ctx.createBiquadFilter();
+    f.type = 'bandpass';
+    f.Q.value = 1.2;
+    f.frequency.setValueAtTime(250, 0);
+    f.frequency.exponentialRampToValueAtTime(5000, dur * 0.55);
+    f.frequency.exponentialRampToValueAtTime(900, dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.001, 0);
+    g.gain.exponentialRampToValueAtTime(1.6, dur * 0.5);
+    g.gain.exponentialRampToValueAtTime(0.001, dur);
+    s.connect(f).connect(g).connect(ctx.destination);
+    s.start();
+  } else if (id === 'impacto') {
+    // grave que cai + estalo: a prensa batendo
+    bumbo(ctx, ctx.destination, 0, 1.2);
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.frequency.setValueAtTime(90, 0);
+    o.frequency.exponentialRampToValueAtTime(32, 1.0);
+    g.gain.setValueAtTime(0.9, 0);
+    g.gain.exponentialRampToValueAtTime(0.001, 1.15);
+    o.connect(g).connect(ctx.destination);
+    o.start(0); o.stop(1.2);
+    chiado(ctx, ctx.destination, ruido(ctx, 0.3), 0, 0.12, 0.6, 2500);
+  } else {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.frequency.setValueAtTime(900, 0);
+    o.frequency.exponentialRampToValueAtTime(420, 0.12);
+    g.gain.setValueAtTime(0.9, 0);
+    g.gain.exponentialRampToValueAtTime(0.001, 0.2);
+    o.connect(g).connect(ctx.destination);
+    o.start(0); o.stop(0.22);
+  }
+  return ctx.startRendering();
+}

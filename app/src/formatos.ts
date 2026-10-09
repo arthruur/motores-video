@@ -263,11 +263,30 @@ function rotulo(ctx: CanvasRenderingContext2D, texto: string, x: number, y: numb
 }
 
 /** desenha o quadro do instante t (segundos desde o início do trecho) */
+/** câmera viva: um zoom lento e contínuo (até 6% em 12 s) e um "soco" de zoom quando o gancho carimba */
+function zoomCamera(t: number, temGancho: boolean): number {
+  const lento = 0.06 * Math.min(1, t / 12);
+  const soco = temGancho ? 0.07 * Math.max(0, 1 - t / 0.35) ** 2 : 0;
+  return 1 + lento + soco;
+}
+
+/** desenha a fonte com o zoom da câmera, recortado à caixa dela */
+function comZoom(ctx: CanvasRenderingContext2D, z: number, x: number, y: number, w: number, h: number, desenho: () => void) {
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.translate(x + w / 2, y + h * 0.42);
+  ctx.scale(z, z);
+  ctx.translate(-(x + w / 2), -(y + h * 0.42));
+  desenho();
+  ctx.restore();
+}
+
 export function desenharQuadro(ctx: CanvasRenderingContext2D, q: Quadro, t: number, principal: Fonte | null, baixo: Fonte | null) {
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, L, A);
+  const z = zoomCamera(t, q.gancho.estilo !== 'nenhum' && !!q.gancho.texto.trim());
   if (q.layout === 'dividida') {
-    if (principal) cobrir(ctx, principal, 0, 0, L, CORTE);
+    if (principal) comZoom(ctx, z, 0, 0, L, CORTE, () => cobrir(ctx, principal, 0, 0, L, CORTE));
     const g = q.gerador ? GERADORES.find((g) => g.id === q.gerador) : null;
     if (g) g.desenhar(ctx, t, 0, CORTE, L, A - CORTE);
     else if (baixo) cobrir(ctx, baixo, 0, CORTE, L, A - CORTE);
@@ -278,8 +297,8 @@ export function desenharQuadro(ctx: CanvasRenderingContext2D, q: Quadro, t: numb
     if (principal.w / principal.h > 0.7) { // deitado ou quadrado: fundo desfocado + vídeo inteiro
       fundoDesfocado(ctx, principal);
       const h = (L * principal.h) / principal.w;
-      ctx.drawImage(principal.img, 0, A * 0.45 - h / 2, L, h);
-    } else cobrir(ctx, principal, 0, 0, L, A);
+      comZoom(ctx, z, 0, A * 0.45 - h / 2, L, h, () => ctx.drawImage(principal.img, 0, A * 0.45 - h / 2, L, h));
+    } else comZoom(ctx, z, 0, 0, L, A, () => cobrir(ctx, principal, 0, 0, L, A));
   }
   const y = desenharGancho(ctx, q.gancho, t);
   rotulo(ctx, q.fonte ? `Fonte: ${q.fonte}` : '', MARGEM, y + 14);

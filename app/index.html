@@ -41,6 +41,13 @@
         <span class="botao-prensa">Escolher vídeo</span>
         <span class="miudo">um ou vários de uma vez · nada sai do seu aparelho</span>
       </label>
+      <form class="colar-link" id="colar-link" novalidate>
+        <span class="ou">ou cole um link</span>
+        <div class="linha-link">
+          <input type="url" id="link" inputmode="url" placeholder="x.com/…, instagram.com/…, tiktok.com/…, youtube.com/…" autocomplete="off" aria-label="Link do vídeo">
+          <button type="submit">Buscar</button>
+        </div>
+      </form>
       <div class="convertendo" id="convertendo" hidden role="status">
         <p id="convertendo-texto"></p>
         <div class="trilho"><span id="convertendo-barra"></span></div>
@@ -182,9 +189,11 @@
         <p class="rotulo">Música</p>
         <div class="musicas" id="musicas" role="radiogroup" aria-label="Música"></div>
         <input type="file" accept="audio/*,video/*" id="arquivo-musica" hidden>
+        <p class="rotulo">Efeito na entrada do gancho</p>
+        <div class="fichas" id="efeitos" role="radiogroup" aria-label="Efeito na entrada do gancho"></div>
         <div class="som-musica" id="som-musica" hidden>
           <label class="regua">Volume da música <output id="volume-musica-valor">média</output>
-            <input type="range" id="volume-musica" min="0" max="100" step="5" value="55">
+            <input type="range" id="volume-musica" min="0" max="100" step="5" value="65">
           </label>
           <div class="chaves">
             <label class="chave"><input type="checkbox" id="abaixar" checked><span>Abaixar quando alguém fala</span></label>

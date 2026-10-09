@@ -1,4 +1,5 @@
-import { type ClipeAcervo, baixarClipe, carregarManifesto, urlDoClipe } from './acervo';
+import { type ClipeAcervo, type MusicaAcervo, baixarClipe, baixarMusica, carregarManifesto, carregarMusicas, urlDoClipe } from './acervo';
+import { BAIXADOR, baixarLink } from './baixador';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
 import { type Passo, criarDemo } from './demo';
@@ -8,7 +9,7 @@ import { PLATAFORMAS } from './plataformas';
 import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audioParaFala, exportar, prensar, temSom } from './prensa';
 import { RECEITAS, type Receita, ganchosDaFala } from './receitas';
 import { GERADORES } from './retencao';
-import { TRILHAS, gerarTrilha } from './trilhas';
+import { EFEITOS, TRILHAS, gerarEfeito, gerarTrilha } from './trilhas';
 import { transcrever } from './transcrever';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -38,8 +39,9 @@ const estado = {
   urls: [] as string[],
   cancelar: null as AbortController | null,
   convertendo: null as { texto: string; fracao?: number; vez: number } | null, // conversor em segundo plano
+  origem: '',                                  // link original, quando o vídeo veio de um link
   som: {
-    volumeFala: 1, musica: 'nenhuma', volumeMusica: 55, abaixar: true, suave: true,
+    volumeFala: 1, musica: 'nenhuma', volumeMusica: 65, abaixar: true, suave: true, efeito: 'whoosh',
     arquivoMusica: null as File | null, buffers: new Map<string, Promise<AudioBuffer>>(),
   },
 };
@@ -188,9 +190,40 @@ function verificarRequisitos(): boolean {
   return false;
 }
 
+// ---------------------------------------------------------------- link: o baixador traz o vídeo, a fonte já vem preenchida
+const formLink = $<HTMLFormElement>('colar-link');
+formLink.hidden = !BAIXADOR;
+const REDES: Record<string, string> = { Twitter: 'X', Instagram: 'Instagram', TikTok: 'TikTok', Youtube: 'YouTube', Kwai: 'Kwai', Facebook: 'Facebook' };
+async function buscarLink(url: string) {
+  if (!verificarRequisitos()) return;
+  const botao = formLink.querySelector('button')!;
+  botao.disabled = true;
+  try {
+    const b = await baixarLink(url, convertendo);
+    $('convertendo').hidden = true;
+    const rede = REDES[b.plataforma] ?? b.plataforma;
+    const arroba = ['X', 'Instagram', 'TikTok'].includes(rede) && b.autor ? `@${b.autor.replace(/^@/, '')}` : b.autor;
+    campoFonte.value = [arroba, rede].filter(Boolean).join(' · ');
+    estado.origem = b.origem;
+    estado.fila = [b.arquivo];
+    estado.filaIndice = 0;
+    await carregarPrincipal(b.arquivo);
+  } catch (e) {
+    convertendo(`Não deu: ${(e as Error).message}`, 0);
+  } finally {
+    botao.disabled = false;
+  }
+}
+formLink.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const url = $<HTMLInputElement>('link').value.trim();
+  if (url) buscarLink(/^https?:\/\//.test(url) ? url : `https://${url}`);
+});
+
 function receberArquivos(lista: FileList | File[]) {
   const videos = [...lista];
   if (!videos.length) return;
+  estado.origem = '';
   estado.fila = videos;
   estado.filaIndice = 0;
   carregarPrincipal(videos[0]);
@@ -467,8 +500,18 @@ const observarClipe = new IntersectionObserver((es) => es.forEach(async (e) => {
   if (!url) return;
   // o navegador só desenha o quadro se o tempo for pedido de verdade (o #t não basta em todo lugar)
   v.addEventListener('loadedmetadata', () => { v.currentTime = Math.min(1.5, (v.duration || 3) / 2); }, { once: true });
+  // com o quadro na mão, o <video> sai: dezenas de vídeos vivos estouravam a memória do celular
+  v.addEventListener('seeked', () => {
+    const c = document.createElement('canvas');
+    c.width = 135; c.height = 240;
+    const k = Math.max(135 / v.videoWidth, 240 / v.videoHeight);
+    c.getContext('2d')!.drawImage(v, (135 - v.videoWidth * k) / 2, (240 - v.videoHeight * k) / 2, v.videoWidth * k, v.videoHeight * k);
+    v.replaceWith(c);
+    v.removeAttribute('src');
+    v.load();
+  }, { once: true });
   if (url.startsWith('http')) v.crossOrigin = 'anonymous'; // a página é isolada (COEP): vídeo de outro domínio só em modo CORS
-  v.preload = 'auto';
+  v.preload = 'metadata';
   v.src = url;
 }), { rootMargin: '200px' });
 
@@ -558,18 +601,26 @@ async function usarBaixo(f: File, credito: string, chave: string) {
 videoBaixo.addEventListener('seeked', () => redesenhar());
 
 async function carregarAcervo() {
-  try { clipesAcervo = await carregarManifesto(); } catch { clipesAcervo = []; }
+  try { clipesAcervo = (await carregarManifesto()).filter((c) => c.revisado); } catch { clipesAcervo = []; }
   montarGaleria();
+  try { musicasAcervo = await carregarMusicas(); } catch { musicasAcervo = []; }
+  listarMusicas();
+  montarMusicas();
 }
 
 // ---------------------------------------------------------------- som: fala, música, ducking
-const MUSICAS = [
-  { id: 'nenhuma', nome: 'Sem música', clima: 'só o som do vídeo' },
-  ...TRILHAS.map((t) => ({ id: t.id, nome: t.nome, clima: t.clima })),
-  { id: 'arquivo', nome: 'Sua música', clima: 'do seu aparelho' },
-];
-// régua de 0 a 100 → -24 a 0 dB em relação à fala; 55 ≈ -11 dB
-const volumeMusicaDb = () => -24 + 24 * (estado.som.volumeMusica / 100);
+let musicasAcervo: MusicaAcervo[] = [];
+const MUSICAS: { id: string; nome: string; clima: string }[] = [];
+function listarMusicas() {
+  MUSICAS.splice(0, MUSICAS.length,
+    { id: 'nenhuma', nome: 'Sem música', clima: 'só o som do vídeo' },
+    ...musicasAcervo.map((m) => ({ id: `acervo:${m.id}`, nome: m.titulo, clima: m.clima ?? m.credito })),
+    ...TRILHAS.map((t) => ({ id: t.id, nome: t.nome, clima: `gerada · ${t.clima}` })),
+    { id: 'arquivo', nome: 'Sua música', clima: 'do seu aparelho' });
+}
+listarMusicas();
+// régua de 0 a 100 → -20 a +4 dB em relação à fala; 65 ≈ -4 dB (a música abaixa 8 dB quando alguém fala)
+const volumeMusicaDb = () => -20 + 24 * (estado.som.volumeMusica / 100);
 const dbLin = (db: number) => 10 ** (db / 20);
 
 function montarMusicas() {
@@ -617,8 +668,10 @@ function bufferDaMusica(): Promise<AudioBuffer> | null {
   if (s.musica === 'nenhuma' || (s.musica === 'arquivo' && !s.arquivoMusica)) return null;
   const chave = s.musica === 'arquivo' ? `arquivo:${s.arquivoMusica!.name}:${s.arquivoMusica!.size}` : s.musica;
   if (!s.buffers.has(chave)) {
-    const p = s.musica === 'arquivo'
-      ? s.arquivoMusica!.arrayBuffer().then((b) => new OfflineAudioContext(2, 48000, 48000).decodeAudioData(b))
+    const daAcervo = musicasAcervo.find((m) => `acervo:${m.id}` === s.musica);
+    const decodificar = (b: ArrayBuffer) => new OfflineAudioContext(2, 48000, 48000).decodeAudioData(b);
+    const p = s.musica === 'arquivo' ? s.arquivoMusica!.arrayBuffer().then(decodificar)
+      : daAcervo ? baixarMusica(daAcervo).then(decodificar)
       : gerarTrilha(s.musica, 48000);
     p.catch(() => s.buffers.delete(chave));
     s.buffers.set(chave, p);
@@ -635,6 +688,23 @@ reguaFala.addEventListener('input', () => {
 });
 const reguaMusica = $<HTMLInputElement>('volume-musica');
 reguaMusica.addEventListener('input', () => { estado.som.volumeMusica = Number(reguaMusica.value); sincMusicas(); atualizarGanhoMusica(); });
+// efeito na entrada do gancho: toca na hora em que é escolhido
+const efeitosProntos = new Map<string, Promise<AudioBuffer>>();
+const efeitoBuffer = (id: string) => { if (!efeitosProntos.has(id)) efeitosProntos.set(id, gerarEfeito(id, 48000)); return efeitosProntos.get(id)!; };
+fichas($('efeitos'), [{ id: 'nenhum', nome: 'Nenhum' }, ...EFEITOS], (id) => estado.som.efeito === id, async (id) => {
+  estado.som.efeito = id;
+  if (id === 'nenhum') return;
+  acordarAudio();
+  const b = await efeitoBuffer(id);
+  if (!ctxAudio) return;
+  const s = ctxAudio.createBufferSource();
+  const g = ctxAudio.createGain();
+  g.gain.value = 0.7;
+  s.buffer = b;
+  s.connect(g).connect(ctxAudio.destination);
+  s.start();
+});
+
 $<HTMLInputElement>('abaixar').addEventListener('change', (e) => { estado.som.abaixar = (e.target as HTMLInputElement).checked; });
 $<HTMLInputElement>('suave').addEventListener('change', (e) => { estado.som.suave = (e.target as HTMLInputElement).checked; });
 
@@ -886,7 +956,28 @@ function textoPost(): string {
   if (g && !g.includes('___')) linhas.push((prefixo[estado.receita.gancho] ?? '') + g);
   if (campoFonte.value.trim()) linhas.push(`Fonte: ${campoFonte.value.trim()}`);
   if (usaVideoDeBaixo() && campoCredito.value.trim()) linhas.push(`Vídeo de baixo: ${campoCredito.value.trim()}`);
+  if (estado.origem) linhas.push(`Original: ${estado.origem}`);
+  const musica = musicasAcervo.find((m) => `acervo:${m.id}` === estado.som.musica);
+  if (musica) linhas.push(`Música: ${musica.credito}`);
   return linhas.join('\n');
+}
+
+/** os vídeos prontos vão para o disco do navegador (OPFS), quando ele deixa: assim a bandeja não ocupa a memória */
+async function paraODisco(arquivos: Arquivo[]) {
+  try {
+    const pasta = await navigator.storage.getDirectory();
+    const feitos = new Map<Blob, Blob>();
+    for (const a of arquivos) {
+      if (!feitos.has(a.blob)) {
+        const h = await pasta.getFileHandle(`${Date.now()}-${a.nome}`, { create: true });
+        const w = await h.createWritable();
+        await w.write(a.blob);
+        await w.close();
+        feitos.set(a.blob, await h.getFile());
+      }
+      a.blob = feitos.get(a.blob)!;
+    }
+  } catch { /* sem OPFS gravável (iPhone antigo): fica na memória */ }
 }
 
 /** prensa o vídeo atual com as escolhas atuais e põe o resultado na bandeja */
@@ -915,6 +1006,9 @@ async function prensarAtual(): Promise<boolean> {
     const som: OpcoesDeSom = {
       limpar: campoSom.checked, volumeFala: estado.som.volumeFala, musica: pMusica ? await pMusica : null,
       volumeMusicaDb: volumeMusicaDb(), abaixar: estado.som.abaixar, suave: estado.som.suave,
+      // o efeito acompanha o carimbo do gancho (só quando há gancho)
+      efeitos: estado.som.efeito !== 'nenhum' && q.gancho.texto.trim() && q.gancho.estilo !== 'nenhum'
+        ? [{ buffer: await efeitoBuffer(estado.som.efeito), em: 0, db: -3 }] : [],
     };
     andamento('Prensando', 0);
     const mestre = await prensar({ ...q, principal: m, baixo: usaVideoDeBaixo() ? estado.baixo : null, ini: estado.ini, fim: estado.fim, som },
@@ -925,7 +1019,8 @@ async function prensarAtual(): Promise<boolean> {
       folhasDoPrelo(Math.floor(f * plats.length));
     });
     folhasDoPrelo(plats.length);
-    estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
+    await paraODisco(arquivos);
+    estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre: arquivos[0]?.blob ?? mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
     montarBandeja();
     return true;
   } catch (e) {
@@ -1091,6 +1186,10 @@ $('historia-comecar').addEventListener('click', () => {
 // ---------------------------------------------------------------- início
 (async () => {
   verificarRequisitos();
+  // vídeos prontos de sessões anteriores não são mais usados: libera o disco
+  navigator.storage?.getDirectory?.().then(async (pasta) => {
+    for await (const nome of (pasta as unknown as { keys(): AsyncIterable<string> }).keys()) await pasta.removeEntry(nome).catch(() => {});
+  }).catch(() => {});
   montarReceitas();
   montarMusicas();
   montarGaleria();
@@ -1101,6 +1200,13 @@ $('historia-comecar').addEventListener('click', () => {
   irPassoDemo(0);
   aplicarReceita(RECEITAS[0]);
   carregarAcervo();
+  // link recebido pelo menu Compartilhar (Android) ou pela URL
+  const linkRecebido = new URLSearchParams(location.search).get('link');
+  if (linkRecebido && BAIXADOR) {
+    history.replaceState(null, '', location.pathname);
+    $<HTMLInputElement>('link').value = linkRecebido;
+    buscarLink(linkRecebido);
+  }
   // vídeo recebido pelo menu Compartilhar (Android)
   if (new URLSearchParams(location.search).has('recebido') && 'caches' in window) {
     const c = await caches.open('prensa-recebido');

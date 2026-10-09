@@ -87,3 +87,11 @@ Os exemplos `karaoke-discurso` e `colagem-democracia` usam trechos de vídeos pu
 | Google Chrome / Microsoft Edge | Proprietário (com componentes de código aberto do Chromium, BSD-3-Clause) | O render usa o navegador instalado. Chromium puro também serve (`--chrome`) |
 | Node.js | MIT | |
 | Python | PSF License | |
+
+## Prensa: baixador de links e músicas do acervo
+
+| Componente | Licença | Onde | Observação |
+|---|---|---|---|
+| yt-dlp | Unlicense | `servidor/baixador` | Traz o vídeo de um link. Baixar não dá direito sobre o vídeo; a Prensa credita a fonte e o link original no post |
+| FastAPI / Uvicorn | MIT / BSD-3-Clause | `servidor/baixador` | Serviço HTTP do baixador |
+| Músicas do acervo (Jamendo, via Openverse) | CC0 ou CC BY (2.0–4.0, por faixa) | dataset `arthruur/prensa-acervo`, pasta `audio/` | Crédito, licença e link de cada faixa em `acervo.json` → `musicas`. O crédito entra no texto do post |

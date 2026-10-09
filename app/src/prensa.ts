@@ -17,7 +17,7 @@ export type Midia = {
   input: Input;
   video: InputVideoTrack;
   audio: InputAudioTrack | null;
-  somWeb: AudioBuffer | null; // som decodificado pelo Web Audio quando o WebCodecs não lê (AAC no iPhone, por exemplo)
+  somWeb: boolean; // o WebCodecs não lê o som (AAC no iPhone, por exemplo): ele é lido pelo Web Audio, trecho a trecho
   inicio: number; // primeiro timestamp do arquivo
   dur: number;
   w: number;
@@ -43,35 +43,73 @@ export async function abrir(arquivo: File): Promise<Midia> {
   const codigo = async (t: InputVideoTrack | InputAudioTrack, oque: string) => { const c = await t.getCodec(); return c ? `${oque} em ${c.toUpperCase()}` : `esse tipo de ${oque}`; };
   if (!(await video.canDecode())) throw new FormatoNaoLido(await codigo(video, 'vídeo'));
   let audio = await input.getPrimaryAudioTrack();
-  let somWeb: AudioBuffer | null = null;
+  const inicio = await input.getFirstTimestamp();
+  const dur = (await input.computeDuration()) - inicio;
+  const m: Midia = { arquivo, input, video, audio, somWeb: false, inicio, dur, w: video.displayWidth, h: video.displayHeight };
   if (audio && !(await audio.canDecode())) {
+    // o navegador do iPhone não decodifica AAC pelo WebCodecs, mas decodifica pelo Web Audio. Testa com 3 s
     const faixa = audio;
-    // o navegador do iPhone não decodifica AAC pelo WebCodecs, mas decodifica pelo Web Audio: usa esse caminho
+    m.audio = null;
+    m.somWeb = true;
     try {
-      somWeb = await new OfflineAudioContext(2, 1, 48000).decodeAudioData(await arquivo.arrayBuffer());
-      audio = null;
+      await somDoTrecho(m, 0, Math.min(3, dur));
     } catch {
       throw new FormatoNaoLido(await codigo(faixa, 'som'));
     }
   }
-  const inicio = await input.getFirstTimestamp();
-  const dur = (await input.computeDuration()) - inicio;
-  return { arquivo, input, video, audio, somWeb, inicio, dur, w: video.displayWidth, h: video.displayHeight };
+  return m;
 }
 
-/** áudio do trecho [ini, fim) como canais Float32 na taxa original */
+const sonsDoTrecho = new WeakMap<Midia, Map<string, Promise<AudioBuffer>>>();
+/** só o som do trecho, sem o vídeo e sem carregar o arquivo inteiro na memória: os pacotes de áudio viram um
+ *  .m4a pequeno (cópia, sem decodificar) e só ele passa pelo Web Audio */
+function somDoTrecho(m: Midia, ini: number, fim: number): Promise<AudioBuffer> {
+  let cache = sonsDoTrecho.get(m);
+  if (!cache) { cache = new Map(); sonsDoTrecho.set(m, cache); }
+  const chave = `${ini.toFixed(2)}|${fim.toFixed(2)}`;
+  if (!cache.has(chave)) {
+    const p = (async () => {
+      const extrair = async (trim?: { start: number; end: number }) => {
+        const output = new Output({ format: new Mp4OutputFormat({ fastStart: 'in-memory' }), target: new BufferTarget() });
+        const conv = await Conversion.init({
+          input: new Input({ source: new BlobSource(m.arquivo), formats: ALL_FORMATS }), output,
+          video: { discard: true }, ...(trim ? { trim } : {}),
+        });
+        await conv.execute();
+        return (output.target as BufferTarget).buffer!;
+      };
+      let dados: ArrayBuffer, desloca = 0;
+      try {
+        dados = await extrair({ start: m.inicio + Math.max(0, ini - 0.5), end: m.inicio + fim + 0.5 });
+        desloca = Math.max(0, ini - 0.5);
+      } catch {
+        dados = await extrair(); // sem corte: o som inteiro (ainda bem menor que o vídeo)
+      }
+      const b = await new OfflineAudioContext(2, 1, 48000).decodeAudioData(dados);
+      // devolve exatamente [ini, fim)
+      const taxa = b.sampleRate, n = Math.ceil((fim - ini) * taxa), de = Math.round((ini - desloca) * taxa);
+      const saida = new AudioBuffer({ length: Math.max(1, n), numberOfChannels: b.numberOfChannels, sampleRate: taxa });
+      for (let c = 0; c < b.numberOfChannels; c++) saida.copyToChannel(b.getChannelData(c).subarray(de, de + n), c);
+      return saida;
+    })();
+    p.catch(() => cache!.delete(chave));
+    cache.set(chave, p);
+  }
+  return cache.get(chave)!;
+}
+
 export const temSom = (m: Midia | null) => !!(m && (m.audio || m.somWeb));
 
 async function lerAudio(m: Midia, ini: number, fim: number): Promise<{ canais: Float32Array<ArrayBuffer>[]; taxa: number }> {
   if (!m.audio && m.somWeb) {
-    const b = m.somWeb, taxa = b.sampleRate;
-    const de = Math.floor(ini * taxa), ate = Math.min(b.length, Math.ceil(fim * taxa)), n = Math.ceil((fim - ini) * taxa);
+    const b = await somDoTrecho(m, ini, fim);
+    const n = Math.ceil((fim - ini) * b.sampleRate);
     const canais = Array.from({ length: Math.min(2, b.numberOfChannels) }, (_, c) => {
       const out = new Float32Array(new ArrayBuffer(n * 4));
-      out.set(b.getChannelData(c).subarray(de, Math.max(de, ate)));
+      out.set(b.getChannelData(c).subarray(0, n));
       return out;
     });
-    return { canais, taxa };
+    return { canais, taxa: b.sampleRate };
   }
   const taxa = await m.audio!.getSampleRate();
   const nc = Math.min(2, await m.audio!.getNumberOfChannels());
@@ -130,6 +168,7 @@ export type OpcoesDeSom = {
   volumeMusicaDb: number;     // em relação à fala
   abaixar: boolean;           // abaixa a música enquanto alguém fala
   suave: boolean;             // entrada e saída suaves
+  efeitos: { buffer: AudioBuffer; em: number; db: number }[]; // efeitos sonoros no tempo do trecho
 };
 
 export type Progresso = (fracao: number) => void;
@@ -155,7 +194,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   const fonteVideo = new CanvasSource(canvas, { codec: 'avc', bitrate: BITRATE, keyFrameInterval: 2 });
   output.addVideoTrack(fonteVideo, { frameRate: FPS });
   let fonteAudio: AudioBufferSource | null = null;
-  if (temSom(p.principal) || p.som.musica) {
+  if (temSom(p.principal) || p.som.musica || p.som.efeitos.length) {
     fonteAudio = new AudioBufferSource({ codec: 'aac', bitrate: 128_000 });
     output.addAudioTrack(fonteAudio);
   }
@@ -195,7 +234,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
     const canais = (await mixar({
       fala: lido?.canais ?? null, musica: p.som.musica, taxa, amostras: Math.ceil((p.fim - p.ini) * taxa),
       limpar: p.som.limpar, volumeFala: p.som.volumeFala, volumeMusicaDb: p.som.volumeMusicaDb,
-      abaixar: p.som.abaixar, suave: p.som.suave, sinal,
+      abaixar: p.som.abaixar, suave: p.som.suave, efeitos: p.som.efeitos, sinal,
     })).map((c) => new Float32Array(c));
     const ab = new AudioBuffer({ length: canais[0].length, numberOfChannels: canais.length, sampleRate: taxa });
     canais.forEach((c, i) => ab.copyToChannel(c, i));

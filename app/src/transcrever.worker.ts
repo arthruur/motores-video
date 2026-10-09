@@ -1,5 +1,8 @@
 // Whisper no próprio aparelho (transformers.js, WASM). Na 1ª vez baixa o modelo (77 MB) e guarda no cache do navegador.
-import { pipeline, type AutomaticSpeechRecognitionPipeline } from '@huggingface/transformers';
+import { env, pipeline, type AutomaticSpeechRecognitionPipeline } from '@huggingface/transformers';
+
+// no celular, cada thread a mais é memória a mais: até 4 basta
+if (env.backends.onnx.wasm) env.backends.onnx.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
 
 const MODELO = 'onnx-community/whisper-base_timestamped';
 // 8 bits: 77 MB (contra 206 MB do fp32 + q4) e, no teste, transcrição até melhor

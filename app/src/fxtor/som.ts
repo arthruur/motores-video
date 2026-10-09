@@ -73,6 +73,7 @@ export type Mixagem = {
   volumeMusicaDb: number;        // em relação à fala: -18 dB é o padrão de vídeo falado
   abaixar: boolean;              // abaixa a música enquanto alguém fala (ducking)
   suave: boolean;                // entrada e saída suaves da música
+  efeitos?: { buffer: AudioBuffer; em: number; db: number }[]; // efeitos sonoros: quando (s) e o volume (dB, em relação à fala)
   sinal?: AbortSignal;
 };
 
@@ -137,6 +138,18 @@ export async function mixar(o: Mixagem): Promise<Float32Array[]> {
       return v * g;
     }));
     saida = saida.map((c, k) => c.map((v, i) => v + m[k][i]));
+  }
+  for (const ef of o.efeitos ?? []) {
+    // o efeito é reamostrado para a taxa da fala e somado no instante pedido, com pico em -6 dBFS mais o ajuste
+    const r = await musicaNoTrecho(ef.buffer, o.taxa, Math.ceil(ef.buffer.duration * o.taxa));
+    let pico = 0;
+    for (const c of r) for (const v of c) pico = Math.max(pico, Math.abs(v));
+    const g = pico > 0 ? (dbParaLinear(-6 + ef.db) / pico) * (fala ? 1 : 0.6) : 0;
+    const de = Math.round(ef.em * o.taxa);
+    for (let k = 0; k < 2; k++) {
+      const src = r[Math.min(k, r.length - 1)];
+      for (let i = 0; i < src.length && de + i < n; i++) if (de + i >= 0) saida[k][de + i] += src[i] * g;
+    }
   }
   return limitar(nivelar(saida, o.taxa), o.taxa);
 }

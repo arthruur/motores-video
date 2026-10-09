@@ -1,0 +1,4 @@
+# sem versão fixa no yt-dlp de propósito: as redes mudam e ele precisa estar sempre atualizado (cada build pega o mais novo)
+yt-dlp
+fastapi>=0.115
+uvicorn[standard]>=0.30

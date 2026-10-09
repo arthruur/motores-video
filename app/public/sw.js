@@ -18,6 +18,8 @@ self.addEventListener('fetch', (e) => {
     e.respondWith((async () => {
       const dados = await e.request.formData();
       const video = dados.get('video');
+      const link = [dados.get('link'), dados.get('texto'), dados.get('titulo')].map(String).join(' ').match(/https?:\/\/\S+/)?.[0];
+      if ((!video || typeof video === 'string') && link) return Response.redirect(`./?link=${encodeURIComponent(link)}`, 303);
       if (video && typeof video !== 'string') {
         const c = await caches.open('prensa-recebido');
         await c.put('./recebido', new Response(video, { headers: { 'Content-Type': video.type, 'X-Nome': encodeURIComponent(video.name || 'video.mp4') } }));

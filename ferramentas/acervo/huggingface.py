@@ -144,7 +144,18 @@ def exportar_para_pasta(saida_dir: Path, repo_nome: str = "prensa-acervo") -> No
             destino.write_bytes(origem.read_bytes())
             copiados += 1
 
+    # Copia as músicas (etapa Som)
+    audio_dir = saida_dir / "audio"
+    musicas = 0
+    for m in acervo.get("musicas", []):
+        origem = ACERVO_DIR / "audio" / m["arquivo"]
+        if origem.exists():
+            audio_dir.mkdir(parents=True, exist_ok=True)
+            (audio_dir / m["arquivo"]).write_bytes(origem.read_bytes())
+            musicas += 1
+
     print(f"Exportação concluída em: {saida_dir}")
+    print(f"- {musicas} músicas copiadas para {audio_dir}")
     print(f"- README.md gerado com metadados HF")
     print(f"- acervo.json copiado")
     print(f"- {copiados} clipes de vídeo copiados para {clipes_dir}")

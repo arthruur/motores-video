@@ -112,3 +112,49 @@ export async function urlDoClipe(clipe: ClipeAcervo): Promise<string | null> {
   }
   return null;
 }
+
+export type MusicaAcervo = {
+  id: string;
+  arquivo: string;   // em audio/ (local ou no dataset)
+  titulo: string;
+  credito: string;
+  licenca: string;
+  revisado: boolean;
+  clima?: string;
+};
+
+/** as faixas de música do acervo (chave "musicas" do acervo.json), só as revisadas */
+export async function carregarMusicas(): Promise<MusicaAcervo[]> {
+  for (const url of ['./acervo/acervo.json', `${HF_DATASET_URL}/acervo.json`]) {
+    try {
+      const r = await fetch(url, url.startsWith('http') ? { mode: 'cors' } : {});
+      if (!r.ok) continue;
+      const dados = (await r.json()) as { musicas?: MusicaAcervo[] };
+      if (dados.musicas?.length) return dados.musicas.filter((m) => m.revisado);
+    } catch {
+      // tenta o próximo
+    }
+  }
+  return [];
+}
+
+/** os bytes da faixa: pasta local, cache offline ou o dataset */
+export async function baixarMusica(m: MusicaAcervo): Promise<ArrayBuffer> {
+  const cache = typeof caches !== 'undefined' ? await caches.open(CACHE_NOME) : null;
+  const chave = `./acervo/audio/${m.arquivo}`;
+  const eAudio = (r: Response) => r.ok && /^audio\//.test(r.headers.get('content-type') ?? '');
+  const guardado = await cache?.match(chave);
+  if (guardado && eAudio(guardado)) return guardado.arrayBuffer();
+  for (const url of [chave, `${HF_DATASET_URL}/audio/${m.arquivo}`]) {
+    try {
+      const r = await fetch(url, url.startsWith('http') ? { mode: 'cors' } : {});
+      if (eAudio(r)) {
+        if (cache) await cache.put(chave, r.clone());
+        return r.arrayBuffer();
+      }
+    } catch {
+      // tenta a próxima
+    }
+  }
+  throw new Error(`Não foi possível baixar a música ${m.titulo}.`)
+}
