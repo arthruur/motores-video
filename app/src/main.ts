@@ -183,16 +183,12 @@ async function usarBaixo(f: File, credito: string) {
   }
 }
 
-// acervo opcional (vídeos com licença livre, gerado por ferramentas/acervo/coletar.py e servido junto do app)
-type Clipe = { arquivo: string; titulo: string; credito: string; licenca: string; revisado: boolean };
+import { carregarManifesto, baixarClipe } from './acervo';
+
+// acervo de mídias livres (Wikimedia Commons / Hugging Face Datasets)
 async function carregarAcervo() {
   try {
-    const r = await fetch('./acervo/acervo.json');
-    if (!r.ok) return;
-    const todos = ((await r.json()) as { clipes: Clipe[] }).clipes ?? [];
-    // só o que uma pessoa revisou e que existe nesta cópia (o git guarda só o acervo.json)
-    const existe = await Promise.all(todos.map((c) => c.revisado && fetch(`./acervo/${c.arquivo}`, { method: 'HEAD' }).then((x) => x.ok).catch(() => false)));
-    const clipes = todos.filter((_, i) => existe[i]);
+    const clipes = await carregarManifesto();
     if (!clipes.length) return;
     const caixa = $('acervo');
     caixa.hidden = false;
@@ -204,11 +200,19 @@ async function carregarAcervo() {
       b.querySelector('span')!.textContent = c.titulo;
       b.querySelector('small')!.textContent = `${c.credito} · ${c.licenca}`;
       b.addEventListener('click', async () => {
+        const textoOriginal = b.querySelector('small')!.textContent;
         b.disabled = true;
         try {
-          const blob = await (await fetch(`./acervo/${c.arquivo}`)).blob();
+          const blob = await baixarClipe(c, (msg) => {
+            b.querySelector('small')!.textContent = msg;
+          });
           await usarBaixo(new File([blob], c.arquivo, { type: blob.type || 'video/mp4' }), `${c.credito} (${c.licenca})`);
-        } finally { b.disabled = false; }
+        } catch (err) {
+          alert((err as Error).message);
+        } finally {
+          b.querySelector('small')!.textContent = textoOriginal;
+          b.disabled = false;
+        }
       });
       return b;
     }));

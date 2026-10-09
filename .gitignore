@@ -22,3 +22,5 @@ exemplos/*/entrada/
 .DS_Store
 Thumbs.db
 apresentacao/
+tmp_drive/
+pasta_hf/

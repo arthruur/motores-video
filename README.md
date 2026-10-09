@@ -50,7 +50,7 @@ cd app && npm install && npm run dev      # abra o endereço no celular, na mesm
 
 Escolher vídeo → tocar numa receita (Corte direto, Você sabia?, Dica rápida, Estímulo duplo, Mito ou fato, Frase de impacto, Cívico) → **Prensar** → compartilhar. A legenda (Whisper, no próprio aparelho) começa assim que o vídeo chega, e o gancho já vem sugerido a partir da própria fala. O som passa pelo motor do [Audio FXtor](https://github.com/matheustdo/audio-fxtor) (−14 LUFS, remoção de ruído). Com a legenda pronta, um vídeo de 33 s vira 5 arquivos em 16 a 26 s num notebook sem GPU.
 
-Detalhes e números no [README do app](app/README.md). As receitas e a evidência por trás de cada uma estão em [docs/receitas.md](docs/receitas.md), o acervo de vídeos de retenção com licença livre em [docs/acervo.md](docs/acervo.md) e os limites de cada rede em [docs/plataformas.md](docs/plataformas.md).
+Detalhes e números no [README do app](app/README.md). As receitas e a evidência por trás de cada uma estão em [docs/receitas.md](docs/receitas.md), o acervo de vídeos de retenção com licença livre em [docs/acervo.md](docs/acervo.md) (como contribuir em [docs/contribuir_acervo.md](docs/contribuir_acervo.md)) e os limites de cada rede em [docs/plataformas.md](docs/plataformas.md).
 
 ## Instalação
 

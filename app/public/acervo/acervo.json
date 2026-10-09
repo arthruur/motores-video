@@ -131,6 +131,174 @@
       "share_alike": false,
       "modificacoes": "trecho de 15 s, recortado para 9:16, 720p, sem áudio",
       "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-acidentes-lula",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-acidentes-lula.mp4",
+      "titulo": "acidentes lula",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "4197651b607f3608b0f795066dfb8057b7462cb5455204b7a0af6924041ae0fd",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "acidentes_lula"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-carlinhos-maia-1",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-carlinhos-maia-1.mp4",
+      "titulo": "carlinhos maia 1",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "6124b14114f125392cb29121189df5eb388c820c0fd68746124f8b0c4384d036",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "carlinhos maia 1"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-carlinhos-maia-2",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-carlinhos-maia-2.mp4",
+      "titulo": "carlinhos maia 2",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "79c25e0d8b8367a5eec6b36c4ecd281a9d517a6445e2deea707ae10fc785966f",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "carlinhos maia 2"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-quedas-1-lula",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-quedas-1-lula.mp4",
+      "titulo": "quedas 1 lula",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "ae401912700b8fdb460d258d009d8d229fdec1cc972f02eb91056ac110df5265",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "quedas 1_lula"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-quedas-2-lula",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-quedas-2-lula.mp4",
+      "titulo": "quedas 2 lula",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "54b2fd232046f68e6b61e519736cc6764c469e09e38eb5f5ff36b1d9c976bb10",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "quedas 2_lula"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-quedas-lula-08-10",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-quedas-lula-08-10.mp4",
+      "titulo": "quedas lula 08 10",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "0a5ebb6c90d27477e1d4374e95e62c3f35bfb43dc58c59ecb10e973d76c82a30",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "quedas_lula 08_10"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-sabonete-lula",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-sabonete-lula.mp4",
+      "titulo": "sabonete lula",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "786fcfac96066dc7f635019d2b305ab4a979528ca4af23fbae25dc0a1238da17",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "sabonete_lula"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
+    },
+    {
+      "id": "cort-tapete-lula-6x1",
+      "categoria": "cortes-virais",
+      "arquivo": "cort-tapete-lula-6x1.mp4",
+      "titulo": "tapete lula 6x1",
+      "credito": "Acervo Comunitário (Drive)",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 1280,
+      "duracao_s": 15.0,
+      "sha256": "b061df2589b592c3f3f6c62b6857bc7295df2cf5f52762d6ff24963749ec3222",
+      "origem": {
+        "fonte": "google-drive-colaborativo",
+        "arquivo_original": "tapete_lula 6x1.mp4"
+      },
+      "licenca_url": "https://creativecommons.org/licenses/by/4.0",
+      "share_alike": false,
+      "modificacoes": "conversão 9:16 720p 15s sem áudio",
+      "coletado_em": "2026-10-08"
     }
   ],
   "rejeitados": [

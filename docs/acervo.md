@@ -56,9 +56,27 @@ A licença no Commons diz o que o autor declarou, não o que a imagem mostra.
 
 **Aprovados nessa coleta:** areia cinética sendo cortada, gelo visto da órbita (NASA), motores hidráulicos, duas cachoeiras e um túnel de metrô. Os créditos estão no `app/public/acervo/acervo.json`.
 
+## Publicação no Hugging Face Datasets
+
+Para servir o acervo de forma pública e sem depender de hospedar os arquivos `.mp4` pesados no repositório git, usamos o Hugging Face Datasets:
+
+```bash
+# Gera o README.md formatado com dataset card e YAML frontmatter para o HF
+python ferramentas/acervo/huggingface.py --card
+
+# Exporta os clipes aprovados e o manifesto para uma pasta de publicação
+python ferramentas/acervo/huggingface.py --exportar pasta_hf/
+
+# Publica diretamente no repositório (requer huggingface_hub instalado e autenticado)
+python ferramentas/acervo/huggingface.py --upload --repo usuario/prensa-acervo
+```
+
+O aplicativo (`app/src/acervo.ts`) tenta primeiro carregar os arquivos da pasta local (`./acervo/`), e recorre automaticamente à URL pública do Hugging Face Datasets (`resolve/main`) caso os `.mp4` não estejam no servidor local. Uma vez selecionado, o vídeo fica salvo no `CacheStorage` do navegador para funcionar offline.
+
 ## Próximos passos
 
 - Mais termos de busca e categorias; o Internet Archive como segunda fonte.
-- Publicar o acervo maior como dataset no Hugging Face, com o mesmo `acervo.json` como manifesto.
+- Trilhas de áudio livres (phonk e lo-fi) catalogadas no mesmo manifesto.
 - Busca ao vivo no Pexels e no Pixabay com a chave da pessoa (sem re-hospedar).
 - Exportar um `CREDITOS.txt` junto do vídeo.
+
