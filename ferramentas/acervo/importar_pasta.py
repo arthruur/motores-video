@@ -58,21 +58,40 @@ def obter_dimensoes(caminho: Path) -> tuple[int, int]:
         return 720, 1280
 
 
-def cortar_video(origem: Path, destino: Path, forcar_9_16: bool = False) -> None:
-    dur = obter_duracao(origem)
-    ini = max(0.0, min(dur * 0.15, dur - DUR_CLIPE)) if dur > DUR_CLIPE else 0.0
+def tem_audio(caminho: Path) -> bool:
+    cmd = ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=codec_type", "-of", "csv=p=0", str(caminho)]
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    return bool(res.stdout.strip())
+
+
+def cortar_video(origem: Path, destino: Path, forcar_9_16: bool = False, sem_audio: bool = False, inteiro: bool = False) -> float:
+    dur_total = obter_duracao(origem)
+    if inteiro or dur_total <= DUR_CLIPE:
+        ini = 0.0
+        dur_corte = dur_total
+        args_tempo = []
+    else:
+        ini = max(0.0, min(dur_total * 0.15, dur_total - DUR_CLIPE))
+        dur_corte = DUR_CLIPE
+        args_tempo = ["-ss", f"{ini:.2f}", "-t", f"{dur_corte:.2f}"]
+
     if forcar_9_16:
         filtro = "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,fps=30,format=yuv420p"
     else:
         filtro = "scale=trunc(iw/2)*2:trunc(ih/2)*2,fps=30,format=yuv420p"
-    subprocess.run([
-        "ffmpeg", "-v", "error", "-y", "-ss", f"{ini:.2f}", "-t", f"{DUR_CLIPE}",
-        "-i", str(origem), "-vf", filtro, "-an", "-c:v", "libx264",
+
+    audio_cmd = ["-an"] if (sem_audio or not tem_audio(origem)) else ["-c:a", "aac", "-b:a", "128k"]
+
+    cmd = [
+        "ffmpeg", "-v", "error", "-y", *args_tempo,
+        "-i", str(origem), "-vf", filtro, *audio_cmd, "-c:v", "libx264",
         "-preset", "veryfast", "-crf", "28", "-movflags", "+faststart", str(destino)
-    ], check=True, timeout=300)
+    ]
+    subprocess.run(cmd, check=True, timeout=300)
+    return dur_corte
 
 
-def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: str, titulo: str | None = None, aprovar_direto: bool = False, upload_hf: bool = False, repo_hf: str = "arthruur/prensa-acervo", forcar_9_16: bool = False) -> None:
+def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: str, titulo: str | None = None, aprovar_direto: bool = False, upload_hf: bool = False, repo_hf: str = "arthruur/prensa-acervo", forcar_9_16: bool = False, sem_audio: bool = False, inteiro: bool = False) -> None:
     if not alvo.exists():
         sys.exit(f"Arquivo ou pasta não encontrado: {alvo}")
 
@@ -98,9 +117,10 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
         id_ = f"{categoria}-{slug}" if categoria else slug
         destino = SAIDA / f"{id_}.mp4"
 
-        print(f"  Processando {arq.name} -> {destino.name} (mantendo proporção original: {not forcar_9_16})...")
+        possui_som = tem_audio(arq) and not sem_audio
+        print(f"  Processando {arq.name} -> {destino.name} (áudio: {'sim' if possui_som else 'não'}, 9:16: {forcar_9_16})...")
         try:
-            cortar_video(arq, destino, forcar_9_16=forcar_9_16)
+            dur_final = cortar_video(arq, destino, forcar_9_16=forcar_9_16, sem_audio=sem_audio, inteiro=inteiro)
         except Exception as e:
             print(f"    Erro ao cortar {arq.name}: {e}")
             continue
@@ -125,7 +145,8 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
             "revisado": aprovar_direto,
             "largura": largura,
             "altura": altura,
-            "duracao_s": DUR_CLIPE,
+            "duracao_s": round(dur_final, 2),
+            "tem_audio": possui_som,
             "sha256": sha,
             "origem": {
                 "fonte": "importacao-direta",
@@ -133,7 +154,7 @@ def importar(alvo: Path, categoria: str, autor: str, licenca: str, licenca_url: 
             },
             "licenca_url": licenca_url,
             "share_alike": "sa" in licenca.lower(),
-            "modificacoes": "trecho de 15s sem áudio na proporção original" if not forcar_9_16 else "recorte 9:16 720p 15s sem áudio",
+            "modificacoes": f"otimização H.264{' com áudio AAC' if possui_som else ' sem áudio'}",
             "coletado_em": date.today().isoformat()
         })
         existentes_sha.add(sha)
@@ -171,9 +192,11 @@ def main() -> None:
     ap.add_argument("--upload", action="store_true", help="já faz upload direto para o Hugging Face")
     ap.add_argument("--repo", default="arthruur/prensa-acervo", help="repositório HF destino")
     ap.add_argument("--forcar-9-16", action="store_true", help="força o recorte em 9:16 (720x1280) em vez de manter a proporção original")
+    ap.add_argument("--sem-audio", action="store_true", help="remove a faixa de áudio (silencioso)")
+    ap.add_argument("--inteiro", action="store_true", help="mantém a duração inteira do vídeo original (não corta em 15s)")
     args = ap.parse_args()
 
-    importar(args.alvo, args.categoria, args.autor, args.licenca, args.licenca_url, args.titulo, args.aprovar, args.upload, args.repo, forcar_9_16=args.forcar_9_16)
+    importar(args.alvo, args.categoria, args.autor, args.licenca, args.licenca_url, args.titulo, args.aprovar, args.upload, args.repo, forcar_9_16=args.forcar_9_16, sem_audio=args.sem_audio, inteiro=args.inteiro)
 
 
 if __name__ == "__main__":

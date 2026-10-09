@@ -301,6 +301,48 @@
       "coletado_em": "2026-10-08"
     },
     {
+      "id": "viral-ssstwitter-com-1791514819227",
+      "categoria": "viral",
+      "arquivo": "viral-ssstwitter-com-1791514819227.mp4",
+      "titulo": "ssstwitter.com 1791514819227",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 720,
+      "duracao_s": 15.0,
+      "sha256": "864bf86076baa737d090db4eb3c5246ebe193e45bf482958f04f6ea47606bbf3",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791514819227.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "trecho de 15s sem áudio na proporção original",
+      "coletado_em": "2026-10-09"
+    },
+    {
+      "id": "viral-ssstwitter-com-1791514940032",
+      "categoria": "viral",
+      "arquivo": "viral-ssstwitter-com-1791514940032.mp4",
+      "titulo": "ssstwitter.com 1791514940032",
+      "credito": "Comunidade",
+      "licenca": "CC BY 4.0",
+      "revisado": true,
+      "largura": 720,
+      "altura": 816,
+      "duracao_s": 15.0,
+      "sha256": "97c07c1d386297e88df73b53273f555419ffa24135a4a176750512a458d79cb3",
+      "origem": {
+        "fonte": "importacao-direta",
+        "arquivo_original": "ssstwitter.com_1791514940032.mp4"
+      },
+      "licenca_url": "",
+      "share_alike": false,
+      "modificacoes": "trecho de 15s sem áudio na proporção original",
+      "coletado_em": "2026-10-09"
+    },
+    {
       "id": "viral-video-twitter",
       "categoria": "viral",
       "arquivo": "viral-video-twitter.mp4",
@@ -310,16 +352,17 @@
       "revisado": true,
       "largura": 480,
       "altura": 286,
-      "duracao_s": 15.0,
-      "sha256": "53e41216ab8c274949ea375f81ed01c99488057d033f9b4be2ced1bcaeae8797",
+      "duracao_s": 43.19,
+      "tem_audio": true,
+      "sha256": "6b61b02bcd2859e287361915beceaaa9df0276d5c9b58643afb16209d0dbf5b2",
       "origem": {
         "fonte": "importacao-direta",
         "arquivo_original": "ssstwitter.com_1791508241346.mp4"
       },
       "licenca_url": "",
       "share_alike": false,
-      "modificacoes": "trecho de 15s sem áudio na proporção original",
-      "coletado_em": "2026-10-08"
+      "modificacoes": "otimização H.264 com áudio AAC",
+      "coletado_em": "2026-10-09"
     }
   ],
   "rejeitados": [
