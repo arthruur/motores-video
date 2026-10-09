@@ -337,11 +337,20 @@
     <div class="caixa-contato">
       <button type="button" class="fechar-contato" id="contato-fechar" aria-label="Fechar">×</button>
       <header>
-        <p class="sobretitulo">Expediente</p>
-        <h2 id="contato-titulo" tabindex="-1">Fale com o autor</h2>
+        <p class="sobretitulo">Expediente & Comunidade</p>
+        <h2 id="contato-titulo" tabindex="-1">Fale conosco</h2>
       </header>
 
-      <div class="autor-bloco">
+      <div class="contato-abas" role="tablist" aria-label="Abas de contato">
+        <button type="button" class="aba-botao ativa" id="aba-autor" role="tab" aria-selected="true" aria-controls="painel-autor">
+          Arthur Teles
+        </button>
+        <button type="button" class="aba-botao" id="aba-mangaio" role="tab" aria-selected="false" aria-controls="painel-mangaio">
+          Mangaio
+        </button>
+      </div>
+
+      <div id="painel-autor" class="autor-bloco" role="tabpanel" aria-labelledby="aba-autor">
         <h3 class="autor-nome">Arthur Teles</h3>
         <p>A Prensa é uma ferramenta de código aberto feita para colocar a produção de vídeo curto nas mãos de qualquer pessoa, sem ferramentas fechadas e sem cobrança em dólar. Dúvidas, sugestões, colaborações e ideias são muito bem-vindas!</p>
         <div class="redes">
@@ -357,6 +366,59 @@
             <span>Repositório</span>
             <strong>motores-video ↗</strong>
           </a>
+        </div>
+      </div>
+
+      <div id="painel-mangaio" class="autor-bloco" role="tabpanel" aria-labelledby="aba-mangaio" hidden>
+        <h3 class="autor-nome">Mangaio</h3>
+        <p>Iniciativa popular e cultural voltada à valorização da produção local, agricultura familiar e fortalecimento de redes comunitárias. Acompanhe e fale com o Mangaio:</p>
+        <div class="redes">
+          <a class="botao-rede" href="https://instagram.com/mangaio" target="_blank" rel="noopener">
+            <span>Instagram</span>
+            <strong>@mangaio ↗</strong>
+          </a>
+          <a class="botao-rede" href="https://wa.me/5575992727075" target="_blank" rel="noopener">
+            <span>WhatsApp</span>
+            <strong>(75) 99272-7075 ↗</strong>
+          </a>
+          <a class="botao-rede" href="https://x.com/mangaio" target="_blank" rel="noopener">
+            <span>Twitter / X</span>
+            <strong>@mangaio ↗</strong>
+          </a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===================================================== modal publicar youtube -->
+  <dialog id="dialog-yt" aria-labelledby="dialog-yt-titulo">
+    <div class="caixa-yt">
+      <button type="button" class="fechar-yt" id="dialog-yt-fechar" aria-label="Fechar">×</button>
+      <header>
+        <p class="sobretitulo">Distribuição</p>
+        <h2 id="dialog-yt-titulo" tabindex="-1">Publicar no YouTube Shorts</h2>
+      </header>
+      <div class="yt-form">
+        <label class="yt-campo">
+          <span>Título do Shorts (adiciona #Shorts automaticamente):</span>
+          <input type="text" id="yt-titulo" maxlength="90">
+        </label>
+        <label class="yt-campo">
+          <span>Descrição e hashtags:</span>
+          <textarea id="yt-desc" rows="3"></textarea>
+        </label>
+        <label class="yt-campo">
+          <span>Privacidade no canal:</span>
+          <select id="yt-privacidade">
+            <option value="private">Privado (só você vê — ideal para teste)</option>
+            <option value="unlisted">Não listado (quem tiver o link pode ver)</option>
+            <option value="public">Público (publicado para todos os inscritos)</option>
+          </select>
+        </label>
+        <div id="yt-status-msg" class="yt-status-msg" hidden></div>
+        <div class="yt-acoes">
+          <button type="button" class="botao-secundario" id="yt-cancelar">Cancelar</button>
+          <button type="button" class="botao-prensa" id="yt-enviar">Publicar agora</button>
         </div>
       </div>
     </div>

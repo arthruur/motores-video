@@ -17,14 +17,21 @@ import urllib.parse
 from collections import defaultdict, deque
 
 import yt_dlp
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from starlette.background import BackgroundTask
 
+try:
+    from . import youtube
+    from . import transcritor
+except (ImportError, ValueError):
+    import youtube
+    import transcritor
+
 ORIGENS = [o.strip() for o in os.environ.get(
-    "ORIGENS", "https://arthruur-prensa.static.hf.space,https://localhost:5173,https://localhost:5179").split(",") if o.strip()]
+    "ORIGENS", "https://arthruur-prensa.static.hf.space,https://localhost:5173,https://localhost:5179,http://localhost:5173,http://127.0.0.1:5173,https://127.0.0.1:5173").split(",") if o.strip()]
 DUR_MAX = int(os.environ.get("DUR_MAX", 20 * 60))          # s: a Prensa usa no máximo 3 min de trecho
 TAMANHO_MAX = int(os.environ.get("TAMANHO_MAX", 400 * 2**20))
 POR_HORA = int(os.environ.get("POR_HORA", 30))             # pedidos por IP por hora
@@ -116,3 +123,82 @@ def baixar(p: Pedido, request: Request):
         },
         background=BackgroundTask(shutil.rmtree, pasta, ignore_errors=True),
     )
+
+
+@app.get("/publicar/youtube/status")
+def status_publicar_youtube():
+    return youtube.status_youtube()
+
+
+@app.post("/publicar/youtube")
+async def publicar_youtube(
+    request: Request,
+    arquivo: UploadFile = File(...),
+    titulo: str = Form("Vídeo da Prensa"),
+    descricao: str = Form(""),
+    hashtags: str = Form("Shorts"),
+    privacidade: str = Form("private"),
+):
+    limite(request.headers.get("x-forwarded-for", request.client.host if request.client else "?").split(",")[0])
+    pasta = tempfile.mkdtemp(prefix="prensa-yt-")
+    caminho = os.path.join(pasta, "video.mp4")
+    try:
+        conteudo = await arquivo.read()
+        if len(conteudo) > TAMANHO_MAX:
+            raise HTTPException(413, "Vídeo grande demais para envio.")
+        with open(caminho, "wb") as f:
+            f.write(conteudo)
+
+        resultado = youtube.publicar_shorts(
+            video_path=caminho,
+            titulo=titulo,
+            descricao=descricao,
+            hashtags=hashtags,
+            privacidade=privacidade,
+        )
+        return resultado
+    except HTTPException:
+        raise
+    except FileNotFoundError as e:
+        raise HTTPException(400, str(e))
+    except Exception as e:
+        msg = str(e)
+        raise HTTPException(500, f"Não foi possível publicar no YouTube: {msg}")
+    finally:
+        shutil.rmtree(pasta, ignore_errors=True)
+
+
+@app.get("/transcrever/status")
+def status_transcrever():
+    import torch
+    disponivel = torch.cuda.is_available()
+    dispositivo = torch.cuda.get_device_name(0) if disponivel else "CPU"
+    modelo = getattr(transcritor, "_modelo_nome", "small")
+    return {
+        "ok": True,
+        "cuda": disponivel,
+        "dispositivo": dispositivo,
+        "modelo": modelo,
+    }
+
+
+@app.post("/transcrever")
+async def transcrever(
+    request: Request,
+    audio: UploadFile = File(...),
+    idioma: str = Form("pt"),
+):
+    limite(request.headers.get("x-forwarded-for", request.client.host if request.client else "?").split(",")[0])
+    try:
+        conteudo = await audio.read()
+        if not conteudo:
+            raise HTTPException(400, "Arquivo de áudio vazio.")
+        if len(conteudo) > TAMANHO_MAX:
+            raise HTTPException(413, "Áudio grande demais.")
+        
+        palavras = transcritor.transcrever_audio_bytes(conteudo, idioma=idioma)
+        return {"ok": True, "palavras": palavras}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Erro ao transcrever com GPU: {e}")

@@ -26,3 +26,6 @@ apresentacao/
 tmp_drive/
 pasta_hf/
 app/public/acervo/audio/
+client_secret*.json
+token_youtube*.json
+*.pem
