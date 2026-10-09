@@ -1,0 +1,21 @@
+# Blueprint do Render: publica só o baixador de links da Prensa (servidor/baixador).
+# O app continua no Hugging Face (https://arthruur-prensa.static.hf.space).
+services:
+  - type: web
+    name: prensa-baixador
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: prensa
+    rootDir: servidor/baixador
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: ORIGENS
+        value: https://arthruur-prensa.static.hf.space,https://localhost:5173,https://localhost:5179
+      - key: DUR_MAX
+        value: "1200"
+      - key: POR_HORA
+        value: "30"

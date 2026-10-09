@@ -19,3 +19,11 @@ quem usa. Nada é guardado: o arquivo é apagado assim que a resposta termina.
 - Limites (variáveis de ambiente): `DUR_MAX` (20 min), `TAMANHO_MAX` (400 MB), `POR_HORA` (30 pedidos por IP), `ORIGENS` (de onde o app pode chamar).
 
 Código: [motores-video/servidor/baixador](https://github.com/arthruur/motores-video/tree/prensa/servidor/baixador) · Apache-2.0.
+
+## Publicar no Render (grátis)
+
+O `render.yaml` na raiz do repositório descreve o serviço. No painel do Render: **New → Blueprint**, escolha o repositório `motores-video` e a branch `prensa`, e confirme. Quando o serviço estiver no ar (`https://prensa-baixador.onrender.com/` responde `{"ok": true, ...}`), publique o app apontando para ele:
+
+    VITE_BAIXADOR_URL=https://prensa-baixador.onrender.com python ferramentas/publicar_space.py
+
+No plano grátis o serviço dorme depois de 15 min parado; o primeiro link seguinte leva de 30 a 60 s.

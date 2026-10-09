@@ -9,4 +9,5 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 COPY --chown=prensa app.py .
 ENV PATH="/home/prensa/.local/bin:$PATH"
 EXPOSE 7860
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+# o Render passa a porta em $PORT; o Hugging Face usa 7860
+CMD uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860} --proxy-headers --forwarded-allow-ips "*"
