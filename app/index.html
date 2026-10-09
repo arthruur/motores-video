@@ -126,7 +126,19 @@
     </aside>
 
     <section class="painel">
-      <div class="fila" id="fila" hidden aria-label="Fila de vídeos"></div>
+      <details class="fila" id="fila" open hidden>
+        <summary><strong>Fila</strong> <span id="fila-contagem"></span></summary>
+        <div class="fila-barra">
+          <div class="fichas" id="fila-filtros" aria-label="Mostrar"></div>
+          <div class="fila-acoes">
+            <button type="button" id="fila-anterior" aria-label="Vídeo anterior da fila">←</button>
+            <button type="button" id="fila-proximo">Próximo pendente →</button>
+            <button type="button" class="primario" id="fila-prensar">Prensar os pendentes</button>
+          </div>
+        </div>
+        <ol class="fila-grade" id="fila-grade"></ol>
+        <p class="nota">Toque num vídeo para abrir e ajustar. O gancho, a fonte e o trecho de cada um ficam guardados. O ⨯ tira o vídeo do lote.</p>
+      </details>
 
       <div class="faixa-conversao" id="faixa-conversao" hidden role="status">
         <p><strong>Convertendo seu vídeo.</strong> <span id="faixa-conversao-motivo"></span> Pode ir escolhendo a receita: quando terminar, a prévia aparece.</p>

@@ -19,6 +19,10 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
 type EscolhaBaixo = { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado'; id: string } | { tipo: 'video'; chave: string };
 type Saida = { titulo: string; arquivos: Arquivo[]; mestre: Blob; post: string; srt: string; segundos: number };
 type PassoId = 'receita' | 'gancho' | 'fonte' | 'baixo' | 'som' | 'legenda' | 'prensar';
+/** o que a pessoa ajustou num vídeo da fila: volta quando ela abre o vídeo de novo, e o lote respeita */
+type Ajustes = { gancho: string; ganchoMexido: boolean; fonte: string; origem: string; ini: number; fim: number };
+type ItemFila = { situacao: 'pendente' | 'pronto' | 'erro' | 'fora'; ajustes: Ajustes | null; capa: string | null };
+type FiltroFila = 'todos' | 'pendente' | 'pronto';
 
 // a Aventura do Mangaio vem primeiro na lista, mas quem abre a Prensa começa no Corte direto
 const RECEITA_PADRAO = RECEITAS.find((r) => r.id === 'direto') ?? RECEITAS[0];
@@ -39,7 +43,11 @@ const estado = {
   ganchoMexido: false,
   passo: 'receita' as PassoId,
   fila: [] as File[],
+  filaItens: [] as ItemFila[],
   filaIndice: 0,
+  filaFiltro: 'todos' as FiltroFila,
+  lote: false,       // prensando os pendentes um atrás do outro
+  loteParado: false, // a pessoa cancelou no meio do lote
   saidas: [] as Saida[],
   urls: [] as string[],
   cancelar: null as AbortController | null,
@@ -210,8 +218,7 @@ async function buscarLink(url: string) {
     const arroba = ['X', 'Instagram', 'TikTok'].includes(rede) && b.autor ? `@${b.autor.replace(/^@/, '')}` : b.autor;
     campoFonte.value = [arroba, rede].filter(Boolean).join(' · ');
     estado.origem = b.origem;
-    estado.fila = [b.arquivo];
-    estado.filaIndice = 0;
+    novaFila([b.arquivo]);
     await carregarPrincipal(b.arquivo);
   } catch (e) {
     convertendo(`Não deu: ${(e as Error).message}`, 0);
@@ -229,25 +236,220 @@ function receberArquivos(lista: FileList | File[]) {
   const videos = [...lista];
   if (!videos.length) return;
   estado.origem = '';
-  estado.fila = videos;
-  estado.filaIndice = 0;
-  carregarPrincipal(videos[0]);
+  novaFila(videos);
+  carregarPrincipal(videos[0]).then((ok) => { if (!ok) marcarFila(0, 'erro'); });
 }
 
-function atualizarFila() {
-  const f = estado.fila;
-  $('fila').hidden = f.length < 2;
-  $('fila').replaceChildren(...f.map((arq, i) => {
-    const s = document.createElement('span');
-    s.className = i < estado.filaIndice ? 'feito' : i === estado.filaIndice ? 'atual' : '';
-    s.textContent = `${i + 1}. ${arq.name.replace(/\.[^.]+$/, '').slice(0, 22)}`;
-    return s;
-  }));
-  const resta = f.length - estado.filaIndice - 1;
-  $<HTMLButtonElement>('proximo-fila').hidden = resta <= 0;
-  $<HTMLButtonElement>('prensar-fila').hidden = resta <= 0;
-  if (resta > 0) $('prensar-fila').textContent = `Prensar o resto da fila (${resta}) com estas escolhas`;
+// ---------------------------------------------------------------- fila em grade: muitos vídeos de uma vez
+function novaFila(videos: File[]) {
+  estado.filaItens.forEach((it) => { if (it.capa) URL.revokeObjectURL(it.capa); });
+  estado.fila = videos;
+  estado.filaItens = videos.map(() => ({ situacao: 'pendente', ajustes: null, capa: null }));
+  estado.filaIndice = 0;
+  estado.filaFiltro = 'todos';
+  cartoesFila.length = 0;
+  if (videos.length > 1) gerarCapas(videos);
 }
+
+function marcarFila(i: number, situacao: ItemFila['situacao']) {
+  const it = estado.filaItens[i];
+  if (it) { it.situacao = situacao; atualizarFila(); }
+}
+
+/** guarda o que a pessoa mexeu no vídeo aberto, para não perder ao pular para outro */
+function guardarAjustes() {
+  const it = estado.filaItens[estado.filaIndice];
+  if (!it || !estado.principal) return;
+  it.ajustes = { gancho: campoGancho.value, ganchoMexido: estado.ganchoMexido, fonte: campoFonte.value, origem: estado.origem, ini: estado.ini, fim: estado.fim };
+}
+
+/** abre o vídeo i da fila, com os ajustes que ele já tinha */
+async function abrirDaFila(i: number): Promise<boolean> {
+  if (i < 0 || i >= estado.fila.length) return false;
+  guardarAjustes();
+  estado.filaIndice = i;
+  const it = estado.filaItens[i];
+  atualizarFila();
+  if (!(await carregarPrincipal(estado.fila[i], true))) { marcarFila(i, 'erro'); return false; }
+  if (it.situacao === 'erro') it.situacao = 'pendente';
+  const a = it.ajustes;
+  if (a && estado.principal) {
+    estado.ini = Math.min(a.ini, estado.principal.dur);
+    estado.fim = Math.min(a.fim, estado.principal.dur);
+    estado.ganchoMexido = a.ganchoMexido;
+    campoGancho.value = a.gancho;
+    campoFonte.value = a.fonte;
+    estado.origem = a.origem;
+    infoTrecho();
+    video.currentTime = estado.ini;
+    pedirLegenda().catch(() => {});
+    montarIdeias();
+    redesenhar();
+  }
+  atualizarFila();
+  return true;
+}
+
+/** o próximo vídeo ainda por fazer depois de `depois`, dando a volta na fila; -1 se não há */
+function proximoPendente(depois: number): number {
+  const n = estado.fila.length;
+  for (let k = 1; k <= n; k++) {
+    const i = (depois + k) % n;
+    if (estado.filaItens[i].situacao === 'pendente') return i;
+  }
+  return -1;
+}
+
+/** um quadro de cada vídeo, um de cada vez e com um <video> à parte: só para reconhecer o vídeo na grade */
+async function gerarCapas(fila: File[]) {
+  const v = document.createElement('video');
+  v.muted = true;
+  v.preload = 'auto';
+  const c = document.createElement('canvas');
+  c.width = 108; c.height = 192;
+  const ctx = c.getContext('2d')!;
+  for (let i = 0; i < fila.length; i++) {
+    if (estado.fila !== fila) break; // chegou outra fila
+    const url = URL.createObjectURL(fila[i]);
+    try {
+      v.src = url;
+      await new Promise<void>((ok, falha) => {
+        v.onloadedmetadata = () => { v.currentTime = Math.min(1.5, (v.duration || 0) / 2); };
+        v.onseeked = () => ok();
+        v.onerror = () => falha(new Error('formato'));
+        setTimeout(() => falha(new Error('demorou')), 8000);
+      });
+      // cobre o quadro 9:16, como a prévia
+      const e = Math.max(c.width / v.videoWidth, c.height / v.videoHeight);
+      const w = v.videoWidth * e, h = v.videoHeight * e;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(v, (c.width - w) / 2, (c.height - h) / 2, w, h);
+      const capa = await new Promise<Blob | null>((ok) => c.toBlob(ok, 'image/jpeg', 0.7));
+      if (capa && estado.fila === fila) {
+        const it = estado.filaItens[i];
+        it.capa = URL.createObjectURL(capa);
+        const img = cartoesFila[i]?.querySelector('img');
+        if (img) { img.src = it.capa; img.hidden = false; }
+      }
+    } catch { /* fica só o número (formato que só a conversão lê) */ }
+    finally { URL.revokeObjectURL(url); }
+  }
+  v.removeAttribute('src');
+}
+
+const cartoesFila: HTMLLIElement[] = [];
+function cartaoFila(i: number): HTMLLIElement {
+  const li = document.createElement('li');
+  const abrir = Object.assign(document.createElement('button'), { type: 'button', className: 'fila-abrir' });
+  const quadro = Object.assign(document.createElement('span'), { className: 'fila-quadro' });
+  const img = Object.assign(document.createElement('img'), { alt: '', hidden: !estado.filaItens[i]?.capa });
+  if (estado.filaItens[i]?.capa) img.src = estado.filaItens[i].capa!;
+  quadro.append(img, Object.assign(document.createElement('b'), { className: 'fila-numero', textContent: String(i + 1) }),
+    Object.assign(document.createElement('span'), { className: 'fila-selo' }));
+  abrir.append(quadro, Object.assign(document.createElement('small'), { className: 'fila-nome' }));
+  abrir.addEventListener('click', () => {
+    if (estado.lote || i === estado.filaIndice) return;
+    abrirDaFila(i).then(() => irPara('gancho'));
+  });
+  const fora = Object.assign(document.createElement('button'), { type: 'button', className: 'fila-fora' });
+  fora.addEventListener('click', () => {
+    const it = estado.filaItens[i];
+    it.situacao = it.situacao === 'fora' ? 'pendente' : 'fora';
+    atualizarFila();
+  });
+  li.append(abrir, fora);
+  return li;
+}
+
+const NOME_SITUACAO = { pendente: 'pendente', pronto: 'pronto', erro: 'não abriu', fora: 'fora do lote' } as const;
+function atualizarFila() {
+  const f = estado.fila, itens = estado.filaItens;
+  $('fila').hidden = f.length < 2;
+  if (f.length < 2) {
+    $<HTMLButtonElement>('proximo-fila').hidden = true;
+    $<HTMLButtonElement>('prensar-fila').hidden = true;
+    return;
+  }
+  while (cartoesFila.length < f.length) cartoesFila.push(cartaoFila(cartoesFila.length));
+  const conta = (s: ItemFila['situacao']) => itens.filter((it) => it.situacao === s).length;
+  const pendentes = conta('pendente');
+  $('fila-contagem').textContent = `${conta('pronto')} de ${f.length} prontos` + (conta('erro') ? ` · ${conta('erro')} não abriram` : '');
+  cartoesFila.forEach((li, i) => {
+    const it = itens[i];
+    li.className = `situacao-${it.situacao}` + (i === estado.filaIndice ? ' atual' : '');
+    const nome = it.ajustes?.gancho || f[i].name.replace(/\.[^.]+$/, '');
+    li.querySelector('.fila-nome')!.textContent = nome;
+    const abrir = li.querySelector<HTMLButtonElement>('.fila-abrir')!;
+    abrir.title = `${i + 1}. ${nome} (${NOME_SITUACAO[it.situacao]})`;
+    abrir.setAttribute('aria-current', String(i === estado.filaIndice));
+    abrir.disabled = estado.lote;
+    const fora = li.querySelector<HTMLButtonElement>('.fila-fora')!;
+    fora.textContent = it.situacao === 'fora' ? '↺' : '⨯';
+    fora.setAttribute('aria-label', it.situacao === 'fora' ? `Pôr o vídeo ${i + 1} de volta no lote` : `Tirar o vídeo ${i + 1} do lote`);
+    fora.hidden = it.situacao === 'pronto' || estado.lote;
+  });
+  const grade = $('fila-grade');
+  grade.replaceChildren(...cartoesFila.filter((_, i) => estado.filaFiltro === 'todos' || itens[i].situacao === estado.filaFiltro || i === estado.filaIndice));
+  grade.querySelector('.atual')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  sincFiltrosFila();
+  $<HTMLButtonElement>('fila-anterior').disabled = estado.lote || estado.filaIndice === 0;
+  const prox = proximoPendente(estado.filaIndice);
+  $<HTMLButtonElement>('fila-proximo').disabled = estado.lote || prox < 0;
+  const b = $<HTMLButtonElement>('fila-prensar');
+  b.textContent = estado.lote ? 'Parar depois deste' : `Prensar os pendentes (${pendentes})`;
+  b.disabled = !estado.lote && !pendentes;
+  // os mesmos atalhos na bandeja, depois de prensar
+  $<HTMLButtonElement>('proximo-fila').hidden = prox < 0 || estado.lote;
+  $<HTMLButtonElement>('prensar-fila').hidden = !pendentes || estado.lote;
+  if (pendentes) $('prensar-fila').textContent = `Prensar os pendentes (${pendentes}) com estas escolhas`;
+}
+
+const sincFiltrosFila = fichas($('fila-filtros'),
+  [{ id: 'todos' as FiltroFila, nome: 'Todos' }, { id: 'pendente' as FiltroFila, nome: 'Pendentes' }, { id: 'pronto' as FiltroFila, nome: 'Prontos' }],
+  (id) => estado.filaFiltro === id, (id) => { estado.filaFiltro = id; atualizarFila(); });
+
+$('fila-anterior').addEventListener('click', () => abrirDaFila(estado.filaIndice - 1).then(() => irPara('gancho')));
+async function irProximoPendente() {
+  const i = proximoPendente(estado.filaIndice);
+  if (i < 0) return;
+  await abrirDaFila(i);
+  irPara('gancho');
+  $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('fila-proximo').addEventListener('click', irProximoPendente);
+
+/** em lote: os pendentes com as escolhas atuais (receita, som, redes); o gancho de cada um é o ajustado ou o da fala */
+async function prensarPendentes() {
+  if (estado.lote) { estado.loteParado = true; atualizarFila(); return; }
+  estado.lote = true;
+  estado.loteParado = false;
+  $<HTMLButtonElement>('prensar').disabled = true;
+  atualizarFila();
+  try {
+    // começa pelo que está aberto, se ele ainda não saiu
+    let i = estado.filaItens[estado.filaIndice]?.situacao === 'pendente' ? estado.filaIndice : proximoPendente(estado.filaIndice);
+    while (i >= 0 && !estado.loteParado) {
+      const prontos = estado.filaItens.filter((it) => it.situacao === 'pronto').length;
+      const total = prontos + estado.filaItens.filter((it) => it.situacao === 'pendente').length;
+      andamento(`Vídeo ${i + 1} (${prontos + 1} de ${total}): abrindo`);
+      if (i !== estado.filaIndice || !estado.principal) {
+        if (!(await abrirDaFila(i))) { i = proximoPendente(i); continue; }
+      }
+      if (campoLegenda.checked && temSom(estado.principal)) { await pedirLegenda().catch(() => []); montarIdeias(); }
+      if (!(await prensarAtual())) {
+        if (estado.loteParado) break;
+        marcarFila(i, 'erro');
+      }
+      i = proximoPendente(i);
+    }
+  } finally {
+    estado.lote = false;
+    $<HTMLButtonElement>('prensar').disabled = false;
+    atualizarFila();
+  }
+}
+$('fila-prensar').addEventListener('click', prensarPendentes);
 
 let vezArquivo = 0;
 /** abre o vídeo; se o navegador não lê o formato, converte em segundo plano enquanto a pessoa já compõe */
@@ -1054,6 +1256,8 @@ async function prensarAtual(): Promise<boolean> {
     folhasDoPrelo(plats.length);
     await paraODisco(arquivos);
     estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre: arquivos[0]?.blob ?? mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
+    guardarAjustes();
+    if (estado.filaItens[estado.filaIndice]) estado.filaItens[estado.filaIndice].situacao = 'pronto';
     montarBandeja();
     if (studioLigado()) paraOStudio(estado.saidas[0]);
     return true;
@@ -1076,7 +1280,7 @@ $('prensar').addEventListener('click', async () => {
   b.disabled = false;
   if (ok) $('bandeja').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-$('cancelar').addEventListener('click', () => estado.cancelar?.abort());
+$('cancelar').addEventListener('click', () => { estado.loteParado = estado.lote; estado.cancelar?.abort(); });
 
 // ---------------------------------------------------------------- modal publicar no youtube shorts
 const dlgYt = $<HTMLDialogElement>('dialog-yt');
@@ -1278,31 +1482,8 @@ $('outro-corte').addEventListener('click', () => {
   $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-$('proximo-fila').addEventListener('click', async () => {
-  if (estado.filaIndice >= estado.fila.length - 1) return;
-  estado.filaIndice++;
-  await carregarPrincipal(estado.fila[estado.filaIndice], true);
-  irPara('gancho');
-  $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-
-/** em lote: o resto da fila com as mesmas escolhas, e o gancho de cada um tirado da própria fala */
-$('prensar-fila').addEventListener('click', async () => {
-  const botoes = ['prensar-fila', 'proximo-fila', 'prensar'].map((id) => $<HTMLButtonElement>(id));
-  botoes.forEach((b) => { b.disabled = true; });
-  try {
-    while (estado.filaIndice < estado.fila.length - 1) {
-      estado.filaIndice++;
-      andamento(`Vídeo ${estado.filaIndice + 1} de ${estado.fila.length}: abrindo`);
-      if (!(await carregarPrincipal(estado.fila[estado.filaIndice], true))) continue;
-      if (campoLegenda.checked && temSom(estado.principal)) { await pedirLegenda().catch(() => []); montarIdeias(); }
-      await prensarAtual();
-    }
-  } finally {
-    botoes.forEach((b) => { b.disabled = false; });
-    atualizarFila();
-  }
-});
+$('proximo-fila').addEventListener('click', irProximoPendente);
+$('prensar-fila').addEventListener('click', prensarPendentes);
 
 $('novo').addEventListener('click', () => { $<HTMLInputElement>('arquivo').value = ''; $<HTMLInputElement>('arquivo').click(); });
 

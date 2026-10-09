@@ -631,10 +631,37 @@ dialog#contato::backdrop {
 .editor-legenda input { flex: 1; min-width: 0; font: 600 16px var(--ui); padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--linha); background: var(--cartao); color: var(--tinta); }
 
 /* fila */
-.fila { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 12px; padding-bottom: 4px; }
-.fila span { flex: 0 0 auto; font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1.5px dashed var(--linha); color: var(--suave); }
-.fila span.feito { border-style: solid; color: var(--tinta-2); text-decoration: line-through; }
-.fila span.atual { border-style: solid; border-color: var(--vermelho); color: var(--tinta); font-weight: 700; }
+/* fila em grade: dezenas de vídeos de uma vez, cada um com o seu estado */
+.fila { margin: 0 0 14px; padding: 10px 12px 12px; border: 1.5px solid var(--linha); border-radius: 14px; background: var(--cartao); }
+.fila summary { cursor: pointer; font: 700 15px var(--ui); padding: 2px 0; }
+.fila summary span { font-weight: 500; color: var(--suave); font-size: 13px; margin-left: 4px; }
+.fila-barra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0; }
+.fila-barra .fichas button { min-height: 32px; padding: 2px 12px; font-size: 13px; }
+.fila-acoes { display: flex; flex-wrap: wrap; gap: 6px; }
+.fila-acoes button { min-height: 38px; padding: 4px 14px; border-radius: 999px; border: 1.5px solid var(--linha); background: var(--papel); color: var(--tinta); font-weight: 700; font-size: 14px; }
+.fila-acoes button.primario { background: var(--vermelho); color: var(--sobre-vermelho); border-color: var(--vermelho); }
+.fila-acoes button:disabled { opacity: 0.45; cursor: default; }
+.fila-grade { list-style: none; margin: 0; padding: 2px; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; max-height: min(46vh, 420px); overflow-y: auto; overscroll-behavior: contain; }
+.fila-grade li { position: relative; min-width: 0; }
+.fila-abrir { display: grid; gap: 4px; width: 100%; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; }
+.fila-abrir:disabled { cursor: progress; }
+.fila-quadro { position: relative; display: grid; place-items: center; aspect-ratio: 9 / 16; border-radius: 8px; overflow: hidden; background: var(--papel-2); border: 2px solid transparent; }
+.fila-quadro img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fila-numero { position: absolute; left: 4px; top: 4px; min-width: 20px; padding: 0 5px; border-radius: 999px; background: rgba(0, 0, 0, 0.6); color: #fff; font: 700 11px/18px var(--ui); text-align: center; }
+.fila-selo { position: absolute; right: 4px; bottom: 4px; width: 20px; height: 20px; border-radius: 50%; font: 800 12px/20px var(--ui); text-align: center; color: #fff; }
+.fila-nome { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11px; line-height: 1.25; color: var(--tinta-2); overflow-wrap: anywhere; }
+.fila-grade li.atual .fila-quadro { border-color: var(--vermelho); }
+.fila-grade li.atual .fila-nome { color: var(--tinta); font-weight: 700; }
+.situacao-pronto .fila-selo { background: var(--tinta); color: var(--papel); }
+.situacao-pronto .fila-selo::after { content: "✓"; }
+.situacao-erro .fila-selo { background: var(--erro); }
+.situacao-erro .fila-selo::after { content: "!"; }
+.situacao-fora .fila-quadro { opacity: 0.35; }
+.situacao-fora .fila-nome { text-decoration: line-through; }
+.fila-fora { position: absolute; right: 2px; top: 2px; width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 0; background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 14px; line-height: 26px; opacity: 0; transition: opacity 0.15s; }
+.fila-grade li:hover .fila-fora, .fila-fora:focus-visible, .situacao-fora .fila-fora { opacity: 1; }
+@media (hover: none) { .fila-fora { opacity: 0.85; } }
+.fila .nota { margin: 8px 0 0; font-size: 12px; }
 
 /* bandeja de saída */
 .bandeja { margin: 0 0 20px; padding: 16px; border-radius: 18px; background: var(--cartao); box-shadow: var(--sombra); border: 2px solid var(--tinta); }
