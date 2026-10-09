@@ -959,7 +959,7 @@ function textoPost(): string {
   if (estado.origem) linhas.push(`Original: ${estado.origem}`);
   const musica = musicasAcervo.find((m) => `acervo:${m.id}` === estado.som.musica);
   if (musica) linhas.push(`Música: ${musica.credito}`);
-  linhas.push('\nFeito na Prensa (software livre) · Contato: https://github.com/arthruur');
+  linhas.push('\nFeito na Prensa (software livre) · Contato: @arthurnoyes (https://x.com/arthurnoyes)');
   return linhas.join('\n');
 }
 
@@ -1187,6 +1187,14 @@ $('historia-comecar').addEventListener('click', () => {
   historia.close();
   if (!estado.principal) { mostrar('inicio'); $<HTMLInputElement>('arquivo').click(); }
 });
+
+const dlgContato = $<HTMLDialogElement>('contato');
+$('abrir-contato').addEventListener('click', () => {
+  dlgContato.showModal();
+  dlgContato.scrollTop = 0;
+  $('contato-titulo').focus();
+});
+$('contato-fechar').addEventListener('click', () => dlgContato.close());
 
 // ---------------------------------------------------------------- início
 (async () => {
