@@ -329,25 +329,32 @@
   </dialog>
 
   <!-- ===================================================== contato e autoria -->
-  <dialog id="contato" class="historia" aria-labelledby="contato-titulo">
-    <div class="jornal">
-      <button type="button" class="fechar" id="contato-fechar" aria-label="Fechar">×</button>
-      <header class="cabeca">
-        <p class="sobretitulo">Expediente & Contato</p>
+  <dialog id="contato" aria-labelledby="contato-titulo">
+    <div class="caixa-contato">
+      <button type="button" class="fechar-contato" id="contato-fechar" aria-label="Fechar">×</button>
+      <header>
+        <p class="sobretitulo">Expediente</p>
         <h2 id="contato-titulo" tabindex="-1">Fale com o autor</h2>
       </header>
 
-      <article class="capitulo">
-        <p class="ano">autor</p>
-        <div>
-          <h3>Arthur Teles</h3>
-          <p>A Prensa é software livre feito para colocar a produção de vídeo curto no celular de qualquer pessoa, sem ferramentas fechadas e sem cobrança em dólar. Dúvidas, sugestões, colaborações e ideias são muito bem-vindas!</p>
-          <div class="linha" style="margin-top: 16px; gap: 10px; flex-wrap: wrap;">
-            <a class="botao-contorno" href="https://x.com/arthurnoyes" target="_blank" rel="noopener">Twitter / X: @arthurnoyes</a>
-            <a class="botao-contorno" href="https://github.com/arthruur" target="_blank" rel="noopener">GitHub: @arthruur</a>
-          </div>
+      <div class="autor-bloco">
+        <h3 class="autor-nome">Arthur Teles</h3>
+        <p>A Prensa é uma ferramenta de código aberto feita para colocar a produção de vídeo curto nas mãos de qualquer pessoa, sem ferramentas fechadas e sem cobrança em dólar. Dúvidas, sugestões, colaborações e ideias são muito bem-vindas!</p>
+        <div class="redes">
+          <a class="botao-rede" href="https://x.com/arthurnoyes" target="_blank" rel="noopener">
+            <span>Twitter / X</span>
+            <strong>@arthurnoyes ↗</strong>
+          </a>
+          <a class="botao-rede" href="https://github.com/arthruur" target="_blank" rel="noopener">
+            <span>GitHub</span>
+            <strong>@arthruur ↗</strong>
+          </a>
+          <a class="botao-rede" href="https://github.com/arthruur/motores-video" target="_blank" rel="noopener">
+            <span>Repositório</span>
+            <strong>motores-video ↗</strong>
+          </a>
         </div>
-      </article>
+      </div>
     </div>
   </dialog>
 

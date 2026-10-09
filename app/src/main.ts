@@ -1195,6 +1195,9 @@ $('abrir-contato').addEventListener('click', () => {
   $('contato-titulo').focus();
 });
 $('contato-fechar').addEventListener('click', () => dlgContato.close());
+dlgContato.addEventListener('click', (e) => {
+  if (e.target === dlgContato) dlgContato.close();
+});
 
 // ---------------------------------------------------------------- início
 (async () => {

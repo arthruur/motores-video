@@ -402,6 +402,100 @@ a.botao-contorno:hover { background: var(--tinta); color: var(--papel); }
 .destaque { font-weight: 700 !important; font-size: 22px !important; }
 .hoje .regra { font: clamp(48px, 13vw, 88px)/0.9 var(--exibicao) !important; text-transform: uppercase; color: var(--vermelho); margin: 6px 0 22px !important; }
 
+/* ===================================================== modal de contato */
+dialog#contato {
+  width: min(500px, calc(100vw - 32px));
+  max-width: 500px;
+  border: 1.5px solid var(--linha);
+  border-radius: 20px;
+  background: var(--grao), var(--papel);
+  color: var(--tinta);
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.35);
+  padding: 0;
+  margin: auto;
+}
+dialog#contato::backdrop {
+  background: rgba(22, 19, 15, 0.65);
+  backdrop-filter: blur(4px);
+}
+.caixa-contato {
+  padding: 26px 24px 28px;
+  position: relative;
+}
+.fechar-contato {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--linha);
+  background: var(--cartao);
+  font-size: 22px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--tinta);
+}
+.fechar-contato:hover {
+  border-color: var(--vermelho);
+  color: var(--vermelho);
+}
+.caixa-contato header {
+  border-bottom: 2px double var(--linha);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  padding-right: 44px;
+}
+.caixa-contato header h2 {
+  font: 700 clamp(26px, 6vw, 34px)/1.05 var(--serifa);
+  margin: 4px 0 0;
+  letter-spacing: -0.5px;
+}
+.caixa-contato .autor-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.caixa-contato .autor-nome {
+  font: 700 22px/1.2 var(--serifa);
+  color: var(--vermelho);
+  margin: 0;
+}
+.caixa-contato p {
+  font: 16px/1.5 var(--serifa);
+  color: var(--tinta-2);
+  margin: 0;
+}
+.caixa-contato .redes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.caixa-contato .botao-rede {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--linha);
+  background: var(--cartao);
+  color: var(--tinta);
+  text-decoration: none;
+  font-size: 15px;
+  transition: transform 0.1s ease, border-color 0.1s ease;
+}
+.caixa-contato .botao-rede:hover {
+  border-color: var(--vermelho);
+  color: var(--vermelho);
+  transform: translateY(-1px);
+}
+.caixa-contato .botao-rede strong {
+  color: var(--vermelho);
+}
+
 .rodape { color: var(--suave); font-size: 13px; padding-top: 18px; padding-bottom: 36px; border-top: 1.5px solid var(--linha); }
 
 /* ===================================================== vídeo de baixo: galeria */
