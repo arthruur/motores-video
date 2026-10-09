@@ -127,7 +127,7 @@ export async function mixar(o: Mixagem): Promise<Float32Array[]> {
     let m = nivelar(await musicaNoTrecho(o.musica, o.taxa, n), o.taxa);
     const base = fala ? dbParaLinear(o.volumeMusicaDb) * Math.max(0.2, o.volumeFala) : 1;
     const env = fala && o.abaixar ? quandoFala(fala, o.taxa, n) : null;
-    const abaixado = dbParaLinear(-10);
+    const abaixado = dbParaLinear(-8);
     const entra = o.suave ? Math.round(1.0 * o.taxa) : 0, sai = o.suave ? Math.round(2.0 * o.taxa) : 0;
     m = m.map((c) => c.map((v, i) => {
       let g = base;

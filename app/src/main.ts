@@ -5,7 +5,7 @@ import { type Passo, criarDemo } from './demo';
 import { A, L, type Fonte, type Quadro, desenharQuadro, faixaLegenda } from './formatos';
 import { type Bloco, type EstiloLegenda, type Palavra, FONTE, gerarSrt, montarBlocos } from './legenda';
 import { PLATAFORMAS } from './plataformas';
-import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audioParaFala, exportar, prensar } from './prensa';
+import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audioParaFala, exportar, prensar, temSom } from './prensa';
 import { RECEITAS, type Receita, ganchosDaFala } from './receitas';
 import { GERADORES } from './retencao';
 import { TRILHAS, gerarTrilha } from './trilhas';
@@ -13,28 +13,35 @@ import { transcrever } from './transcrever';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
+type EscolhaBaixo = { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado'; id: string } | { tipo: 'video'; chave: string };
+type Saida = { titulo: string; arquivos: Arquivo[]; mestre: Blob; post: string; srt: string; segundos: number };
+type PassoId = 'receita' | 'gancho' | 'fonte' | 'baixo' | 'som' | 'legenda' | 'prensar';
+
 const estado = {
   principal: null as Midia | null,
   baixo: null as Midia | null,
   ini: 0,
   fim: 0,
   receita: RECEITAS[0],
-  // vídeo de baixo: o padrão da receita, nenhum, uma animação gerada ou um vídeo (do acervo ou da pessoa)
-  escolhaBaixo: { tipo: 'receita' } as { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado'; id: string } | { tipo: 'video'; chave: string },
-  som: {
-    volumeFala: 1, musica: 'nenhuma', volumeMusica: 50, abaixar: true, suave: true,
-    arquivoMusica: null as File | null, buffers: new Map<string, Promise<AudioBuffer>>(),
-  },
+  escolhaBaixo: { tipo: 'receita' } as EscolhaBaixo,
   estiloLegenda: null as EstiloLegenda | null, // null = o da receita
   plataformas: new Set(PLATAFORMAS.map((p) => p.id)),
-  falas: new Map<string, Palavra[]>(),         // trecho -> palavras
+  falas: new Map<string, Palavra[]>(),         // trecho -> palavras (já com as correções da pessoa)
   ouvindo: new Map<string, Promise<Palavra[]>>(),
+  versaoFala: 0,                               // muda quando a pessoa edita a legenda
   esperandoLegenda: false,
   ganchoMexido: false,
-  srt: '',
+  passo: 'receita' as PassoId,
+  fila: [] as File[],
+  filaIndice: 0,
+  saidas: [] as Saida[],
   urls: [] as string[],
   cancelar: null as AbortController | null,
   convertendo: null as { texto: string; fracao?: number; vez: number } | null, // conversor em segundo plano
+  som: {
+    volumeFala: 1, musica: 'nenhuma', volumeMusica: 55, abaixar: true, suave: true,
+    arquivoMusica: null as File | null, buffers: new Map<string, Promise<AudioBuffer>>(),
+  },
 };
 
 const video = $<HTMLVideoElement>('video');
@@ -65,12 +72,10 @@ const usaVideoDeBaixo = () => estado.escolhaBaixo.tipo === 'video' && !!estado.b
 
 // ---------------------------------------------------------------- telas
 let demo: ReturnType<typeof criarDemo> | null = null;
-function mostrar(tela: 'inicio' | 'criar' | 'pronta') {
+function mostrar(tela: 'inicio' | 'criar') {
   $('tela-inicio').hidden = tela !== 'inicio';
   $('tela-criar').hidden = tela !== 'criar';
-  $('tela-pronta').hidden = tela !== 'pronta';
   if (tela === 'inicio') demo?.continuar(); else demo?.parar();
-  if (tela !== 'pronta') $<HTMLVideoElement>('resultado').pause();
   window.scrollTo({ top: 0 });
 }
 $('ir-inicio').addEventListener('click', () => mostrar(estado.principal ? 'criar' : 'inicio'));
@@ -78,18 +83,79 @@ $('ir-inicio').addEventListener('click', () => mostrar(estado.principal ? 'criar
 // ---------------------------------------------------------------- 1. início: demonstração viva
 let passoAuto: number | undefined;
 const DUR_PASSO = 6000;
-function irPasso(p: Passo, auto = true) {
+function irPassoDemo(p: Passo, auto = true) {
   demo?.ir(p);
   document.querySelectorAll<HTMLButtonElement>('#passos-demo button').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.passo) === p)));
   document.querySelector('.vitrine')!.classList.toggle('passo-2', p === 2);
   clearTimeout(passoAuto);
-  if (auto) passoAuto = window.setTimeout(() => irPasso(((p + 1) % 3) as Passo), DUR_PASSO);
+  if (auto) passoAuto = window.setTimeout(() => irPassoDemo(((p + 1) % 3) as Passo), DUR_PASSO);
   else document.querySelectorAll<HTMLElement>('#passos-demo .tempo').forEach((t) => { t.style.animation = 'none'; });
 }
-document.querySelectorAll<HTMLButtonElement>('#passos-demo button').forEach((b) => b.addEventListener('click', () => irPasso(Number(b.dataset.passo) as Passo, false)));
+document.querySelectorAll<HTMLButtonElement>('#passos-demo button').forEach((b) => b.addEventListener('click', () => irPassoDemo(Number(b.dataset.passo) as Passo, false)));
 document.documentElement.style.setProperty('--dur', `${DUR_PASSO}ms`);
 
-// ---------------------------------------------------------------- vídeo principal (com conversor de segurança)
+// ---------------------------------------------------------------- 2. a mesa como passo a passo
+const PASSOS: { id: PassoId; nome: string }[] = [
+  { id: 'receita', nome: 'Receita' }, { id: 'gancho', nome: 'Gancho' }, { id: 'fonte', nome: 'Fonte' },
+  { id: 'baixo', nome: 'Vídeo de baixo' }, { id: 'som', nome: 'Som' }, { id: 'legenda', nome: 'Legenda' }, { id: 'prensar', nome: 'Prensar' },
+];
+const passosDaReceita = () => PASSOS.filter((p) => !(p.id === 'baixo' && estado.receita.id === 'civico'));
+
+function irPara(id: PassoId) {
+  estado.passo = id;
+  document.querySelectorAll<HTMLElement>('.passo-guia').forEach((d) => { d.hidden = d.dataset.passo !== id; });
+  const passos = passosDaReceita();
+  const i = passos.findIndex((p) => p.id === id);
+  $('trilha-passos').replaceChildren(...passos.map((p, k) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = `${k + 1}. ${p.nome}`;
+    b.className = k < i ? 'feito' : '';
+    if (p.id === id) b.setAttribute('aria-current', 'step');
+    b.addEventListener('click', () => irPara(p.id));
+    return b;
+  }));
+  $<HTMLButtonElement>('voltar-passo').hidden = i <= 0;
+  const proximo = passos[i + 1];
+  $<HTMLButtonElement>('proximo-passo').hidden = !proximo;
+  if (proximo) $('proximo-passo').textContent = `Próximo: ${proximo.nome} →`;
+  if (id === 'legenda') montarEditorLegenda();
+  if (id === 'prensar') montarResumo();
+  $('trilha-passos').querySelector('[aria-current]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+$('voltar-passo').addEventListener('click', () => {
+  const p = passosDaReceita();
+  irPara(p[Math.max(0, p.findIndex((x) => x.id === estado.passo) - 1)].id);
+});
+$('proximo-passo').addEventListener('click', () => {
+  const p = passosDaReceita();
+  irPara(p[Math.min(p.length - 1, p.findIndex((x) => x.id === estado.passo) + 1)].id);
+  if (matchMedia('(max-width: 899px)').matches) $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+function montarResumo() {
+  const r = estado.receita;
+  const gerador = geradorDe(r);
+  const baixo = usaVideoDeBaixo() ? (campoCredito.value || 'seu vídeo') : gerador ? GERADORES.find((g) => g.id === gerador)?.nome ?? '' : 'nenhum';
+  const musica = MUSICAS.find((m) => m.id === estado.som.musica)?.nome ?? 'Sem música';
+  const itens: [string, string][] = [
+    ['Receita', r.nome],
+    ['Gancho', campoGancho.value.trim() || '—'],
+    ['Vídeo de baixo', baixo],
+    ['Música', musica],
+    ['Legenda', campoLegenda.checked ? (estiloLegendaDe(r) === 'palavra' ? 'palavra por palavra' : 'em bloco') : 'desligada'],
+    ['Trecho', `${fmt(estado.ini)} → ${fmt(estado.fim)}`],
+  ];
+  $('resumo').replaceChildren(...itens.map(([k, v]) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<span></span><strong></strong>';
+    li.querySelector('span')!.textContent = k;
+    li.querySelector('strong')!.textContent = v;
+    return li;
+  }));
+}
+
+// ---------------------------------------------------------------- vídeo principal (com conversor de segurança) e fila
 function convertendo(texto: string, fracao?: number) {
   $('convertendo').hidden = false;
   $('convertendo-texto').textContent = texto;
@@ -105,11 +171,11 @@ function verificarRequisitos(): boolean {
   let titulo = '', texto = '', link = '';
   if (!isSecureContext) {
     titulo = 'Abra a Prensa pelo endereço oficial.';
-    texto = `Esta página foi aberta sem conexão segura (${location.origin}), e assim o navegador desliga justamente o que a Prensa usa para ler e gravar vídeo no aparelho. O endereço oficial tem HTTPS de verdade e funciona em qualquer celular.`;
+    texto = `Esta página foi aberta sem conexão segura (${location.origin}), e assim o navegador desliga o que a Prensa usa para ler e gravar vídeo.`;
     link = ENDERECO_OFICIAL;
   } else if (typeof VideoEncoder === 'undefined' || typeof VideoDecoder === 'undefined') {
     titulo = 'Este navegador ainda não sabe fazer vídeo.';
-    texto = 'A Prensa monta o vídeo no próprio aparelho com uma tecnologia chamada WebCodecs, que falta neste navegador. Use o Chrome, o Edge ou o Safari atualizados (no iPhone, iOS 17 ou mais novo).';
+    texto = 'Use o Chrome, o Edge ou o Safari atualizados (no iPhone, iOS 17 ou mais novo).';
   }
   if (!titulo) return true;
   $('requisitos').hidden = false;
@@ -122,17 +188,40 @@ function verificarRequisitos(): boolean {
   return false;
 }
 
+function receberArquivos(lista: FileList | File[]) {
+  const videos = [...lista];
+  if (!videos.length) return;
+  estado.fila = videos;
+  estado.filaIndice = 0;
+  carregarPrincipal(videos[0]);
+}
+
+function atualizarFila() {
+  const f = estado.fila;
+  $('fila').hidden = f.length < 2;
+  $('fila').replaceChildren(...f.map((arq, i) => {
+    const s = document.createElement('span');
+    s.className = i < estado.filaIndice ? 'feito' : i === estado.filaIndice ? 'atual' : '';
+    s.textContent = `${i + 1}. ${arq.name.replace(/\.[^.]+$/, '').slice(0, 22)}`;
+    return s;
+  }));
+  const resta = f.length - estado.filaIndice - 1;
+  $<HTMLButtonElement>('proximo-fila').hidden = resta <= 0;
+  $<HTMLButtonElement>('prensar-fila').hidden = resta <= 0;
+  if (resta > 0) $('prensar-fila').textContent = `Prensar o resto da fila (${resta}) com estas escolhas`;
+}
+
 let vezArquivo = 0;
-async function carregarPrincipal(arquivo: File) {
+/** abre o vídeo; se o navegador não lê o formato, converte em segundo plano enquanto a pessoa já compõe */
+async function carregarPrincipal(arquivo: File, manterPasso = false): Promise<boolean> {
   erro('');
-  if (!verificarRequisitos()) { mostrar('inicio'); return; }
+  if (!verificarRequisitos()) { mostrar('inicio'); return false; }
   const vez = ++vezArquivo; // se a pessoa escolher outro vídeo no meio da conversão, a antiga é descartada
   try {
-    usarPrincipal(await abrir(arquivo));
-    return;
+    usarPrincipal(await abrir(arquivo), manterPasso);
+    return true;
   } catch (e) {
-    if (!(e instanceof FormatoNaoLido)) { convertendo(`Não deu para abrir: ${(e as Error).message}`, 0); return; }
-    // conversão em segundo plano: a pessoa já vai para a mesa e compõe enquanto isso
+    if (!(e instanceof FormatoNaoLido)) { convertendo(`Não deu para abrir: ${(e as Error).message}`, 0); return false; }
     estado.principal = null;
     video.removeAttribute('src');
     estado.convertendo = { texto: 'Preparando o conversor', vez };
@@ -141,7 +230,7 @@ async function carregarPrincipal(arquivo: File) {
     $('faixa-conversao').hidden = false;
     prontoParaPrensar(false);
     mostrar('criar');
-    escolherReceita(estado.receita);
+    if (!manterPasso) irPara('receita');
     animarCompondo();
     try {
       const convertido = await converter(arquivo, (texto, fracao) => {
@@ -152,18 +241,16 @@ async function carregarPrincipal(arquivo: File) {
         barra.parentElement!.classList.toggle('indeterminado', fracao === undefined);
         barra.style.width = fracao === undefined ? '' : `${Math.round(fracao * 100)}%`;
       });
-      if (vez !== vezArquivo) return;
-      try {
-        usarPrincipal(await abrir(convertido));
-      } catch (e3) {
-        throw new Error(`o vídeo convertido também não abriu (${(e3 as Error).message}); o navegador pode estar sem suporte a vídeo`);
-      }
+      if (vez !== vezArquivo) return false;
+      usarPrincipal(await abrir(convertido), true);
+      return true;
     } catch (e2) {
-      if (vez !== vezArquivo) return;
+      if (vez !== vezArquivo) return false;
       estado.convertendo = null;
       $('faixa-conversao').hidden = true;
-      erro(`Não consegui converter esse vídeo: ${(e2 as Error).message}. Tente exportá-lo de novo no celular (em MP4) ou escolha outro em "Mais opções → Trocar o vídeo".`);
+      erro(`Não consegui abrir esse vídeo (${(e2 as Error).message}). Tente outro, ou exporte de novo em MP4.`);
       redesenhar();
+      return false;
     }
   }
 }
@@ -185,28 +272,31 @@ function prontoParaPrensar(sim: boolean) {
   b.querySelector('span')!.textContent = sim ? 'Prensar' : 'Esperando a conversão…';
 }
 
-function usarPrincipal(m: Midia) {
+function usarPrincipal(m: Midia, manterPasso = false) {
   estado.convertendo = null;
   $('convertendo').hidden = true;
   $('faixa-conversao').hidden = true;
   prontoParaPrensar(true);
   estado.principal = m;
-  $('som-fala').hidden = !m.audio;
+  $('som-fala').hidden = !temSom(m);
   video.src = URL.createObjectURL(m.arquivo);
   video.volume = Math.min(1, estado.som.volumeFala);
   estado.ini = 0;
   estado.fim = Math.min(m.dur, 60);
-  estado.ganchoMexido = !!campoGancho.value.trim(); // o que a pessoa escreveu durante a conversão fica
+  estado.ganchoMexido = false;
+  campoGancho.value = '';
   infoTrecho();
+  atualizarFila();
   mostrar('criar');
-  escolherReceita(estado.receita);
+  aplicarReceita(estado.receita);
+  if (!manterPasso) irPara(estado.saidas.length ? 'gancho' : 'receita');
   video.addEventListener('loadeddata', () => { video.currentTime = Math.min(1.5, m.dur / 2); }, { once: true });
   pedirLegenda().catch(() => {});
 }
 
 $<HTMLInputElement>('arquivo').addEventListener('change', (e) => {
-  const f = (e.target as HTMLInputElement).files?.[0];
-  if (f) carregarPrincipal(f);
+  const lista = (e.target as HTMLInputElement).files;
+  if (lista?.length) receberArquivos(lista);
 });
 const soltar = $('soltar');
 soltar.addEventListener('dragover', (e) => { e.preventDefault(); soltar.classList.add('sobre'); });
@@ -214,10 +304,9 @@ soltar.addEventListener('dragleave', () => soltar.classList.remove('sobre'));
 soltar.addEventListener('drop', (e) => {
   e.preventDefault();
   soltar.classList.remove('sobre');
-  const f = e.dataTransfer?.files[0];
-  if (f) carregarPrincipal(f);
+  if (e.dataTransfer?.files.length) receberArquivos(e.dataTransfer.files);
 });
-$('trocar').addEventListener('click', () => { mostrar('inicio'); $<HTMLInputElement>('arquivo').click(); });
+$('trocar').addEventListener('click', () => { $<HTMLInputElement>('arquivo').value = ''; $<HTMLInputElement>('arquivo').click(); });
 
 function infoTrecho() {
   const d = estado.fim - estado.ini;
@@ -226,11 +315,11 @@ function infoTrecho() {
 $('marca-ini').addEventListener('click', () => {
   estado.ini = Math.min(video.currentTime, estado.fim - 1);
   if (estado.fim - estado.ini > 180) estado.fim = estado.ini + 180;
-  infoTrecho(); redesenhar(); pedirLegenda().catch(() => {});
+  infoTrecho(); redesenhar(); pedirLegenda().catch(() => {}); montarResumo();
 });
 $('marca-fim').addEventListener('click', () => {
   estado.fim = Math.min(Math.max(video.currentTime, estado.ini + 1), estado.ini + 180); // 3 min: limite dos Shorts
-  infoTrecho(); pedirLegenda().catch(() => {});
+  infoTrecho(); pedirLegenda().catch(() => {}); montarResumo();
 });
 
 // ---------------------------------------------------------------- receitas: cada cartão mostra o SEU vídeo naquela receita
@@ -247,21 +336,27 @@ function montarReceitas() {
     const ctx = c.getContext('2d')!;
     ctx.scale(216 / L, 384 / A);
     miniaturas.set(r.id, ctx);
+    const texto = document.createElement('div');
+    texto.className = 'receita-texto';
     const nome = document.createElement('strong');
     nome.textContent = r.nome;
-    const para = document.createElement('small');
-    para.textContent = r.para;
-    b.append(c, nome, para);
-    b.addEventListener('click', () => escolherReceita(r));
+    const ideal = document.createElement('small');
+    ideal.textContent = r.ideal;
+    texto.append(nome, ideal);
+    b.append(c, texto);
+    b.addEventListener('click', () => { aplicarReceita(r); irPara('gancho'); });
     return b;
   }));
 }
 
-function escolherReceita(r: Receita) {
+/** troca de receita: o que vinha da receita anterior volta ao padrão; o que a pessoa escolheu de propósito fica */
+function aplicarReceita(r: Receita) {
+  const anterior = estado.receita;
   estado.receita = r;
   estado.estiloLegenda = null;
-  // receita de tela dividida "pede" o vídeo de baixo: se a pessoa tinha tirado, volta ao padrão da receita
-  if (r.layout === 'dividida' && estado.escolhaBaixo.tipo === 'nenhum') estado.escolhaBaixo = { tipo: 'receita' };
+  if (estado.escolhaBaixo.tipo !== 'video') estado.escolhaBaixo = { tipo: 'receita' };
+  // gancho que veio de um modelo da receita anterior não serve para a nova
+  if (anterior !== r && (campoGancho.value.includes('___') || anterior.modelos.includes(campoGancho.value))) estado.ganchoMexido = false;
   document.querySelectorAll<HTMLButtonElement>('.receita').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.id === r.id)));
   $('receita-dica').textContent = r.dica;
   sincGaleria(); sincEstilos();
@@ -295,7 +390,7 @@ function montarIdeias() {
 }
 campoGancho.addEventListener('input', () => { estado.ganchoMexido = true; redesenhar(); });
 
-// ---------------------------------------------------------------- mais opções
+// ---------------------------------------------------------------- fichas (estilo de legenda, redes)
 function fichas<T extends string>(caixa: HTMLElement, itens: { id: T; nome: string }[], ativo: (id: T) => boolean, escolher: (id: T) => void, multi = false) {
   const sinc = () => caixa.querySelectorAll<HTMLButtonElement>('button').forEach((b) => b.setAttribute(multi ? 'aria-pressed' : 'aria-checked', String(ativo(b.dataset.id as T))));
   caixa.replaceChildren(...itens.map((it) => {
@@ -319,7 +414,7 @@ fichas($('plataformas'), PLATAFORMAS.map((p) => ({ id: p.id, nome: p.nome })), (
   $<HTMLButtonElement>('prensar').disabled = estado.plataformas.size === 0;
 }, true);
 
-// ---------------------------------------------------------------- 4. vídeo de baixo: tudo à vista, numa galeria
+// ---------------------------------------------------------------- vídeo de baixo: tudo à vista, em faixas
 const galeria = $('galeria-baixo');
 const animacoes: { ctx: CanvasRenderingContext2D; desenhar: (typeof GERADORES)[number]['desenhar'] }[] = [];
 let clipesAcervo: ClipeAcervo[] = [];
@@ -356,7 +451,7 @@ function sincGaleria() {
   $('campo-credito').hidden = !usaVideoDeBaixo();
 }
 
-function escolherBaixo(e: typeof estado.escolhaBaixo) {
+function escolherBaixo(e: EscolhaBaixo) {
   estado.escolhaBaixo = e;
   sincGaleria();
   redesenhar();
@@ -378,14 +473,12 @@ const observarClipe = new IntersectionObserver((es) => es.forEach(async (e) => {
 }), { rootMargin: '200px' });
 
 function cartaoClipe(c: ClipeAcervo): HTMLButtonElement {
-  // não revisado: ninguém confirmou a licença, então ela não vai para a tela como se fosse certa
-  const licenca = c.revisado ? c.licenca : 'licença não confirmada';
-  const sub = `${c.credito} · ${licenca}${c.share_alike ? ' · o reel herda a CC BY-SA' : ''}`;
+  const sub = c.revisado ? `${c.credito} · ${c.licenca}` : `${c.credito} · não revisado`;
   const b = cartao(`clipe:${c.id}`, c.titulo, sub, async () => {
     b.classList.add('baixando');
     try {
       const blob = await baixarClipe(c);
-      await usarBaixo(new File([blob], c.arquivo, { type: blob.type || 'video/mp4' }), `${c.credito} (${licenca})`, `clipe:${c.id}`);
+      await usarBaixo(new File([blob], c.arquivo, { type: blob.type || 'video/mp4' }), c.credito, `clipe:${c.id}`);
     } catch (err) {
       erro((err as Error).message);
     } finally {
@@ -406,7 +499,7 @@ function montarGaleria() {
   animacoes.length = 0;
   const nenhum = cartao('nenhum', 'Nenhum', 'tela cheia', () => escolherBaixo({ tipo: 'nenhum' }), 'sem');
   const geradas = GERADORES.map((g) => {
-    const b = cartao(`gerado:${g.id}`, g.nome, 'animação · sem direitos de ninguém', () => escolherBaixo({ tipo: 'gerado', id: g.id }));
+    const b = cartao(`gerado:${g.id}`, g.nome, 'animação', () => escolherBaixo({ tipo: 'gerado', id: g.id }));
     const c = document.createElement('canvas');
     c.width = 135; c.height = 240;
     b.querySelector('.quadro')!.append(c);
@@ -415,9 +508,8 @@ function montarGaleria() {
   });
   const revisados = clipesAcervo.filter((c) => c.revisado).map(cartaoClipe);
   const outros = clipesAcervo.filter((c) => !c.revisado).map(cartaoClipe);
-  const enviar = cartao('enviar', 'Enviar o seu', 'um vídeo do seu aparelho', () => $<HTMLInputElement>('arquivo-baixo').click(), 'enviar');
+  const enviar = cartao('enviar', 'Enviar o seu', 'do seu aparelho', () => $<HTMLInputElement>('arquivo-baixo').click(), 'enviar');
   enviar.querySelector('.quadro')!.textContent = '+';
-  // faixas com rolagem lateral: tudo à vista sem virar uma parede de cartões no celular
   const faixa = (titulo: string, cartoes: HTMLElement[]) => {
     const g = document.createElement('div');
     g.className = 'grupo';
@@ -428,16 +520,16 @@ function montarGaleria() {
     return g;
   };
   galeria.replaceChildren(
-    faixa('Animações (sem direitos de ninguém) e o seu', [nenhum, enviar, ...geradas]),
-    ...(revisados.length ? [faixa(`Acervo livre, revisado (${revisados.length})`, revisados)] : []),
-    ...(outros.length ? [faixa(`Não revisados · licença não confirmada (${outros.length}): se não é seu, diga de onde veio`, outros)] : []),
+    faixa('Animações e o seu', [nenhum, enviar, ...geradas]),
+    ...(revisados.length ? [faixa(`Acervo (${revisados.length})`, revisados)] : []),
+    ...(outros.length ? [faixa(`Não revisados (${outros.length})`, outros)] : []),
   );
   sincGaleria();
 }
 
-/** as animações da galeria tocam de verdade, enquanto a mesa está na tela */
+/** as animações da galeria tocam de verdade, enquanto a etapa está na tela */
 function animarGaleria(agora: number) {
-  if (!$('tela-criar').hidden) {
+  if (!$('tela-criar').hidden && estado.passo === 'baixo') {
     for (const a of animacoes) a.desenhar(a.ctx, agora / 1000, 0, 0, 135, 240);
   }
   requestAnimationFrame(animarGaleria);
@@ -470,13 +562,14 @@ async function carregarAcervo() {
   montarGaleria();
 }
 
-// ---------------------------------------------------------------- 5. som: fala, música, ducking
+// ---------------------------------------------------------------- som: fala, música, ducking
 const MUSICAS = [
   { id: 'nenhuma', nome: 'Sem música', clima: 'só o som do vídeo' },
   ...TRILHAS.map((t) => ({ id: t.id, nome: t.nome, clima: t.clima })),
   { id: 'arquivo', nome: 'Sua música', clima: 'do seu aparelho' },
 ];
-const volumeMusicaDb = () => -30 + 24 * (estado.som.volumeMusica / 100); // 50 = -18 dB, o padrão de vídeo falado
+// régua de 0 a 100 → -24 a 0 dB em relação à fala; 55 ≈ -11 dB
+const volumeMusicaDb = () => -24 + 24 * (estado.som.volumeMusica / 100);
 const dbLin = (db: number) => 10 ** (db / 20);
 
 function montarMusicas() {
@@ -500,11 +593,8 @@ function sincMusicas() {
   document.querySelectorAll<HTMLButtonElement>('#musicas .musica').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.id === s.musica)));
   $('som-musica').hidden = s.musica === 'nenhuma';
   if (s.arquivoMusica) document.querySelector('#musicas [data-id="arquivo"] small')!.textContent = s.arquivoMusica.name;
-  $('musica-credito').textContent = s.musica === 'arquivo'
-    ? 'Use só música que você pode usar (sua, livre ou licenciada): as redes derrubam vídeo com música de terceiros.'
-    : s.musica !== 'nenhuma' ? 'Trilha gerada pela Prensa, na hora: sem direitos de ninguém.' : '';
   const v = s.volumeMusica;
-  $('volume-musica-valor').textContent = `${v < 30 ? 'baixa' : v < 70 ? 'média' : 'alta'} (${Math.round(volumeMusicaDb())} dB)`;
+  $('volume-musica-valor').textContent = v < 30 ? 'baixa' : v < 70 ? 'média' : 'alta';
 }
 
 function escolherMusica(id: string) {
@@ -589,10 +679,10 @@ function atualizarGanhoMusica() {
   const s = estado.som;
   const t = video.currentTime - estado.ini;
   const dur = estado.fim - estado.ini;
-  let g = dbLin(volumeMusicaDb()) * 3 * Math.max(0.2, s.volumeFala);
-  if (s.abaixar && estado.principal?.audio) {
+  let g = dbLin(volumeMusicaDb()) * 2 * Math.max(0.2, s.volumeFala);
+  if (s.abaixar && temSom(estado.principal)) {
     const palavras = estado.falas.get(chaveTrecho());
-    if (palavras?.some((w) => t >= w.inicio - 0.1 && t <= w.fim + 0.25)) g *= dbLin(-10);
+    if (palavras?.some((w) => t >= w.inicio - 0.1 && t <= w.fim + 0.25)) g *= dbLin(-8);
   }
   if (s.suave) {
     if (t < 1) g *= Math.max(0, t);
@@ -600,17 +690,18 @@ function atualizarGanhoMusica() {
   }
   ganhoMusica.gain.setTargetAtTime(g, ctxAudio.currentTime, 0.06);
 }
+
 // ---------------------------------------------------------------- prévia e miniaturas (a mesma função de desenho do export)
 const EXEMPLO_GANCHO: Record<string, string> = {
   titulo: 'A frase mais forte do vídeo', 'voce-sabia': 'que isso muda tudo?', lista: '3 erros que todo mundo comete',
   manchete: 'Isso não é o que te contaram', pov: 'você descobriu isso agora', pergunta: 'Por que isso acontece?',
 };
-/** exemplo = true só nas miniaturas: sem gancho escrito, mostra um exemplo para a receita se distinguir */
+/** exemplo = true só nas miniaturas: mostra um gancho de exemplo, para cada receita se distinguir */
 function quadroPara(r: Receita, legenda: Bloco[] | null, exemplo = false): Quadro {
   const escrito = campoGancho.value.includes('___') ? '' : campoGancho.value;
   return {
     layout: usaDividida(r) ? 'dividida' : 'cheio',
-    gancho: { estilo: r.gancho, texto: escrito || (exemplo ? EXEMPLO_GANCHO[r.gancho] ?? '' : '') },
+    gancho: { estilo: r.gancho, texto: exemplo ? EXEMPLO_GANCHO[r.gancho] ?? escrito : escrito },
     fonte: campoFonte.value.trim(),
     creditoBaixo: usaVideoDeBaixo() ? campoCredito.value.trim() : '',
     legenda,
@@ -621,7 +712,7 @@ function quadroPara(r: Receita, legenda: Bloco[] | null, exemplo = false): Quadr
 
 let blocosCache: { chave: string; blocos: Bloco[] | null } = { chave: '', blocos: null };
 function blocosDoTrecho(): Bloco[] | null {
-  const chave = `${chaveTrecho()}|${campoLegenda.checked}|${estado.falas.has(chaveTrecho())}`;
+  const chave = `${chaveTrecho()}|${campoLegenda.checked}|${estado.falas.has(chaveTrecho())}|${estado.versaoFala}`;
   if (blocosCache.chave !== chave) {
     const palavras = estado.falas.get(chaveTrecho());
     const f = faixaLegenda('cheio');
@@ -649,8 +740,7 @@ function redesenhar() {
   miniaturaPendente = requestAnimationFrame(() => {
     const [p, b] = fontes();
     const blocos = blocosDoTrecho();
-    // instante que mostra gancho e legenda juntos
-    const t = Math.max(1.2, blocos?.[0] ? blocos[0].ini + 0.3 : video.currentTime - estado.ini);
+    const t = 1.6; // o carimbo do gancho já assentou e a legenda costuma estar na tela
     for (const r of RECEITAS) {
       const ctx = miniaturas.get(r.id);
       if (ctx) desenharQuadro(ctx, quadroPara(r, blocos, true), t, p, b);
@@ -680,41 +770,41 @@ previa.addEventListener('click', alternar);
 $('play').addEventListener('click', alternar);
 $<HTMLInputElement>('ver-zona').addEventListener('change', (e) => { $('zona').hidden = !(e.target as HTMLInputElement).checked; });
 [campoFonte, campoCredito].forEach((c) => c.addEventListener('input', () => redesenhar()));
-campoFonte.addEventListener('input', () => { $('aviso-fonte').hidden = true; });
-campoLegenda.addEventListener('change', () => { redesenhar(); pedirLegenda().catch(() => {}); });
+campoLegenda.addEventListener('change', () => { redesenhar(); pedirLegenda().catch(() => {}); montarEditorLegenda(); });
 
-// ---------------------------------------------------------------- legenda em segundo plano: começa assim que o vídeo chega
+// ---------------------------------------------------------------- legenda: em segundo plano, e editável
 function estadoLegenda(t: string) {
   $('legenda-estado').textContent = t;
-  $('legenda-estado-2').textContent = t.replace(/ Ideias tiradas da própria fala:$/, '');
+  $('legenda-estado-2').textContent = t.replace(/^Ideias tiradas da própria fala:$/, '');
 }
 
 function avisoLegenda(texto: string, fracao?: number) {
-  estadoLegenda(`Ouvindo a fala para sugerir o gancho e fazer a legenda… ${fracao === undefined ? '' : `${Math.round(fracao * 100)}%`}`);
+  estadoLegenda(`Ouvindo a fala… ${fracao === undefined ? '' : `${Math.round(fracao * 100)}%`}`);
   if (estado.esperandoLegenda) andamento(texto, fracao);
 }
 
 function pedirLegenda(): Promise<Palavra[]> {
   const m = estado.principal;
-  if (!m?.audio || !campoLegenda.checked) {
-    estadoLegenda(m && !m.audio ? 'Esse vídeo não tem som: sai sem legenda.' : '');
+  if (!temSom(m) || !campoLegenda.checked) {
+    estadoLegenda(m && !temSom(m) ? 'Esse vídeo não tem som: sai sem legenda.' : '');
     return Promise.resolve([]);
   }
   const k = chaveTrecho();
   const pronta = estado.falas.get(k);
-  if (pronta) { estadoLegenda('Legenda pronta. Ideias tiradas da própria fala:'); return Promise.resolve(pronta); }
+  if (pronta) { estadoLegenda('Ideias tiradas da própria fala:'); return Promise.resolve(pronta); }
   const andando = estado.ouvindo.get(k);
   if (andando) return andando;
   const { ini, fim } = estado;
   const p = (async () => {
     avisoLegenda('Separando o áudio');
-    const audio = await audioParaFala(m, ini, fim);
+    const audio = await audioParaFala(m!, ini, fim);
     const palavras = audio ? await transcrever(audio, avisoLegenda, () => k === chaveTrecho()) : [];
     estado.falas.set(k, palavras);
     if (k === chaveTrecho()) {
-      estadoLegenda('Legenda pronta. Ideias tiradas da própria fala:');
+      estadoLegenda('Ideias tiradas da própria fala:');
       montarIdeias();
       redesenhar();
+      if (estado.passo === 'legenda') montarEditorLegenda();
     }
     return palavras;
   })().finally(() => estado.ouvindo.delete(k));
@@ -722,7 +812,52 @@ function pedirLegenda(): Promise<Palavra[]> {
   return p;
 }
 
-// ---------------------------------------------------------------- prensar
+/** cada bloco da legenda vira um campo: a pessoa corrige o texto e o tempo se redistribui dentro do bloco */
+function montarEditorLegenda() {
+  const blocos = blocosDoTrecho();
+  const caixa = $('editor-legenda');
+  caixa.hidden = !blocos?.length;
+  if (!blocos?.length) return;
+  $('blocos-legenda').replaceChildren(...blocos.map((b) => {
+    const li = document.createElement('li');
+    const tempo = document.createElement('button');
+    tempo.type = 'button';
+    tempo.className = 'tempo-bloco';
+    tempo.textContent = fmt(b.ini);
+    tempo.title = 'Ouvir este trecho';
+    tempo.addEventListener('click', () => {
+      acordarAudio();
+      video.currentTime = estado.ini + b.ini;
+      video.play();
+      setTimeout(() => video.pause(), Math.max(600, (b.fim - b.ini) * 1000));
+    });
+    const campo = document.createElement('input');
+    campo.type = 'text';
+    campo.value = b.palavras.map((w) => w.texto).join(' ');
+    campo.addEventListener('change', () => corrigirBloco(b, campo.value));
+    li.append(tempo, campo);
+    return li;
+  }));
+}
+
+function corrigirBloco(b: Bloco, texto: string) {
+  const palavras = estado.falas.get(chaveTrecho());
+  if (!palavras) return;
+  const i = palavras.indexOf(b.palavras[0]);
+  const j = palavras.indexOf(b.palavras[b.palavras.length - 1]);
+  if (i < 0 || j < 0) return;
+  const novas = texto.trim().split(/\s+/).filter(Boolean);
+  const ini = b.palavras[0].inicio, fim = b.palavras[b.palavras.length - 1].fim;
+  const total = novas.reduce((a, w) => a + w.length + 1, 0) || 1;
+  let t = ini;
+  const comTempo = novas.map((w) => { const d = ((w.length + 1) / total) * (fim - ini); const p = { texto: w, inicio: t, fim: t + d }; t += d; return p; });
+  palavras.splice(i, j - i + 1, ...comTempo);
+  estado.versaoFala++;
+  redesenhar();
+  montarEditorLegenda();
+}
+
+// ---------------------------------------------------------------- prensar (um vídeo, a fila inteira)
 function erro(msg: string) {
   $('erro').hidden = !msg;
   $('erro').textContent = msg;
@@ -744,26 +879,35 @@ function slug(s: string) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'reel';
 }
 
-$('prensar').addEventListener('click', async () => {
+function textoPost(): string {
+  const g = campoGancho.value.trim();
+  const prefixo: Record<string, string> = { 'voce-sabia': 'Você sabia? ', pov: 'POV: ' };
+  const linhas = [];
+  if (g && !g.includes('___')) linhas.push((prefixo[estado.receita.gancho] ?? '') + g);
+  if (campoFonte.value.trim()) linhas.push(`Fonte: ${campoFonte.value.trim()}`);
+  if (usaVideoDeBaixo() && campoCredito.value.trim()) linhas.push(`Vídeo de baixo: ${campoCredito.value.trim()}`);
+  return linhas.join('\n');
+}
+
+/** prensa o vídeo atual com as escolhas atuais e põe o resultado na bandeja */
+async function prensarAtual(): Promise<boolean> {
   const m = estado.principal;
-  if (!m) return;
+  if (!m) return false;
   erro('');
-  $('aviso-fonte').hidden = !!campoFonte.value.trim();
   video.pause();
-  const botao = $<HTMLButtonElement>('prensar');
-  botao.disabled = true;
   estado.cancelar = new AbortController();
   const plats = PLATAFORMAS.filter((p) => estado.plataformas.has(p.id));
   $('prelo-folhas').replaceChildren(...plats.map((p) => Object.assign(document.createElement('span'), { textContent: p.nome.replace('Status do ', '') })));
   const t0 = performance.now();
   try {
     let blocos: Bloco[] | null = null;
-    if (campoLegenda.checked && m.audio) {
+    let srt = '';
+    if (campoLegenda.checked && temSom(m)) {
       estado.esperandoLegenda = true;
       andamento('Terminando de ouvir a fala');
       await pedirLegenda().finally(() => { estado.esperandoLegenda = false; });
       blocos = blocosDoTrecho();
-      estado.srt = blocos ? gerarSrt(blocos) : '';
+      srt = blocos ? gerarSrt(blocos) : '';
     }
     const q = quadroPara(estado.receita, blocos);
     const pMusica = bufferDaMusica();
@@ -781,85 +925,148 @@ $('prensar').addEventListener('click', async () => {
       folhasDoPrelo(Math.floor(f * plats.length));
     });
     folhasDoPrelo(plats.length);
-    mostrarProntos(arquivos, mestre, (performance.now() - t0) / 1000);
+    estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
+    montarBandeja();
+    return true;
   } catch (e) {
     if ((e as Error).name !== 'AbortError') {
       console.error(e);
       erro(`Não deu certo: ${(e as Error).message}`);
     }
+    return false;
   } finally {
     $('andamento').hidden = true;
-    botao.disabled = false;
     estado.cancelar = null;
   }
+}
+
+$('prensar').addEventListener('click', async () => {
+  const b = $<HTMLButtonElement>('prensar');
+  b.disabled = true;
+  const ok = await prensarAtual();
+  b.disabled = false;
+  if (ok) $('bandeja').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 $('cancelar').addEventListener('click', () => estado.cancelar?.abort());
 
-function textoPost(): string {
-  const g = campoGancho.value.trim();
-  const prefixo: Record<string, string> = { 'voce-sabia': 'Você sabia? ', pov: 'POV: ' };
-  const linhas = [];
-  if (g && !g.includes('___')) linhas.push((prefixo[estado.receita.gancho] ?? '') + g);
-  if (campoFonte.value.trim()) linhas.push(`Fonte: ${campoFonte.value.trim()}`);
-  if (usaVideoDeBaixo() && campoCredito.value.trim()) linhas.push(`Vídeo de baixo: ${campoCredito.value.trim()}`);
-  return linhas.join('\n');
-}
-
-function mostrarProntos(arquivos: Arquivo[], mestre: Blob, segundos: number) {
+/** a bandeja de saída: tudo o que já foi prensado nesta sessão, com compartilhar e baixar; a mesa continua aberta */
+function montarBandeja() {
   estado.urls.forEach((u) => URL.revokeObjectURL(u));
   estado.urls = [];
-  const resultado = $<HTMLVideoElement>('resultado');
-  resultado.src = URL.createObjectURL(mestre);
-  estado.urls.push(resultado.src);
-  $('arquivos').replaceChildren(...arquivos.map((a, k) => {
+  const s = estado.saidas;
+  $('bandeja').hidden = !s.length;
+  $('passe-adiante').hidden = !s.length;
+  $('bandeja-contador').textContent = `${s.length} ${s.length === 1 ? 'vídeo' : 'vídeos'}`;
+  $('saidas').replaceChildren(...s.map((saida, k) => {
     const li = document.createElement('li');
+    li.className = 'saida';
     li.style.setProperty('--k', String(k));
-    const url = URL.createObjectURL(a.blob);
-    estado.urls.push(url);
-    const arquivo = new File([a.blob], a.nome, { type: 'video/mp4' });
-    const info = document.createElement('div');
-    info.className = 'info';
-    info.innerHTML = '<strong></strong><small></small>';
-    info.querySelector('strong')!.textContent = a.plataforma;
-    info.querySelector('small')!.textContent = `${(a.blob.size / 1e6).toFixed(1)} MB${a.aviso ? ` · ${a.aviso}` : ''}`;
-    li.append(info);
-    if (navigator.canShare?.({ files: [arquivo] })) {
-      const comp = document.createElement('button');
-      comp.type = 'button';
-      comp.className = 'compartilhar';
-      comp.textContent = 'Compartilhar';
-      comp.addEventListener('click', () => navigator.share({ files: [arquivo], text: textoPost() }).catch(() => {}));
-      li.append(comp);
+    const v = document.createElement('video');
+    v.muted = true; v.loop = true; v.playsInline = true;
+    const u = URL.createObjectURL(saida.mestre);
+    estado.urls.push(u);
+    v.src = u;
+    v.addEventListener('mouseenter', () => v.play().catch(() => {}));
+    v.addEventListener('mouseleave', () => v.pause());
+    v.addEventListener('click', () => (v.paused ? v.play() : v.pause()));
+    const corpo = document.createElement('div');
+    corpo.className = 'saida-corpo';
+    const t = document.createElement('strong');
+    t.textContent = saida.titulo;
+    const sub = document.createElement('small');
+    sub.textContent = `pronto em ${Math.round(saida.segundos)} s`;
+    const botoes = document.createElement('div');
+    botoes.className = 'saida-botoes';
+    for (const a of saida.arquivos) {
+      const arquivo = new File([a.blob], a.nome, { type: 'video/mp4' });
+      const url = URL.createObjectURL(a.blob);
+      estado.urls.push(url);
+      const grupo = document.createElement('span');
+      grupo.className = 'rede';
+      if (a.aviso) grupo.title = a.aviso;
+      grupo.append(Object.assign(document.createElement('b'), { textContent: `${a.plataforma} · ${(a.blob.size / 1e6).toFixed(0)} MB` }));
+      if (navigator.canShare?.({ files: [arquivo] })) {
+        const comp = Object.assign(document.createElement('button'), { type: 'button', className: 'compartilhar', textContent: 'Compartilhar' });
+        comp.addEventListener('click', () => navigator.share({ files: [arquivo], text: saida.post }).catch(() => {}));
+        grupo.append(comp);
+      }
+      grupo.append(Object.assign(document.createElement('a'), { href: url, download: a.nome, className: 'baixar', textContent: 'Baixar' }));
+      botoes.append(grupo);
     }
-    const baixar = document.createElement('a');
-    baixar.href = url;
-    baixar.download = a.nome;
-    baixar.textContent = 'Baixar';
-    baixar.className = 'baixar';
-    li.append(baixar);
+    const extras = document.createElement('div');
+    extras.className = 'saida-extras';
+    const copiar = Object.assign(document.createElement('button'), { type: 'button', textContent: 'Copiar texto do post' });
+    copiar.addEventListener('click', () => { navigator.clipboard.writeText(saida.post); copiar.textContent = 'Copiado ✓'; });
+    extras.append(copiar);
+    if (saida.srt) {
+      const srt = Object.assign(document.createElement('button'), { type: 'button', textContent: 'Legenda .srt' });
+      srt.addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([saida.srt], { type: 'text/plain' }));
+        a.download = `${slug(saida.titulo)}.srt`;
+        a.click();
+      });
+      extras.append(srt);
+    }
+    corpo.append(t, sub, botoes, extras);
+    li.append(v, corpo);
     return li;
   }));
-  $<HTMLTextAreaElement>('post').value = textoPost();
-  $('srt').hidden = !estado.srt;
-  $('pronto-tempo').textContent = `Pronto em ${Math.round(segundos)} s`;
-  mostrar('pronta');
-  resultado.play().catch(() => {});
+  const resto = (estado.principal?.dur ?? 0) - estado.fim;
+  $<HTMLButtonElement>('outro-corte').hidden = resto < 3;
+  atualizarFila();
 }
 
-$('copiar').addEventListener('click', () => navigator.clipboard.writeText($<HTMLTextAreaElement>('post').value));
-$('srt').addEventListener('click', () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([estado.srt], { type: 'text/plain' }));
-  a.download = 'legenda.srt';
-  a.click();
+$('outro-corte').addEventListener('click', () => {
+  const m = estado.principal;
+  if (!m) return;
+  const dur = estado.fim - estado.ini;
+  estado.ini = estado.fim;
+  estado.fim = Math.min(m.dur, estado.ini + dur);
+  estado.ganchoMexido = false;
+  campoGancho.value = '';
+  infoTrecho();
+  video.currentTime = estado.ini;
+  redesenhar();
+  pedirLegenda().catch(() => {});
+  irPara('gancho');
+  montarBandeja();
+  $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-$('voltar').addEventListener('click', () => mostrar('criar'));
+
+$('proximo-fila').addEventListener('click', async () => {
+  if (estado.filaIndice >= estado.fila.length - 1) return;
+  estado.filaIndice++;
+  await carregarPrincipal(estado.fila[estado.filaIndice], true);
+  irPara('gancho');
+  $('trilha-passos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/** em lote: o resto da fila com as mesmas escolhas, e o gancho de cada um tirado da própria fala */
+$('prensar-fila').addEventListener('click', async () => {
+  const botoes = ['prensar-fila', 'proximo-fila', 'prensar'].map((id) => $<HTMLButtonElement>(id));
+  botoes.forEach((b) => { b.disabled = true; });
+  try {
+    while (estado.filaIndice < estado.fila.length - 1) {
+      estado.filaIndice++;
+      andamento(`Vídeo ${estado.filaIndice + 1} de ${estado.fila.length}: abrindo`);
+      if (!(await carregarPrincipal(estado.fila[estado.filaIndice], true))) continue;
+      if (campoLegenda.checked && temSom(estado.principal)) { await pedirLegenda().catch(() => []); montarIdeias(); }
+      await prensarAtual();
+    }
+  } finally {
+    botoes.forEach((b) => { b.disabled = false; });
+    atualizarFila();
+  }
+});
+
+$('novo').addEventListener('click', () => { $<HTMLInputElement>('arquivo').value = ''; $<HTMLInputElement>('arquivo').click(); });
+
 $('passar-adiante').addEventListener('click', async () => {
   const dados = { title: 'Prensa', text: 'Prensa: seu vídeo vira reels em 3 toques, no seu celular. Software livre, de graça, sem marca d’água.', url: location.origin + location.pathname };
   if (navigator.share) await navigator.share(dados).catch(() => {});
   else { await navigator.clipboard.writeText(`${dados.text} ${dados.url}`); $('passar-adiante').textContent = 'Link copiado ✓'; }
 });
-$('novo').addEventListener('click', () => { $<HTMLInputElement>('arquivo').value = ''; estado.principal = null; mostrar('inicio'); });
 
 // ---------------------------------------------------------------- a história
 const historia = $<HTMLDialogElement>('historia');
@@ -887,11 +1094,12 @@ $('historia-comecar').addEventListener('click', () => {
   montarReceitas();
   montarMusicas();
   montarGaleria();
+  irPara('receita');
   requestAnimationFrame(animarGaleria);
   await document.fonts.load(`84px "${FONTE}"`).catch(() => {});
   demo = criarDemo($<HTMLCanvasElement>('demo'));
-  irPasso(0);
-  escolherReceita(RECEITAS[0]);
+  irPassoDemo(0);
+  aplicarReceita(RECEITAS[0]);
   carregarAcervo();
   // vídeo recebido pelo menu Compartilhar (Android)
   if (new URLSearchParams(location.search).has('recebido') && 'caches' in window) {
@@ -899,7 +1107,7 @@ $('historia-comecar').addEventListener('click', () => {
     const r = await c.match('./recebido');
     if (r) {
       const nome = decodeURIComponent(r.headers.get('X-Nome') ?? 'video.mp4');
-      await carregarPrincipal(new File([await r.blob()], nome, { type: r.headers.get('Content-Type') ?? 'video/mp4' }));
+      receberArquivos([new File([await r.blob()], nome, { type: r.headers.get('Content-Type') ?? 'video/mp4' })]);
       await c.delete('./recebido');
     }
     history.replaceState(null, '', location.pathname);

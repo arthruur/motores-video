@@ -36,15 +36,17 @@ No celular, abra o endereço e use **"Adicionar à tela inicial"**: a Prensa vir
 
 **Formato que o navegador não lê?** MPEG-4 Part 2, 3GP, ProRes, AVI, som AC-3 ou HEVC num aparelho sem suporte: a Prensa converte ali mesmo, uma vez, com o ffmpeg.wasm, e segue. O conversor (~31 MB, GPL) só é baixado quando precisa.
 
-**Tela 2: a mesa de composição.** O celular com a prévia à esquerda (toque para tocar; "Mostrar onde a rede cobre" desenha as áreas que a interface do TikTok/Reels/Shorts tapa) e três etapas numeradas:
-1. **Receita:** cada cartão mostra **o seu próprio vídeo já naquela receita**, não um ícone.
+**Tela 2: a mesa de composição, como passo a passo.** Uma etapa por vez (Receita → Gancho → Fonte → Vídeo de baixo → Som → Legenda → Prensar), com o botão Prensar sempre à mão. Cada receita diz para que vídeo serve. O que sai da prensa vai para uma bandeja na própria mesa, com "Próximo da fila", "Outro corte deste vídeo" e "Prensar o resto da fila" (vários vídeos de uma vez, cada um com o gancho tirado da própria fala). A legenda pode ser corrigida frase a frase.
+
+Ao lado, o celular com a prévia (toque para tocar; "Onde a rede cobre" desenha as áreas que a interface do TikTok, do Reels e do Shorts tapa). As etapas:
+1. **Receita:** cada cartão mostra **o seu próprio vídeo já naquela receita** e para que tipo de vídeo ela serve.
 2. **Gancho:** sugerido a partir da própria fala assim que a legenda fica pronta (ela começa a ser feita quando o vídeo chega). As ideias aparecem como fichas: primeiro as frases da fala, depois os modelos com lacuna da receita.
 3. **De onde é o vídeo?**
 4. **Vídeo de baixo:** galeria em faixas com Nenhum, Enviar o seu, as animações geradas, o acervo revisado e os não revisados (com "licença não confirmada").
 5. **Som:** volume do vídeo, som limpo e música: trilhas geradas na hora (Calma, Lo-fi, Tensão, Animada) ou a sua. Tem volume da música, "abaixar quando alguém fala" e entrada e saída suaves. A prévia toca junto.
-6. **Legenda:** ligar ou desligar, bloco ou palavra por palavra.
+6. **Legenda:** ligar ou desligar, bloco ou palavra por palavra, e corrigir o texto frase a frase.
 
-Depois, **Prensar**: enquanto trabalha, a prensa mostra uma folha por rede sendo carimbada. O resto fica em "Mais opções": trecho, vídeo de baixo, estilo da legenda e redes.
+Enquanto prensa, uma folha por rede é carimbada. "Trecho e redes" fica na última etapa.
 
 | Receita | Para | O que monta |
 |---|---|---|
@@ -64,7 +66,7 @@ O porquê de cada escolha, com o nível de evidência e as fontes, está em [doc
 - **Acervo de clipes reais com licença livre** (Wikimedia Commons e NASA), revisados por uma pessoa e publicados num **dataset do Hugging Face**. O app (`src/acervo.ts`) lê de `public/acervo/` e, se o vídeo não estiver ali, do dataset `arthruur/prensa-acervo`, guardando no cache para funcionar offline. Ver [docs/acervo.md](../docs/acervo.md).
 - **Ou o seu próprio vídeo.**
 
-**Tela 3: saiu da prensa.** O reel tocando no celular e um arquivo por rede (TikTok, Reels, Shorts, Kwai, status do WhatsApp), com Compartilhar e Baixar, mais o texto do post com a fonte e a legenda `.srt`. Limites e fontes em [docs/plataformas.md](../docs/plataformas.md).
+**A bandeja "Saiu da prensa":** cada vídeo prensado na sessão, com um arquivo por rede (TikTok, Reels, Shorts, Kwai, status do WhatsApp), Compartilhar e Baixar, o texto do post e a legenda `.srt`. Limites e fontes em [docs/plataformas.md](../docs/plataformas.md).
 
 A prévia usa a **mesma função de desenho** do export (`desenharQuadro` em `src/formatos.ts`): o que aparece nela é o que sai no arquivo. Toque nela para ver tocando.
 

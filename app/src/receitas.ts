@@ -6,7 +6,8 @@ export type Receita = {
   id: string;
   nome: string;
   para: string;   // uma linha: para que serve
-  dica: string;   // o que a evidência diz, em uma frase
+  ideal: string;  // que vídeo de origem combina com a receita
+  dica: string;   // uma dica prática, em uma frase
   layout: Layout;
   gancho: EstiloGancho;
   legenda: EstiloLegenda;
@@ -17,49 +18,57 @@ export type Receita = {
 export const RECEITAS: Receita[] = [
   {
     id: 'direto', nome: 'Corte direto', para: 'Fala, dica, opinião',
+    ideal: 'Alguém falando para a câmera: opinião, dica, explicação curta.',
     dica: 'Comece na frase mais forte e corte o "oi, gente": os 3 primeiros segundos decidem.',
     layout: 'cheio', gancho: 'titulo', legenda: 'bloco', gerador: null,
     modelos: ['O que quase ninguém percebe sobre ___', 'Isso aqui explica por que ___', 'A parte de ___ que ninguém explica direito', 'Ninguém te conta que ___'],
   },
   {
     id: 'sabia', nome: 'Você sabia?', para: 'Curiosidade, explicação',
-    dica: 'Curiosidade nasce de uma lacuna pequena, que o próprio vídeo fecha.',
+    ideal: 'Explicação de um fato curioso: aula, divulgação científica, curiosidade.',
+    dica: 'Uma pergunta pequena que o próprio vídeo responde prende mais que uma promessa grande.',
     layout: 'cheio', gancho: 'voce-sabia', legenda: 'bloco', gerador: null,
     modelos: ['que ___', 'por que ___?', 'o que acontece quando ___'],
   },
   {
     id: 'lista', nome: 'Dica rápida', para: '"3 erros", "5 passos"',
-    dica: 'Número no gancho promete algo contável. Cumpra a conta no vídeo.',
+    ideal: 'Você contando passos, erros ou dicas em ordem (1, 2, 3...).',
+    dica: 'Ponha o número no começo do gancho: ele aparece gigante.',
     layout: 'cheio', gancho: 'lista', legenda: 'palavra', gerador: null,
-    modelos: ['___ erros comuns em ___', '___ coisas que eu queria saber antes de ___', 'O passo a passo de ___ em ___ etapas', 'Em ___ segundos: como ___'],
+    modelos: ['3 erros comuns em ___', '5 coisas que eu queria saber antes de ___', 'O passo a passo de ___', 'Em 30 segundos: como ___'],
   },
   {
     id: 'resposta', nome: 'Pergunta e resposta', para: 'Responder uma dúvida',
-    dica: 'A pergunta no topo e o vídeo como resposta: a promessa se cumpre na hora. Use perguntas de verdade, do seu público.',
+    ideal: 'Você respondendo a pergunta de alguém (comentário, direct, plateia).',
+    dica: 'Cole a pergunta como ela chegou: o vídeo é a resposta.',
     layout: 'cheio', gancho: 'pergunta', legenda: 'bloco', gerador: null,
     modelos: ['Por que ___?', 'Como ___?', 'Vale a pena ___?', 'O que acontece se ___?'],
   },
   {
     id: 'duplo', nome: 'Estímulo duplo', para: 'Podcast, história longa',
-    dica: 'Tela dividida não atrapalha a compreensão, mas também não prova que retém mais. Evite em política e em vídeo para crianças.',
+    ideal: 'Podcast, conversa longa ou história contada, com pouco movimento na imagem.',
+    dica: 'Funciona melhor quando a imagem de cima é parada: a de baixo dá o movimento.',
     layout: 'dividida', gancho: 'voce-sabia', legenda: 'bloco', gerador: 'bolinhas',
     modelos: ['que ___', 'o que acontece de verdade quando ___', 'por que ___?'],
   },
   {
     id: 'mito', nome: 'Mito ou fato', para: 'Ciência, checagem, educação',
-    dica: 'Contrarie a crença com fato, e mostre a fonte. Indignação contra ideia, nunca contra pessoa.',
+    ideal: 'Explicação que desmente uma crença comum.',
+    dica: 'Diga o mito no gancho e o fato logo depois.',
     layout: 'cheio', gancho: 'manchete', legenda: 'bloco', gerador: null,
-    modelos: ['___ não funciona do jeito que te contaram', 'Parece certo, mas ___ é um erro', 'O mito de ___ e o que os dados mostram'],
+    modelos: ['___ não funciona do jeito que te contaram', 'Parece certo, mas ___ é um erro', 'O mito de ___'],
   },
   {
     id: 'frase', nome: 'Frase de impacto', para: 'Trecho marcante de palestra',
-    dica: 'Curto (10 a 20 s) e feito para rever. A própria frase é o gancho.',
+    ideal: 'Um trecho curto e marcante de palestra, aula ou entrevista (10 a 20 s).',
+    dica: 'Curto e feito para rever: a própria frase é o gancho.',
     layout: 'cheio', gancho: 'titulo', legenda: 'palavra', gerador: null,
     modelos: [],
   },
   {
     id: 'civico', nome: 'Cívico', para: 'Política, mandato, jornalismo',
-    dica: 'Modo seguro: só ganchos tirados da fala, legenda clássica, sem tela dividida. Não corte a fala de um jeito que mude o sentido.',
+    ideal: 'Fala pública, mandato, entrevista ou cobertura jornalística.',
+    dica: 'Gancho tirado da própria fala e legenda clássica, sem tela dividida.',
     layout: 'cheio', gancho: 'titulo', legenda: 'bloco', gerador: null,
     modelos: [],
   },

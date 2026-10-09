@@ -9,13 +9,15 @@ import { mixar } from './fxtor/som';
 import type { Plataforma } from './plataformas';
 
 export const FPS = 30;
-const BITRATE = 6_000_000; // as plataformas recomprimem; menor = compartilha mais rápido pelo celular
+// 3 Mbps: ~22 MB por minuto. As redes recomprimem de qualquer jeito, e arquivo leve sobe e compartilha rápido pelo celular
+const BITRATE = 3_000_000;
 
 export type Midia = {
   arquivo: File;
   input: Input;
   video: InputVideoTrack;
   audio: InputAudioTrack | null;
+  somWeb: AudioBuffer | null; // som decodificado pelo Web Audio quando o WebCodecs não lê (AAC no iPhone, por exemplo)
   inicio: number; // primeiro timestamp do arquivo
   dur: number;
   w: number;
@@ -40,15 +42,37 @@ export async function abrir(arquivo: File): Promise<Midia> {
   if (!video) throw new Error('Esse arquivo não tem vídeo.');
   const codigo = async (t: InputVideoTrack | InputAudioTrack, oque: string) => { const c = await t.getCodec(); return c ? `${oque} em ${c.toUpperCase()}` : `esse tipo de ${oque}`; };
   if (!(await video.canDecode())) throw new FormatoNaoLido(await codigo(video, 'vídeo'));
-  const audio = await input.getPrimaryAudioTrack();
-  if (audio && !(await audio.canDecode())) throw new FormatoNaoLido(await codigo(audio, 'som'));
+  let audio = await input.getPrimaryAudioTrack();
+  let somWeb: AudioBuffer | null = null;
+  if (audio && !(await audio.canDecode())) {
+    const faixa = audio;
+    // o navegador do iPhone não decodifica AAC pelo WebCodecs, mas decodifica pelo Web Audio: usa esse caminho
+    try {
+      somWeb = await new OfflineAudioContext(2, 1, 48000).decodeAudioData(await arquivo.arrayBuffer());
+      audio = null;
+    } catch {
+      throw new FormatoNaoLido(await codigo(faixa, 'som'));
+    }
+  }
   const inicio = await input.getFirstTimestamp();
   const dur = (await input.computeDuration()) - inicio;
-  return { arquivo, input, video, audio, inicio, dur, w: video.displayWidth, h: video.displayHeight };
+  return { arquivo, input, video, audio, somWeb, inicio, dur, w: video.displayWidth, h: video.displayHeight };
 }
 
 /** áudio do trecho [ini, fim) como canais Float32 na taxa original */
+export const temSom = (m: Midia | null) => !!(m && (m.audio || m.somWeb));
+
 async function lerAudio(m: Midia, ini: number, fim: number): Promise<{ canais: Float32Array<ArrayBuffer>[]; taxa: number }> {
+  if (!m.audio && m.somWeb) {
+    const b = m.somWeb, taxa = b.sampleRate;
+    const de = Math.floor(ini * taxa), ate = Math.min(b.length, Math.ceil(fim * taxa)), n = Math.ceil((fim - ini) * taxa);
+    const canais = Array.from({ length: Math.min(2, b.numberOfChannels) }, (_, c) => {
+      const out = new Float32Array(new ArrayBuffer(n * 4));
+      out.set(b.getChannelData(c).subarray(de, Math.max(de, ate)));
+      return out;
+    });
+    return { canais, taxa };
+  }
   const taxa = await m.audio!.getSampleRate();
   const nc = Math.min(2, await m.audio!.getNumberOfChannels());
   const n = Math.ceil((fim - ini) * taxa);
@@ -68,7 +92,7 @@ async function lerAudio(m: Midia, ini: number, fim: number): Promise<{ canais: F
 
 /** áudio mono 16 kHz para o Whisper */
 export async function audioParaFala(m: Midia, ini: number, fim: number): Promise<Float32Array | null> {
-  if (!m.audio) return null;
+  if (!temSom(m)) return null;
   const { canais, taxa } = await lerAudio(m, ini, fim);
   const ctx = new OfflineAudioContext(1, Math.ceil((fim - ini) * 16000), 16000);
   const b = ctx.createBuffer(canais.length, canais[0].length, taxa);
@@ -128,10 +152,10 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   canvas.height = A;
   const ctx = canvas.getContext('2d')!;
   const output = new Output({ format: new Mp4OutputFormat({ fastStart: 'in-memory' }), target: new BufferTarget() });
-  const fonteVideo = new CanvasSource(canvas, { codec: 'avc', bitrate: BITRATE, keyFrameInterval: 1 });
+  const fonteVideo = new CanvasSource(canvas, { codec: 'avc', bitrate: BITRATE, keyFrameInterval: 2 });
   output.addVideoTrack(fonteVideo, { frameRate: FPS });
   let fonteAudio: AudioBufferSource | null = null;
-  if (p.principal.audio || p.som.musica) {
+  if (temSom(p.principal) || p.som.musica) {
     fonteAudio = new AudioBufferSource({ codec: 'aac', bitrate: 128_000 });
     output.addAudioTrack(fonteAudio);
   }
@@ -166,7 +190,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
   if (itB) await itB.return(undefined);
 
   if (fonteAudio) {
-    const lido = p.principal.audio ? await lerAudio(p.principal, p.ini, p.fim) : null;
+    const lido = temSom(p.principal) ? await lerAudio(p.principal, p.ini, p.fim) : null;
     const taxa = lido?.taxa ?? 48000;
     const canais = (await mixar({
       fala: lido?.canais ?? null, musica: p.som.musica, taxa, amostras: Math.ceil((p.fim - p.ini) * taxa),

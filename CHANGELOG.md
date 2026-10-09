@@ -4,6 +4,24 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: passo a passo guiado, produção em escala e legenda editável
+
+- **A mesa virou um passo a passo:**
+  - Receita → Gancho → Fonte → Vídeo de baixo → Som → Legenda → Prensar, uma etapa por vez, com "Voltar" e "Próximo";
+  - uma trilha de etapas clicável no topo e o botão **Prensar sempre à mão**, fixo embaixo.
+  - Cada receita mostra **para que vídeo ela serve** ("Alguém falando para a câmera…", "Você contando passos ou erros em ordem…").
+  - Trocar de receita volta ao padrão o que vinha da receita anterior (gancho de modelo, vídeo de baixo, estilo de legenda) e mantém o que a pessoa escolheu de propósito. Isso corrige as misturas entre receitas.
+- **Produção em escala:**
+  - dá para escolher vários vídeos de uma vez (fila);
+  - a **bandeja "Saiu da prensa"** fica na própria mesa, no lugar da tela de fim, com compartilhar e baixar por rede, o texto do post e o `.srt` de cada vídeo;
+  - "Próximo da fila", "Outro corte deste vídeo" (o trecho seguinte, mesmas escolhas) e **"Prensar o resto da fila"** (em lote, com o gancho de cada vídeo tirado da própria fala).
+- **Legenda editável:** cada frase vira um campo. A pessoa corrige o texto, o tempo se redistribui dentro da frase, e "▶" toca o trecho.
+- **Ganchos mais chamativos:** maiores (90 a 110 px), com contorno e sombra, palavra-chave em amarelo e entrada de carimbo. Na receita Lista, o número aparece gigante; na Manchete, uma faixa vermelha cruza a tela.
+- **Arquivos menores:** 3 Mbps em vez de 6 (cerca de 23 MB por minuto em vez de 45). As redes recomprimem de qualquer jeito.
+- **Música mais presente:** a régua vai de −24 a 0 dB em relação à fala (padrão −11 dB) e o ducking abaixa 8 dB.
+- **Correção: "Este navegador não lê som AAC" no celular.** O navegador do iPhone não decodifica AAC pelo WebCodecs, mas decodifica pelo Web Audio. A Prensa agora usa esse caminho em vez de mandar o vídeo ao conversor, que também não resolvia.
+- **Menos avisos espalhados:** a proposta continua no manifesto e na história; as notas repetidas nas etapas saíram.
+
 ### Prensa: som, vídeo de baixo à vista e fontes no iPhone
 
 - **Nova etapa "Som"** na mesa de composição:

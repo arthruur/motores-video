@@ -37,9 +37,9 @@
         <a class="botao-prensa pequeno" id="requisitos-link" hidden></a>
       </div>
       <label class="platina" id="soltar">
-        <input type="file" accept="video/*,.mov,.mkv,.avi,.3gp" id="arquivo" hidden>
+        <input type="file" accept="video/*,.mov,.mkv,.avi,.3gp" id="arquivo" multiple hidden>
         <span class="botao-prensa">Escolher vídeo</span>
-        <span class="miudo">ou arraste para cá · nada sai do seu aparelho</span>
+        <span class="miudo">um ou vários de uma vez · nada sai do seu aparelho</span>
       </label>
       <div class="convertendo" id="convertendo" hidden role="status">
         <p id="convertendo-texto"></p>
@@ -118,41 +118,61 @@
     </aside>
 
     <section class="painel">
+      <div class="fila" id="fila" hidden aria-label="Fila de vídeos"></div>
+
       <div class="faixa-conversao" id="faixa-conversao" hidden role="status">
-        <p><strong>Convertendo seu vídeo.</strong> <span id="faixa-conversao-motivo"></span> Pode ir escolhendo a receita e escrevendo o gancho: quando terminar, a prévia aparece.</p>
+        <p><strong>Convertendo seu vídeo.</strong> <span id="faixa-conversao-motivo"></span> Pode ir escolhendo a receita: quando terminar, a prévia aparece.</p>
         <div class="trilho indeterminado"><span id="faixa-conversao-barra"></span></div>
         <p class="nota" id="faixa-conversao-texto"></p>
       </div>
-      <div class="etapa">
-        <h2><span class="num">1</span> Receita</h2>
+
+      <section class="bandeja" id="bandeja" hidden aria-labelledby="bandeja-titulo">
+        <div class="bandeja-topo">
+          <h2 id="bandeja-titulo">Saiu da prensa</h2>
+          <span class="contador" id="bandeja-contador"></span>
+        </div>
+        <div class="seguir" id="seguir">
+          <button type="button" class="primario" id="proximo-fila" hidden>Próximo da fila →</button>
+          <button type="button" id="outro-corte">Outro corte deste vídeo</button>
+          <button type="button" id="prensar-fila" hidden>Prensar o resto da fila</button>
+          <button type="button" id="novo">Novo vídeo</button>
+        </div>
+        <ol class="saidas" id="saidas"></ol>
+      </section>
+
+      <nav class="trilha-passos" id="trilha-passos" aria-label="Etapas"></nav>
+
+      <div class="passo-guia" data-passo="receita">
+        <h2>Que vídeo é esse?</h2>
+        <p class="sub">Cada receita já vem montada para um tipo de vídeo. Depois você ajusta o que quiser.</p>
         <div class="receitas" id="receitas" role="radiogroup" aria-label="Receita"></div>
-        <p class="dica" id="receita-dica"></p>
       </div>
 
-      <div class="etapa">
-        <h2><span class="num">2</span> Gancho <small>os 3 primeiros segundos decidem</small></h2>
+      <div class="passo-guia" data-passo="gancho" hidden>
+        <h2>O gancho</h2>
+        <p class="sub" id="receita-dica"></p>
         <input type="text" id="gancho" class="campo-grande" maxlength="80" autocomplete="off" aria-label="Texto do gancho">
         <p class="nota" id="legenda-estado" aria-live="polite"></p>
         <div class="ideias" id="ideias" aria-label="Ideias de gancho"></div>
       </div>
 
-      <div class="etapa">
-        <h2><span class="num">3</span> De onde é o vídeo? <small>aparece na tela</small></h2>
+      <div class="passo-guia" data-passo="fonte" hidden>
+        <h2>De onde é o vídeo? <small>opcional</small></h2>
+        <p class="sub">Aparece pequeno na tela, embaixo do gancho.</p>
         <input type="text" id="fonte" class="campo-grande" placeholder="Quem fala, onde e quando" autocomplete="off" aria-label="Fonte do vídeo">
-        <p class="nota aviso" id="aviso-fonte" hidden>Se o vídeo não é seu, diga quem fala e de onde veio. Fonte na tela protege você e quem assiste.</p>
       </div>
 
-      <div class="etapa">
-        <h2><span class="num">4</span> Vídeo de baixo <small>tela dividida, opcional</small></h2>
+      <div class="passo-guia" data-passo="baixo" hidden>
+        <h2>Vídeo de baixo <small>tela dividida</small></h2>
         <div class="galeria" id="galeria-baixo" role="radiogroup" aria-label="Vídeo de baixo"></div>
         <input type="file" accept="video/*" id="arquivo-baixo" hidden>
-        <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo (aparece na tela)
+        <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo
           <input type="text" id="credito-baixo" placeholder="ex.: Pexels / Fulana">
         </label>
       </div>
 
-      <div class="etapa">
-        <h2><span class="num">5</span> Som <small>toque na prévia para ouvir</small></h2>
+      <div class="passo-guia" data-passo="som" hidden>
+        <h2>Som <small>toque na prévia para ouvir</small></h2>
         <div class="som-fala" id="som-fala">
           <label class="regua">Som do vídeo <output id="volume-fala-valor">100%</output>
             <input type="range" id="volume-fala" min="0" max="150" step="5" value="100">
@@ -164,70 +184,63 @@
         <input type="file" accept="audio/*,video/*" id="arquivo-musica" hidden>
         <div class="som-musica" id="som-musica" hidden>
           <label class="regua">Volume da música <output id="volume-musica-valor">média</output>
-            <input type="range" id="volume-musica" min="0" max="100" step="5" value="50">
+            <input type="range" id="volume-musica" min="0" max="100" step="5" value="55">
           </label>
           <div class="chaves">
             <label class="chave"><input type="checkbox" id="abaixar" checked><span>Abaixar quando alguém fala</span></label>
             <label class="chave"><input type="checkbox" id="suave" checked><span>Entrar e sair suave</span></label>
           </div>
-          <p class="nota" id="musica-credito"></p>
         </div>
       </div>
 
-      <div class="etapa">
-        <h2><span class="num">6</span> Legenda</h2>
+      <div class="passo-guia" data-passo="legenda" hidden>
+        <h2>Legenda</h2>
         <div class="chaves">
           <label class="chave"><input type="checkbox" id="legenda" checked><span>Legenda</span></label>
         </div>
         <div class="fichas" id="estilos-legenda" role="radiogroup" aria-label="Estilo da legenda"></div>
         <p class="nota" id="legenda-estado-2"></p>
-      </div>
-
-      <button type="button" class="prensar" id="prensar"><span>Prensar</span></button>
-      <div class="prelo" id="andamento" hidden>
-        <div class="prelo-folhas" id="prelo-folhas"></div>
-        <p id="andamento-texto"></p>
-        <div class="trilho"><span id="andamento-barra"></span></div>
-        <button type="button" class="link" id="cancelar">Cancelar</button>
-      </div>
-      <p class="erro" id="erro" role="alert" hidden></p>
-
-      <details class="mais">
-        <summary>Trecho e redes</summary>
-        <h3>Trecho</h3>
-        <video id="video" controls playsinline preload="auto"></video>
-        <div class="linha">
-          <button type="button" id="marca-ini">⟦ Começa aqui</button>
-          <button type="button" id="marca-fim">Termina aqui ⟧</button>
+        <div class="editor-legenda" id="editor-legenda" hidden>
+          <p class="rotulo">Corrigir o texto <small>toque numa frase para ouvir; edite e a legenda acompanha</small></p>
+          <ol id="blocos-legenda"></ol>
         </div>
-        <p class="nota" id="trecho-info"></p>
-
-        <h3>Redes</h3>
-        <div class="fichas" id="plataformas"></div>
-
-      </details>
-    </section>
-  </main>
-
-  <!-- ===================================================== 3. pronto -->
-  <main id="tela-pronta" class="pronta" hidden>
-    <div class="celular grande">
-      <video id="resultado" muted loop playsinline autoplay></video>
-    </div>
-    <section class="pronta-painel">
-      <p class="sobretitulo" id="pronto-tempo"></p>
-      <h2>Saiu da prensa.</h2>
-      <ul class="arquivos" id="arquivos"></ul>
-      <label class="campo">Texto do post <textarea id="post" rows="3"></textarea></label>
-      <div class="linha">
-        <button type="button" id="copiar">Copiar texto</button>
-        <button type="button" id="srt" hidden>Legenda .srt</button>
-        <button type="button" id="voltar">Ajustar este</button>
-        <button type="button" class="primario" id="novo">Fazer outro</button>
       </div>
-      <p class="nota">Ao postar, mantenha a fonte. O .srt pode subir como legenda nativa (acessibilidade).</p>
-      <div class="passe-adiante">
-        <p><strong>Sem marca d’água, sem assinatura.</strong> Se a Prensa te ajudou, passe adiante: é assim que software livre circula.</p>
+
+      <div class="passo-guia" data-passo="prensar" hidden>
+        <h2>Tudo pronto?</h2>
+        <ul class="resumo" id="resumo"></ul>
+        <details class="mais">
+          <summary>Trecho e redes</summary>
+          <h3>Trecho</h3>
+          <video id="video" controls playsinline preload="auto"></video>
+          <div class="linha">
+            <button type="button" id="marca-ini">⟦ Começa aqui</button>
+            <button type="button" id="marca-fim">Termina aqui ⟧</button>
+          </div>
+          <p class="nota" id="trecho-info"></p>
+          <h3>Redes</h3>
+          <div class="fichas" id="plataformas"></div>
+        </details>
+      </div>
+
+      <div class="guia-nav">
+        <button type="button" id="voltar-passo">← Voltar</button>
+        <button type="button" class="primario" id="proximo-passo">Próximo</button>
+      </div>
+
+      <div class="prensar-fixo">
+        <button type="button" class="prensar" id="prensar"><span>Prensar</span></button>
+        <div class="prelo" id="andamento" hidden>
+          <div class="prelo-folhas" id="prelo-folhas"></div>
+          <p id="andamento-texto"></p>
+          <div class="trilho"><span id="andamento-barra"></span></div>
+          <button type="button" class="link" id="cancelar">Cancelar</button>
+        </div>
+        <p class="erro" id="erro" role="alert" hidden></p>
+      </div>
+
+      <div class="passe-adiante" id="passe-adiante" hidden>
+        <p><strong>Sem marca d’água, sem assinatura.</strong> Se a Prensa te ajudou, passe adiante.</p>
         <button type="button" id="passar-adiante">Passar a Prensa adiante</button>
       </div>
     </section>
