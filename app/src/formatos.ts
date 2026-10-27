@@ -7,7 +7,9 @@ export const L = 1080;
 export const A = 1920;
 
 export type Layout = 'cheio' | 'dividida';
-export type EstiloGancho = 'nenhum' | 'titulo' | 'voce-sabia' | 'pov' | 'manchete' | 'lista' | 'pergunta';
+export type EstiloGancho = 'nenhum' | 'titulo' | 'voce-sabia' | 'pov' | 'manchete' | 'lista' | 'pergunta' | 'caixa' | 'comentario' | 'citacao' | 'alerta';
+export type AnimacaoGancho = 'carimbo' | 'deslizar' | 'digitar' | 'surgir' | 'fixo';
+export type DepoisGancho = 'titulo' | 'some' | 'fica';
 
 export const LAYOUTS: { id: Layout; nome: string; dica: string }[] = [
   { id: 'cheio', nome: 'Tela cheia', dica: 'Vídeo deitado ganha fundo desfocado' },
@@ -22,6 +24,24 @@ export const GANCHOS: { id: EstiloGancho; nome: string; exemplo: string }[] = [
   { id: 'manchete', nome: 'Manchete', exemplo: 'ninguém te contou isso' },
   { id: 'lista', nome: 'Lista', exemplo: '3 coisas que mudam tudo' },
   { id: 'pergunta', nome: 'Pergunta', exemplo: 'por que isso acontece?' },
+  { id: 'caixa', nome: 'Caixa branca', exemplo: 'o jeito que ninguém usa' },
+  { id: 'comentario', nome: 'Comentário', exemplo: 'mas isso funciona mesmo?' },
+  { id: 'citacao', nome: 'Citação', exemplo: 'a frase dita no vídeo' },
+  { id: 'alerta', nome: 'Atenção', exemplo: 'pare de fazer isso agora' },
+];
+
+export const ANIMACOES: { id: AnimacaoGancho; nome: string }[] = [
+  { id: 'carimbo', nome: 'Carimbo' },
+  { id: 'deslizar', nome: 'Desliza' },
+  { id: 'digitar', nome: 'Digitando' },
+  { id: 'surgir', nome: 'Surge' },
+  { id: 'fixo', nome: 'Sem animação' },
+];
+
+export const DEPOIS: { id: DepoisGancho; nome: string }[] = [
+  { id: 'titulo', nome: 'Vira título' },
+  { id: 'fica', nome: 'Fica grande' },
+  { id: 'some', nome: 'Some' },
 ];
 
 // Faixa segura comum a TikTok, Reels e Shorts (ver docs/plataformas.md): o mesmo arquivo serve em todas.
@@ -31,13 +51,22 @@ export const CORTE = Math.round(A * 0.58);
 const FAIXA_LEGENDA_DIVIDIDA: Faixa = { esq: 120, dir: 780, base: CORTE + 50 };
 const TOPO = 270; // Meta: 14% do topo livre (abas Seguindo / Para você)
 const MARGEM = 72;
-const GANCHO_S = 4;
+export const GANCHO_S = 4; // quanto tempo o gancho fica grande, se ninguém mudar
 
 export type Fonte = { img: CanvasImageSource; w: number; h: number };
 
+export type Gancho = {
+  estilo: EstiloGancho;
+  texto: string;
+  animacao?: AnimacaoGancho; // como entra (padrão: carimbo)
+  dur?: number;              // segundos grande na tela (padrão: GANCHO_S)
+  depois?: DepoisGancho;     // o que acontece depois (padrão: vira título)
+};
+
 export type Quadro = {
   layout: Layout;
-  gancho: { estilo: EstiloGancho; texto: string };
+  gancho: Gancho;
+  zoom?: boolean; // câmera viva (padrão: ligada)
   fonte: string; // quem fala / de onde veio: sempre visível quando preenchido
   creditoBaixo: string;
   legenda: Bloco[] | null;
@@ -142,14 +171,35 @@ function carimbo(t: number): { escala: number; giro: number } {
   return { escala: 1.35 - 0.35 * volta, giro: (1 - p) * -0.06 };
 }
 
-/** gancho no topo: entra com um carimbo, fica grande nos primeiros 4 s e depois vira título fixo */
-function desenharGancho(ctx: CanvasRenderingContext2D, g: Quadro['gancho'], t: number): number {
-  const texto = g.texto.trim();
-  if (g.estilo === 'nenhum' || !texto) return TOPO;
-  const { escala, giro } = carimbo(t);
-  const encolhe = 1 - 0.38 * Math.min(1, Math.max(0, (t - GANCHO_S) / 0.35));
-  const k = escala * encolhe;
+const entre = (x: number) => Math.min(1, Math.max(0, x));
+const saiCubica = (p: number) => 1 - (1 - p) ** 3;
+
+/** a entrada do gancho no instante t: escala, giro, deslocamento, opacidade e quanto do texto já apareceu */
+function entrada(anim: AnimacaoGancho, t: number, letras: number) {
+  const e = { escala: 1, giro: 0, dx: 0, alfa: 1, fracao: 1 };
+  if (anim === 'carimbo') Object.assign(e, carimbo(t));
+  else if (anim === 'deslizar') { const p = saiCubica(entre(t / 0.4)); e.dx = -L * (1 - p); e.alfa = entre(t / 0.15); }
+  else if (anim === 'surgir') { const p = saiCubica(entre(t / 0.5)); e.alfa = p; e.escala = 0.9 + 0.1 * p; }
+  else if (anim === 'digitar') e.fracao = entre(t / Math.min(1.6, 0.045 * letras)); // ~22 letras/s, no máximo 1,6 s
+  return e;
+}
+
+/** gancho no topo: entra (carimbo, deslizando, digitando…), fica grande um tempo e depois vira título, some ou fica */
+function desenharGancho(ctx: CanvasRenderingContext2D, g: Gancho, t: number): number {
+  const inteiro = g.texto.trim();
+  if (g.estilo === 'nenhum' || !inteiro) return TOPO;
+  const anim = g.animacao ?? 'carimbo', dur = g.dur ?? GANCHO_S, depois = g.depois ?? 'titulo';
+  const { escala, giro, dx, alfa, fracao } = entrada(anim, t, inteiro.length);
+  const passou = entre((t - dur) / 0.35);
+  if (depois === 'some' && passou >= 1) return TOPO;
+  // digitando: o texto aparece letra a letra (por caractere, para não partir um acento)
+  const letras = [...inteiro];
+  const texto = fracao >= 1 ? inteiro : letras.slice(0, Math.ceil(letras.length * fracao)).join('');
+  if (!texto) return TOPO;
+  const k = escala * (depois === 'titulo' ? 1 - 0.38 * passou : 1);
   ctx.save();
+  ctx.globalAlpha = alfa * (depois === 'some' ? 1 - passou : 1);
+  ctx.translate(dx, 0);
   ctx.translate(L / 2, TOPO);
   ctx.rotate(giro);
   ctx.scale(k, k);
@@ -239,6 +289,84 @@ function desenharGancho(ctx: CanvasRenderingContext2D, g: Quadro['gancho'], t: n
     ctx.font = `80px "${FONTE}"`;
     linhas.forEach((l, i) => ctx.fillText(l, x0 + 48, y + 78 + i * 84));
     y += alt + 50;
+  } else if (g.estilo === 'caixa') {
+    // o texto nativo das redes: cada linha numa caixa branca, letra preta, sem caixa alta
+    ctx.font = `78px "${FONTE}"`;
+    const linhas = quebrar(ctx, texto, larg - 40);
+    const alt = 92, pad = 26;
+    ctx.fillStyle = '#FFFFFF';
+    linhas.forEach((l, i) => {
+      const w = ctx.measureText(l).width;
+      ctx.beginPath(); ctx.roundRect(L / 2 - w / 2 - pad, y + i * alt, w + 2 * pad, alt + 2, 18); ctx.fill();
+    });
+    ctx.fillStyle = '#111111';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    linhas.forEach((l, i) => ctx.fillText(l, L / 2, y + i * alt + alt / 2 + 4));
+    y += linhas.length * alt + 12;
+  } else if (g.estilo === 'comentario') {
+    // resposta a um comentário: cartão com avatar, "respondendo a" e o comentário
+    ctx.font = `62px "${FONTE}"`;
+    const linhas = quebrar(ctx, texto, larg - 190);
+    const alt = linhas.length * 68 + 100;
+    const lb = Math.min(larg, Math.max(380, ...linhas.map((l) => ctx.measureText(l).width)) + 190);
+    const x0 = L / 2 - lb / 2;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowOffsetY = 8; ctx.shadowBlur = 20;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath(); ctx.roundRect(x0, y, lb, alt, 28); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#E8E3DA';
+    ctx.beginPath(); ctx.arc(x0 + 80, y + 80, 46, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#A59C8E'; // silhueta
+    ctx.beginPath(); ctx.arc(x0 + 80, y + 66, 17, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x0 + 80, y + 112, 30, 22, 0, Math.PI, 0); ctx.fill();
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillStyle = '#8A8378';
+    ctx.font = `34px "${FONTE}"`;
+    ctx.fillText('Respondendo a um comentário', x0 + 152, y + 26);
+    ctx.fillStyle = '#16130F';
+    ctx.font = `62px "${FONTE}"`;
+    linhas.forEach((l, i) => ctx.fillText(l, x0 + 152, y + 70 + i * 68));
+    y += alt + 24;
+  } else if (g.estilo === 'citacao') {
+    // aspas grandes e o texto em itálico com serifa: uma frase dita, não uma manchete
+    ctx.font = 'italic 74px "Fraunces"';
+    const linhas = quebrar(ctx, texto, larg - 60);
+    ctx.fillStyle = AMARELO;
+    ctx.font = '300px "Fraunces"';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('\u201C', MARGEM - 10, y - 70);
+    ctx.font = 'italic 74px "Fraunces"';
+    ctx.lineJoin = 'round';
+    linhas.forEach((l, i) => {
+      const yy = y + 110 + i * 86;
+      ctx.lineWidth = 12; ctx.strokeStyle = 'rgba(0,0,0,0.75)';
+      ctx.strokeText(l, MARGEM + 30, yy);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(l, MARGEM + 30, yy);
+    });
+    y += 110 + linhas.length * 86 + 10;
+  } else if (g.estilo === 'alerta') {
+    // triângulo de aviso e "ATENÇÃO" numa pílula vermelha, o texto embaixo
+    ctx.save();
+    ctx.translate(L / 2, y + 50);
+    ctx.font = `64px "${FONTE}"`;
+    const w = ctx.measureText('ATENÇÃO').width + 150;
+    ctx.fillStyle = '#E0242B';
+    ctx.beginPath(); ctx.roundRect(-w / 2, -48, w, 96, 48); ctx.fill();
+    const tx = -w / 2 + 62;
+    ctx.fillStyle = AMARELO;
+    ctx.beginPath(); ctx.moveTo(tx, -32); ctx.lineTo(tx + 34, 30); ctx.lineTo(tx - 34, 30); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#111';
+    ctx.font = `48px "${FONTE}"`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('!', tx, 8);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `64px "${FONTE}"`;
+    ctx.fillText('ATENÇÃO', 36, 4);
+    ctx.restore();
+    ctx.font = `96px "${FONTE}"`;
+    y = textoForte(ctx, quebrar(ctx, caixa, larg), y + 126, 96, chave);
   }
   ctx.restore();
   return TOPO + (y - TOPO) * k;
@@ -284,7 +412,8 @@ function comZoom(ctx: CanvasRenderingContext2D, z: number, x: number, y: number,
 export function desenharQuadro(ctx: CanvasRenderingContext2D, q: Quadro, t: number, principal: Fonte | null, baixo: Fonte | null) {
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, L, A);
-  const z = zoomCamera(t, q.gancho.estilo !== 'nenhum' && !!q.gancho.texto.trim());
+  const temGancho = q.gancho.estilo !== 'nenhum' && !!q.gancho.texto.trim();
+  const z = q.zoom === false ? 1 : zoomCamera(t, temGancho && (q.gancho.animacao ?? 'carimbo') === 'carimbo');
   if (q.layout === 'dividida') {
     if (principal) comZoom(ctx, z, 0, 0, L, CORTE, () => cobrir(ctx, principal, 0, 0, L, CORTE));
     const g = q.gerador ? GERADORES.find((g) => g.id === q.gerador) : null;

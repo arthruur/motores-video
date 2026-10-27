@@ -3,7 +3,8 @@ import { BAIXADOR, baixarLink } from './baixador';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
 import { type Passo, criarDemo } from './demo';
-import { A, L, type Fonte, type Quadro, desenharQuadro, faixaLegenda } from './formatos';
+import { A, ANIMACOES, type AnimacaoGancho, DEPOIS, type DepoisGancho, type EstiloGancho, GANCHOS, GANCHO_S, L, type Fonte, type Quadro, desenharQuadro, faixaLegenda } from './formatos';
+import { criarLinhaDoTempo } from './linhadotempo';
 import { type Bloco, type EstiloLegenda, type Palavra, FONTE, gerarSrt, montarBlocos } from './legenda';
 import { PLATAFORMAS } from './plataformas';
 import { type Arquivo, FormatoNaoLido, type Midia, type OpcoesDeSom, abrir, audioParaFala, exportar, prensar, temSom } from './prensa';
@@ -25,6 +26,10 @@ type FiltroFila = 'todos' | 'pendente' | 'pronto';
 
 // a Aventura do Mangaio vem primeiro na lista, mas quem abre a Prensa começa no Corte direto
 const RECEITA_PADRAO = RECEITAS.find((r) => r.id === 'direto') ?? RECEITAS[0];
+// o maior trecho que a Prensa aceita (o limite do TikTok); ao abrir, o padrão é o vídeo inteiro até 3 min (o dos Shorts)
+const MAX_TRECHO = 600;
+const TRECHO_PADRAO = 180;
+type EfeitoNoVideo = { id: number; efeito: string; em: number; db: number }; // em: segundos no vídeo original
 
 const estado = {
   principal: null as Midia | null,
@@ -34,6 +39,11 @@ const estado = {
   receita: RECEITA_PADRAO,
   escolhaBaixo: { tipo: 'receita' } as EscolhaBaixo,
   estiloLegenda: null as EstiloLegenda | null, // null = o da receita
+  estiloGancho: null as EstiloGancho | null,   // null = o da receita
+  animacao: 'carimbo' as AnimacaoGancho,
+  durGancho: GANCHO_S,
+  depois: 'titulo' as DepoisGancho,
+  zoom: true,
   plataformas: new Set(PLATAFORMAS.map((p) => p.id)),
   falas: new Map<string, Palavra[]>(),         // trecho -> palavras (já com as correções da pessoa)
   ouvindo: new Map<string, Promise<Palavra[]>>(),
@@ -54,6 +64,8 @@ const estado = {
   origem: '',                                  // link original, quando o vídeo veio de um link
   som: {
     volumeFala: 1, musica: 'nenhuma', volumeMusica: 65, abaixar: true, suave: true, efeito: 'whoosh',
+    musicaDe: 0, musicaEm: 0,
+    extras: [] as EfeitoNoVideo[], escolhido: 'ding', proximoId: 1,
     arquivoMusica: null as File | null, buffers: new Map<string, Promise<AudioBuffer>>(),
   },
 };
@@ -71,6 +83,7 @@ const campoSom = $<HTMLInputElement>('som-limpo');
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 const chaveTrecho = () => `${estado.principal?.arquivo.name}|${estado.ini.toFixed(2)}|${estado.fim.toFixed(2)}`;
 const estiloLegendaDe = (r: Receita): EstiloLegenda => (r === estado.receita ? estado.estiloLegenda ?? r.legenda : r.legenda);
+const estiloGanchoDe = (r: Receita): EstiloGancho => (r === estado.receita ? estado.estiloGancho ?? r.gancho : r.gancho);
 // a escolha explícita de vídeo de baixo vale para todas as receitas; sem escolha, cada receita usa o seu padrão
 const usaDividida = (r: Receita) => {
   const e = estado.escolhaBaixo;
@@ -521,9 +534,13 @@ function usarPrincipal(m: Midia, manterPasso = false) {
   video.src = URL.createObjectURL(m.arquivo);
   video.volume = Math.min(1, estado.som.volumeFala);
   estado.ini = 0;
-  estado.fim = Math.min(m.dur, 60);
+  estado.fim = Math.min(m.dur, TRECHO_PADRAO);
   estado.ganchoMexido = false;
+  estado.som.extras = [];
   campoGancho.value = '';
+  $('tempo-linha').hidden = false;
+  linhaDoTempo.definir(m);
+  listarEfeitos();
   infoTrecho();
   atualizarFila();
   mostrar('criar');
@@ -549,16 +566,54 @@ $('trocar').addEventListener('click', () => { $<HTMLInputElement>('arquivo').val
 
 function infoTrecho() {
   const d = estado.fim - estado.ini;
-  $('trecho-info').textContent = `Trecho: ${fmt(estado.ini)} → ${fmt(estado.fim)} (${Math.round(d)} s de ${Math.round(estado.principal?.dur ?? 0)} s). Dê play e marque o início e o fim.`;
+  $('trecho-info').textContent = `${fmt(estado.ini)} → ${fmt(estado.fim)} · ${Math.round(d)} s de ${Math.round(estado.principal?.dur ?? 0)} s`;
+  // avisa antes de prensar quais redes vão cortar ou dividir
+  const curtas = PLATAFORMAS.filter((p) => estado.plataformas.has(p.id) && d > p.maxDur + 0.05);
+  const aviso = $('trecho-aviso');
+  aviso.hidden = !curtas.length;
+  aviso.textContent = curtas.map((p) => `${p.nome} aceita até ${fmt(p.maxDur)}: ${p.dividir ? 'sai em partes' : 'sai cortado'}.`).join(' ')
+    + (curtas.length ? ' Desmarque a rede em "Redes" se não quiser.' : '');
+  linhaDoTempo.desenhar();
 }
-$('marca-ini').addEventListener('click', () => {
-  estado.ini = Math.min(video.currentTime, estado.fim - 1);
-  if (estado.fim - estado.ini > 180) estado.fim = estado.ini + 180;
-  infoTrecho(); redesenhar(); pedirLegenda().catch(() => {}); montarResumo();
-});
-$('marca-fim').addEventListener('click', () => {
-  estado.fim = Math.min(Math.max(video.currentTime, estado.ini + 1), estado.ini + 180); // 3 min: limite dos Shorts
-  infoTrecho(); pedirLegenda().catch(() => {}); montarResumo();
+
+/** muda o trecho; com final = true (soltou a alça, tocou num botão) refaz a legenda e o resumo */
+function mudarTrecho(ini: number, fim: number, final: boolean) {
+  const dur = estado.principal?.dur ?? 0;
+  const mexeuIni = Math.abs(ini - estado.ini) > 1e-3;
+  ini = Math.max(0, Math.min(ini, dur - 1));
+  fim = Math.min(dur, Math.max(fim, ini + 1));
+  // passou do máximo: a ponta que não foi arrastada acompanha
+  if (fim - ini > MAX_TRECHO) { if (mexeuIni) fim = ini + MAX_TRECHO; else ini = fim - MAX_TRECHO; }
+  estado.ini = ini;
+  estado.fim = fim;
+  if (!video.paused) video.pause();
+  infoTrecho();
+  if (final) {
+    video.currentTime = mexeuIni ? ini : Math.max(ini, fim - 2); // mostra o ponto que mudou
+    redesenhar(); pedirLegenda().catch(() => {}); montarIdeias(); montarResumo();
+  }
+}
+$('marca-ini').addEventListener('click', () => mudarTrecho(video.currentTime, estado.fim, true));
+$('marca-fim').addEventListener('click', () => mudarTrecho(estado.ini, video.currentTime, true));
+$('video-inteiro').addEventListener('click', () => mudarTrecho(0, estado.principal?.dur ?? 0, true));
+
+const linhaDoTempo = criarLinhaDoTempo($<HTMLCanvasElement>('linha-tempo'), {
+  ini: () => estado.ini,
+  fim: () => estado.fim,
+  agora: () => video.currentTime,
+  marcas: () => [
+    ...(temGancho() && estado.som.efeito !== 'nenhum' ? [{ id: 0, em: estado.ini, nome: '' }] : []),
+    ...estado.som.extras.map((e) => ({ id: e.id, em: e.em, nome: nomeEfeito(e.efeito) })),
+  ],
+  aoMudarTrecho: mudarTrecho,
+  aoBuscar: (t) => { video.currentTime = t; },
+  aoMoverMarca: (id, em, final) => {
+    const e = estado.som.extras.find((x) => x.id === id);
+    if (!e) return; // a marca do gancho acompanha o começo do trecho
+    e.em = em;
+    video.currentTime = em;
+    if (final) listarEfeitos();
+  },
 });
 
 // ---------------------------------------------------------------- receitas: cada cartão mostra o SEU vídeo naquela receita
@@ -593,12 +648,13 @@ function aplicarReceita(r: Receita) {
   const anterior = estado.receita;
   estado.receita = r;
   estado.estiloLegenda = null;
+  estado.estiloGancho = null;
   if (estado.escolhaBaixo.tipo !== 'video') estado.escolhaBaixo = { tipo: 'receita' };
   // gancho que veio de um modelo da receita anterior não serve para a nova
   if (anterior !== r && (campoGancho.value.includes('___') || anterior.modelos.includes(campoGancho.value))) estado.ganchoMexido = false;
   document.querySelectorAll<HTMLButtonElement>('.receita').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.id === r.id)));
   $('receita-dica').textContent = r.dica;
-  sincGaleria(); sincEstilos();
+  sincGaleria(); sincEstilos(); sincEstilosGancho();
   montarIdeias();
   redesenhar();
 }
@@ -628,6 +684,7 @@ function montarIdeias() {
   }));
 }
 campoGancho.addEventListener('input', () => { estado.ganchoMexido = true; redesenhar(); });
+function temGancho() { return estiloGanchoDe(estado.receita) !== 'nenhum' && !!campoGancho.value.trim() && !campoGancho.value.includes('___'); }
 
 // ---------------------------------------------------------------- fichas (estilo de legenda, redes)
 function fichas<T extends string>(caixa: HTMLElement, itens: { id: T; nome: string }[], ativo: (id: T) => boolean, escolher: (id: T) => void, multi = false) {
@@ -651,7 +708,34 @@ const sincEstilos = fichas($('estilos-legenda'), [{ id: 'bloco' as EstiloLegenda
 fichas($('plataformas'), PLATAFORMAS.map((p) => ({ id: p.id, nome: p.nome })), (id) => estado.plataformas.has(id), (id) => {
   if (estado.plataformas.has(id)) estado.plataformas.delete(id); else estado.plataformas.add(id);
   $<HTMLButtonElement>('prensar').disabled = estado.plataformas.size === 0;
+  infoTrecho();
 }, true);
+
+// ---------------------------------------------------------------- gancho: estilo, entrada, tempo na tela
+// ver a entrada de novo: a prévia volta ao começo do trecho
+const reverEntrada = () => { video.currentTime = estado.ini; redesenhar(); };
+const sincEstilosGancho = fichas($('estilos-gancho'), GANCHOS.map((g) => ({ id: g.id, nome: g.nome })), (id) => estiloGanchoDe(estado.receita) === id, (id) => {
+  estado.estiloGancho = id;
+  reverEntrada();
+});
+fichas($('animacoes-gancho'), ANIMACOES, (id) => estado.animacao === id, (id) => {
+  estado.animacao = id;
+  // a máquina de escrever pede o som de teclas, se o efeito ainda é o padrão
+  if (id === 'digitar' && estado.som.efeito === 'whoosh') { estado.som.efeito = 'clique'; sincEfeitos(); }
+  reverEntrada();
+});
+fichas($('depois-gancho'), DEPOIS, (id) => estado.depois === id, (id) => {
+  estado.depois = id;
+  video.currentTime = Math.min(estado.fim, estado.ini + Math.max(0, estado.durGancho - 0.8)); // mostra a passagem
+  redesenhar();
+});
+const reguaGancho = $<HTMLInputElement>('dur-gancho');
+reguaGancho.addEventListener('input', () => {
+  estado.durGancho = Number(reguaGancho.value);
+  $('dur-gancho-valor').textContent = `${String(estado.durGancho).replace('.', ',')} s`;
+  redesenhar();
+});
+$<HTMLInputElement>('zoom').addEventListener('change', (e) => { estado.zoom = (e.target as HTMLInputElement).checked; redesenhar(); });
 
 // ---------------------------------------------------------------- vídeo de baixo: tudo à vista, em faixas
 const galeria = $('galeria-baixo');
@@ -858,8 +942,12 @@ function escolherMusica(id: string) {
   acordarAudio();
   if (id === 'arquivo' && !estado.som.arquivoMusica) { $<HTMLInputElement>('arquivo-musica').click(); return; }
   estado.som.musica = id;
+  estado.som.musicaDe = 0;
+  reguaMusicaDe.value = '0';
+  $('musica-de-valor').textContent = fmt(0);
   sincMusicas();
-  bufferDaMusica(); // já começa a preparar a trilha
+  // já começa a preparar a trilha; a régua de "a partir de" vai até o fim dela
+  bufferDaMusica()?.then((b) => { reguaMusicaDe.max = String(Math.max(1, Math.floor(b.duration - 1))); }).catch(() => {});
   if (!video.paused) tocarMusicaNaPrevia();
 }
 $<HTMLInputElement>('arquivo-musica').addEventListener('change', (e) => {
@@ -897,18 +985,93 @@ reguaMusica.addEventListener('input', () => { estado.som.volumeMusica = Number(r
 // efeito na entrada do gancho: toca na hora em que é escolhido
 const efeitosProntos = new Map<string, Promise<AudioBuffer>>();
 const efeitoBuffer = (id: string) => { if (!efeitosProntos.has(id)) efeitosProntos.set(id, gerarEfeito(id, 48000)); return efeitosProntos.get(id)!; };
-fichas($('efeitos'), [{ id: 'nenhum', nome: 'Nenhum' }, ...EFEITOS], (id) => estado.som.efeito === id, async (id) => {
-  estado.som.efeito = id;
-  if (id === 'nenhum') return;
+function nomeEfeito(id: string) { return EFEITOS.find((e) => e.id === id)?.nome ?? id; }
+const fmtDec = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`.replace('.', ',');
+
+function tocarEfeito(id: string, db = 0) {
   acordarAudio();
-  const b = await efeitoBuffer(id);
-  if (!ctxAudio) return;
-  const s = ctxAudio.createBufferSource();
-  const g = ctxAudio.createGain();
-  g.gain.value = 0.7;
-  s.buffer = b;
-  s.connect(g).connect(ctxAudio.destination);
-  s.start();
+  efeitoBuffer(id).then((b) => {
+    if (!ctxAudio) return;
+    const s = ctxAudio.createBufferSource();
+    const g = ctxAudio.createGain();
+    g.gain.value = 0.7 * dbLin(db);
+    s.buffer = b;
+    s.connect(g).connect(ctxAudio.destination);
+    s.start();
+  }).catch(() => {});
+}
+
+const sincEfeitos = fichas($('efeitos'), [{ id: 'nenhum', nome: 'Nenhum' }, ...EFEITOS], (id) => estado.som.efeito === id, (id) => {
+  estado.som.efeito = id;
+  if (id !== 'nenhum') tocarEfeito(id);
+  linhaDoTempo.desenhar();
+});
+
+// efeitos pelo vídeo: escolhe na paleta (toca para ouvir) e põe no ponto do cursor
+fichas($('efeitos-extras'), EFEITOS, (id) => estado.som.escolhido === id, (id) => {
+  estado.som.escolhido = id;
+  tocarEfeito(id);
+  atualizarBotaoEfeito();
+});
+function atualizarBotaoEfeito() {
+  $('por-efeito').textContent = `+ Pôr "${nomeEfeito(estado.som.escolhido)}" em ${fmtDec(Math.max(estado.ini, Math.min(video.currentTime, estado.fim)))}`;
+}
+$('por-efeito').addEventListener('click', () => {
+  const em = Math.min(Math.max(video.currentTime, estado.ini), Math.max(estado.ini, estado.fim - 0.1));
+  estado.som.extras.push({ id: estado.som.proximoId++, efeito: estado.som.escolhido, em, db: 0 });
+  listarEfeitos();
+});
+
+function listarEfeitos() {
+  const lista = [...estado.som.extras].sort((a, b) => a.em - b.em);
+  const botao = (texto: string, titulo: string, acao: () => void) => {
+    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: texto, title: titulo });
+    b.setAttribute('aria-label', titulo);
+    b.addEventListener('click', acao);
+    return b;
+  };
+  $('lista-efeitos').replaceChildren(...lista.map((e) => {
+    const li = document.createElement('li');
+    if (e.em < estado.ini || e.em >= estado.fim) { li.className = 'fora'; li.title = 'Fora do trecho: não entra no vídeo'; }
+    const empurrar = (d: number) => { e.em = Math.max(0, Math.min(estado.principal?.dur ?? 0, e.em + d)); video.currentTime = Math.max(0, e.em - 0.5); listarEfeitos(); };
+    const tempo = botao(fmtDec(e.em), 'Ir para este ponto e ouvir', () => { video.currentTime = Math.max(estado.ini, e.em - 1); if (video.paused) alternar(); });
+    tempo.className = 'efeito-tempo';
+    const nome = Object.assign(document.createElement('strong'), { textContent: nomeEfeito(e.efeito) });
+    const vol = Object.assign(document.createElement('input'), { type: 'range', min: '-18', max: '6', step: '1', value: String(e.db) });
+    vol.setAttribute('aria-label', `Volume do efeito ${nomeEfeito(e.efeito)}`);
+    vol.addEventListener('change', () => { e.db = Number(vol.value); tocarEfeito(e.efeito, e.db); });
+    li.append(tempo, nome,
+      botao('−', 'Um décimo de segundo antes', () => empurrar(-0.1)),
+      botao('+', 'Um décimo de segundo depois', () => empurrar(0.1)),
+      vol,
+      botao('✕', 'Tirar este efeito', () => { estado.som.extras = estado.som.extras.filter((x) => x !== e); listarEfeitos(); }));
+    return li;
+  }));
+  $('efeitos-nota').hidden = !lista.length;
+  linhaDoTempo.desenhar();
+}
+
+/** os efeitos que tocam no trecho: o do gancho (no começo) e os postos pelo vídeo; em segundos do vídeo original */
+function efeitosDoTrecho(): { efeito: string; em: number; db: number }[] {
+  const s = estado.som;
+  return [
+    ...(temGancho() && s.efeito !== 'nenhum' ? [{ efeito: s.efeito, em: estado.ini, db: -3 }] : []),
+    ...s.extras.filter((e) => e.em >= estado.ini && e.em < estado.fim),
+  ];
+}
+
+// música: de que ponto dela tocar e quando ela entra no vídeo
+const reguaMusicaDe = $<HTMLInputElement>('musica-de');
+reguaMusicaDe.addEventListener('input', () => {
+  estado.som.musicaDe = Number(reguaMusicaDe.value);
+  $('musica-de-valor').textContent = fmt(estado.som.musicaDe);
+  if (!video.paused) tocarMusicaNaPrevia();
+});
+const reguaMusicaEm = $<HTMLInputElement>('musica-em');
+reguaMusicaEm.addEventListener('input', () => {
+  estado.som.musicaEm = Number(reguaMusicaEm.value);
+  $('musica-em-valor').textContent = `${String(estado.som.musicaEm).replace('.', ',')} s`;
+  if (!video.paused) tocarMusicaNaPrevia();
 });
 
 $<HTMLInputElement>('abaixar').addEventListener('change', (e) => { estado.som.abaixar = (e.target as HTMLInputElement).checked; });
@@ -939,7 +1102,8 @@ async function tocarMusicaNaPrevia() {
   fonteMusica.buffer = buf;
   fonteMusica.loop = true;
   fonteMusica.connect(ganhoMusica);
-  fonteMusica.start(0, Math.max(0, video.currentTime - estado.ini) % buf.duration);
+  const t = video.currentTime - estado.ini - estado.som.musicaEm; // < 0: a música ainda vai entrar
+  fonteMusica.start(ctxAudio.currentTime + Math.max(0, -t), (estado.som.musicaDe + Math.max(0, t)) % buf.duration);
   atualizarGanhoMusica();
 }
 
@@ -953,12 +1117,13 @@ function pararMusicaNaPrevia() {
 function atualizarGanhoMusica() {
   if (!ganhoMusica || !ctxAudio) return;
   const s = estado.som;
-  const t = video.currentTime - estado.ini;
-  const dur = estado.fim - estado.ini;
+  const t = video.currentTime - estado.ini - s.musicaEm;
+  const dur = estado.fim - estado.ini - s.musicaEm;
   let g = dbLin(volumeMusicaDb()) * 2 * Math.max(0.2, s.volumeFala);
   if (s.abaixar && temSom(estado.principal)) {
     const palavras = estado.falas.get(chaveTrecho());
-    if (palavras?.some((w) => t >= w.inicio - 0.1 && t <= w.fim + 0.25)) g *= dbLin(-8);
+    const tf = t + s.musicaEm; // as palavras contam do começo do trecho
+    if (palavras?.some((w) => tf >= w.inicio - 0.1 && tf <= w.fim + 0.25)) g *= dbLin(-8);
   }
   if (s.suave) {
     if (t < 1) g *= Math.max(0, t);
@@ -977,7 +1142,11 @@ function quadroPara(r: Receita, legenda: Bloco[] | null, exemplo = false): Quadr
   const escrito = campoGancho.value.includes('___') ? '' : campoGancho.value;
   return {
     layout: usaDividida(r) ? 'dividida' : 'cheio',
-    gancho: { estilo: r.gancho, texto: exemplo ? EXEMPLO_GANCHO[r.gancho] ?? escrito : escrito },
+    gancho: {
+      estilo: estiloGanchoDe(r), texto: exemplo ? EXEMPLO_GANCHO[r.gancho] ?? escrito : escrito,
+      ...(exemplo ? {} : { animacao: estado.animacao, dur: estado.durGancho, depois: estado.depois }),
+    },
+    zoom: estado.zoom,
     fonte: campoFonte.value.trim(),
     creditoBaixo: usaVideoDeBaixo() ? campoCredito.value.trim() : '',
     legenda,
@@ -1024,15 +1193,31 @@ function redesenhar() {
   });
 }
 
+// os efeitos tocam na prévia quando o cursor passa por eles
+let ultimoT = 0;
+function efeitosNaPrevia() {
+  const t = video.currentTime;
+  if (t > ultimoT && t - ultimoT < 0.5) {
+    for (const e of efeitosDoTrecho()) if (e.em > ultimoT && e.em <= t) tocarEfeito(e.efeito, e.db);
+  }
+  ultimoT = t;
+}
+
 function laco() {
   desenhar();
   atualizarGanhoMusica();
+  efeitosNaPrevia();
+  linhaDoTempo.desenhar();
   if (!video.paused) requestAnimationFrame(laco);
 }
 const celular = previa.parentElement!;
-video.addEventListener('play', () => { celular.classList.add('tocando'); if (usaVideoDeBaixo()) videoBaixo.play(); tocarMusicaNaPrevia(); laco(); });
+video.addEventListener('play', () => { celular.classList.add('tocando'); ultimoT = video.currentTime - 0.01; if (usaVideoDeBaixo()) videoBaixo.play(); tocarMusicaNaPrevia(); laco(); });
 video.addEventListener('pause', () => { celular.classList.remove('tocando'); videoBaixo.pause(); pararMusicaNaPrevia(); });
-video.addEventListener('seeked', () => { redesenhar(); if (!video.paused) tocarMusicaNaPrevia(); });
+video.addEventListener('seeked', () => {
+  ultimoT = video.currentTime - 0.01;
+  redesenhar(); linhaDoTempo.desenhar(); atualizarBotaoEfeito();
+  if (!video.paused) tocarMusicaNaPrevia();
+});
 video.addEventListener('timeupdate', () => { if (video.currentTime > estado.fim + 0.2 && !video.paused) video.currentTime = estado.ini; });
 function alternar() {
   if (!estado.principal) return;
@@ -1212,10 +1397,10 @@ async function prensarAtual(): Promise<boolean> {
     if (pMusica) andamento('Preparando a música');
     const som: OpcoesDeSom = {
       limpar: campoSom.checked, volumeFala: estado.som.volumeFala, musica: pMusica ? await pMusica : null,
+      musicaDe: estado.som.musicaDe, musicaEm: estado.som.musicaEm,
       volumeMusicaDb: volumeMusicaDb(), abaixar: estado.som.abaixar, suave: estado.som.suave,
-      // o efeito acompanha o carimbo do gancho (só quando há gancho)
-      efeitos: estado.som.efeito !== 'nenhum' && q.gancho.texto.trim() && q.gancho.estilo !== 'nenhum'
-        ? [{ buffer: await efeitoBuffer(estado.som.efeito), em: 0, db: -3 }] : [],
+      // o do gancho acompanha a entrada dele; os outros, onde a pessoa pôs (contados do começo do trecho)
+      efeitos: await Promise.all(efeitosDoTrecho().map(async (e) => ({ buffer: await efeitoBuffer(e.efeito), em: e.em - estado.ini, db: e.db }))),
     };
     andamento('Prensando', 0);
     const mestre = await prensar({ ...q, principal: m, baixo: usaVideoDeBaixo() ? estado.baixo : null, ini: estado.ini, fim: estado.fim, som },
@@ -1419,7 +1604,7 @@ dlgContato.addEventListener('click', (e) => {
   montarGaleria();
   irPara('receita');
   requestAnimationFrame(animarGaleria);
-  await document.fonts.load(`84px "${FONTE}"`).catch(() => {});
+  await Promise.all([`84px "${FONTE}"`, 'italic 74px "Fraunces"', '300px "Fraunces"'].map((f) => document.fonts.load(f))).catch(() => {});
   demo = criarDemo($<HTMLCanvasElement>('demo'));
   irPassoDemo(0);
   aplicarReceita(RECEITA_PADRAO);

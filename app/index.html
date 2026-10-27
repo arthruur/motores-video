@@ -123,6 +123,16 @@
         <button type="button" class="botao-trocar" id="trocar">Trocar vídeo</button>
         <label class="chave pequena"><input type="checkbox" id="ver-zona"><span>Onde a rede cobre</span></label>
       </div>
+      <div class="tempo-linha" id="tempo-linha" hidden>
+        <p class="tempo-topo"><strong>Linha do tempo</strong> <span id="trecho-info"></span></p>
+        <canvas id="linha-tempo" aria-label="Linha do tempo. Arraste as alças amarelas para escolher onde o vídeo começa e termina; toque para ir a um ponto."></canvas>
+        <div class="tempo-acoes">
+          <button type="button" id="marca-ini" title="O trecho começa no ponto do cursor">⟦ Começa aqui</button>
+          <button type="button" id="video-inteiro">Inteiro</button>
+          <button type="button" id="marca-fim" title="O trecho termina no ponto do cursor">Termina aqui ⟧</button>
+        </div>
+        <p class="nota" id="trecho-aviso" hidden></p>
+      </div>
     </aside>
 
     <section class="painel">
@@ -178,6 +188,18 @@
         <input type="text" id="gancho" class="campo-grande" maxlength="80" autocomplete="off" aria-label="Texto do gancho">
         <p class="nota" id="legenda-estado" aria-live="polite"></p>
         <div class="ideias" id="ideias" aria-label="Ideias de gancho"></div>
+        <p class="rotulo">Estilo</p>
+        <div class="fichas" id="estilos-gancho" role="radiogroup" aria-label="Estilo do gancho"></div>
+        <p class="rotulo">Como entra</p>
+        <div class="fichas" id="animacoes-gancho" role="radiogroup" aria-label="Entrada do gancho"></div>
+        <label class="regua">Fica grande por <output id="dur-gancho-valor">4 s</output>
+          <input type="range" id="dur-gancho" min="1" max="15" step="0.5" value="4">
+        </label>
+        <p class="rotulo">Depois disso</p>
+        <div class="fichas" id="depois-gancho" role="radiogroup" aria-label="O gancho depois"></div>
+        <div class="chaves">
+          <label class="chave"><input type="checkbox" id="zoom" checked><span>Câmera viva (zoom lento)</span></label>
+        </div>
       </div>
 
       <div class="passo-guia" data-passo="fonte" hidden>
@@ -206,17 +228,28 @@
         <p class="rotulo">Música</p>
         <div class="musicas" id="musicas" role="radiogroup" aria-label="Música"></div>
         <input type="file" accept="audio/*,video/*" id="arquivo-musica" hidden>
-        <p class="rotulo">Efeito na entrada do gancho</p>
-        <div class="fichas" id="efeitos" role="radiogroup" aria-label="Efeito na entrada do gancho"></div>
         <div class="som-musica" id="som-musica" hidden>
           <label class="regua">Volume da música <output id="volume-musica-valor">média</output>
             <input type="range" id="volume-musica" min="0" max="100" step="5" value="65">
+          </label>
+          <label class="regua">Tocar a música a partir de <output id="musica-de-valor">0:00</output>
+            <input type="range" id="musica-de" min="0" max="60" step="0.5" value="0">
+          </label>
+          <label class="regua">A música entra no vídeo em <output id="musica-em-valor">0 s</output>
+            <input type="range" id="musica-em" min="0" max="30" step="0.5" value="0">
           </label>
           <div class="chaves">
             <label class="chave"><input type="checkbox" id="abaixar" checked><span>Abaixar quando alguém fala</span></label>
             <label class="chave"><input type="checkbox" id="suave" checked><span>Entrar e sair suave</span></label>
           </div>
         </div>
+        <p class="rotulo">Efeito na entrada do gancho</p>
+        <div class="fichas" id="efeitos" role="radiogroup" aria-label="Efeito na entrada do gancho"></div>
+        <p class="rotulo">Efeitos pelo vídeo <small>toque para ouvir, depois ponha no ponto do cursor</small></p>
+        <div class="fichas" id="efeitos-extras" role="radiogroup" aria-label="Efeito para pôr no vídeo"></div>
+        <div class="linha"><button type="button" class="primario" id="por-efeito">+ Pôr no cursor</button></div>
+        <ol class="lista-efeitos" id="lista-efeitos"></ol>
+        <p class="nota" id="efeitos-nota">As marcas vermelhas na linha do tempo também dão para arrastar.</p>
       </div>
 
       <div class="passo-guia" data-passo="legenda" hidden>
@@ -236,16 +269,11 @@
         <h2>Tudo pronto?</h2>
         <ul class="resumo" id="resumo"></ul>
         <details class="mais">
-          <summary>Trecho e redes</summary>
-          <h3>Trecho</h3>
-          <video id="video" controls playsinline preload="auto"></video>
-          <div class="linha">
-            <button type="button" id="marca-ini">⟦ Começa aqui</button>
-            <button type="button" id="marca-fim">Termina aqui ⟧</button>
-          </div>
-          <p class="nota" id="trecho-info"></p>
+          <summary>Redes e vídeo original</summary>
           <h3>Redes</h3>
           <div class="fichas" id="plataformas"></div>
+          <h3>Vídeo original</h3>
+          <video id="video" controls playsinline preload="auto"></video>
         </details>
       </div>
 

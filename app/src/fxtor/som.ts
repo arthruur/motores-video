@@ -66,6 +66,8 @@ export async function tratarSom(canais: Float32Array[], taxa: number, { limpar, 
 export type Mixagem = {
   fala: Float32Array[] | null;   // canais da fala na taxa `taxa` (null: vídeo sem som)
   musica: AudioBuffer | null;    // trilha em qualquer taxa; é reamostrada e repetida até cobrir o trecho
+  musicaDe?: number;             // s: de que ponto da música começar (pula a introdução, cai no refrão)
+  musicaEm?: number;             // s: quando a música entra no vídeo (0 = desde o começo)
   taxa: number;
   amostras: number;              // duração do trecho em amostras
   limpar: boolean;
@@ -77,14 +79,14 @@ export type Mixagem = {
   sinal?: AbortSignal;
 };
 
-/** a música repetida até cobrir o trecho, na taxa da fala, em estéreo */
-async function musicaNoTrecho(m: AudioBuffer, taxa: number, amostras: number): Promise<Float32Array[]> {
+/** a música repetida até cobrir o trecho, na taxa da fala, em estéreo, a partir de `de` segundos dela */
+async function musicaNoTrecho(m: AudioBuffer, taxa: number, amostras: number, de = 0): Promise<Float32Array[]> {
   const ctx = new OfflineAudioContext(2, amostras, taxa);
   const s = ctx.createBufferSource();
   s.buffer = m;
   s.loop = true;
   s.connect(ctx.destination);
-  s.start();
+  s.start(0, de % m.duration);
   const r = await ctx.startRendering();
   return [r.getChannelData(0), r.getChannelData(1)];
 }
@@ -124,20 +126,22 @@ export async function mixar(o: Mixagem): Promise<Float32Array[]> {
     if (fala.length === 1) fala = [fala[0], new Float32Array(fala[0])];
   }
   let saida: Float32Array[] = fala ?? [new Float32Array(n), new Float32Array(n)];
-  if (o.musica) {
-    let m = nivelar(await musicaNoTrecho(o.musica, o.taxa, n), o.taxa);
+  const em = Math.min(n, Math.round((o.musicaEm ?? 0) * o.taxa)); // a música entra em `em` e vai até o fim
+  if (o.musica && n - em > 0) {
+    const nm = n - em;
+    let m = nivelar(await musicaNoTrecho(o.musica, o.taxa, nm, o.musicaDe ?? 0), o.taxa);
     const base = fala ? dbParaLinear(o.volumeMusicaDb) * Math.max(0.2, o.volumeFala) : 1;
     const env = fala && o.abaixar ? quandoFala(fala, o.taxa, n) : null;
     const abaixado = dbParaLinear(-8);
     const entra = o.suave ? Math.round(1.0 * o.taxa) : 0, sai = o.suave ? Math.round(2.0 * o.taxa) : 0;
     m = m.map((c) => c.map((v, i) => {
       let g = base;
-      if (env) g *= 1 - (1 - abaixado) * env[i];
+      if (env) g *= 1 - (1 - abaixado) * env[i + em];
       if (i < entra) g *= i / entra;
-      if (n - i < sai) g *= (n - i) / sai;
+      if (nm - i < sai) g *= (nm - i) / sai;
       return v * g;
     }));
-    saida = saida.map((c, k) => c.map((v, i) => v + m[k][i]));
+    saida = saida.map((c, k) => c.map((v, i) => (i >= em ? v + m[k][i - em] : v)));
   }
   for (const ef of o.efeitos ?? []) {
     // o efeito é reamostrado para a taxa da fala e somado no instante pedido, com pico em -6 dBFS mais o ajuste

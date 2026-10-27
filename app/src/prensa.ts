@@ -165,6 +165,8 @@ export type OpcoesDeSom = {
   limpar: boolean;            // remove ruído da voz (RNNoise, do Audio FXtor)
   volumeFala: number;         // 0 a 1.5
   musica: AudioBuffer | null; // trilha gerada ou da pessoa
+  musicaDe: number;           // s: de que ponto da música começar
+  musicaEm: number;           // s: quando a música entra, contado do início do trecho
   volumeMusicaDb: number;     // em relação à fala
   abaixar: boolean;           // abaixa a música enquanto alguém fala
   suave: boolean;             // entrada e saída suaves
@@ -232,7 +234,7 @@ export async function prensar(p: Pedido, progresso: Progresso, sinal?: AbortSign
     const lido = temSom(p.principal) ? await lerAudio(p.principal, p.ini, p.fim) : null;
     const taxa = lido?.taxa ?? 48000;
     const canais = (await mixar({
-      fala: lido?.canais ?? null, musica: p.som.musica, taxa, amostras: Math.ceil((p.fim - p.ini) * taxa),
+      fala: lido?.canais ?? null, musica: p.som.musica, musicaDe: p.som.musicaDe, musicaEm: p.som.musicaEm, taxa, amostras: Math.ceil((p.fim - p.ini) * taxa),
       limpar: p.som.limpar, volumeFala: p.som.volumeFala, volumeMusicaDb: p.som.volumeMusicaDb,
       abaixar: p.som.abaixar, suave: p.som.suave, efeitos: p.som.efeitos, sinal,
     })).map((c) => new Float32Array(c));

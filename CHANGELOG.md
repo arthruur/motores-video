@@ -4,6 +4,14 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 
 ## [Não lançado]
 
+### Prensa: linha do tempo, mais ganchos e efeitos pelo vídeo
+
+- **Vídeo inteiro:** ao abrir, o trecho é o vídeo todo até 3 min (antes cortava em 1 min sem avisar). Dá para ir até 10 min, o limite do TikTok.
+- **Linha do tempo** embaixo da prévia, em todas as etapas: miniaturas, a onda do som, alças amarelas para arrastar o começo e o fim, cursor e os botões "Começa aqui", "Inteiro" e "Termina aqui". Avisa quais redes vão cortar ou dividir o trecho (Kwai e Status do WhatsApp: 1 min).
+- **Gancho:** o estilo agora se escolhe à parte da receita, com quatro novos (caixa branca, comentário, citação, atenção). Também dá para escolher como ele entra (carimbo, desliza, digitando, surge, sem animação), por quanto tempo fica grande (1 a 15 s) e o que acontece depois (vira título, fica grande, some). A câmera viva pode ser desligada.
+- **Efeitos sonoros:** oito novos, gerados no aparelho (ding, notificação, máquina de escrever, subida, rufar e prato, boing, glitch, disco arranhado). Além do efeito na entrada do gancho, dá para pôr efeitos em qualquer ponto do vídeo, com volume próprio, ajuste fino de 0,1 s e arrastando a marca na linha do tempo. A prévia toca os efeitos quando o cursor passa.
+- **Música:** escolher de que ponto dela tocar (pular a introdução) e em que segundo ela entra no vídeo.
+
 ### Prensa: fila em grade, para dezenas de vídeos
 
 - **A fila virou grade:** com mais de um vídeo, cada um aparece com capa, número e situação (pendente, pronto ✓, não abriu !, fora do lote). Filtros Todos / Pendentes / Prontos, e a grade rola sozinha, sem empurrar o resto da tela.
