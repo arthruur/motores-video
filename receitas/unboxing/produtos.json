@@ -1,0 +1,18 @@
+{
+ "tempos": { "capa": 2.8, "abertura": 4.4, "produto": 4.4, "final": 6.0, "rasgo": 1.0 },
+ "capa": { "nota": "abre comigo?" },
+ "abertura": { "titulo": "unboxing", "nota": "meu kit de make" },
+ "final": { "titulo": "meu kit", "nota": "10 queridinhos" },
+ "produtos": [
+  { "foto": "creme",     "nome": "Creme",     "marca": "Lancôme · Hydra Zen",         "nota": "pele hidratada!",    "enfeite": "flor" },
+  { "foto": "tonico",    "nome": "Tônico",    "marca": "Caudalie · Eau de Beauté",    "nota": "glow na hora",       "enfeite": "onca",  "brilho": true },
+  { "foto": "primer",    "nome": "Primer",    "marca": "e.l.f. · Power Grip",         "nota": "fixa tudo!",         "enfeite": "estrelas" },
+  { "foto": "corretivo", "nome": "Corretivo", "marca": "Dior · Forever Skin Correct", "nota": "adeus, olheira",     "enfeite": "beijo" },
+  { "foto": "po",        "nome": "Pó",        "marca": "Boca Rosa Beauty",            "nota": "sela e fixa",        "enfeite": "flor" },
+  { "foto": "contorno",  "nome": "Bronzer",   "marca": "Rare Beauty · bastão",        "nota": "sol o ano todo",     "enfeite": "onca" },
+  { "foto": "blush",     "nome": "Blush",     "marca": "Rare Beauty · Soft Pinch",    "nota": "bochecha corada",    "enfeite": "beijo", "brilho": true },
+  { "foto": "rimel",     "nome": "Rímel",     "marca": "Fenty Beauty",                "nota": "cílios de boneca",   "enfeite": "estrelas" },
+  { "foto": "lapis",     "nome": "Lápis",     "marca": "Sephora · 8H Colorful",       "nota": "boca desenhada",     "enfeite": "onca" },
+  { "foto": "gloss",     "nome": "Gloss",     "marca": "Fenty Beauty · Gloss Bomb",   "nota": "brilho de milhões!", "enfeite": "beijo", "brilho": true }
+ ]
+}

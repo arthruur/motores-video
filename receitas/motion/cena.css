@@ -1,0 +1,56 @@
+@font-face { font-family: 'Barlow Condensed'; src: url('/_fontes/BarlowCondensed-ExtraBold.ttf'); font-weight: 800; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #1c120c; }
+#palco { position: absolute; inset: 0; overflow: hidden; }
+
+/* fotos: posicionadas por transform em seek(t) */
+.plano { position: absolute; inset: 0; overflow: hidden; background: #1c120c; }
+.plano img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+
+/* véu escuro no topo para o texto ler sobre o xadrez claro */
+.veu { position: absolute; left: 0; right: 0; top: 0; height: 900px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(28,18,12,.78) 0%, rgba(28,18,12,.45) 45%, rgba(28,18,12,0) 100%); }
+
+/* gancho: texto grande, palavra a palavra (zona segura: x 120–880, y 288+) */
+.gancho { position: absolute; left: 120px; width: 760px; top: 330px; text-align: center; color: #fff8ec;
+  font-family: Georgia, serif; font-style: italic; font-weight: 700; font-size: 112px; line-height: 1.04;
+  text-shadow: 0 6px 30px rgba(0,0,0,.55); }
+.gancho .linha { white-space: nowrap; }
+.gancho span { display: inline-block; }
+
+/* rótulo: imita a etiqueta branca de borda preta dos potes */
+.rotulo { position: absolute; left: 500px; top: 360px; transform-origin: 50% 50%; }
+.rotulo .etq { padding: 30px 54px 34px; background: #fbf7ee; border-radius: 22px;
+  border: 4px solid #1a1410; box-shadow: inset 0 0 0 8px #fbf7ee, inset 0 0 0 11px #1a1410, 0 18px 50px rgba(0,0,0,.45);
+  font-family: Georgia, serif; font-weight: 700; font-size: 70px; line-height: 1.08; color: #1a1410; text-align: center;
+  white-space: pre; }
+.rotulo .sub { display: table; margin: 26px auto 0; padding: 10px 30px 8px;
+  background: #1a1410; color: #f2c14e; border-radius: 40px; font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 44px; letter-spacing: 6px; text-transform: uppercase; white-space: nowrap; }
+
+/* cartão final */
+#final { position: absolute; inset: 0; background-color: #22150e;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(196,92,60,.10) 0 60px, transparent 60px 120px),
+    repeating-linear-gradient(90deg, rgba(196,92,60,.10) 0 60px, transparent 60px 120px),
+    radial-gradient(circle at 50% 35%, rgba(255,214,140,.16), transparent 60%); }
+#tampa { position: absolute; left: 500px; top: 640px; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 26px, rgba(120,80,10,.28) 27px 29px, rgba(0,0,0,0) 30px 44px),
+    radial-gradient(circle at 38% 32%, #fff0b8 0%, #e6bf5c 28%, #b8862a 62%, #7a5512 100%);
+  box-shadow: 0 30px 70px rgba(0,0,0,.6), inset 0 0 0 14px rgba(110,72,10,.55), inset 0 0 0 18px rgba(255,230,160,.35); }
+#selo { position: absolute; left: 50%; top: 50%; width: 330px; height: 190px; margin: -95px 0 0 -165px; border-radius: 34px;
+  background: #15110e; box-shadow: inset 0 0 0 5px #15110e, inset 0 0 0 8px #e9dfc9; color: #f3ead8; text-align: center;
+  font-family: Georgia, serif; }
+#selo .n1 { position: absolute; left: 0; right: 0; top: 30px; font-size: 76px; font-weight: 700; letter-spacing: 6px; }
+#selo .n2 { position: absolute; left: 0; right: 0; top: 112px; font-size: 46px; letter-spacing: 4px; }
+#selo .orn { position: absolute; left: 0; right: 0; top: 10px; font-size: 22px; }
+#linha { position: absolute; left: 120px; width: 760px; top: 960px; text-align: center; color: #fff8ec;
+  font-family: Georgia, serif; font-style: italic; font-weight: 700; font-size: 74px; white-space: nowrap; }
+#chamada { position: absolute; left: 500px; top: 1080px; }
+#chamada div { padding: 16px 40px 12px; background: #f2c14e; color: #1a1410; border-radius: 60px;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 54px; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+#contato { position: absolute; left: 120px; width: 760px; top: 1180px; text-align: center; color: #f3ead8;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 50px; letter-spacing: 2px; }
+.plano img.fundo { width: 1080px; height: 1920px; object-fit: cover; transform: scale(1.1); }
+.plano img.menor { -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 88%, transparent 100%); }

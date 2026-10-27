@@ -1,0 +1,55 @@
+{
+ "creditos": {
+  "a": "FOTOS: FLÁVIO DE BARROS, 1897 · MUSEU DA REPÚBLICA / IMS · BIBLIOTECA NACIONAL",
+  "b": "FOTOS: FLÁVIO DE BARROS, 1897 · MUSEU DA REPÚBLICA / IMS · AÇUDE: A. DUARTE E RITA BARRETO/BAHIATURSA, CC BY-SA"
+ },
+ "videos": {
+  "a": {
+   "titulo": "Canudos não se rendeu",
+   "bpm": 96,
+   "planos": [
+    { "foto": "conselheiro", "b": 5, "zoom": [0.62, 1.15], "foco": [[0.5, 0.5], [0.45, 0.32]], "secao": "tensao",
+      "texto": "ANTÔNIO CONSELHEIRO", "sub": "BAHIA, 1893" },
+    { "foto": "vila", "b": 6, "zoom": [1.0, 1.15], "foco": [[0.62, 0.62], [0.5, 0.3]], "brilho": 0.78, "secao": "tensao",
+      "texto": "BELO MONTE", "sub": "MILHARES DE SERTANEJOS SEM PATRÃO" },
+    { "foto": "mapa", "b": 3, "zoom": [0.9, 1.0], "foco": [[0.3, 0.75], [0.3, 0.72]], "secao": "batida", "flash": true,
+      "texto": "1ª EXPEDIÇÃO", "sub": "DERROTADA" },
+    { "foto": "mapa", "b": 3, "zoom": [1.3, 1.4], "foco": [[0.55, 0.45], [0.55, 0.42]], "secao": "batida", "flash": true,
+      "texto": "2ª EXPEDIÇÃO", "sub": "DERROTADA" },
+    { "foto": "mapa", "b": 3, "zoom": [1.8, 1.95], "foco": [[0.42, 0.22], [0.42, 0.2]], "secao": "batida", "flash": true,
+      "texto": "3ª EXPEDIÇÃO", "sub": "DERROTADA" },
+    { "foto": "tropa", "b": 3, "zoom": [1.0, 1.1], "foco": [[0.6, 0.5], [0.5, 0.45]], "secao": "drop", "flash": true, "tremor": true,
+      "texto": "A 4ª VEIO COM", "sub": "ATÉ 10 MIL SOLDADOS" },
+    { "foto": "incendio", "b": 3, "zoom": [1.2, 1.35], "foco": [[0.45, 0.7], [0.55, 0.62]], "secao": "drop", "flash": true, "tremor": true },
+    { "foto": "prisioneiros", "b": 7, "zoom": [1.0, 1.12], "foco": [[0.35, 0.6], [0.55, 0.6]], "secao": "drop", "flash": true,
+      "texto": "PROMETERAM POUPAR.", "sub": "2 DE OUTUBRO DE 1897", "texto2": "DEGOLARAM.", "b2": 3.5 },
+    { "foto": "ruinas", "b": 8, "zoom": [1.0, 1.08], "foco": [[0.5, 0.45], [0.5, 0.35]], "secao": "calmo",
+      "citacao": "“Eram quatro apenas: um velho, dois homens feitos e uma criança.”", "sub": "EUCLIDES DA CUNHA, OS SERTÕES" },
+    { "foto": null, "b": 7, "secao": "fim", "texto": "CANUDOS NÃO SE RENDEU.", "sub": "5 DE OUTUBRO DE 1897", "credito": true }
+   ]
+  },
+  "b": {
+   "titulo": "O sertão vai virar mar",
+   "bpm": 80,
+   "planos": [
+    { "foto": "seca", "cor": true, "b": 6, "zoom": [1.0, 1.12], "foco": [[0.3, 0.5], [0.4, 0.45]], "secao": "calmo",
+      "texto": "ESTA CIDADE ESTÁ DEBAIXO D’ÁGUA" },
+    { "foto": "vila", "b": 6, "zoom": [1.0, 1.15], "foco": [[0.62, 0.62], [0.5, 0.3]], "brilho": 0.78, "secao": "calmo", "virapb": true,
+      "texto": "ERA BELO MONTE", "sub": "A TERRA NÃO TINHA DONO" },
+    { "foto": "conselheiro", "b": 4, "zoom": [0.8, 1.0], "foco": [[0.45, 0.4], [0.45, 0.35]], "secao": "tensao",
+      "texto": "A REPÚBLICA CHAMOU DE FANATISMO" },
+    { "foto": "tropa", "b": 4, "zoom": [1.0, 1.1], "foco": [[0.4, 0.5], [0.6, 0.45]], "secao": "tensao",
+      "texto": "E MANDOU 4 EXPEDIÇÕES" },
+    { "foto": "incendio", "b": 3, "zoom": [1.2, 1.35], "foco": [[0.45, 0.7], [0.55, 0.62]], "secao": "drop", "flash": true, "tremor": true,
+      "texto": "5 DE OUTUBRO DE 1897" },
+    { "foto": "prisioneiros", "b": 6, "zoom": [1.0, 1.14], "foco": [[0.6, 0.6], [0.4, 0.6]], "secao": "drop", "flash": true },
+    { "foto": "ruinas", "b": 4, "zoom": [1.0, 1.08], "foco": [[0.5, 0.4], [0.5, 0.3]], "secao": "drop", "flash": true,
+      "texto": "5.200 CASAS DERRUBADAS" },
+    { "foto": "acude", "cor": true, "b": 6, "zoom": [1.0, 1.1], "foco": [[0.35, 0.5], [0.6, 0.5]], "secao": "calmo",
+      "texto": "NOS ANOS 1960, UM AÇUDE COBRIU O QUE SOBROU", "sub": "“O SERTÃO VAI VIRAR MAR”" },
+    { "foto": "seca", "cor": true, "b": 5, "zoom": [1.12, 1.0], "foco": [[0.4, 0.45], [0.3, 0.5]], "secao": "fim",
+      "texto": "NA SECA, CANUDOS VOLTA", "credito": true }
+   ]
+  }
+ }
+}

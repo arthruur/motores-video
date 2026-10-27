@@ -1,0 +1,259 @@
+{
+ "marca": {
+  "assina": "Receitas do Bistrô",
+  "chamada": "Peça a sua!",
+  "contato": "@bistro153"
+ },
+ "pecas": {
+  "pimenta": {
+   "titulo": [
+    "Geleia de",
+    "Pimenta"
+   ],
+   "cor": "#8d0c00",
+   "fundo": "#8d0c00",
+   "tinta": "#fffdea",
+   "retrato": "6865",
+   "retrato_pos": "50% 40%",
+   "recorte": "6904",
+   "notas": [
+    "docinha…",
+    "e com ardência!"
+   ],
+   "deco": "xadrez"
+  },
+  "manga": {
+   "titulo": [
+    "Geleia de Manga",
+    "com Maracujá"
+   ],
+   "cor": "#d16f4a",
+   "fundo": "#ffd21f",
+   "tinta": "#3d2f29",
+   "retrato": "6859",
+   "retrato_pos": "50% 45%",
+   "recorte": "6903",
+   "notas": [
+    "tropical…",
+    "doce e azedinha!"
+   ],
+   "deco": "xadrez"
+  },
+  "pesto": {
+   "titulo": [
+    "Pesto de",
+    "Manjericão"
+   ],
+   "cor": "#396600",
+   "fundo": "#396600",
+   "tinta": "#fffdea",
+   "retrato": "6868",
+   "retrato_pos": "50% 40%",
+   "recorte": "6905",
+   "notas": [
+    "fresquinho…",
+    "cheiro de manjericão!"
+   ],
+   "deco": "xadrez"
+  },
+  "chutney": {
+   "titulo": [
+    "Chutney de",
+    "Tamarindo"
+   ],
+   "cor": "#3d2f29",
+   "fundo": "#3d2f29",
+   "tinta": "#fffdea",
+   "retrato": "6860",
+   "retrato_pos": "55% 45%",
+   "recorte": "6906",
+   "notas": [
+    "agridoce…",
+    "tamarindo no ponto!"
+   ],
+   "deco": "xadrez"
+  },
+  "molho-pimenta": {
+   "titulo": [
+    "Molho de",
+    "Pimenta"
+   ],
+   "cor": "#003984",
+   "fundo": "#003984",
+   "tinta": "#fffdea",
+   "retrato": "6864",
+   "retrato_pos": "50% 40%",
+   "recorte": "6908",
+   "notas": [
+    "picante…",
+    "pra quem gosta de ardor!"
+   ],
+   "deco": "azulejo"
+  },
+  "linha": {
+   "tipo": "linha",
+   "titulo": [
+    "Receitas",
+    "do Bistrô"
+   ],
+   "cor": "#8d0c00",
+   "fundo": "#8d0c00",
+   "tinta": "#fffdea",
+   "assina_a": "feitas à mão, pote por pote",
+   "retrato": "6829",
+   "retrato_pos": "50% 35%",
+   "potes": [
+    {
+     "recorte": "6903",
+     "nome": "manga c/ maracujá",
+     "x": 190,
+     "top": 280,
+     "w": 235
+    },
+    {
+     "recorte": "6906",
+     "nome": "chutney",
+     "x": 520,
+     "top": 265,
+     "w": 235
+    },
+    {
+     "recorte": "6904",
+     "nome": "geleia de pimenta",
+     "x": 850,
+     "top": 285,
+     "w": 235
+    },
+    {
+     "recorte": "6905",
+     "nome": "pesto",
+     "x": 190,
+     "top": 655,
+     "w": 235
+    },
+    {
+     "recorte": "6908",
+     "nome": "molho de pimenta",
+     "x": 850,
+     "top": 655,
+     "w": 235
+    },
+    {
+     "recorte": "6911",
+     "nome": "alho confit",
+     "x": 190,
+     "top": 1025,
+     "w": 235
+    },
+    {
+     "recorte": "6913",
+     "nome": "mostarda",
+     "x": 850,
+     "top": 1025,
+     "w": 235
+    },
+    {
+     "recorte": "cachaca",
+     "nome": "cachaça",
+     "x": 520,
+     "top": 640,
+     "w": 190
+    }
+   ],
+   "deco": "xadrez",
+   "aviso": "Beba com moderação · Venda proibida para menores de 18 anos"
+  },
+  "cachaca": {
+   "titulo": [
+    "Cachaça"
+   ],
+   "subtitulo": "com alecrim do mato, limão e mel",
+   "cor": "#c4552b",
+   "fundo": "#396600",
+   "tinta": "#fffdea",
+   "retrato": "cachaca",
+   "retrato_pos": "62% 50%",
+   "recorte": "cachaca",
+   "recorte_css": {
+    "left": 350,
+    "top": 330,
+    "width": 300
+   },
+   "fitas": [
+    {
+     "x": 500,
+     "y": 470,
+     "rot": -10,
+     "w": 210
+    },
+    {
+     "x": 500,
+     "y": 1250,
+     "rot": 7,
+     "w": 280
+    }
+   ],
+   "notas": [
+    "alecrim\ndo mato…",
+    "limão e mel!"
+   ],
+   "notas_css": [
+    {
+     "left": 58,
+     "top": 890
+    },
+    {
+     "left": 330,
+     "top": 1352
+    }
+   ],
+   "setas": [
+    "M180 895 C 150 870, 150 852, 170 846 M 175 844 l -26 8 M 175 844 l -6 26",
+    null,
+    "M335 1450 C 460 1436, 620 1456, 780 1438"
+   ],
+   "rabiscos": [
+    "M300 830 C 270 700, 230 560, 190 430 M296 812 l -52 -14 M296 812 l 40 -30 M287 760 l -52 -15 M287 760 l 40 -30 M276 706 l -52 -16 M276 706 l 40 -30 M262 650 l -52 -17 M262 650 l 40 -30 M247 594 l -52 -18 M247 594 l 40 -30 M231 540 l -52 -19 M231 540 l 40 -30 M214 486 l -52 -20 M214 486 l 40 -30 M198 446 l -52 -21 M198 446 l 40 -30",
+    "M718 520 a 82 82 0 1 0 164 0 a 82 82 0 1 0 -164 0 M732 520 a 68 68 0 1 0 136 0 a 68 68 0 1 0 -136 0 M800 520 L864 520 M800 520 L845 565 M800 520 L800 584 M800 520 L755 565 M800 520 L736 520 M800 520 L755 475 M800 520 L800 456 M800 520 L845 475",
+    "M905 650 L 795 850 M 728 868 q 40 -26 78 12 M 716 896 q 46 -30 92 12 M 714 926 q 46 -30 90 12 M 722 956 q 38 -24 72 10 M 752 990 q -8 26 4 40 q 12 -14 -4 -40"
+   ],
+   "deco": "azulejo",
+   "aviso": "Beba com moderação · Venda proibida para menores de 18 anos",
+   "titulo_tam": 236
+  },
+  "alho": {
+   "titulo": [
+    "Alho",
+    "Confit"
+   ],
+   "cor": "#396600",
+   "fundo": "#d16f4a",
+   "tinta": "#fffdea",
+   "retrato": "6844",
+   "retrato_pos": "45% 50%",
+   "recorte": "6911",
+   "notas": [
+    "macio…",
+    "derrete no pão!"
+   ],
+   "deco": "xadrez"
+  },
+  "mostarda": {
+   "titulo": [
+    "Mostarda"
+   ],
+   "titulo_tam": 220,
+   "cor": "#003984",
+   "fundo": "#fecfd5",
+   "tinta": "#3d2f29",
+   "retrato": "6846",
+   "retrato_pos": "50% 50%",
+   "recorte": "6913",
+   "notas": [
+    "cremosa…",
+    "pro sanduíche!"
+   ],
+   "deco": "xadrez"
+  }
+ }
+}

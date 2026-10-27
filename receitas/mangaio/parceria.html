@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Bistrô 153 + Mangaio · Receitas do Bistrô</title>
+<link rel="stylesheet" href="../promo/promo.css">
+<style>
+  #palco { background: #fff3cf; }
+  .camada { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+  .camada > svg { position: absolute; left: 0; top: 0; overflow: visible; }
+  .papel-sombra { filter: drop-shadow(0 6px 0 rgba(61,47,41,.18)); }
+  .tela { position: absolute; inset: 0; pointer-events: none; }
+  #ceu { position: absolute; inset: 0; background: linear-gradient(180deg, #fff9e6 0%, #ffeab0 70%, #ffd98a 100%); }
+  #ceu::after { content: ''; position: absolute; inset: 0; background: url('../promo/marca/linho.png'); background-size: 1100px; opacity: .35; mix-blend-mode: multiply; }
+  #sol { position: absolute; left: 720px; top: 690px; width: 260px; height: 287px; }
+  #mascote-wrap { position: absolute; transform-origin: 50% 100%; }
+  #mascote-wrap svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  #mascote-wrap svg g { transform-box: fill-box; }
+  .item { position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; }
+  .item svg { width: 100%; height: 100%; overflow: visible; }
+  #textos1 .titulo { position: absolute; left: 40px; width: 920px; top: 310px; font-size: 128px; color: var(--vinho); }
+  #textos1 .mao { position: absolute; left: 20px; width: 1040px; top: 600px; text-align: center; font-size: 48px; color: var(--marrom); }
+  #dentro { position: absolute; inset: 0; display: none; overflow: hidden; }
+  #parede { background: var(--creme); }
+  #parede::before { content: ''; position: absolute; inset: 0; background: url('../promo/marca/linho.png'); background-size: 1100px; opacity: .55; }
+  .tabua { position: absolute; height: 34px; background: #8a5a2b; border-radius: 6px; box-shadow: 0 10px 0 rgba(61,47,41,.25), inset 0 -8px 0 #6b4220; }
+  .mao-francesa { position: absolute; width: 18px; height: 70px; background: #6b4220; border-radius: 0 0 8px 8px; }
+  .pote { position: absolute; transform-origin: 50% 100%; }
+  .pote img { width: 100%; display: block; }
+  #d-titulo { position: absolute; left: 40px; width: 920px; top: 300px; font-size: 100px; color: var(--vinho); }
+  #d-mao { position: absolute; left: 20px; width: 1040px; top: 432px; text-align: center; font-size: 46px; color: var(--marrom); }
+  #fim { position: absolute; inset: 0; display: none; overflow: hidden; background: var(--creme); }
+  #f-logo { position: absolute; left: 120px; top: 380px; width: 270px; height: 378px; }
+  #f-mais { position: absolute; left: 400px; top: 470px; width: 140px; text-align: center; font-size: 150px; color: var(--vinho); }
+  #f-mascote { position: absolute; left: 540px; top: 330px; width: 380px; height: 446px; transform-origin: 50% 100%; }
+  #f-mascote svg { width: 100%; height: 100%; overflow: visible; }
+  #f-mascote svg g { transform-box: fill-box; }
+  #f-assina { position: absolute; left: 80px; width: 840px; top: 820px; text-align: center; font-size: 60px; color: var(--marrom); }
+  #f-titulo { position: absolute; left: 40px; width: 920px; top: 905px; font-size: 128px; color: var(--vinho); }
+  #f-cta { position: absolute; left: 500px; top: 1150px; }
+  #f-cta div { padding: 14px 40px 12px; background: var(--marrom); color: var(--creme); border-radius: 60px; font-family: 'Raleway', sans-serif;
+    font-weight: 700; font-size: 42px; white-space: nowrap; }
+  #f-aviso { position: absolute; left: 60px; width: 880px; top: 1258px; text-align: center; font-family: 'Raleway', sans-serif; font-weight: 600;
+    font-size: 25px; color: var(--marrom); opacity: .85; }
+  #f-estrela { position: absolute; left: 790px; top: 150px; width: 230px; height: 254px; }
+  #f-estrela img { width: 100%; height: 100%; }
+  #f-estrela .mao { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-size: 36px; color: var(--marrom); transform: rotate(-12deg); }
+  .f-pote { position: absolute; top: 1380px; transform-origin: 50% 100%; }
+  .f-pote img { width: 100%; display: block; }
+  #salto { position: absolute; left: 0; top: 0; z-index: 650; display: none; transform-origin: 50% 70%; }
+  #salto svg { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div id="palco">
+  <div id="fora">
+    <div id="ceu"></div>
+    <div class="tela"><img id="sol" src="../promo/marca/estrela.svg" alt=""></div>
+    <div class="camada" id="c-nuvens"></div>
+    <div class="camada" id="c-serra1"></div>
+    <div class="camada" id="c-serra2"></div>
+    <div class="camada papel-sombra" id="c-caatinga"></div>
+    <div class="camada" id="c-estrada"></div>
+    <div class="camada papel-sombra" id="c-frente"></div>
+    <div class="tela" id="textos1">
+      <div class="titulo" id="t1"></div>
+      <div class="mao" id="t1-mao">tem parceria nova em Serrinha!</div>
+    </div>
+  </div>
+
+  <div id="dentro">
+    <div class="camada" id="parede" style="width:1300px;height:2100px;left:-110px;top:-90px"></div>
+    <div class="camada" id="c-prateleira"></div>
+    <div class="titulo" id="d-titulo"></div>
+    <div class="mao" id="d-mao">à venda primeiro no app Mangaio</div>
+  </div>
+
+  <div id="fim">
+    <div class="papel"></div>
+    <div id="f-topo"></div><div id="f-base"></div>
+    <img id="f-logo" src="../promo/marca/logo.svg" alt="Bistrô 153">
+    <div class="titulo" id="f-mais">+</div>
+    <div id="f-mascote"></div>
+    <div id="f-estrela"><img src="../promo/marca/estrela.svg" alt=""><div class="mao">novidade!</div></div>
+    <div class="mao" id="f-assina">Receitas do Bistrô</div>
+    <div class="titulo" id="f-titulo"></div>
+    <div id="f-cta"><div>Baixe o app e peça a sua</div></div>
+    <div id="f-aviso">Beba com moderação · Venda proibida para menores de 18 anos</div>
+  </div>
+
+  <div id="salto"></div>
+  <div class="grao"></div>
+  <div class="vinheta"></div>
+</div>
+
+<script src="../promo/kit.js"></script>
+<script src="arte.js"></script>
+<script>
+const { lim, fase, suave, saida, mix, quadros, CARIMBO, tremor, escreve, ferve, r } = K
+const BPM = 116, SEG = 60 / BPM
+const s = b => b * SEG                       // batida → segundos
+const bt = t => t / SEG                      // segundos → batida
+const passo = t => K.passo(t)                // stop-motion: 12 por segundo
+const $ = q => document.querySelector(q)
+const NS = 'http://www.w3.org/2000/svg'
+
+// ---------------- roteiro (em batidas) ----------------
+const R = {
+  anda: 8, chega: 26, porta: 26.5, mergulho: 28, dentro: 30, cestoEntra: 33, potes: 35, salto: 44.6, fim: 46, final: 56, total: 60,
+  pegas: [10, 12, 13.5, 15, 16.5, 18, 19.5, 21],
+}
+const ING = ['pimenta', 'manga', 'maracuja', 'manjericao', 'limao', 'alho', 'tamarindo', 'alecrim']
+const BISTRO_X = 2740, PORTA_Y = 1075, CHAO = 1420, CESTO_H = 440
+
+// ---------------- câmera ----------------
+function camera(b) {
+  const x = 2200 * suave(lim((b - R.anda) / (R.chega - R.anda)))
+  let z = b < R.anda ? 120 * suave(b / R.anda) : 120 * (1 - suave(lim((b - R.anda) / 2)))
+  let y = 210 * suave(lim((b - R.anda) / 2.5))
+  if (b >= R.mergulho) {                                   // mergulho pela porta
+    const p = lim((b - R.mergulho) / (R.dentro - R.mergulho))
+    z = 900 * p ** 2.2
+    y = mix(210, PORTA_Y - 960, suave(lim(p * 1.6)))
+  }
+  return { x, y, z }
+}
+const CAMADAS = []   // { el, Z }
+function camada(id, Z, conteudo, w, hgt) {
+  const el = document.getElementById(id)
+  el.innerHTML = `<svg width="${w}" height="${hgt}" viewBox="0 0 ${w} ${hgt}">${conteudo}</svg>`
+  CAMADAS.push({ el, Z })
+  return el
+}
+function projetar(cam) {
+  for (const { el, Z } of CAMADAS) {
+    const pf = 1000 / Z, d = Z - cam.z
+    if (d < 60) { el.style.display = 'none'; continue }    // a camada passou pela câmera
+    el.style.display = 'block'
+    const k = Z / d
+    el.style.transform = `translate(540px,960px) scale(${r(k, 4)}) translate(${r(-540 - cam.x * pf, 1)}px,${r(-960 - cam.y * pf, 1)}px)`
+  }
+}
+
+// ---------------- mascote (o cesto do Mangaio) ----------------
+const PIVO = { 'braco-esq': '80% 10%', 'braco-dir': '20% 10%', alca: '50% 100%', rosto: '50% 50%', 'olho-esq': '50% 55%', 'olho-dir': '50% 55%' }
+async function mascote(pai) {
+  const txt = await (await fetch('mascote.svg')).text()
+  pai.innerHTML = txt
+  const svg = pai.querySelector('svg')
+  svg.removeAttribute('width'); svg.removeAttribute('height')
+  const g = {}
+  for (const id of Object.keys(PIVO)) { g[id] = svg.querySelector('#' + CSS.escape(id)); g[id].style.transformOrigin = PIVO[id] }
+  return g
+}
+// pose: andar (passo por batida), acenar, pulo de pegar
+function pose(g, b, { anda = 0, acena = 0, pisca = true }) {
+  const fb = b - Math.floor(b)
+  const lado = Math.floor(b) % 2 ? 1 : -1
+  const braco = anda * Math.sin(Math.PI * b) * 22
+  g['braco-esq'].style.transform = `rotate(${r(braco)}deg)`
+  g['braco-dir'].style.transform = `rotate(${r(acena ? -95 + Math.sin(b * Math.PI * 2) * 22 : -braco)}deg)`
+  g.alca.style.transform = `scaleY(${r(1 + 0.05 * Math.cos(2 * Math.PI * b), 3)})`
+  const olho = pisca && (b % 7.3) < 0.18 ? 0.12 : 1
+  g['olho-esq'].style.transform = g['olho-dir'].style.transform = `scaleY(${olho})`
+  return { pulo: anda * Math.abs(Math.sin(Math.PI * b)) * 30, giro: anda * lado * Math.sin(Math.PI * fb) * 4, esmaga: anda * (fb < 0.12 ? 1 : 0) }
+}
+
+// ---------------- montagem ----------------
+let M = {}
+async function montar() {
+  K.filtros()
+  // céu e serras
+  let nuvens = ''
+  for (let i = 0; i < 6; i++) nuvens += `<g fill="#fffdea" opacity=".9">${ARTE.moita(150 + i * 420, 330 + (i % 3) * 90, 70, '#fffdea', i)}</g>`
+  camada('c-nuvens', 6000, nuvens, 2600, 1920)
+  camada('c-serra1', 4000, ARTE.serra(-200, 1900, 960, 1400, 170, 120, 1, '#e3b48c') + ARTE.serra(-200, 1900, 1040, 1400, 120, 70, 4, '#d29a76'), 2100, 1920)
+  camada('c-serra2', 2200, ARTE.serra(-200, 2600, 1100, 1500, 220, 90, 9, '#9db06a') + ARTE.serra(-200, 2600, 1160, 1500, 160, 50, 3, '#7f9a52'), 2800, 1920)
+  let caat = ''
+  for (let i = 0; i < 16; i++) {
+    const x = 60 + i * 190 + (K.hash(i, 2) - 0.5) * 80
+    if (i % 4 === 1) caat += ARTE.umbuzeiro(x, 1250, 280, '#5f8a3e', '#7a5230')
+    else if (i % 4 === 3) caat += ARTE.mandacaru(x, 1250, 230 + K.hash(i) * 90, '#396600')
+    else caat += ARTE.moita(x, 1252, 46 + K.hash(i, 5) * 30, '#6f9445', i)
+  }
+  camada('c-caatinga', 1500, ARTE.chao(-200, 3000, 1240, 1500, '#c9d48f', 7, 14) + caat, 3000, 1920)
+
+  // estrada (profundidade da ação): chão, cerca, moitas com ingredientes, casas e o Bistrô
+  let est = ARTE.chao(-200, 3800, 1255, 1920, '#e2ac6b', 11, 12) + ARTE.chao(-200, 3800, 1360, 1560, '#cf9156', 12, 8)
+  // pedrinhas, sulcos de roda e florzinhas na terra
+  for (let i = 0; i < 70; i++) {
+    const x = -100 + i * 56 + K.hash(i, 21) * 40, y = 1440 + K.hash(i, 22) * 420
+    est += `<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${(8 + K.hash(i, 23) * 14).toFixed(0)}" ry="${(5 + K.hash(i, 24) * 7).toFixed(0)}" fill="${i % 3 ? '#c48650' : '#b5733f'}"/>`
+    if (i % 5 === 0) est += `<circle cx="${(x + 20).toFixed(0)}" cy="${(y - 30).toFixed(0)}" r="9" fill="${['#fffdea', '#ffd21f', '#fecfd5'][i % 3]}"/><circle cx="${(x + 20).toFixed(0)}" cy="${(y - 30).toFixed(0)}" r="3" fill="#d16f4a"/>`
+  }
+  for (const y of [1500, 1620]) est += `<path d="M-200 ${y} C 600 ${y - 18}, 1400 ${y + 22}, 3800 ${y - 6}" stroke="#c07f4a" stroke-width="10" fill="none" opacity=".55" stroke-dasharray="80 26"/>`
+  for (let x = -100; x < 1900; x += 120) est += `<rect x="${x}" y="${1185 + K.hash(x) * 10}" width="14" height="90" rx="4" fill="#8a5a2b"/>`
+  est += `<rect x="-100" y="1205" width="2000" height="9" fill="#8a5a2b"/><rect x="-100" y="1235" width="2000" height="9" fill="#8a5a2b"/>`
+  // as moitas ficam onde a câmera estará no momento do lançamento
+  const xCesto = b => camera(b).x + 420
+  M.moitas = R.pegas.map((pb, i) => ({ x: camera(pb - 1).x + 720, y: 1290, i }))
+  for (const m of M.moitas) est += ARTE.moita(m.x, m.y, 78, ['#4f7a33', '#5f8a3e', '#3f6b2a'][m.i % 3], m.i + 30)
+  // casinhas de Serrinha e o Bistrô 153
+  const casas = [[1930, 300, 520, '#e8a0a8', '#003984', '#fffdea'], [2250, 260, 470, '#7fa7d9', '#8d0c00', '#fffdea'],
+                 [3160, 300, 540, '#9cc27a', '#3d2f29', '#fffdea'], [3490, 280, 480, '#f2a93b', '#003984', '#fffdea']]
+  for (const [x, l, a, c, p, j] of casas) est += ARTE.casa(x, 1255, l, a, c, p, j, x)
+  est += bistro()
+  M.estrada = camada('c-estrada', 1000, est, 3900, 1920)
+  M.portaFolha = M.estrada.querySelector('#porta-folha')
+  M.estrada.querySelector('svg').classList.add('papel-sombra')
+
+  // primeiro plano: capim e flores que passam rente à câmera
+  let fr = ''
+  for (let i = 0; i < 40; i++) {
+    const x = i * 120 + K.hash(i, 9) * 60, y = 1900
+    fr += `<path d="M${x} ${y} q 10 -${90 + K.hash(i) * 80} 26 -${130 + K.hash(i, 1) * 70} q -4 70 12 ${130} q 14 -70 40 -${100 + K.hash(i, 3) * 60} q -12 60 -8 ${100} Z" fill="${i % 2 ? '#396600' : '#4f7a33'}"/>`
+    if (i % 3 === 0) fr += `<circle cx="${x + 30}" cy="${y - 150 - K.hash(i, 4) * 60}" r="14" fill="${['#ffd21f', '#fecfd5', '#fffdea'][i % 3]}"/>`
+  }
+  camada('c-frente', 700, fr, 4900, 2000)
+
+  // o cesto anda dentro da camada da estrada (assim acompanha a paralaxe e o mergulho)
+  M.cesto = document.createElement('div'); M.cesto.id = 'mascote-wrap'
+  M.cesto.style.width = `${CESTO_H * 534 / 627}px`; M.cesto.style.height = `${CESTO_H}px`
+  M.estrada.appendChild(M.cesto)
+  M.g = await mascote(M.cesto)
+  M.xCesto = xCesto
+  // ingredientes: voam da moita para o cesto e ficam empilhados na boca dele
+  M.itens = ING.map((nome, i) => {
+    const d = document.createElement('div'); d.className = 'item'
+    d.innerHTML = `<svg viewBox="-70 -70 140 140">${ARTE.ingrediente[nome]}</svg>`
+    M.estrada.appendChild(d); return d
+  })
+
+  // textos da abertura
+  letras($('#t1'), ['Bistrô 153', '+ Mangaio']); M.t1 = [...$('#t1').querySelectorAll('.letra')]
+
+  // dentro do Bistrô: prateleiras com os potes de verdade
+  let prat = ''
+  for (const y of [790, 1150]) prat += `<div class="tabua" style="left:110px;top:${y}px;width:860px"></div><div class="mao-francesa" style="left:170px;top:${y + 30}px"></div><div class="mao-francesa" style="left:890px;top:${y + 30}px"></div>`
+  $('#c-prateleira').innerHTML = prat
+  const potes = [['6903', 0], ['6906', 0], ['6904', 0], ['6905', 0], ['6908', 1], ['6911', 1], ['6913', 1], ['cachaca', 1]]
+  M.potes = potes.map(([f, linha], i) => {
+    const d = document.createElement('div'); d.className = 'pote recorte'
+    const w = f === 'cachaca' ? 92 : 168, cx = 220 + (i % 4) * 213
+    d.style.width = `${w}px`; d.style.left = `${cx - w / 2}px`
+    d.innerHTML = `<img src="../promo/recortes/${f}.png" alt="">`
+    $('#c-prateleira').appendChild(d)
+    return { d, cx, base: linha ? 1150 : 790 }
+  })
+  CAMADAS_DENTRO.push({ el: $('#parede'), Z: 1400 }, { el: $('#c-prateleira'), Z: 1000 })
+  letras($('#d-titulo'), ['Receitas do Bistrô']); M.dt = [...$('#d-titulo').querySelectorAll('.letra')]
+  // o cesto lá dentro (mais perto da câmera) e o salto para a tela final
+  M.cesto2 = document.createElement('div'); M.cesto2.id = 'mascote-wrap'
+  Object.assign(M.cesto2.style, { width: `${640 * 534 / 627}px`, height: '640px', left: `${540 - 320 * 534 / 627}px`, top: `${1800 - 640}px` })
+  $('#dentro').appendChild(M.cesto2)
+  M.g2 = await mascote(M.cesto2)
+
+  // fim: assinatura
+  faixa($('#fim'), -70); faixa($('#fim'), 1810)
+  M.faixas = [...$('#fim').querySelectorAll('.azulejo')]
+  M.g3 = await mascote($('#f-mascote'))
+  letras($('#f-titulo'), ['agora no', 'app Mangaio']); M.ft = [...$('#f-titulo').querySelectorAll('.letra')]
+  M.fpotes = ['6903', '6906', '6904', '6905', 'cachaca', '6908', '6911', '6913'].map((f, i) => {
+    const d = document.createElement('div'); d.className = 'f-pote recorte'
+    const w = f === 'cachaca' ? 70 : 128
+    d.style.width = `${w}px`; d.style.left = `${70 + i * 122 + (128 - w) / 2}px`
+    d.innerHTML = `<img src="../promo/recortes/${f}.png" alt="">`; $('#fim').appendChild(d); return d
+  })
+
+  await document.fonts.load('900 100px Titulo'); await document.fonts.load('40px Mao'); await document.fonts.load('700 40px Raleway')
+  await document.fonts.ready
+  await Promise.all([...document.images].map(i => i.decode()))
+  M.potes.forEach(p => p.d.style.top = `${p.base - p.d.offsetHeight}px`)
+  $('#fim').style.display = 'block'; M.fpotes.forEach(d => d.style.top = `${1560 - d.offsetHeight}px`); $('#fim').style.display = 'none'
+}
+const CAMADAS_DENTRO = []
+
+function bistro() {
+  const x0 = BISTRO_X - 380, x1 = BISTRO_X + 380, topo = 330, yb = 1255
+  // platibanda com volutas
+  let plat = `M${x0} ${topo + 60} Q ${x0 + 60} ${topo - 10} ${x0 + 160} ${topo + 30} Q ${BISTRO_X - 120} ${topo - 40} ${BISTRO_X} ${topo - 60} Q ${BISTRO_X + 120} ${topo - 40} ${x1 - 160} ${topo + 30} Q ${x1 - 60} ${topo - 10} ${x1} ${topo + 60} V ${yb} H ${x0} Z`
+  return `<g id="bistro">
+    <path d="${plat}" fill="#f2c14e"/>
+    <path d="M${x0} ${topo + 60} H ${x1}" stroke="#fffdea" stroke-width="14"/>
+    <rect x="${x0}" y="${yb - 70}" width="760" height="70" fill="#8d0c00"/>
+    <rect x="${BISTRO_X - 250 - 80}" y="640" width="160" height="230" rx="10" fill="#fffdea"/>
+    <rect x="${BISTRO_X + 250 - 80}" y="640" width="160" height="230" rx="10" fill="#fffdea"/>
+    <rect x="${BISTRO_X - 250 - 80}" y="640" width="70" height="230" fill="#003984"/><rect x="${BISTRO_X - 250 + 10}" y="640" width="70" height="230" fill="#003984"/>
+    <rect x="${BISTRO_X + 250 - 80}" y="640" width="70" height="230" fill="#003984"/><rect x="${BISTRO_X + 250 + 10}" y="640" width="70" height="230" fill="#003984"/>
+    <path d="M${BISTRO_X - 115} ${yb} V 960 A 115 115 0 0 1 ${BISTRO_X + 115} 960 V ${yb} Z" fill="#1c120c"/>
+    <path id="porta-folha" d="M${BISTRO_X - 115} ${yb} V 960 A 115 115 0 0 1 ${BISTRO_X + 115} 960 V ${yb} Z" fill="#6b4220" style="transform-box: fill-box; transform-origin: 0% 50%"/>
+    <path d="M${BISTRO_X - 115} ${yb} V 960 A 115 115 0 0 1 ${BISTRO_X + 115} 960 V ${yb}" fill="none" stroke="#fffdea" stroke-width="12"/>
+    <circle cx="${BISTRO_X + 190}" cy="560" r="70" fill="#ffd21f" opacity=".35"/>
+    <rect x="${BISTRO_X + 170}" y="525" width="40" height="64" rx="10" fill="#15110e"/><rect x="${BISTRO_X + 178}" y="535" width="24" height="44" rx="6" fill="#ffd21f"/>
+    <path d="M${x0 + 30} 470 H ${x0 + 330}" stroke="#15110e" stroke-width="10" stroke-linecap="round"/>
+    <path d="M${x0 + 90} 470 v 26 M${x0 + 270} 470 v 26" stroke="#15110e" stroke-width="5"/>
+    <rect x="${x0 + 40}" y="496" width="280" height="160" rx="26" fill="#15110e"/>
+    <text x="${x0 + 180}" y="582" text-anchor="middle" font-family="Titulo" font-weight="800" font-size="62" fill="#f3ead8" style="font-variation-settings:'SOFT' 100">BISTRÔ</text>
+    <text x="${x0 + 180}" y="636" text-anchor="middle" font-family="Titulo" font-size="46" fill="#f3ead8">153</text>
+  </g>`
+}
+function letras(e, linhas) {
+  linhas.forEach((l, i) => {
+    if (i) e.appendChild(document.createElement('br'))
+    ;[...l].forEach(ch => { const sp = document.createElement('span'); sp.className = 'letra'; sp.textContent = ch === ' ' ? ' ' : ch; e.appendChild(sp) })
+  })
+}
+function faixa(pai, y) {
+  for (let i = 0; i < 6; i++) { const a = document.createElement('div'); a.className = 'azulejo'; a.style.left = `${i * 180}px`; a.style.top = `${y}px`; pai.appendChild(a) }
+}
+const pos = (e, o) => K.pos(e, o)
+const carimbo = (t, ini) => quadros(t, ini, CARIMBO)
+
+// ---------------- desenho de um instante ----------------
+function desenhar(tReal) {
+  const tq = passo(tReal), b = bt(tReal), bq = bt(tq)        // b: suave (câmera) · bq: em passos (bonecos)
+  const fora = b < R.dentro, dentro = b >= R.dentro && b < R.fim, fim = b >= R.fim
+  $('#fora').style.display = fora ? 'block' : 'none'
+  $('#dentro').style.display = dentro ? 'block' : 'none'
+  $('#fim').style.display = fim ? 'block' : 'none'
+
+  if (fora) {
+    const cam = camera(b)
+    projetar(cam)
+    $('#sol').style.transform = `rotate(${r(bq * 4)}deg)`
+    // o cesto: aparece na abertura, anda acompanhando a câmera, chega na porta e entra
+    let sx = b < R.anda ? 760 : mix(760, 420, suave(lim((b - R.anda) / 2)))
+    if (b >= 24) sx = mix(420, 540, suave(lim((b - 24) / 3)))
+    const anda = b >= R.anda && b < 27.5 ? 1 : 0
+    const p = pose(M.g, bq, { anda, acena: b < R.anda - 0.5 && b > 2.5 ? 1 : 0 })
+    const surge = quadros(tq, s(2), [0.3, 1.15, 0.92, 1.03, 1]) ?? 0
+    let yb = CHAO, esc = surge, opac = 1
+    if (b >= 27.4) {                                          // pulinho porta adentro
+      const q = lim((bq - 27.4) / 0.7)
+      yb = mix(CHAO, 1255, q) - Math.sin(Math.PI * q) * 120; esc = mix(1, 0.62, q); opac = q > 0.85 ? 0 : 1
+    }
+    // pega: esmagadinha quando um ingrediente cai dentro
+    const pega = R.pegas.some(pb => bq >= pb && bq < pb + 0.17)
+    const sy = (p.esmaga || pega ? 0.9 : 1), sxs = (p.esmaga || pega ? 1.07 : 1)
+    const wx = sx + cam.x
+    M.cesto.style.left = `${r(wx - parseFloat(M.cesto.style.width) / 2, 1)}px`
+    M.cesto.style.top = `${r(yb - CESTO_H - p.pulo, 1)}px`
+    M.cesto.style.transform = `rotate(${r(p.giro)}deg) scale(${r(esc * sxs, 3)},${r(esc * sy, 3)})`
+    M.cesto.style.opacity = opac
+    // ingredientes: na moita → voo de uma batida → empilhados na boca do cesto
+    M.itens.forEach((d, i) => {
+      const pb = R.pegas[i], m = M.moitas[i]
+      const boca = (bb) => ({ x: M.xCesto(bb) + (i % 4 - 1.5) * 62, y: CHAO - CESTO_H * 0.74 - Math.floor(i / 4) * 44 - pose(M.g, bb, { anda: 1 }).pulo })
+      let x, y, rot = 0, e = 1
+      if (bq < pb - 1) { x = m.x; y = m.y - 150; rot = Math.sin(bq * Math.PI) * 6 }
+      else if (bq < pb) {
+        const q = bq - (pb - 1), alvo = boca(pb)
+        x = mix(m.x, alvo.x, q); y = mix(m.y - 150, alvo.y, q) - Math.sin(Math.PI * q) * 320; rot = q * 360; e = mix(1, 0.7, q)
+      } else { const a = boca(bq); x = a.x; y = a.y; rot = (i - 3.5) * 8; e = 0.7 }
+      if (b >= 27.4) { d.style.opacity = M.cesto.style.opacity; x += (sx - 420) * 0; }
+      else d.style.opacity = 1
+      d.style.left = `${r(x, 1)}px`; d.style.top = `${r(y, 1)}px`
+      d.style.transform = `rotate(${r(rot)}deg) scale(${r(e * (b >= 27.4 ? esc : 1), 3)})`
+      d.style.display = b >= 28 ? 'none' : 'block'
+    })
+    // porta abre
+    const ab = lim((bq - R.porta) / 0.5)
+    M.portaFolha.style.transform = `scaleX(${r(1 - 0.85 * ab, 3)})`
+    // abertura: títulos
+    M.t1.forEach((sp, i) => {
+      const v = carimbo(tq, s(0.6 + (i >= 10 ? 1.2 : 0) + (i % 10) * 0.09))
+      pos(sp, { s: v ?? 0, o: v == null ? 0 : 1, y: v == null ? 0 : (1 - v) * -40, tremor: tremor(60 + i, tq, 0.35) })
+    })
+    const t1 = $('#textos1')
+    const sai = lim((bq - (R.anda - 0.6)) / 0.6)
+    t1.style.transform = `translateY(${r(-sai * 500, 1)}px)`; t1.style.opacity = r(1 - sai, 3)
+    escreve($('#t1-mao'), tq, s(3.4), s(2)); $('#t1').style.filter = ferve(tq)
+    // escurece ao atravessar a porta
+    $('#fora').style.filter = b > 29.2 ? `brightness(${r(1 - lim((b - 29.2) / 0.8), 3)})` : 'none'
+  }
+
+  if (dentro) {
+    const bd = b - R.dentro, bdq = bq - R.dentro
+    const cam = { x: -40 + 80 * suave(lim(bd / 16)), y: 0, z: 260 * (1 - saida(lim(bd / 2.5))) }
+    for (const { el, Z } of CAMADAS_DENTRO) {
+      const pf = 1000 / Z, k = Z / (Z - cam.z)
+      el.style.transform = `translate(540px,960px) scale(${r(k, 4)}) translate(${r(-540 - cam.x * pf, 1)}px,${r(-960 - cam.y * pf, 1)}px)`
+    }
+    $('#dentro').style.filter = bd < 0.6 ? `brightness(${r(lim(bd / 0.6), 3)})` : 'none'
+    M.dt.forEach((sp, i) => {
+      const v = carimbo(tq, s(R.dentro + 1 + i * 0.12))
+      pos(sp, { s: v ?? 0, o: v == null ? 0 : 1, y: v == null ? 0 : (1 - v) * -40, tremor: tremor(140 + i, tq, 0.35) })
+    })
+    $('#d-titulo').style.filter = ferve(tq)
+    escreve($('#d-mao'), tq, s(R.potes + 1.5), s(2.4)); pos($('#d-mao'), { rot: -2, tremor: tremor(150, tq, 0.5) })
+    // o cesto sobe de baixo e espera os potes
+    const sobe = quadros(tq, s(R.cestoEntra), [1, 0.55, 0.12, -0.05, 0.02, 0]) ?? 1
+    const pd = pose(M.g2, bq, { anda: 0, acena: 0 })
+    const pegaPote = M.potes.some((_, i) => bq >= R.potes + i + 1 && bq < R.potes + i + 1.17)
+    let esc = 1, ty = sobe * 900
+    if (bq >= R.salto) {   // salto em direção à câmera, cobrindo a tela
+      const v = quadros(tq, s(R.salto), [1.15, 1.6, 2.6, 4.2, 7, 11]) ?? 1
+      esc = v; ty = -v * 120
+    }
+    M.cesto2.style.transform = `translateY(${r(ty, 1)}px) scale(${r(esc * (pegaPote ? 1.06 : 1), 3)},${r(esc * (pegaPote ? 0.92 : 1), 3)})`
+    M.cesto2.style.transformOrigin = '50% 70%'
+    // potes pulam da prateleira para o cesto, um por batida
+    M.potes.forEach(({ d, cx, base }, i) => {
+      const pb = R.potes + i + 1, q = lim((bq - (pb - 1)) / 1)
+      if (bq < pb - 1) { pos(d, { tremor: tremor(160 + i, tq, 0.4) }); return }
+      const alvoX = 540 - cx, alvoY = 1800 - 640 * 0.62 - base
+      if (q >= 1) { d.style.opacity = 0; return }
+      d.style.opacity = 1
+      d.style.transform = `translate(${r(alvoX * q, 1)}px,${r(alvoY * q - Math.sin(Math.PI * q) * 380, 1)}px) rotate(${r(q * 300 * (i % 2 ? 1 : -1))}deg) scale(${r(mix(1, 0.7, q), 3)})`
+    })
+  }
+
+  if (fim) {
+    const tf = tq - s(R.fim)
+    $('#salto').style.display = 'none'
+    M.faixas.forEach((a, i) => { const v = quadros(tf, 0.05 + (i % 6) * 0.05, [0.3, 1.12, 0.96, 1]) ?? 0; pos(a, { s: v, rot: (1 - v) * 30 }) })
+    const lg = carimbo(tf, s(0.5)); pos($('#f-logo'), { s: lg ?? 0, o: lg == null ? 0 : 1, rot: -3, tremor: tremor(200, tq, 0.5) })
+    const mais = carimbo(tf, s(1.1)); pos($('#f-mais'), { s: mais ?? 0, o: mais == null ? 0 : 1, tremor: tremor(201, tq, 0.5) })
+    const ms = quadros(tf, s(1.6), [0.3, 1.15, 0.92, 1.03, 1])
+    const pulo = bq >= R.final && bq < R.final + 1 ? Math.sin(Math.PI * (bq - R.final)) * 60 : 0
+    pose(M.g3, bq, { anda: 0, acena: bq > R.fim + 2.2 ? 1 : 0 })
+    pos($('#f-mascote'), { s: ms ?? 0, o: ms == null ? 0 : 1, y: -pulo, tremor: tremor(202, tq, 0.5) })
+    escreve($('#f-assina'), tf, s(2.4), s(1.6)); pos($('#f-assina'), { tremor: tremor(203, tq, 0.5) })
+    M.ft.forEach((sp, i) => {
+      const v = carimbo(tf, s(4.2 + i * 0.13))
+      pos(sp, { s: v ?? 0, o: v == null ? 0 : 1, y: v == null ? 0 : (1 - v) * -40, tremor: tremor(210 + i, tq, 0.35) })
+    })
+    $('#f-titulo').style.filter = ferve(tq)
+    const cta = quadros(tf, s(6.6), [0.5, 1.12, 0.96, 1])
+    $('#f-cta').style.transform = `translateX(-50%) scale(${cta ?? 0})`
+    const av = quadros(tf, s(7.2), [0.4, 1]); $('#f-aviso').style.opacity = av ?? 0
+    M.fpotes.forEach((d, i) => {
+      const v = quadros(tf, s(7.8 + i * 0.5), [0.3, 1.18, 0.92, 1.03, 1])   // surge no lugar, sem cruzar o texto
+      pos(d, { s: v ?? 0, rot: (i - 3.5) * 2, o: v == null ? 0 : 1, tremor: tremor(230 + i, tq, 0.6) })
+    })
+    const es = quadros(tq, s(R.final), [0.3, 1.3, 0.9, 1.06, 1])
+    pos($('#f-estrela'), { s: es ?? 0, o: es == null ? 0 : 1, rot: 10 + (es == null ? 0 : Math.floor((tq - s(R.final)) * 12) * 1.2) })
+  }
+  // salto do cesto cobre a passagem dentro → fim
+  const g = Math.floor(tq * 12) % 4
+  $('.grao').style.transform = `translate(${[0, -23, 17, -9][g]}px,${[0, 13, -19, 21][g]}px)`
+  return fora ? r(tReal, 3) : tq.toFixed(4)
+}
+
+;(async () => {
+  await montar()
+  window.DURACAO = s(R.total) + 1.6
+  window.seek = desenhar
+  desenhar(0)
+  window.pronto = true
+})()
+</script>
+</body>
+</html>

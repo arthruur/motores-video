@@ -1,0 +1,517 @@
+{
+ "marca": {
+  "nome": "BISTRÔ",
+  "numero": "153",
+  "linha": "Receitas do Bistrô",
+  "chamada": "Peça a sua pelo direct",
+  "contato": "@bistro153"
+ },
+ "videos": {
+  "linha": {
+   "planos": [
+    {
+     "foto": "6897",
+     "dur": 2.6,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.3,
+       0.45
+      ],
+      [
+       0.45,
+       0.45
+      ]
+     ],
+     "gancho": "Feito à mão,\npote por pote",
+     "alvo": 1010
+    },
+    {
+     "foto": "6903",
+     "dur": 1.9,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "trans": "circulo",
+     "rotulo": "Geleia de Manga\ncom Maracujá",
+     "sub": "doce · tropical",
+     "alvo": 980
+    },
+    {
+     "foto": "6906",
+     "dur": 1.9,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "trans": "circulo",
+     "rotulo": "Chutney de\nTamarindo",
+     "sub": "agridoce",
+     "alvo": 980
+    },
+    {
+     "foto": "6904",
+     "dur": 1.9,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "trans": "circulo",
+     "rotulo": "Geleia de\nPimenta",
+     "sub": "doce com ardência",
+     "alvo": 980
+    },
+    {
+     "foto": "6905",
+     "dur": 1.9,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "trans": "circulo",
+     "rotulo": "Pesto de\nManjericão",
+     "sub": "fresco · herbal",
+     "alvo": 980
+    },
+    {
+     "foto": "6908",
+     "dur": 1.9,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.44
+      ],
+      [
+       0.49,
+       0.44
+      ]
+     ],
+     "trans": "circulo",
+     "rotulo": "Molho de\nPimenta",
+     "sub": "picante",
+     "alvo": 980
+    },
+    {
+     "foto": "6873",
+     "dur": 3.2,
+     "zoom": [
+      0.75,
+      0.75
+     ],
+     "foco": [
+      [
+       0.0,
+       0.74
+      ],
+      [
+       1.0,
+       0.74
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "5 receitas,\num só bistrô",
+     "alvo": 1010
+    },
+    {
+     "foto": "6829",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.45
+      ],
+      [
+       0.5,
+       0.4
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "Monte a sua caixa"
+    }
+   ],
+   "final": 3.4
+  },
+  "manga": {
+   "planos": [
+    {
+     "foto": "6903",
+     "dur": 2.8,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "rotulo": "Geleia de Manga\ncom Maracujá",
+     "sub": "doce · tropical",
+     "alvo": 980
+    },
+    {
+     "foto": "6859",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.55
+      ],
+      [
+       0.5,
+       0.58
+      ]
+     ],
+     "trans": "circulo"
+    },
+    {
+     "foto": "6889",
+     "dur": 2.2,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.2,
+       0.62
+      ],
+      [
+       0.35,
+       0.62
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "+ 4 receitas\npara provar",
+     "alvo": 1010
+    }
+   ],
+   "final": 3.0
+  },
+  "chutney": {
+   "planos": [
+    {
+     "foto": "6906",
+     "dur": 2.8,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "rotulo": "Chutney de\nTamarindo",
+     "sub": "agridoce",
+     "alvo": 980
+    },
+    {
+     "foto": "6860",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.55
+      ],
+      [
+       0.5,
+       0.58
+      ]
+     ],
+     "trans": "circulo"
+    },
+    {
+     "foto": "6877",
+     "dur": 2.2,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.25,
+       0.45
+      ],
+      [
+       0.45,
+       0.45
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "+ 4 receitas\npara provar",
+     "alvo": 1010
+    }
+   ],
+   "final": 3.0
+  },
+  "geleia-pimenta": {
+   "planos": [
+    {
+     "foto": "6904",
+     "dur": 2.8,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "rotulo": "Geleia de\nPimenta",
+     "sub": "doce com ardência",
+     "alvo": 980
+    },
+    {
+     "foto": "6865",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.55
+      ],
+      [
+       0.5,
+       0.58
+      ]
+     ],
+     "trans": "circulo"
+    },
+    {
+     "foto": "6884",
+     "dur": 2.2,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.3,
+       0.57
+      ],
+      [
+       0.5,
+       0.57
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "+ 4 receitas\npara provar",
+     "alvo": 1010
+    }
+   ],
+   "final": 3.0
+  },
+  "pesto": {
+   "planos": [
+    {
+     "foto": "6905",
+     "dur": 2.8,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.42
+      ],
+      [
+       0.49,
+       0.42
+      ]
+     ],
+     "rotulo": "Pesto de\nManjericão",
+     "sub": "fresco · herbal",
+     "alvo": 980
+    },
+    {
+     "foto": "6868",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.55
+      ],
+      [
+       0.5,
+       0.58
+      ]
+     ],
+     "trans": "circulo"
+    },
+    {
+     "foto": "6879",
+     "dur": 2.2,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.35,
+       0.47
+      ],
+      [
+       0.6,
+       0.47
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "+ 4 receitas\npara provar",
+     "alvo": 1010
+    }
+   ],
+   "final": 3.0
+  },
+  "molho-pimenta": {
+   "planos": [
+    {
+     "foto": "6908",
+     "dur": 2.8,
+     "zoom": [
+      0.6,
+      0.66
+     ],
+     "foco": [
+      [
+       0.49,
+       0.44
+      ],
+      [
+       0.49,
+       0.44
+      ]
+     ],
+     "rotulo": "Molho de\nPimenta",
+     "sub": "picante",
+     "alvo": 980
+    },
+    {
+     "foto": "6864",
+     "dur": 2.4,
+     "zoom": [
+      1.0,
+      1.1
+     ],
+     "foco": [
+      [
+       0.5,
+       0.55
+      ],
+      [
+       0.5,
+       0.58
+      ]
+     ],
+     "trans": "circulo"
+    },
+    {
+     "foto": "6897",
+     "dur": 2.2,
+     "zoom": [
+      0.68,
+      0.74
+     ],
+     "foco": [
+      [
+       0.35,
+       0.45
+      ],
+      [
+       0.55,
+       0.45
+      ]
+     ],
+     "trans": "fade",
+     "gancho": "+ 4 receitas\npara provar",
+     "alvo": 1010
+    }
+   ],
+   "final": 3.0
+  }
+ }
+}

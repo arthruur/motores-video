@@ -1,0 +1,94 @@
+/* Identidade do Bistrô 153 (manual da marca): cores e fontes.
+   TAN Jambore e Perandory são comerciais: Fraunces (SOFT, WONK) faz as vezes até chegarem os arquivos. */
+@font-face { font-family: 'Titulo'; src: url('fontes/Fraunces.ttf'); font-weight: 100 900; }
+@font-face { font-family: 'Mao'; src: url('fontes/HomemadeApple-Regular.ttf'); }
+@font-face { font-family: 'Raleway'; src: url('fontes/Raleway.ttf'); font-weight: 100 900; }
+
+:root {
+  --creme: #fffdea; --creme2: #f9f7dc;
+  --vinho: #8d0c00; --vinho-esc: #640800;
+  --verde: #396600; --amarelo: #ffd21f; --marrom: #3d2f29; --azul: #003984;
+  --rosa: #fecfd5; --tijolo: #d16f4a;
+}
+
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--creme); }
+#palco { position: absolute; inset: 0; overflow: hidden; }
+.cena { position: absolute; inset: 0; overflow: hidden; }
+.abs { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; will-change: transform; }
+
+/* papel: cor + linho do manual + grão */
+.papel { position: absolute; inset: -40px; }
+.papel::before { content: ''; position: absolute; inset: 0; background: url('marca/linho.png'); background-size: 1100px; opacity: .55; }
+.papel.escuro::before { opacity: .22; mix-blend-mode: screen; }
+.grao { position: absolute; inset: -60px; background: url('marca/grao.png'); background-size: 720px; mix-blend-mode: multiply;
+  opacity: .16; pointer-events: none; z-index: 900; }
+.vinheta { position: absolute; inset: 0; pointer-events: none; z-index: 901;
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, transparent 55%, rgba(61,47,41,.30) 100%); }
+
+/* tipografia */
+.titulo { font-family: 'Titulo', serif; font-weight: 900; font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+  line-height: .92; letter-spacing: -1px; text-align: center; white-space: nowrap; }
+.titulo .letra { display: inline-block; transform-origin: 50% 80%; }
+.mao { font-family: 'Mao', cursive; white-space: nowrap; line-height: 1.5; }
+.texto { font-family: 'Raleway', sans-serif; font-weight: 700; white-space: nowrap; }
+
+/* azulejo e fita */
+.azulejo { position: absolute; width: 180px; height: 180px; background: url('marca/azulejo-mostarda.png') center/cover;
+  box-shadow: 0 3px 0 rgba(61,47,41,.25); }
+.cortina { position: absolute; inset: 0; z-index: 800; }
+.peca { position: absolute; background-size: cover; box-shadow: 0 0 0 1px rgba(61,47,41,.25); }
+.fita { position: absolute; height: 56px; background: rgba(236, 222, 186, .88); z-index: 5;
+  clip-path: polygon(0 8%, 4% 0, 9% 12%, 14% 2%, 86% 0, 91% 10%, 96% 0, 100% 9%, 100% 92%, 95% 100%, 90% 88%, 85% 100%, 12% 100%, 7% 90%, 3% 100%, 0 90%);
+  box-shadow: inset 0 0 18px rgba(160, 130, 80, .25); }
+
+/* recorte de papel com sombra de mesa */
+.recorte { filter: drop-shadow(0 14px 10px rgba(40, 20, 10, .35)) drop-shadow(0 2px 1px rgba(40, 20, 10, .3)); }
+
+/* ===================== peças (promo.js) ===================== */
+/* cena A: retrato no creme */
+#a-assina { left: 120px; width: 760px; top: 300px; text-align: center; font-size: 52px; color: var(--marrom); }
+#a-titulo { left: 40px; width: 920px; top: 392px; font-size: 178px; color: var(--cor); }
+/* moldura de renda 640×880: miolo medido no desenho (centro 318,370; raios ~212×303), a foto passa uns px por baixo do anel */
+#a-oval { left: 170px; top: 760px; width: 640px; height: 880px; }
+#a-oval .foto { position: absolute; left: 98px; top: 58px; width: 440px; height: 624px; overflow: hidden;
+  clip-path: ellipse(50% 50% at 50% 50%); background: var(--marrom); }
+#a-oval .foto img { position: absolute; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 45%; }
+#a-oval .renda { position: absolute; inset: 0; width: 100%; height: 100%; }
+#a-estrela { left: 650px; top: 690px; width: 300px; height: 331px; }
+#a-estrela img { width: 100%; height: 100%; }
+#a-estrela .mao { position: absolute; left: 0; right: 0; top: 125px; text-align: center; font-size: 38px; color: var(--marrom); transform: rotate(-14deg); }
+
+/* cena B: o pote (ou a linha) no papel colorido */
+#b .papel { background: var(--fundo); }
+#b-deco { left: -150px; top: 1430px; width: 520px; }
+#b-deco.azulejo-deco { width: 300px; height: 300px; left: -60px; top: 1440px; background: url('marca/azulejo-mostarda.png') center/cover; }
+#b-ondas { left: 700px; top: -160px; width: 560px; opacity: .9; }
+#b-pote { left: 190px; top: 520px; width: 620px; }
+#b-pote img, .pote-linha img { width: 100%; display: block; }
+.nota { color: var(--tinta); font-size: 60px; }
+#b-n1 { left: 128px; top: 316px; }
+#b-n2 { left: 300px; top: 1350px; }
+#b-tracos { left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+#b-tracos path { fill: none; stroke: var(--tinta); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#b-tracos .brilho { stroke: var(--amarelo); stroke-width: 6; }
+.fundo-claro #b-tracos .brilho { stroke: var(--vinho); }
+.pote-linha { width: 350px; }
+.rotulo-linha { width: 440px; text-align: center; font-size: 34px; color: var(--tinta); }
+
+/* transição */
+#estrelao { left: 140px; top: 560px; width: 800px; height: 883px; z-index: 700; }
+#estrelao img { width: 100%; height: 100%; }
+
+/* cena C: assinatura com o monograma */
+#c-logo { left: 300px; top: 300px; width: 400px; height: 560px; }
+#c-logo img { width: 100%; height: 100%; }
+#c-assina { left: 120px; width: 760px; top: 900px; text-align: center; font-size: 58px; color: var(--marrom); }
+#c-chamada { left: 60px; width: 880px; top: 1000px; font-size: 150px; color: var(--vinho); }
+#c-contato { left: 120px; width: 760px; top: 1162px; text-align: center; font-size: 50px; color: var(--marrom); letter-spacing: 1px; }
+#c-prateleira .abs { width: 190px; top: 1330px; }
+#c-prateleira img { width: 100%; display: block; }
+
+/* subtítulo à mão (cachaça), notas de duas linhas e cláusula de advertência (bebida alcoólica) */
+#a-sub { left: 80px; width: 840px; top: 584px; text-align: center; font-size: 44px; color: var(--marrom); }
+.nota { white-space: pre; line-height: 1.25; }
+#c-aviso { left: 60px; width: 880px; top: 1240px; text-align: center; font-size: 25px; font-weight: 600; color: var(--marrom); opacity: .85; white-space: normal; }

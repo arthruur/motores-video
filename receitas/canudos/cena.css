@@ -1,0 +1,30 @@
+@font-face { font-family: 'Barlow Condensed'; src: url('/_fontes/BarlowCondensed-ExtraBold.ttf'); font-weight: 800; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#palco { position: absolute; inset: 0; overflow: hidden; background: #000; }
+
+/* fotos: posicionadas por transform em seek(t) */
+.plano { position: absolute; inset: 0; overflow: hidden; background: #000; }
+.plano img.foto { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.plano img.fundo { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover;
+  filter: grayscale(1) blur(36px) brightness(.45); transform: scale(1.15); }
+
+/* texto no centro da zona segura (x 120–880, y 288–1248) */
+.texto { position: absolute; left: 120px; width: 760px; top: 560px; text-align: center; }
+.titulo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; line-height: .98; letter-spacing: 2px;
+  color: #f4ede0; text-shadow: 0 6px 34px rgba(0,0,0,.85), 0 0 4px rgba(0,0,0,.6); }
+.titulo span, .citacao span { display: inline-block; }
+.citacao { font-family: Georgia, serif; font-style: italic; font-weight: 700; line-height: 1.14;
+  color: #f4ede0; text-shadow: 0 6px 30px rgba(0,0,0,.9); }
+.sub { display: table; margin: 30px auto 0; padding: 10px 26px 8px; background: #a3241b; color: #f4ede0;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 44px; letter-spacing: 4px; line-height: 1.05; }
+.credito { position: absolute; left: 120px; width: 760px; top: 1150px; text-align: center; color: #f4ede0;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 2px; line-height: 1.3; opacity: 0;
+  padding: 12px 18px; box-sizing: border-box; background: rgba(0,0,0,.7); }
+
+/* acabamento: vinheta, granulado, flash */
+#vinheta { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 75% 60% at 50% 50%, transparent 40%, rgba(0,0,0,.72) 100%),
+              linear-gradient(180deg, rgba(0,0,0,.35), transparent 25%, transparent 70%, rgba(0,0,0,.45)); }
+.grao { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated;
+  mix-blend-mode: overlay; opacity: .16; pointer-events: none; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }

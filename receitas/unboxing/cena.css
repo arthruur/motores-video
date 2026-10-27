@@ -1,0 +1,37 @@
+@font-face { font-family: 'Titulo'; src: url('fontes/Pacifico-Regular.ttf'); }
+@font-face { font-family: 'Mao'; src: url('fontes/CaveatBrush-Regular.ttf'); }
+:root { --vinho: #8e1029; --tinta: #2a1814; --papel: #fffaf1; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #f6efe3; }
+#palco { position: absolute; inset: 0; overflow: hidden; }
+
+/* cada cena é uma folha inteira; ao sair, rasga em duas (cada cópia vira uma metade) */
+.peca { position: absolute; inset: 0; }
+.fibra { position: absolute; inset: 0; background: var(--papel); }
+.cena { position: absolute; inset: 0; overflow: hidden; background: url('texturas/papel.jpg'); }
+.mundo { position: absolute; inset: 0; transform-origin: 540px 800px; }
+.mundo > * { position: absolute; }
+.grupo { left: 0; top: 0; width: 1080px; height: 1920px; }
+.grupo > * { position: absolute; }
+.capa { inset: 0; background: url('texturas/onca.jpg') center / 1300px; }
+.grao { inset: 0; background: url('texturas/grao.png'); opacity: .07; mix-blend-mode: multiply; pointer-events: none; }
+
+/* papel rasgado: embaixo o miolo branco do papel, em cima a cor (com a textura) */
+.rasgado { left: 0; top: 0; width: 1080px; height: 1920px; filter: drop-shadow(0 8px 12px rgba(60, 20, 14, .2)); }
+.rasgado > div { position: absolute; inset: 0; }
+.rasgado .miolo { background: var(--papel); }
+.rasgado .cor.vinho { background: url('texturas/vinho.jpg') center / cover; }
+.rasgado .cor.onca { background: url('texturas/onca.jpg') center / 1100px; }
+.rasgado .cor.creme { background: url('texturas/papel.jpg') center / cover; }
+
+/* produto solto, só com a borda de papel do recorte */
+.adesivo { transform-origin: 50% 50%; }
+
+/* títulos: letra de pincel creme com contorno vinho, como no convite */
+.titulo { left: 120px; width: 760px; text-align: center; font-family: 'Titulo'; color: #f6ecdd; font-size: 140px; line-height: 1.25; white-space: nowrap; }
+.titulo span { display: inline-block; transform-origin: 50% 80%; }
+.nota { font-family: 'Mao'; color: var(--tinta); font-size: 76px; line-height: 1; white-space: nowrap; }
+.num { font-family: 'Mao'; color: var(--vinho); font-size: 64px; white-space: nowrap; }
+.marca { left: 120px; width: 760px; text-align: center; font-family: 'Mao'; color: var(--tinta); font-size: 52px; white-space: nowrap; }
+
+.rabisco { left: 0; top: 0; overflow: visible; pointer-events: none; }
+.ilustra { overflow: visible; transform-origin: 50% 50%; }
