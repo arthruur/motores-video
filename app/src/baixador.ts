@@ -1,7 +1,10 @@
 // Links (X, Instagram, TikTok, YouTube...): o navegador não pode baixar dessas redes direto (CORS), então um
 // serviço pequeno com o yt-dlp baixa e devolve o MP4 (servidor/baixador). O resto continua no aparelho.
 
-export const BAIXADOR = ((import.meta.env.VITE_BAIXADOR_URL as string | undefined) ?? '').replace(/\/$/, '');
+export const BAIXADOR = (
+  (import.meta.env.VITE_BAIXADOR_URL as string | undefined) ||
+  (import.meta.env.DEV ? 'http://localhost:7860' : 'https://prensa-baixador.onrender.com')
+).replace(/\/$/, '');
 
 export type Baixado = { arquivo: File; titulo: string; autor: string; origem: string; plataforma: string };
 

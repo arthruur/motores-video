@@ -1,5 +1,6 @@
 import { type ClipeAcervo, type LinkCatalogo, type MusicaAcervo, baixarClipe, baixarMusica, buscarNoCatalogo, carregarCatalogo, carregarManifesto, carregarMusicas, urlDoClipe } from './acervo';
 import { BAIXADOR, baixarLink } from './baixador';
+import { checarStatusYouTube, publicarParaYouTube, gerarIdeiasVirais } from './publicador';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
 import { type Passo, criarDemo } from './demo';
@@ -667,23 +668,50 @@ function montarIdeias() {
   const daFala = palavras ? ganchosDaFala(palavras) : [];
   if (!estado.ganchoMexido) campoGancho.value = daFala[0] ?? '';
   campoGancho.placeholder = estado.receita.modelos[0] ? `ex.: ${estado.receita.modelos[0]}` : 'a frase mais forte do vídeo';
-  const chips = [...daFala.map((t) => ({ t, fala: true })), ...estado.receita.modelos.map((t) => ({ t, fala: false }))];
-  $('ideias').replaceChildren(...chips.map(({ t, fala }) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = fala ? 'ideia da-fala' : 'ideia';
-    b.textContent = t;
-    b.title = t;
-    b.addEventListener('click', () => {
-      campoGancho.value = t;
-      estado.ganchoMexido = true;
-      campoGancho.focus();
-      const lacuna = t.indexOf('___'); // seleciona a lacuna: é só digitar por cima
-      if (lacuna >= 0) campoGancho.setSelectionRange(lacuna, lacuna + 3);
-      redesenhar();
-    });
-    return b;
-  }));
+  const chips = [...daFala.map((t) => ({ t, fala: true, llm: false })), ...estado.receita.modelos.map((t) => ({ t, fala: false, llm: false }))];
+  const containerIdeias = $('ideias');
+  
+  const renderChips = (lista: { t: string; fala: boolean; llm: boolean }[]) => {
+    containerIdeias.replaceChildren(...lista.map(({ t, fala, llm }) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = llm ? 'ideia da-fala' : (fala ? 'ideia da-fala' : 'ideia');
+      if (llm) b.style.borderColor = 'var(--cor-destaque, #f59e0b)';
+      b.textContent = llm ? `⚡ ${t}` : t;
+      b.title = t;
+      b.addEventListener('click', () => {
+        campoGancho.value = t;
+        estado.ganchoMexido = true;
+        campoGancho.focus();
+        const lacuna = t.indexOf('___'); // seleciona a lacuna: é só digitar por cima
+        if (lacuna >= 0) campoGancho.setSelectionRange(lacuna, lacuna + 3);
+        redesenhar();
+      });
+      return b;
+    }));
+  };
+
+  renderChips(chips);
+
+  // Se tivermos texto falado, consulta o LLM local (Qwen na GPU) para hooks virais extras
+  if (palavras && palavras.length > 3) {
+    const textoCompleto = palavras.map((p) => p.texto).join(' ');
+    gerarIdeiasVirais(textoCompleto, estado.receita.nome).then((ideias) => {
+      if (!ideias || !ideias.ok) return;
+      const extras: { t: string; fala: boolean; llm: boolean }[] = [];
+      if (ideias.hook) extras.push({ t: ideias.hook, fala: true, llm: true });
+      if (Array.isArray(ideias.titulos)) {
+        for (const tit of ideias.titulos) {
+          if (tit && !extras.some((x) => x.t === tit)) {
+            extras.push({ t: tit, fala: true, llm: true });
+          }
+        }
+      }
+      if (extras.length > 0) {
+        renderChips([...extras, ...chips]);
+      }
+    }).catch(() => {});
+  }
 }
 campoGancho.addEventListener('input', () => { estado.ganchoMexido = true; redesenhar(); });
 function temGancho() { return estiloGanchoDe(estado.receita) !== 'nenhum' && !!campoGancho.value.trim() && !campoGancho.value.includes('___'); }
@@ -1578,6 +1606,86 @@ $('prensar').addEventListener('click', async () => {
 });
 $('cancelar').addEventListener('click', () => { estado.loteParado = estado.lote; estado.cancelar?.abort(); });
 
+// ---------------------------------------------------------------- modal publicar no youtube shorts
+const dlgYt = $<HTMLDialogElement>('dialog-yt');
+const campoYtTitulo = $<HTMLInputElement>('yt-titulo');
+const campoYtDesc = $<HTMLTextAreaElement>('yt-desc');
+const campoYtPrivacidade = $<HTMLSelectElement>('yt-privacidade');
+const msgYt = $<HTMLDivElement>('yt-status-msg');
+const btnYtEnviar = $<HTMLButtonElement>('yt-enviar');
+const btnYtCancelar = $<HTMLButtonElement>('yt-cancelar');
+const btnYtFechar = $<HTMLButtonElement>('dialog-yt-fechar');
+
+let blobParaEnviar: Blob | null = null;
+let botaoOrigemPublicacao: HTMLButtonElement | null = null;
+
+function fecharModalYt() {
+  dlgYt.close();
+  blobParaEnviar = null;
+  botaoOrigemPublicacao = null;
+}
+
+btnYtFechar.addEventListener('click', fecharModalYt);
+btnYtCancelar.addEventListener('click', fecharModalYt);
+dlgYt.addEventListener('click', (e) => {
+  if (e.target === dlgYt) fecharModalYt();
+});
+
+async function abrirModalPublicar(blob: Blob, titulo: string, post: string, btn: HTMLButtonElement) {
+  blobParaEnviar = blob;
+  botaoOrigemPublicacao = btn;
+  campoYtTitulo.value = titulo || 'Vídeo da Prensa';
+  campoYtDesc.value = post || '';
+  campoYtPrivacidade.value = 'private';
+  msgYt.hidden = true;
+  msgYt.className = 'yt-status-msg';
+  msgYt.textContent = '';
+  btnYtEnviar.disabled = false;
+  btnYtEnviar.textContent = 'Publicar agora';
+
+  dlgYt.showModal();
+
+  checarStatusYouTube().then((st) => {
+    if (!st.pronto && !st.tem_secret) {
+      msgYt.hidden = false;
+      msgYt.className = 'yt-status-msg aviso';
+      msgYt.textContent = 'Aviso: client_secret.json não foi encontrado. Para publicar pelo bot, baixe o arquivo OAuth do Google Cloud Console e coloque na pasta do projeto ou backend.';
+    }
+  }).catch(() => {});
+}
+
+btnYtEnviar.addEventListener('click', async () => {
+  if (!blobParaEnviar) return;
+  btnYtEnviar.disabled = true;
+  btnYtEnviar.textContent = 'Enviando...';
+  msgYt.hidden = false;
+  msgYt.className = 'yt-status-msg';
+  msgYt.textContent = 'Iniciando upload para o YouTube Shorts...';
+
+  try {
+    const res = await publicarParaYouTube(
+      blobParaEnviar,
+      campoYtTitulo.value.trim() || 'Vídeo da Prensa',
+      campoYtDesc.value.trim(),
+      campoYtPrivacidade.value as 'private' | 'unlisted' | 'public',
+      (texto) => { msgYt.textContent = texto; }
+    );
+
+    msgYt.className = 'yt-status-msg sucesso';
+    msgYt.innerHTML = `<strong>Shorts publicado com sucesso!</strong><br><a href="${res.url}" target="_blank" rel="noopener" style="color: #15803d; font-weight: bold; text-decoration: underline;">Abrir vídeo: ${res.url} ↗</a>`;
+    btnYtEnviar.textContent = 'Concluído ✓';
+    if (botaoOrigemPublicacao) {
+      botaoOrigemPublicacao.textContent = 'Publicado no YouTube ✓';
+      botaoOrigemPublicacao.classList.add('sucesso');
+    }
+  } catch (e) {
+    btnYtEnviar.disabled = false;
+    btnYtEnviar.textContent = 'Tentar novamente';
+    msgYt.className = 'yt-status-msg erro';
+    msgYt.textContent = `Erro ao publicar: ${(e as Error).message}`;
+  }
+});
+
 /** a bandeja de saída: tudo o que já foi prensado nesta sessão, com compartilhar e baixar; a mesa continua aberta */
 // ---------------------------------------------------------------- M20 Studio: cada vídeo pronto entra na biblioteca dele
 const chaveStudio = $<HTMLInputElement>('mandar-studio');
@@ -1665,6 +1773,14 @@ function montarBandeja() {
           if (aberto) aberto.remove(); else corpo.append(painelYoutube(saida, a.blob));
         });
         grupo.append(yt);
+      } else if (a.plataforma === 'Shorts') {
+        const pub = Object.assign(document.createElement('button'), {
+          type: 'button',
+          className: 'publicar-yt',
+          textContent: 'Publicar no YouTube',
+        });
+        pub.addEventListener('click', () => abrirModalPublicar(a.blob, saida.titulo, saida.post, pub));
+        grupo.append(pub);
       }
       botoes.append(grupo);
     }
@@ -1782,7 +1898,26 @@ $('historia-comecar').addEventListener('click', () => {
 });
 
 const dlgContato = $<HTMLDialogElement>('contato');
+const abaAutor = $<HTMLButtonElement>('aba-autor');
+const abaMangaio = $<HTMLButtonElement>('aba-mangaio');
+const painelAutor = $<HTMLDivElement>('painel-autor');
+const painelMangaio = $<HTMLDivElement>('painel-mangaio');
+
+function alternarAbaContato(aba: 'autor' | 'mangaio') {
+  const isAutor = aba === 'autor';
+  abaAutor.classList.toggle('ativa', isAutor);
+  abaAutor.setAttribute('aria-selected', String(isAutor));
+  abaMangaio.classList.toggle('ativa', !isAutor);
+  abaMangaio.setAttribute('aria-selected', String(!isAutor));
+  painelAutor.hidden = !isAutor;
+  painelMangaio.hidden = isAutor;
+}
+
+abaAutor?.addEventListener('click', () => alternarAbaContato('autor'));
+abaMangaio?.addEventListener('click', () => alternarAbaContato('mangaio'));
+
 $('abrir-contato').addEventListener('click', () => {
+  alternarAbaContato('autor');
   dlgContato.showModal();
   dlgContato.scrollTop = 0;
   $('contato-titulo').focus();

@@ -30,3 +30,12 @@ app/public/acervo/audio/
 # receitas: fotos brutas do celular e áudio bruto ficam fora (o que a peça usa já vem recortado/tratado)
 receitas/*.HEIC
 receitas/**/bruto/
+
+# segredos (OAuth do YouTube, chaves)
+client_secret*.json
+token_youtube*.json
+token_*.json
+*.pem
+.env
+.env.*
+.notebooklm/
