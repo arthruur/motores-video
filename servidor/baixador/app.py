@@ -6,20 +6,24 @@ o arquivo é apagado assim que a resposta termina.
 
   uvicorn app:app --port 7860          # local
   POST /baixar  {"url": "https://..."}  -> video/mp4, com X-Titulo, X-Autor, X-Origem, X-Plataforma
+  GET /info?url=https://...              -> título, @, duração e plataforma de um link do TikTok ou do X (catálogo)
+  GET /miniatura?url=https://...         -> a capa (jpeg/webp) desse link, para a busca do app
 """
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import tempfile
 import time
 import urllib.parse
-from collections import defaultdict, deque
+import urllib.request
+from collections import OrderedDict, defaultdict, deque
 
 import yt_dlp
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 from starlette.background import BackgroundTask
 
@@ -28,24 +32,55 @@ ORIGENS = [o.strip() for o in os.environ.get(
 DUR_MAX = int(os.environ.get("DUR_MAX", 20 * 60))          # s: a Prensa usa no máximo 3 min de trecho
 TAMANHO_MAX = int(os.environ.get("TAMANHO_MAX", 400 * 2**20))
 POR_HORA = int(os.environ.get("POR_HORA", 30))             # pedidos por IP por hora
+CAPAS_POR_HORA = int(os.environ.get("CAPAS_POR_HORA", 300))  # a busca pede uma capa por cartão que aparece
+# só as redes que este servidor consegue baixar (YouTube e Instagram barram servidores de nuvem)
+REDES_CAPA = re.compile(r"^https://(www\.|m\.|vm\.|vt\.)?(tiktok\.com|x\.com|twitter\.com)/", re.I)
 
 app = FastAPI(title="Prensa · baixador")
 app.add_middleware(CORSMiddleware, allow_origins=ORIGENS, allow_methods=["GET", "POST"], allow_headers=["*"],
                    expose_headers=["X-Titulo", "X-Autor", "X-Origem", "X-Plataforma", "Content-Length"])
 pedidos: dict[str, deque] = defaultdict(deque)
+pedidos_capa: dict[str, deque] = defaultdict(deque)
+# url -> (quando, dados) e url -> (bytes, tipo); os 300 últimos de cada (~15 MB de capas). A capa do TikTok vem
+# assinada e expira em poucas horas, por isso os dados valem 3 h e o app nunca guarda o link da capa.
+fichas: OrderedDict[str, tuple[float, dict]] = OrderedDict()
+capas: OrderedDict[str, tuple[bytes, str]] = OrderedDict()
 
 
 class Pedido(BaseModel):
     url: str
 
 
-def limite(ip: str) -> None:
-    agora, fila = time.time(), pedidos[ip]
+def ip_de(request: Request) -> str:
+    return request.headers.get("x-forwarded-for", request.client.host if request.client else "?").split(",")[0]
+
+
+def limite(ip: str, filas: dict[str, deque] = pedidos, maximo: int = POR_HORA) -> None:
+    agora, fila = time.time(), filas[ip]
     while fila and agora - fila[0] > 3600:
         fila.popleft()
-    if len(fila) >= POR_HORA:
+    if len(fila) >= maximo:
         raise HTTPException(429, "Muitos pedidos nesta hora. Tente de novo daqui a pouco.")
     fila.append(agora)
+
+
+def guardar(cache: OrderedDict, chave: str, valor) -> None:
+    cache[chave] = valor
+    cache.move_to_end(chave)
+    while len(cache) > 300:
+        cache.popitem(last=False)
+
+
+def autor_de(info: dict) -> str:
+    # nas redes de @ (X, TikTok, Instagram) o crédito é o @, não o nome de exibição
+    if info.get("extractor_key") in ("Twitter", "TikTok", "Instagram") and info.get("uploader_id"):
+        return info["uploader_id"]
+    return info.get("uploader") or info.get("channel") or info.get("uploader_id") or ""
+
+
+def erro_ytdlp(e: Exception) -> str:
+    """a 1ª linha do erro do yt-dlp, sem cor de terminal nem o prefixo ERROR:"""
+    return re.sub(r"\x1b\[[0-9;]*m", "", str(e)).split("\n")[0].replace("ERROR: ", "")
 
 
 def cabecalho(v: str | None) -> str:
@@ -62,13 +97,14 @@ def baixar(p: Pedido, request: Request):
     url = p.url.strip()
     if not url.startswith(("http://", "https://")):
         raise HTTPException(400, "Isso não parece um link.")
-    limite(request.headers.get("x-forwarded-for", request.client.host if request.client else "?").split(",")[0])
+    limite(ip_de(request))
     pasta = tempfile.mkdtemp(prefix="prensa-")
     opcoes = {
         "outtmpl": os.path.join(pasta, "video.%(ext)s"),
         "noplaylist": True,
         "quiet": True,
         "no_warnings": True,
+        "noprogress": True,  # a barra de progresso do yt-dlp só enchia o log do Render
         "merge_output_format": "mp4",
         "max_filesize": TAMANHO_MAX,
         "socket_timeout": 30,
@@ -91,7 +127,7 @@ def baixar(p: Pedido, request: Request):
         raise
     except Exception as e:  # noqa: BLE001 — o yt-dlp levanta muitos tipos; a mensagem dele é o que importa
         shutil.rmtree(pasta, ignore_errors=True)
-        msg = str(e).split("\n")[0].replace("ERROR: ", "")
+        msg = erro_ytdlp(e)
         if any(k in msg for k in ("cookies", "Sign in", "login", "not a bot", "empty media")):
             # YouTube e Instagram costumam barrar servidores de nuvem: o caminho é enviar o arquivo
             raise HTTPException(422, "Essa rede não deixou baixar daqui. Salve o vídeo no aparelho e envie o arquivo.")
@@ -107,12 +143,65 @@ def baixar(p: Pedido, request: Request):
         arquivo, media_type="video/mp4", filename="video.mp4",
         headers={
             "X-Titulo": cabecalho(info.get("title")),
-            # nas redes de @ (X, TikTok, Instagram) o crédito é o @, não o nome de exibição
-            "X-Autor": cabecalho(
-                info.get("uploader_id") if info.get("extractor_key") in ("Twitter", "TikTok", "Instagram") and info.get("uploader_id")
-                else info.get("uploader") or info.get("channel") or info.get("uploader_id")),
+            "X-Autor": cabecalho(autor_de(info)),
             "X-Origem": cabecalho(info.get("webpage_url") or url),
             "X-Plataforma": cabecalho(info.get("extractor_key")),
         },
         background=BackgroundTask(shutil.rmtree, pasta, ignore_errors=True),
     )
+
+
+def ficha(url: str, request: Request) -> dict:
+    """os dados públicos de um link do TikTok ou do X, sem baixar o vídeo"""
+    url = url.strip()
+    if not REDES_CAPA.match(url):
+        raise HTTPException(400, "Só links do TikTok ou do X.")
+    guardada = fichas.get(url)
+    if guardada and time.time() - guardada[0] < 3 * 3600:
+        return guardada[1]
+    limite(ip_de(request), pedidos_capa, CAPAS_POR_HORA)
+    try:
+        with yt_dlp.YoutubeDL({"quiet": True, "no_warnings": True, "noplaylist": True, "socket_timeout": 20}) as ydl:
+            info = ydl.extract_info(url, download=False, process=False)
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(422, f"Não consegui ler esse link: {erro_ytdlp(e)[:150]}")
+    capa = info.get("thumbnail") or next((t["url"] for t in reversed(info.get("thumbnails") or []) if t.get("url")), None)
+    dados = {
+        "url": info.get("webpage_url") or url,
+        "titulo": info.get("title") or info.get("description") or "",
+        "autor": autor_de(info),
+        "plataforma": info.get("extractor_key") or "",
+        "duracao": info.get("duration"),
+        "_capa": capa if capa and capa.startswith("https://") else None,
+    }
+    guardar(fichas, url, (time.time(), dados))
+    return dados
+
+
+@app.get("/info")
+def info_link(url: str, request: Request):
+    d = ficha(url, request)
+    return {k: v for k, v in d.items() if not k.startswith("_")} | {"tem_capa": bool(d["_capa"])}
+
+
+@app.get("/miniatura")
+def miniatura(url: str, request: Request):
+    if url not in capas:
+        capa = ficha(url, request)["_capa"]
+        if not capa:
+            raise HTTPException(404, "Esse vídeo não tem capa.")
+        try:
+            req = urllib.request.Request(capa, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                tipo = r.headers.get_content_type()
+                dados = r.read(2 * 2**20 + 1)
+        except Exception as e:  # noqa: BLE001
+            fichas.pop(url, None)  # a capa assinada pode ter expirado: na próxima, lê o link de novo
+            raise HTTPException(422, f"Não consegui a capa: {str(e)[:150]}")
+        if not tipo.startswith("image/") or len(dados) > 2 * 2**20:
+            raise HTTPException(422, "A capa não é uma imagem.")
+        guardar(capas, url, (dados, tipo))
+    dados, tipo = capas[url]
+    # a Prensa roda isolada (COEP): imagem de outro domínio só entra com CORS ou com esta permissão
+    return Response(dados, media_type=tipo, headers={"Cache-Control": "public, max-age=86400",
+                                                    "Cross-Origin-Resource-Policy": "cross-origin"})

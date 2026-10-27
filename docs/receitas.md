@@ -7,6 +7,8 @@ As receitas da Prensa (`app/src/receitas.ts`) juntam técnicas de vídeo curto v
 - **[plataforma]**: dado da própria empresa, sem método publicado.
 - **[fraca]**: blog de ferramenta, guru ou opinião.
 
+O texto que acompanha o vídeo (título, legenda e hashtags de cada rede) está em [postagem.md](postagem.md).
+
 **Conclusão geral:** há evidência sólida sobre **emoção e compartilhamento** (estudos com texto e manchete), **legenda e consumo sem som**, e **riscos do vídeo curto para a atenção**. Quase todo o resto (duração ideal, zoom, ritmo de cortes, loop) é saber de praticante, sem estudo controlado. Por isso as receitas são **pontos de partida**, não fórmulas.
 
 ## O que a Prensa aplica, e por quê

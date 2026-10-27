@@ -16,7 +16,10 @@ TikTok, YouTube...). O navegador não pode baixar vídeo dessas redes direto, en
 quem usa. Nada é guardado: o arquivo é apagado assim que a resposta termina.
 
 - `POST /baixar` com `{"url": "..."}` devolve `video/mp4` e os cabeçalhos `X-Titulo`, `X-Autor`, `X-Origem`, `X-Plataforma`.
-- Limites (variáveis de ambiente): `DUR_MAX` (20 min), `TAMANHO_MAX` (400 MB), `POR_HORA` (30 pedidos por IP), `ORIGENS` (de onde o app pode chamar).
+- `GET /info?url=...` devolve título, @, duração e plataforma de um link do TikTok ou do X, sem baixar. É assim que `ferramentas/acervo/catalogar.py` confere se um link entra no catálogo da busca.
+- `GET /miniatura?url=...` devolve a capa desse link para os cartões da busca, com CORS e `Cross-Origin-Resource-Policy: cross-origin`. A capa do TikTok vem assinada e expira, por isso o app pede aqui e não guarda o link da imagem.
+- Limites (variáveis de ambiente): `DUR_MAX` (20 min), `TAMANHO_MAX` (400 MB), `POR_HORA` (30 pedidos por IP), `CAPAS_POR_HORA` (300 leituras de `/info` e `/miniatura` por IP), `ORIGENS` (de onde o app pode chamar).
+- Daqui de nuvem, **TikTok e X baixam; YouTube e Instagram pedem login** ("not a bot") e falham. Por isso a busca só cataloga TikTok e X.
 
 Código: [motores-video/servidor/baixador](https://github.com/arthruur/motores-video/tree/prensa/servidor/baixador) · Apache-2.0.
 

@@ -19,6 +19,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[2]
 ACERVO_DIR = RAIZ / "app" / "public" / "acervo"
 ACERVO_JSON = ACERVO_DIR / "acervo.json"
+CATALOGO_JSON = ACERVO_DIR / "catalogo.json"  # links de terceiros para a busca (ferramentas/acervo/catalogar.py)
 
 
 def carregar_acervo(caminho: Path = ACERVO_JSON) -> dict:
@@ -87,6 +88,8 @@ def gerar_card_hf(acervo: dict, repo_nome: str = "prensa-acervo") -> str:
         "",
         "- `acervo.json`: Manifesto com créditos, licenças, URLs originais e hashes SHA-256.",
         "- `clipes/*.mp4`: Arquivos de vídeo prontos em H.264 30 fps sem áudio.",
+        "- `audio/*.m4a`: Trilhas instrumentais (CC0 / CC BY) para a etapa Som, inclusive phonk.",
+        "- `catalogo.json`: **Só links** (TikTok e X) para a busca do app: anime, edits de phonk, memes. Veja abaixo.",
         "",
         "## Clipes Aprovados",
         "",
@@ -99,7 +102,22 @@ def gerar_card_hf(acervo: dict, repo_nome: str = "prensa-acervo") -> str:
         cred = c.get("credito", "").replace("|", "-")
         linhas.append(f"| `{c['id']}` | {c.get('categoria', '')} | {tit} | {cred} | [{c.get('licenca', '')}]({c.get('licenca_url', '')}) |")
 
+    musicas = [m for m in acervo.get("musicas", []) if m.get("revisado")]
+    if musicas:
+        linhas.extend(["", "## Trilhas", "", "| Clima | Faixa | Crédito | Licença |", "|---|---|---|---|"])
+        for m in musicas:
+            linhas.append(f"| {m.get('clima', '')} | {m['titulo'].replace('|', '-')} | {m.get('credito', '').replace('|', '-')} "
+                          f"| [{m.get('licenca', '')}]({m.get('licenca_url') or ''}) |")
+
     linhas.extend([
+        "",
+        "## Catálogo de links (`catalogo.json`)",
+        "",
+        "Edits de anime e vídeos com phonk quase nunca têm licença livre, então **não estão neste dataset**.",
+        "O `catalogo.json` guarda só o endereço público de cada vídeo, o título e o @ de quem publicou. O vídeo é",
+        "baixado na hora pelo baixador da Prensa, que o entrega direto a quem pediu e não guarda nada; aqui ele nunca é hospedado.",
+        "**As licenças acima não valem para esses vídeos:** os direitos continuam de quem publicou, e o app usa o @",
+        "como crédito. Para pedir a retirada de um link, abra uma issue no repositório.",
         "",
         "## Como Consumir via Web (CORS liberado)",
         "",
@@ -144,6 +162,9 @@ def exportar_para_pasta(saida_dir: Path, repo_nome: str = "prensa-acervo") -> No
     # Grava acervo.json
     (saida_dir / "acervo.json").write_text(json.dumps(acervo, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
+    if CATALOGO_JSON.exists():
+        (saida_dir / "catalogo.json").write_text(CATALOGO_JSON.read_text("utf-8"), encoding="utf-8")
+
     # Copia clipes existentes
     copiados = 0
     for c in acervo.get("clipes", []):
@@ -166,7 +187,7 @@ def exportar_para_pasta(saida_dir: Path, repo_nome: str = "prensa-acervo") -> No
     print(f"Exportação concluída em: {saida_dir}")
     print(f"- {musicas} músicas copiadas para {audio_dir}")
     print(f"- README.md gerado com metadados HF")
-    print(f"- acervo.json copiado")
+    print(f"- acervo.json copiado" + (" (e catalogo.json)" if CATALOGO_JSON.exists() else ""))
     print(f"- {copiados} clipes de vídeo copiados para {clipes_dir}")
 
 

@@ -24,6 +24,16 @@ Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 - **Trilha "Baião do Mangaio"**: zabumba, triângulo, baixo e sanfona sintetizados a 116 BPM, com os pulos e as piruetas da aventura caindo na batida.
 - **Receita "Aventura do Mangaio"**, a primeira da lista: tela dividida com a aventura embaixo. Quem abre a Prensa continua começando no Corte direto.
 
+### Prensa: busca de anime, phonk e memes, sem re-hospedar
+
+- **Busca no "Vídeo de baixo":** um campo de busca com temas (anime, phonk, meme…) sobre um **catálogo de links** do TikTok e do X. O vídeo vem na hora pelo baixador, o @ de quem publicou entra no crédito, e nada é guardado no dataset. A busca só aparece com o baixador configurado e o catálogo preenchido.
+  - `ferramentas/acervo/catalogar.py` adiciona, lista e remove links. Cada link é lido pelo próprio baixador, então só entra o que ele consegue baixar. YouTube e Instagram ficam de fora: barram servidores de nuvem.
+  - O catálogo é o `catalogo.json`, publicado no dataset por `huggingface.py`. O app lê do dataset primeiro, então link novo aparece sem republicar o app.
+- **Baixador:** `GET /info` (título, @, duração e plataforma de um link) e `GET /miniatura` (a capa, com CORS e `Cross-Origin-Resource-Policy` para a página isolada). Os dois têm cache e um limite próprio (`CAPAS_POR_HORA`, 300). O log ficou sem a barra de progresso do yt-dlp.
+- **Phonk livre no acervo:** novo clima "phonk · para edit" com 4 faixas do Alexi Action (CC BY 3.0, Wikimedia), via `coletar_audio.py --climas phonk`.
+- **Animação livre para edit de anime:** nova categoria `animacao` no coletor, com Sintel, Morevna, Sprite Fright, Spring e Tears of Steel (CC BY). Os clipes chegam não revisados.
+- **Correções do coletor:** não quebra mais com clipes importados sem página de origem e aceita `.ogv` (o Commons manda como `application/ogg`).
+
 ### Prensa: link direto, música do acervo, efeitos e mais impacto
 
 - **Colar um link** (X, Instagram, TikTok, YouTube, Kwai…) na página inicial ou compartilhar o link para a Prensa (Android). Um serviço pequeno, `servidor/baixador` (FastAPI + yt-dlp), traz o vídeo em MP4 e não guarda nada. A fonte já vem preenchida ("@perfil · X"), e o texto do post ganha "Original: link". O campo só aparece quando o app é construído com `VITE_BAIXADOR_URL`.

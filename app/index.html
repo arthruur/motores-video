@@ -210,6 +210,12 @@
 
       <div class="passo-guia" data-passo="baixo" hidden>
         <h2>Vídeo de baixo <small>tela dividida</small></h2>
+        <div class="busca-baixo" id="busca-baixo" hidden>
+          <input type="search" id="busca" class="campo-grande" placeholder="Buscar: anime, phonk, meme…" autocomplete="off" aria-label="Buscar vídeo de baixo">
+          <div class="fichas" id="temas-busca" aria-label="Temas"></div>
+          <div class="faixa" id="resultados-busca" role="radiogroup" aria-label="Resultados da busca"></div>
+          <p class="nota" id="nota-busca">Vídeos de quem publicou: o @ entra no crédito. A Prensa baixa na hora e não guarda.</p>
+        </div>
         <div class="galeria" id="galeria-baixo" role="radiogroup" aria-label="Vídeo de baixo"></div>
         <input type="file" accept="video/*" id="arquivo-baixo" hidden>
         <label class="campo" id="campo-credito" hidden>Crédito do vídeo de baixo

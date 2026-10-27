@@ -158,3 +158,42 @@ export async function baixarMusica(m: MusicaAcervo): Promise<ArrayBuffer> {
   }
   throw new Error(`Não foi possível baixar a música ${m.titulo}.`)
 }
+
+/** um vídeo de terceiros no catálogo da busca (anime, edits de phonk, memes): só o link, nunca o arquivo */
+export type LinkCatalogo = {
+  id: string;
+  url: string;
+  tema: string;
+  tags?: string[];
+  titulo: string;
+  autor: string;       // o @ de quem publicou: é o crédito
+  plataforma: string;  // TikTok ou X
+  duracao_s?: number | null;
+};
+
+/** o catálogo vem do dataset primeiro (link novo aparece sem republicar o app) e da pasta local se estiver sem rede */
+export async function carregarCatalogo(): Promise<LinkCatalogo[]> {
+  for (const url of [`${HF_DATASET_URL}/catalogo.json`, './acervo/catalogo.json']) {
+    try {
+      const r = await fetch(url, url.startsWith('http') ? { mode: 'cors', cache: 'no-cache' } : {});
+      if (!r.ok || !(r.headers.get('content-type') ?? '').includes('json')) continue;
+      const dados = (await r.json()) as { links?: LinkCatalogo[] };
+      if (dados.links) return dados.links;
+    } catch {
+      // tenta o próximo
+    }
+  }
+  return [];
+}
+
+const semAcento = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+
+/** todas as palavras da busca precisam aparecer no tema, nas tags, no título ou no @ */
+export function buscarNoCatalogo(links: LinkCatalogo[], consulta: string): LinkCatalogo[] {
+  const palavras = semAcento(consulta).split(/\s+/).filter(Boolean);
+  if (!palavras.length) return links;
+  return links.filter((l) => {
+    const texto = semAcento([l.tema, ...(l.tags ?? []), l.titulo, l.autor, l.plataforma].join(' '));
+    return palavras.every((p) => texto.includes(p));
+  });
+}

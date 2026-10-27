@@ -105,11 +105,32 @@ python ferramentas/acervo/huggingface.py --upload --repo usuario/prensa-acervo
 
 O aplicativo (`app/src/acervo.ts`) tenta primeiro carregar os arquivos da pasta local (`./acervo/`), e recorre automaticamente à URL pública do Hugging Face Datasets (`resolve/main`) caso os `.mp4` não estejam no servidor local. Uma vez selecionado, o vídeo fica salvo no `CacheStorage` do navegador para funcionar offline.
 
+## Anime, phonk e memes: a busca (09/10/2026)
+
+Edit de anime e vídeo com phonk são o que mais se pede, e quase nada disso tem licença livre. Por isso entram de três jeitos diferentes:
+
+| O quê | Como | Onde fica |
+|---|---|---|
+| **Phonk livre** | `coletar_audio.py --climas phonk`: 4 faixas do Alexi Action (CC BY 3.0, Wikimedia), achadas pelo Openverse **sem** o filtro `category=music`, porque o Openverse não dá categoria às faixas do Wikimedia | `audio/` no dataset, clima "phonk · para edit" |
+| **Animação livre com cara de anime** | `coletar.py --categorias animacao`: filmes abertos (Sintel, Morevna, Sprite Fright, Spring, Tears of Steel), CC BY. Na revisão, o Tears of Steel tem atores reais (rosto em primeiro plano), e filmes com mais de um arquivo no Commons dão clipes repetidos | `clipes/` no dataset, depois de revisados |
+| **Edits de terceiros** (anime, phonk, memes) | `catalogar.py URL --tema anime`: guarda **só o link**, o título e o @. O app mostra na busca do "Vídeo de baixo", e o baixador traz o vídeo na hora | `catalogo.json` no dataset, **sem vídeo** |
+
+**Por que só TikTok e X no catálogo:** testado em 09/10/2026 no baixador do Render. TikTok e X baixam; YouTube e Instagram respondem "Sign in / not a bot" para servidor de nuvem. A busca do yt-dlp no YouTube funciona, mas o download não, então uma busca "ao vivo" no YouTube mostraria resultados que falham ao escolher. O yt-dlp não tem busca para TikTok, e a do Bilibili responde 412.
+
+**Por que só o link:** re-hospedar edit de anime no dataset, com uma licença que ninguém deu, seria distribuir obra de terceiros. Com só o link, a Prensa faz o mesmo que o "cole um link", com curadoria. O crédito é o @ e quem publicou pode pedir a retirada (`catalogar.py --remover`, que também impede o link de voltar).
+
+```bash
+python ferramentas/acervo/catalogar.py https://www.tiktok.com/@perfil/video/123 --tema anime --tags phonk luta
+python ferramentas/acervo/catalogar.py --de links.txt --tema phonk
+python ferramentas/acervo/catalogar.py --listar
+python ferramentas/acervo/huggingface.py --upload     # o app lê o catalogo.json do dataset
+```
+
 ## Próximos passos
 
 - **Gravar o satisfying clássico** (areia, sabão, tinta, slime) em CC0 e publicar no mesmo dataset.
 - **Mais animações geradas:** simulação de fluido e corrida de bolinhas com física.
 - Internet Archive (Prelinger, domínio público) como segunda fonte.
-- Trilhas de áudio livres (phonk e lo-fi) catalogadas no mesmo manifesto.
+- Lo-fi livre no mesmo manifesto (o phonk já entrou).
 - **Busca ao vivo no Pexels e no Pixabay** com a chave da própria pessoa, sem re-hospedar.
 - **Exportar um `CREDITOS.txt`** junto do vídeo.

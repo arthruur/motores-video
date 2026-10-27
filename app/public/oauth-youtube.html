@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prensa · YouTube</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; font: 16px system-ui, sans-serif; background: #f6f1e7; color: #1d1a16; }
+</style>
+</head>
+<body>
+<p id="msg">Voltando para a Prensa…</p>
+<script>
+  // O Google volta para cá com o token no fragmento (#access_token=...). Esta página só repassa a resposta
+  // para a aba da Prensa (youtube.ts) e fecha. O fragmento nunca vai para servidor nenhum.
+  const r = Object.fromEntries(new URLSearchParams(location.hash.slice(1) || location.search.slice(1)));
+  history.replaceState(null, '', location.pathname); // tira o token da barra de endereço e do histórico
+  const canal = new BroadcastChannel('prensa:youtube');
+  canal.postMessage(r);
+  canal.close();
+  document.getElementById('msg').textContent = r.error ? 'O login não foi autorizado. Pode fechar esta janela.' : 'Pronto! Pode fechar esta janela.';
+  setTimeout(() => window.close(), 300);
+</script>
+</body>
+</html>

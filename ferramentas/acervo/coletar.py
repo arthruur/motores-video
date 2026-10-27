@@ -66,6 +66,10 @@ PLANO: dict[str, tuple[int, list[tuple[str, str]]]] = {
                 ("commons", 'incategory:"First-person videos on foot"'),
                 ("commons", 'incategory:"Videos of rail transport with onboard view"'), ("commons", '"cab ride"'),
                 ("commons", 'incategory:"Videos of roller coasters"'), ("commons", 'incategory:"Hyperlapse videos"')]),
+    # para edit de anime: filmes abertos (Blender Studio, Morevna) são CC BY e têm luta, dragão e cena de ação
+    "animacao": (10, [("commons", 'incategory:"Sintel"'), ("commons", '"Morevna"'), ("commons", '"Sprite Fright"'),
+                     ("commons", '"Spring - Blender Open Movie"'), ("commons", '"Tears of Steel"'),
+                     ("commons", '"Big Buck Bunny"')]),
 }
 LICENCAS_OK = re.compile(r"^(cc0|cc-zero|public domain|pd\b|pd-|cc by \d|cc-by-\d)", re.I)
 LICENCA_SA = re.compile(r"^cc[ -]by-sa", re.I)
@@ -107,7 +111,7 @@ def candidatos_commons(consulta: str, aceitar_sa: bool):
             motivo = f"{lic}: share-alike (use --aceitar-sa)"
         elif not LICENCAS_OK.match(lic) and not LICENCA_SA.match(lic):
             motivo = f"licença {lic or '?'} fora da lista"
-        elif not str(v.get("mime", "")).startswith("video/"):
+        elif not str(v.get("mime", "")).startswith(("video/", "application/ogg")):  # .ogv vem como application/ogg
             motivo = "não é vídeo"
         elif (v.get("height") or 0) < ALTURA_MIN:
             motivo = f"baixa resolução ({v.get('height')} px)"
@@ -223,7 +227,8 @@ def gravar(saida: Path, acervo: dict) -> None:
 
 def coletar(saida: Path, aceitar_sa: bool, so: list[str] | None, escala: float) -> None:
     acervo = carregar(saida)
-    vistos = {c["origem"]["pagina"] for c in acervo["clipes"]} | set(acervo.get("rejeitados", []))
+    # clipes importados (Drive, arquivo) não têm página de origem
+    vistos = {c["origem"].get("pagina") for c in acervo["clipes"]} | set(acervo.get("rejeitados", []))
     for cat, (alvo, consultas) in PLANO.items():
         if so and cat not in so:
             continue
@@ -314,7 +319,7 @@ def marcar(saida: Path, ids: list[str], aprovar: bool) -> None:
                 c["revisado"] = True
             else:
                 (saida / c["arquivo"]).unlink(missing_ok=True)
-                acervo.setdefault("rejeitados", []).append(c["origem"]["pagina"])
+                acervo.setdefault("rejeitados", []).append(c["origem"].get("pagina") or c["arquivo"])
                 acervo["clipes"].remove(c)
     gravar(saida, acervo)
     print(f"{'aprovados' if aprovar else 'rejeitados'}: {', '.join(ids)}")

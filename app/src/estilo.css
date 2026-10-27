@@ -664,6 +664,38 @@ dialog#contato::backdrop {
 .para-studio small { color: var(--suave); font-size: 13px; }
 @media (pointer: coarse) { .para-studio { display: none; } }
 
+/* ===================================================== vídeo de baixo: busca no catálogo de links */
+.busca-baixo { display: grid; gap: 8px; margin-bottom: 14px; min-width: 0; }
+.busca-baixo .fichas button { text-transform: capitalize; }
+.busca-baixo .faixa:empty { display: none; }
+.busca-baixo .nota { margin: 0; font-size: 12px; }
+.cartao-baixo.link .quadro { font-size: 32px; }
+.cartao-baixo.link .quadro img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* YouTube Shorts direto da bandeja (youtube.ts) */
+.rede .para-youtube { border-color: var(--tinta); }
+.painel-youtube { display: grid; gap: 8px; margin-top: 10px; padding: 12px; border: 1.5px solid var(--linha); border-radius: 12px; background: var(--papel); }
+.painel-youtube label { display: grid; gap: 4px; font: 600 13px var(--ui); color: var(--tinta-2); }
+.painel-youtube input, .painel-youtube textarea, .painel-youtube select { font: 15px var(--ui); padding: 6px 8px; border: 1.5px solid var(--linha); border-radius: 8px; background: var(--papel); color: var(--tinta); }
+.painel-youtube small { color: var(--suave); font-size: 13px; }
+.painel-youtube button { justify-self: start; min-height: 36px; padding: 4px 16px; border-radius: 999px; font-weight: 700; }
+.painel-youtube .situacao a { color: inherit; font-weight: 700; }
+
+/* Sugestões para postar (postagem.ts) */
+.hashtags-fixas { display: grid; gap: 4px; margin: 0 0 12px; font: 600 13px var(--ui); color: var(--tinta-2); }
+.hashtags-fixas input { font: 15px var(--ui); padding: 6px 8px; border: 1.5px solid var(--linha); border-radius: 8px; background: var(--papel); color: var(--tinta); }
+.sugestoes { margin-top: 10px; border-top: 1px dashed var(--linha); padding-top: 8px; }
+.sugestoes summary { cursor: pointer; font: 700 14px var(--ui); }
+.sugestoes section { margin-top: 12px; }
+.sugestoes h4 { margin: 0 0 6px; font: 800 15px var(--ui); }
+.sugestoes .campo-topo { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.sugestoes .campo-topo b { font: 600 13px var(--ui); color: var(--tinta-2); margin-right: auto; }
+.sugestoes .conta { color: var(--suave); font-size: 12px; font-variant-numeric: tabular-nums; }
+.sugestoes .conta.passou { color: var(--vermelho); font-weight: 700; }
+.sugestoes .campo-topo button { min-height: 30px; padding: 2px 12px; border-radius: 999px; border: 1.5px solid var(--linha); background: var(--papel); color: var(--tinta); font-weight: 700; font-size: 13px; }
+.sugestoes textarea { width: 100%; box-sizing: border-box; margin-top: 4px; font: 14px/1.4 var(--ui); padding: 8px; border: 1.5px solid var(--linha); border-radius: 8px; background: var(--papel); color: var(--tinta); resize: vertical; }
+.sugestoes ul { margin: 6px 0 0; padding-left: 18px; color: var(--suave); font-size: 12.5px; }
+
 /* ===================================================== linha do tempo: o vídeo inteiro, com o trecho entre alças */
 .tempo-linha { width: 100%; display: grid; gap: 6px; }
 .tempo-topo { margin: 0; display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }

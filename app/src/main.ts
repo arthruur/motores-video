@@ -1,4 +1,4 @@
-import { type ClipeAcervo, type MusicaAcervo, baixarClipe, baixarMusica, carregarManifesto, carregarMusicas, urlDoClipe } from './acervo';
+import { type ClipeAcervo, type LinkCatalogo, type MusicaAcervo, baixarClipe, baixarMusica, buscarNoCatalogo, carregarCatalogo, carregarManifesto, carregarMusicas, urlDoClipe } from './acervo';
 import { BAIXADOR, baixarLink } from './baixador';
 import { desenharCompondo } from './compondo';
 import { converter } from './conversor';
@@ -12,12 +12,14 @@ import { RECEITAS, type Receita, ganchosDaFala } from './receitas';
 import { GERADORES } from './retencao';
 import { EFEITOS, TRILHAS, gerarEfeito, gerarTrilha } from './trilhas';
 import { enviarAoStudio, lembrarStudio, procurarStudio, studioLigado } from './studio';
+import { type DadosDoVideo, sugerirPostagens } from './postagem';
+import { PRIVACIDADES, type Privacidade, enviarShort, linkDoShort, linkDoStudio, youtubeConfigurado } from './youtube';
 import { transcrever } from './transcrever';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 type EscolhaBaixo = { tipo: 'receita' } | { tipo: 'nenhum' } | { tipo: 'gerado'; id: string } | { tipo: 'video'; chave: string };
-type Saida = { titulo: string; arquivos: Arquivo[]; mestre: Blob; post: string; srt: string; segundos: number };
+type Saida = { titulo: string; arquivos: Arquivo[]; mestre: Blob; post: string; srt: string; segundos: number; dados: DadosDoVideo };
 type PassoId = 'receita' | 'gancho' | 'fonte' | 'baixo' | 'som' | 'legenda' | 'prensar';
 /** o que a pessoa ajustou num vídeo da fila: volta quando ela abre o vídeo de novo, e o lote respeita */
 type Ajustes = { gancho: string; ganchoMexido: boolean; fonte: string; origem: string; ini: number; fim: number };
@@ -768,7 +770,7 @@ function chaveEscolha(): string {
 
 function sincGaleria() {
   const k = chaveEscolha();
-  galeria.querySelectorAll<HTMLButtonElement>('.cartao-baixo').forEach((b) => {
+  document.querySelectorAll<HTMLButtonElement>('[data-passo="baixo"] .cartao-baixo').forEach((b) => {
     b.setAttribute('aria-checked', String(b.dataset.chave === k || (k.startsWith('proprio:') && b.dataset.chave === 'enviar')));
   });
   $('campo-credito').hidden = !usaVideoDeBaixo();
@@ -860,6 +862,85 @@ function montarGaleria() {
   sincGaleria();
 }
 
+// ---------------------------------------------------------------- busca: anime, phonk, memes... do catálogo de links
+// O catálogo (catalogo.json no dataset) guarda só o link; o baixador traz o vídeo na hora, e o @ vai no crédito.
+let catalogo: LinkCatalogo[] = [];
+const campoBusca = $<HTMLInputElement>('busca');
+const resultados = $('resultados-busca');
+
+function cartaoLink(l: LinkCatalogo): HTMLButtonElement {
+  const credito = [l.autor, l.plataforma].filter(Boolean).join(' · ');
+  const b = cartao(`link:${l.id}`, l.titulo || l.tema, credito, async () => {
+    if (b.classList.contains('baixando')) return;
+    b.classList.add('baixando');
+    try {
+      const baixado = await baixarLink(l.url, (_t, fracao) => {
+        sm.textContent = fracao === undefined ? 'buscando…' : `baixando ${Math.round(fracao * 100)}%`;
+      });
+      await usarBaixo(baixado.arquivo, credito, `link:${l.id}`);
+    } catch (err) {
+      erro(`Não deu para trazer esse vídeo: ${(err as Error).message}`);
+    } finally {
+      b.classList.remove('baixando');
+      sm.textContent = credito;
+    }
+  }, 'link');
+  const sm = b.querySelector('small')!;
+  const quadro = b.querySelector('.quadro')!;
+  quadro.textContent = l.plataforma === 'TikTok' ? '♪' : '𝕏';
+  b.dataset.capa = `${BAIXADOR}/miniatura?url=${encodeURIComponent(l.url)}`;
+  observarCapa.observe(b);
+  return b;
+}
+
+/** a capa só é pedida ao baixador quando o cartão aparece: o servidor limita as capas por hora */
+const observarCapa = new IntersectionObserver((es) => es.forEach((e) => {
+  if (!e.isIntersecting) return;
+  observarCapa.unobserve(e.target);
+  const b = e.target as HTMLButtonElement;
+  const capa = new Image();
+  capa.crossOrigin = 'anonymous'; // a página é isolada (COEP): imagem de outro domínio só em modo CORS
+  capa.alt = '';
+  capa.addEventListener('load', () => b.querySelector('.quadro')!.replaceChildren(capa), { once: true });
+  capa.src = b.dataset.capa!;
+}), { rootMargin: '200px' });
+
+const cartoesLink = new Map<string, HTMLButtonElement>();
+function filtrarBusca() {
+  const achados = buscarNoCatalogo(catalogo, campoBusca.value);
+  // os cartões são reaproveitados: refazer a cada tecla pediria as capas de novo ao servidor
+  resultados.replaceChildren(...achados.map((l) => {
+    if (!cartoesLink.has(l.id)) cartoesLink.set(l.id, cartaoLink(l));
+    return cartoesLink.get(l.id)!;
+  }));
+  $('nota-busca').textContent = achados.length
+    ? 'Vídeos de quem publicou: o @ entra no crédito. A Prensa baixa na hora e não guarda.'
+    : 'Nada com essa busca. Tente um dos temas.';
+  $('temas-busca').querySelectorAll<HTMLButtonElement>('button').forEach((t) => {
+    t.setAttribute('aria-pressed', String(semAcentoBusca(campoBusca.value) === semAcentoBusca(t.textContent ?? '')));
+  });
+  sincGaleria();
+}
+const semAcentoBusca = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').trim().toLowerCase();
+
+function montarBusca(links: LinkCatalogo[]) {
+  catalogo = links;
+  // sem o baixador no ar, o link não teria como chegar ao aparelho
+  $('busca-baixo').hidden = !BAIXADOR || !catalogo.length;
+  if ($('busca-baixo').hidden) return;
+  const temas = [...new Set(catalogo.map((l) => l.tema))];
+  $('temas-busca').replaceChildren(...temas.map((t) => {
+    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t });
+    b.addEventListener('click', () => {
+      campoBusca.value = semAcentoBusca(campoBusca.value) === t ? '' : t;
+      filtrarBusca();
+    });
+    return b;
+  }));
+  filtrarBusca();
+}
+campoBusca.addEventListener('input', filtrarBusca);
+
 /** as animações da galeria tocam de verdade, enquanto a etapa está na tela */
 function animarGaleria(agora: number) {
   if (!$('tela-criar').hidden && estado.passo === 'baixo') {
@@ -893,6 +974,7 @@ videoBaixo.addEventListener('seeked', () => redesenhar());
 async function carregarAcervo() {
   try { clipesAcervo = (await carregarManifesto()).filter((c) => c.revisado); } catch { clipesAcervo = []; }
   montarGaleria();
+  carregarCatalogo().then(montarBusca, () => montarBusca([]));
   try { musicasAcervo = await carregarMusicas(); } catch { musicasAcervo = []; }
   listarMusicas();
   montarMusicas();
@@ -1268,7 +1350,11 @@ function pedirLegenda(): Promise<Palavra[]> {
       if (estado.passo === 'legenda') montarEditorLegenda();
     }
     return palavras;
-  })().finally(() => estado.ouvindo.delete(k));
+  })().catch((err: Error) => {
+    // sem isto, a falha ficava muda e a tela parava em "Ouvindo a fala…"
+    if (err.name !== 'AbortError') { console.error('legenda:', err); estadoLegenda(`A legenda não saiu: ${err.message}`); }
+    throw err;
+  }).finally(() => estado.ouvindo.delete(k));
   estado.ouvindo.set(k, p);
   return p;
 }
@@ -1338,6 +1424,59 @@ function folhasDoPrelo(n: number) {
 
 function slug(s: string) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'reel';
+}
+
+/** o que as sugestões de postagem (postagem.ts) precisam saber deste vídeo, guardado junto da saída */
+function dadosDoVideo(): DadosDoVideo {
+  const g = campoGancho.value.trim();
+  const prefixo: Record<string, string> = { 'voce-sabia': 'Você sabia? ', pov: 'POV: ' };
+  const musica = musicasAcervo.find((m) => `acervo:${m.id}` === estado.som.musica);
+  return {
+    gancho: g ? (prefixo[estado.receita.gancho] ?? '') + g : '',
+    palavras: [...(estado.falas.get(chaveTrecho()) ?? [])],
+    fonte: campoFonte.value.trim(),
+    creditoBaixo: usaVideoDeBaixo() ? campoCredito.value.trim() : '',
+    origem: estado.origem,
+    musica: musica?.credito ?? '',
+    hashtagsFixas: [],
+  };
+}
+
+// as hashtags da pessoa (ex.: #mangaio #serrinha): entram primeiro em todas as sugestões, e ficam lembradas
+const CHAVE_HASHTAGS = 'prensa:hashtags';
+function hashtagsFixas(): string[] {
+  try { return (localStorage.getItem(CHAVE_HASHTAGS) ?? '').split(/[\s,]+/).filter(Boolean); } catch { return []; }
+}
+
+function painelSugestoes(saida: Saida): HTMLElement {
+  const d = document.createElement('details');
+  d.className = 'sugestoes';
+  d.append(Object.assign(document.createElement('summary'), { textContent: 'Sugestões para postar' }));
+  for (const sug of sugerirPostagens({ ...saida.dados, hashtagsFixas: hashtagsFixas() })) {
+    const bloco = document.createElement('section');
+    bloco.append(Object.assign(document.createElement('h4'), { textContent: sug.rede }));
+    for (const c of sug.campos) {
+      const campo = Object.assign(document.createElement('textarea'), { value: c.texto, rows: Math.min(8, c.texto.split('\n').length + 1) });
+      const conta = Object.assign(document.createElement('small'), { className: 'conta' });
+      const contar = () => {
+        conta.textContent = c.limite ? `${campo.value.length}/${c.limite}` : `${campo.value.length}`;
+        conta.classList.toggle('passou', !!c.limite && campo.value.length > c.limite);
+      };
+      campo.addEventListener('input', contar);
+      contar();
+      const copiar = Object.assign(document.createElement('button'), { type: 'button', textContent: 'Copiar' });
+      copiar.addEventListener('click', () => { navigator.clipboard.writeText(campo.value); copiar.textContent = 'Copiado ✓'; setTimeout(() => (copiar.textContent = 'Copiar'), 1500); });
+      const topo = document.createElement('div');
+      topo.className = 'campo-topo';
+      topo.append(Object.assign(document.createElement('b'), { textContent: c.rotulo }), conta, copiar);
+      bloco.append(topo, campo);
+    }
+    const dicas = document.createElement('ul');
+    dicas.append(...sug.dicas.map((t) => Object.assign(document.createElement('li'), { textContent: t })));
+    bloco.append(dicas);
+    d.append(bloco);
+  }
+  return d;
 }
 
 function textoPost(): string {
@@ -1412,7 +1551,7 @@ async function prensarAtual(): Promise<boolean> {
     });
     folhasDoPrelo(plats.length);
     await paraODisco(arquivos);
-    estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre: arquivos[0]?.blob ?? mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000 });
+    estado.saidas.unshift({ titulo: campoGancho.value.trim() || m.arquivo.name, arquivos, mestre: arquivos[0]?.blob ?? mestre, post: textoPost(), srt, segundos: (performance.now() - t0) / 1000, dados: dadosDoVideo() });
     guardarAjustes();
     if (estado.filaItens[estado.filaIndice]) estado.filaItens[estado.filaIndice].situacao = 'pronto';
     montarBandeja();
@@ -1461,7 +1600,19 @@ async function paraOStudio(saida: (typeof estado.saidas)[number]) {
   }
 }
 
+let campoHashtags: HTMLInputElement | null = null;
 function montarBandeja() {
+  if (!campoHashtags) {
+    const l = document.createElement('label');
+    l.className = 'hashtags-fixas';
+    campoHashtags = Object.assign(document.createElement('input'), { placeholder: '#mangaio #serrinha', value: hashtagsFixas().join(' ') });
+    l.append(Object.assign(document.createElement('span'), { textContent: 'Suas hashtags (entram primeiro nas sugestões)' }), campoHashtags);
+    campoHashtags.addEventListener('change', () => {
+      try { localStorage.setItem(CHAVE_HASHTAGS, campoHashtags!.value); } catch { /* vale só nesta visita */ }
+      montarBandeja();
+    });
+    $('saidas').before(l);
+  }
   if (chaveStudio.checked && !estadoStudio.textContent) conferirStudio();
   estado.urls.forEach((u) => URL.revokeObjectURL(u));
   estado.urls = [];
@@ -1507,6 +1658,14 @@ function montarBandeja() {
         grupo.append(comp);
       }
       grupo.append(Object.assign(document.createElement('a'), { href: url, download: a.nome, className: 'baixar', textContent: 'Baixar' }));
+      if (a.plataforma === 'Shorts' && youtubeConfigurado()) {
+        const yt = Object.assign(document.createElement('button'), { type: 'button', className: 'para-youtube', textContent: 'Enviar ao YouTube' });
+        yt.addEventListener('click', () => {
+          const aberto = corpo.querySelector('.painel-youtube');
+          if (aberto) aberto.remove(); else corpo.append(painelYoutube(saida, a.blob));
+        });
+        grupo.append(yt);
+      }
       botoes.append(grupo);
     }
     const extras = document.createElement('div');
@@ -1524,13 +1683,54 @@ function montarBandeja() {
       });
       extras.append(srt);
     }
-    corpo.append(t, sub, botoes, extras);
+    corpo.append(t, sub, botoes, extras, painelSugestoes(saida));
     li.append(v, corpo);
     return li;
   }));
   const resto = (estado.principal?.dur ?? 0) - estado.fim;
   $<HTMLButtonElement>('outro-corte').hidden = resto < 3;
   atualizarFila();
+}
+
+/** o envio para o YouTube Shorts: título, descrição e privacidade conferidos antes de sair do aparelho */
+function painelYoutube(saida: Saida, video: Blob): HTMLElement {
+  const p = document.createElement('form');
+  p.className = 'painel-youtube';
+  const titulo = Object.assign(document.createElement('input'), { value: saida.titulo.slice(0, 100), maxLength: 100, required: true });
+  const descricao = Object.assign(document.createElement('textarea'), { value: saida.post, rows: 4, maxLength: 5000 });
+  const privacidade = document.createElement('select');
+  privacidade.append(...PRIVACIDADES.map((o) => new Option(o.nome, o.id)));
+  const rotulo = (texto: string, campo: HTMLElement) => {
+    const l = document.createElement('label');
+    l.append(Object.assign(document.createElement('span'), { textContent: texto }), campo);
+    return l;
+  };
+  const aviso = Object.assign(document.createElement('small'), {
+    textContent: 'Enquanto o projeto do Google não passar pela auditoria do YouTube, o vídeo entra como privado; dá para conferir e publicar no YouTube Studio.',
+  });
+  const enviar = Object.assign(document.createElement('button'), { type: 'submit', className: 'compartilhar', textContent: 'Enviar' });
+  const situacao = Object.assign(document.createElement('small'), { className: 'situacao' });
+  situacao.setAttribute('role', 'status');
+  p.append(rotulo('Título', titulo), rotulo('Descrição', descricao), rotulo('Privacidade', privacidade), aviso, enviar, situacao);
+  p.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    enviar.disabled = true;
+    situacao.textContent = 'entrando no YouTube…';
+    try {
+      const id = await enviarShort({
+        video, titulo: titulo.value, descricao: descricao.value, privacidade: privacidade.value as Privacidade,
+        aoProgresso: (f) => { situacao.textContent = `enviando · ${Math.round(f * 100)}%`; },
+      });
+      situacao.replaceChildren('Enviado! ',
+        Object.assign(document.createElement('a'), { href: linkDoStudio(id), target: '_blank', rel: 'noopener', textContent: 'Abrir no YouTube Studio' }),
+        ' · ',
+        Object.assign(document.createElement('a'), { href: linkDoShort(id), target: '_blank', rel: 'noopener', textContent: 'ver o Short' }));
+    } catch (erro) {
+      situacao.textContent = `Não foi: ${(erro as Error).message}`;
+      enviar.disabled = false;
+    }
+  });
+  return p;
 }
 
 $('outro-corte').addEventListener('click', () => {

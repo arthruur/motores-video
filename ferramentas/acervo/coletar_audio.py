@@ -7,6 +7,7 @@ licença para o texto do post.
 
   python ferramentas/acervo/coletar_audio.py                 # coleta o plano inteiro
   python ferramentas/acervo/coletar_audio.py --por-clima 1   # uma faixa por clima (teste rápido)
+  python ferramentas/acervo/coletar_audio.py --climas phonk --por-clima 4   # só os climas que começam assim
   python ferramentas/acervo/coletar_audio.py --rejeitar ID   # tira uma faixa do app (revisado: false)
   python ferramentas/acervo/huggingface.py --upload          # publica no dataset (clipes + audio/)
 
@@ -40,8 +41,12 @@ PLANO: dict[str, list[str]] = {
     "calma · para explicar": ["chill lofi", "ambient chill"],
     "emoção · para história": ["emotional piano", "sad piano"],
     "eletrônica · para ritmo": ["electronic dance", "synthwave"],
+    # edits de anime e de esporte: o phonk livre que existe é quase todo do Alexi Action (CC BY, no Wikimedia)
+    "phonk · para edit": ["phonk", "drift phonk", "brazilian phonk", "memphis phonk"],
 }
-RUINS = re.compile(r"\b(remix|cover|karaoke|vocal|lyrics|feat\.?|ft\.)\b", re.I)
+RUINS = re.compile(r"\b(remix|cover|karaoke|vocal|lyrics|feat\.?|ft\.|preview)\b", re.I)
+# o Openverse não dá categoria às faixas do Wikimedia, e é lá que está o phonk livre: buscar sem o filtro "music"
+SEM_CATEGORIA = {"phonk · para edit"}
 
 
 def pedir(url: str) -> bytes:
@@ -50,8 +55,10 @@ def pedir(url: str) -> bytes:
         return r.read()
 
 
-def buscar(q: str, pagina: int = 1) -> list[dict]:
-    params = {"q": q, "license": "cc0,by", "category": "music", "page_size": 20, "page": pagina, "mature": "false"}
+def buscar(q: str, pagina: int = 1, categoria: str | None = "music") -> list[dict]:
+    params = {"q": q, "license": "cc0,by", "page_size": 20, "page": pagina, "mature": "false"}
+    if categoria:
+        params["category"] = categoria
     dados = json.loads(pedir(f"{API}?{urllib.parse.urlencode(params)}"))
     return dados.get("results", [])
 
@@ -96,19 +103,21 @@ def salvar(acervo: dict) -> None:
     ACERVO_JSON.write_text(json.dumps(acervo, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def coletar(por_clima: int) -> None:
+def coletar(por_clima: int, so: list[str] | None = None) -> None:
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     acervo = carregar()
     musicas: list[dict] = acervo.setdefault("musicas", [])
     vistas = {m["fonte_id"] for m in musicas if m.get("fonte_id")}
     novas = 0
     for clima, buscas in PLANO.items():
+        if so and not any(clima.startswith(c) for c in so):
+            continue
         tem = sum(1 for m in musicas if m.get("clima") == clima)
         for q in buscas:
             if tem >= por_clima:
                 break
             try:
-                resultados = buscar(q)
+                resultados = buscar(q, categoria=None if clima in SEM_CATEGORIA else "music")
             except Exception as e:  # noqa: BLE001
                 print(f"  ! busca '{q}' falhou: {e}")
                 continue
@@ -151,6 +160,7 @@ def coletar(por_clima: int) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--por-clima", type=int, default=2, help="quantas faixas por clima (padrão 2)")
+    ap.add_argument("--climas", nargs="*", help="só estes climas (pelo começo do nome: phonk, calma...)")
     ap.add_argument("--rejeitar", metavar="ID", help="marca a faixa como não revisada (sai do app)")
     a = ap.parse_args()
     if a.rejeitar:
@@ -162,8 +172,9 @@ def main() -> None:
                 print(f"{a.rejeitar}: fora do app")
                 return
         sys.exit(f"não achei {a.rejeitar}")
-    coletar(a.por_clima)
+    coletar(a.por_clima, a.climas)
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     main()

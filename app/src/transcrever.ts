@@ -27,6 +27,13 @@ function rodar(audio: Float32Array, aviso: Aviso, idioma: string): Promise<Palav
       else if (m.tipo === 'pronto') ok(m.palavras);
       else if (m.tipo === 'erro') falha(new Error(m.mensagem));
     };
+    // o worker pode morrer sem mandar 'erro' (falta de memória, falha ao carregar): sem isto a fila travava para sempre
+    w.onerror = (e) => {
+      e.preventDefault();
+      worker?.terminate();
+      worker = null;
+      falha(new Error(e.message || 'o ouvido da Prensa parou (falta de memória?)'));
+    };
     aviso('Preparando a legenda');
     w.postMessage({ audio, idioma }, [audio.buffer]);
   });
