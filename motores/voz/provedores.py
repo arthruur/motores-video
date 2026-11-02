@@ -156,10 +156,16 @@ def _xml(s: str) -> str:
 def _elevenlabs(texto: str, voz: str, wav: Path, op: dict) -> list[dict]:
     """ElevenLabs: pago, nuvem. Endpoint /with-timestamps devolve o tempo de cada caractere.
 
-    Precisa de ELEVENLABS_API_KEY; a voz é o voice_id (ou ELEVENLABS_VOICE_ID).
-    NÃO TESTADO por falta de chave: escrito pela documentação da API.
+    Precisa de ELEVENLABS_API_KEY; a voz é o voice_id (ou ELEVENLABS_VOICE_ID). O modelo vem de ELEVENLABS_MODEL
+    (eleven_multilingual_v2 por padrão; eleven_v3 também devolve os tempos) e o idioma, de ELEVENLABS_LANGUAGE
+    ("pt" evita que vozes nativas de inglês leiam com pronúncia inglesa). No plano gratuito, só as vozes padrão
+    da conta funcionam pela API; as da biblioteca pública pedem plano pago.
     """
     corpo = {"text": texto, "model_id": os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2")}
+    if os.environ.get("ELEVENLABS_LANGUAGE"):
+        corpo["language_code"] = os.environ["ELEVENLABS_LANGUAGE"]
+    if os.environ.get("ELEVENLABS_SETTINGS"):   # JSON de voice_settings, ex.: {"stability": 0.5, "style": 0.2}
+        corpo["voice_settings"] = json.loads(os.environ["ELEVENLABS_SETTINGS"])
     req = urllib.request.Request(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voz}/with-timestamps?output_format=mp3_44100_128",
         data=json.dumps(corpo).encode(),
@@ -179,12 +185,17 @@ def _elevenlabs(texto: str, voz: str, wav: Path, op: dict) -> list[dict]:
         if c.isspace():
             atual = None
             continue
+        if c == "[" or (atual is not None and atual["texto"].startswith("[")):
+            # marcação de interpretação do v3 ([whispers], [pause]): não é palavra falada
+            atual = atual if c != "[" else {"texto": "", "inicio": ini, "fim": fim, "tag": True}
+            atual["texto"] += c
+            continue
         if atual is None:
             atual = {"texto": "", "inicio": ini, "fim": fim}
             marcas.append(atual)
         atual["texto"] += c
         atual["fim"] = fim
-    return marcas
+    return [m for m in marcas if not m.get("tag")]
 
 
 def _gravacao(texto: str, voz: str, wav: Path, op: dict) -> None:
@@ -259,7 +270,8 @@ PROVEDORES: dict[str, Provedor] = {p.id: p for p in [
 def sintetizar(texto: str, provedor: str, voz: str | None, saida_wav: str | Path, *,
                pronuncia: bool | str | Path = True, alinhar: bool = True, whisper: str = WHISPER_PADRAO,
                velocidade: float = 1.0, taxa: int = 48000, modelos: str | Path | None = None,
-               arquivo: str | Path | None = None, limpar: bool = False, permitir_pago: bool = False) -> dict:
+               arquivo: str | Path | None = None, limpar: bool = False, permitir_pago: bool = False,
+               falado: str | None = None) -> dict:
     """Texto -> WAV mono + palavras com tempo (grafia do texto original).
 
     -> {wav, palavras: [{texto, inicio, fim}], provedor, voz, sintetica, tempos, duracao, ...}
@@ -267,6 +279,8 @@ def sintetizar(texto: str, provedor: str, voz: str | None, saida_wav: str | Path
     pronuncia: True usa motores/voz/pronuncia.json; caminho usa outro arquivo; False desliga.
     alinhar: para motores sem tempos nativos, roda o alinhador (faster-whisper) no fim.
     arquivo/limpar: só para o provedor "gravacao".
+    falado: o que a voz recebe, quando difere do texto da legenda (ex.: marcações do ElevenLabs v3 como
+    "[whispers]"); a pronúncia é aplicada sobre ele e os tempos continuam casados com `texto`.
     """
     if provedor not in PROVEDORES:
         raise ValueError(f"provedor desconhecido: {provedor} (opções: {', '.join(PROVEDORES)})")
@@ -283,9 +297,9 @@ def sintetizar(texto: str, provedor: str, voz: str | None, saida_wav: str | Path
     wav = Path(saida_wav)
     wav.parent.mkdir(parents=True, exist_ok=True)
 
-    falado = texto
+    falado = falado or texto
     if pronuncia and p.sintetica:
-        falado = aplicar_pronuncia(texto, provedor, None if pronuncia is True else pronuncia)
+        falado = aplicar_pronuncia(falado, provedor, None if pronuncia is True else pronuncia)
     op = {"velocidade": velocidade, "taxa": taxa, "modelos": modelos, "arquivo": arquivo, "limpar": limpar}
 
     t0 = time.perf_counter()
