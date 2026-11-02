@@ -1,0 +1,735 @@
+{
+ "duracao": 58.557,
+ "rotulo": "narração gerada por IA",
+ "rotulo_voz": "Narração gerada por IA (voz sintética ElevenLabs: JBFqnCBsd6RMkjVDRZzb), não é a voz de uma pessoa real",
+ "cenas": [
+  {
+   "id": "arvore",
+   "ini": 0.0,
+   "dur": 8.557,
+   "fala": 0.6,
+   "fala_dur": 6.957,
+   "transicao": {
+    "tipo": "zoom",
+    "dur": 1.5
+   },
+   "palavras": [
+    {
+     "texto": "Uma",
+     "inicio": 0.6,
+     "fim": 0.774
+    },
+    {
+     "texto": "árvore",
+     "inicio": 0.861,
+     "fim": 1.209
+    },
+    {
+     "texto": "cai",
+     "inicio": 1.252,
+     "fim": 1.557
+    },
+    {
+     "texto": "no",
+     "inicio": 1.614,
+     "fim": 1.73
+    },
+    {
+     "texto": "meio",
+     "inicio": 1.783,
+     "fim": 1.991
+    },
+    {
+     "texto": "da",
+     "inicio": 2.049,
+     "fim": 2.165
+    },
+    {
+     "texto": "Amazônia.",
+     "inicio": 2.195,
+     "fim": 2.948
+    },
+    {
+     "texto": "Ninguém",
+     "inicio": 4.325,
+     "fim": 4.6
+    },
+    {
+     "texto": "viu…",
+     "inicio": 4.687,
+     "fim": 5.643
+    },
+    {
+     "texto": "ou",
+     "inicio": 6.397,
+     "fim": 6.426
+    },
+    {
+     "texto": "quase",
+     "inicio": 6.513,
+     "fim": 6.861
+    },
+    {
+     "texto": "ninguém.",
+     "inicio": 6.948,
+     "fim": 7.557
+    }
+   ],
+   "marcas": {
+    "cai": 1.252,
+    "quase": 6.513
+   }
+  },
+  {
+   "id": "satelite",
+   "ini": 7.057,
+   "dur": 6.709,
+   "fala": 1.1,
+   "fala_dur": 4.609,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.8
+   },
+   "palavras": [
+    {
+     "texto": "Lá",
+     "inicio": 1.257,
+     "fim": 1.361
+    },
+    {
+     "texto": "de",
+     "inicio": 1.39,
+     "fim": 1.448
+    },
+    {
+     "texto": "cima,",
+     "inicio": 1.535,
+     "fim": 2.143
+    },
+    {
+     "texto": "satélites",
+     "inicio": 2.209,
+     "fim": 2.839
+    },
+    {
+     "texto": "do",
+     "inicio": 2.868,
+     "fim": 2.926
+    },
+    {
+     "texto": "INPE",
+     "inicio": 3.013,
+     "fim": 3.361
+    },
+    {
+     "texto": "observam",
+     "inicio": 3.448,
+     "fim": 4.057
+    },
+    {
+     "texto": "a",
+     "inicio": 4.1,
+     "fim": 4.143
+    },
+    {
+     "texto": "floresta",
+     "inicio": 4.187,
+     "fim": 4.709
+    },
+    {
+     "texto": "o",
+     "inicio": 4.73,
+     "fim": 4.752
+    },
+    {
+     "texto": "tempo",
+     "inicio": 4.81,
+     "fim": 5.1
+    },
+    {
+     "texto": "todo.",
+     "inicio": 5.204,
+     "fim": 5.709
+    }
+   ],
+   "marcas": {
+    "inpe": 3.013
+   }
+  },
+  {
+   "id": "alerta",
+   "ini": 12.966,
+   "dur": 7.054,
+   "fala": 0.75,
+   "fala_dur": 5.304,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "palavras": [
+    {
+     "texto": "Quando",
+     "inicio": 0.75,
+     "fim": 1.011
+    },
+    {
+     "texto": "o",
+     "inicio": 1.054,
+     "fim": 1.098
+    },
+    {
+     "texto": "verde",
+     "inicio": 1.155,
+     "fim": 1.446
+    },
+    {
+     "texto": "some",
+     "inicio": 1.533,
+     "fim": 1.88
+    },
+    {
+     "texto": "de",
+     "inicio": 1.91,
+     "fim": 1.967
+    },
+    {
+     "texto": "um",
+     "inicio": 1.997,
+     "fim": 2.054
+    },
+    {
+     "texto": "dia",
+     "inicio": 2.141,
+     "fim": 2.402
+    },
+    {
+     "texto": "pro",
+     "inicio": 2.467,
+     "fim": 2.663
+    },
+    {
+     "texto": "outro,",
+     "inicio": 2.736,
+     "fim": 3.533
+    },
+    {
+     "texto": "o",
+     "inicio": 3.946,
+     "fim": 4.011
+    },
+    {
+     "texto": "sistema",
+     "inicio": 4.027,
+     "fim": 4.141
+    },
+    {
+     "texto": "DETER",
+     "inicio": 4.228,
+     "fim": 4.75
+    },
+    {
+     "texto": "dispara",
+     "inicio": 4.837,
+     "fim": 5.272
+    },
+    {
+     "texto": "um",
+     "inicio": 5.301,
+     "fim": 5.359
+    },
+    {
+     "texto": "alerta.",
+     "inicio": 5.446,
+     "fim": 6.054
+    }
+   ],
+   "marcas": {
+    "some": 1.533,
+    "alerta": 5.446,
+    "deter": 4.228
+   }
+  },
+  {
+   "id": "planejamento",
+   "ini": 19.02,
+   "dur": 7.589,
+   "fala": 0.85,
+   "fala_dur": 5.739,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "palavras": [
+    {
+     "texto": "O",
+     "inicio": 0.85,
+     "fim": 0.937
+    },
+    {
+     "texto": "alerta",
+     "inicio": 1.01,
+     "fim": 1.459
+    },
+    {
+     "texto": "chega",
+     "inicio": 1.546,
+     "fim": 1.893
+    },
+    {
+     "texto": "ao",
+     "inicio": 1.923,
+     "fim": 1.98
+    },
+    {
+     "texto": "Ibama.",
+     "inicio": 2.067,
+     "fim": 2.589
+    },
+    {
+     "texto": "A",
+     "inicio": 3.024,
+     "fim": 3.459
+    },
+    {
+     "texto": "equipe",
+     "inicio": 3.534,
+     "fim": 3.98
+    },
+    {
+     "texto": "estuda",
+     "inicio": 4.046,
+     "fim": 4.415
+    },
+    {
+     "texto": "as",
+     "inicio": 4.445,
+     "fim": 4.502
+    },
+    {
+     "texto": "imagens",
+     "inicio": 4.589,
+     "fim": 5.198
+    },
+    {
+     "texto": "e",
+     "inicio": 5.285,
+     "fim": 5.372
+    },
+    {
+     "texto": "planeja",
+     "inicio": 5.429,
+     "fim": 5.893
+    },
+    {
+     "texto": "a",
+     "inicio": 5.937,
+     "fim": 5.98
+    },
+    {
+     "texto": "rota.",
+     "inicio": 6.067,
+     "fim": 6.589
+    }
+   ],
+   "marcas": {
+    "ibama": 2.067,
+    "rota": 6.067
+   }
+  },
+  {
+   "id": "caminho",
+   "ini": 25.609,
+   "dur": 7.763,
+   "fala": 0.85,
+   "fala_dur": 5.913,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "palavras": [
+    {
+     "texto": "Às",
+     "inicio": 0.85,
+     "fim": 1.024
+    },
+    {
+     "texto": "vezes",
+     "inicio": 1.097,
+     "fim": 1.459
+    },
+    {
+     "texto": "são",
+     "inicio": 1.567,
+     "fim": 1.893
+    },
+    {
+     "texto": "dias",
+     "inicio": 1.946,
+     "fim": 2.154
+    },
+    {
+     "texto": "de",
+     "inicio": 2.212,
+     "fim": 2.328
+    },
+    {
+     "texto": "estrada,",
+     "inicio": 2.398,
+     "fim": 3.285
+    },
+    {
+     "texto": "rio",
+     "inicio": 3.415,
+     "fim": 3.807
+    },
+    {
+     "texto": "e",
+     "inicio": 3.98,
+     "fim": 4.154
+    },
+    {
+     "texto": "helicóptero",
+     "inicio": 4.198,
+     "fim": 5.024
+    },
+    {
+     "texto": "até",
+     "inicio": 5.154,
+     "fim": 5.546
+    },
+    {
+     "texto": "chegar",
+     "inicio": 5.589,
+     "fim": 5.893
+    },
+    {
+     "texto": "ao",
+     "inicio": 5.923,
+     "fim": 5.98
+    },
+    {
+     "texto": "ponto.",
+     "inicio": 6.082,
+     "fim": 6.763
+    }
+   ],
+   "marcas": {
+    "estrada": 2.398,
+    "rio": 3.415,
+    "helicoptero": 4.198,
+    "ponto": 6.082
+   }
+  },
+  {
+   "id": "campo",
+   "ini": 32.372,
+   "dur": 7.241,
+   "fala": 0.85,
+   "fala_dur": 5.391,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "palavras": [
+    {
+     "texto": "Em",
+     "inicio": 0.85,
+     "fim": 1.024
+    },
+    {
+     "texto": "campo,",
+     "inicio": 1.111,
+     "fim": 1.807
+    },
+    {
+     "texto": "os",
+     "inicio": 1.864,
+     "fim": 1.98
+    },
+    {
+     "texto": "fiscais",
+     "inicio": 2.046,
+     "fim": 2.589
+    },
+    {
+     "texto": "confirmam",
+     "inicio": 2.643,
+     "fim": 3.111
+    },
+    {
+     "texto": "o",
+     "inicio": 3.154,
+     "fim": 3.198
+    },
+    {
+     "texto": "desmatamento",
+     "inicio": 3.241,
+     "fim": 3.98
+    },
+    {
+     "texto": "e",
+     "inicio": 4.198,
+     "fim": 4.415
+    },
+    {
+     "texto": "autuam",
+     "inicio": 4.48,
+     "fim": 4.937
+    },
+    {
+     "texto": "os",
+     "inicio": 4.966,
+     "fim": 5.024
+    },
+    {
+     "texto": "responsáveis.",
+     "inicio": 5.1,
+     "fim": 6.241
+    }
+   ],
+   "marcas": {
+    "confirmam": 2.643,
+    "autuam": 4.48,
+    "fiscais": 2.046
+   }
+  },
+  {
+   "id": "maquina",
+   "ini": 38.613,
+   "dur": 6.633,
+   "fala": 0.85,
+   "fala_dur": 4.783,
+   "transicao": {
+    "tipo": "zoom",
+    "dur": 1.5
+   },
+   "palavras": [
+    {
+     "texto": "Se",
+     "inicio": 0.85,
+     "fim": 0.937
+    },
+    {
+     "texto": "a",
+     "inicio": 0.98,
+     "fim": 1.024
+    },
+    {
+     "texto": "máquina",
+     "inicio": 1.082,
+     "fim": 1.459
+    },
+    {
+     "texto": "não",
+     "inicio": 1.502,
+     "fim": 1.633
+    },
+    {
+     "texto": "pode",
+     "inicio": 1.685,
+     "fim": 1.893
+    },
+    {
+     "texto": "sair",
+     "inicio": 1.951,
+     "fim": 2.154
+    },
+    {
+     "texto": "dali,",
+     "inicio": 2.198,
+     "fim": 2.589
+    },
+    {
+     "texto": "a",
+     "inicio": 3.273,
+     "fim": 3.287
+    },
+    {
+     "texto": "lei",
+     "inicio": 3.352,
+     "fim": 3.548
+    },
+    {
+     "texto": "permite",
+     "inicio": 3.602,
+     "fim": 3.983
+    },
+    {
+     "texto": "inutilizá-la",
+     "inicio": 4.04,
+     "fim": 4.852
+    },
+    {
+     "texto": "no",
+     "inicio": 4.882,
+     "fim": 4.939
+    },
+    {
+     "texto": "local.",
+     "inicio": 5.026,
+     "fim": 5.635
+    }
+   ],
+   "marcas": {
+    "lei": 3.352,
+    "inutiliza": 4.04,
+    "maquina": 1.082
+   }
+  },
+  {
+   "id": "volta",
+   "ini": 43.746,
+   "dur": 6.796,
+   "fala": 1.1,
+   "fala_dur": 4.696,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "palavras": [
+    {
+     "texto": "Do",
+     "inicio": 1.26,
+     "fim": 1.274
+    },
+    {
+     "texto": "espaço",
+     "inicio": 1.361,
+     "fim": 1.883
+    },
+    {
+     "texto": "até",
+     "inicio": 1.97,
+     "fim": 2.23
+    },
+    {
+     "texto": "o",
+     "inicio": 2.274,
+     "fim": 2.317
+    },
+    {
+     "texto": "chão",
+     "inicio": 2.375,
+     "fim": 2.578
+    },
+    {
+     "texto": "da",
+     "inicio": 2.636,
+     "fim": 2.752
+    },
+    {
+     "texto": "floresta:",
+     "inicio": 2.796,
+     "fim": 3.883
+    },
+    {
+     "texto": "é",
+     "inicio": 3.926,
+     "fim": 3.97
+    },
+    {
+     "texto": "assim",
+     "inicio": 4.027,
+     "fim": 4.317
+    },
+    {
+     "texto": "que",
+     "inicio": 4.339,
+     "fim": 4.404
+    },
+    {
+     "texto": "uma",
+     "inicio": 4.448,
+     "fim": 4.578
+    },
+    {
+     "texto": "operação",
+     "inicio": 4.613,
+     "fim": 5.1
+    },
+    {
+     "texto": "começa.",
+     "inicio": 5.17,
+     "fim": 5.796
+    }
+   ],
+   "marcas": {
+    "espaco": 1.361,
+    "chao": 2.375
+   }
+  },
+  {
+   "id": "serie",
+   "ini": 49.542,
+   "dur": 9.015,
+   "fala": 0.85,
+   "fala_dur": 5.565,
+   "transicao": {
+    "tipo": "corte",
+    "dur": 0
+   },
+   "palavras": [
+    {
+     "texto": "Quer",
+     "inicio": 0.988,
+     "fim": 1.024
+    },
+    {
+     "texto": "ver",
+     "inicio": 1.067,
+     "fim": 1.198
+    },
+    {
+     "texto": "isso",
+     "inicio": 1.25,
+     "fim": 1.459
+    },
+    {
+     "texto": "de",
+     "inicio": 1.488,
+     "fim": 1.546
+    },
+    {
+     "texto": "verdade?",
+     "inicio": 1.611,
+     "fim": 2.154
+    },
+    {
+     "texto": "Operação",
+     "inicio": 3.428,
+     "fim": 3.898
+    },
+    {
+     "texto": "Guerra",
+     "inicio": 3.955,
+     "fim": 4.246
+    },
+    {
+     "texto": "Verde,",
+     "inicio": 4.318,
+     "fim": 5.028
+    },
+    {
+     "texto": "na",
+     "inicio": 5.086,
+     "fim": 5.202
+    },
+    {
+     "texto": "HBO",
+     "inicio": 5.26,
+     "fim": 5.811
+    },
+    {
+     "texto": "Max.",
+     "inicio": 5.92,
+     "fim": 6.42
+    }
+   ],
+   "marcas": {
+    "operacao": 3.428,
+    "hbo": 5.26,
+    "verde": 4.318
+   }
+  }
+ ]
+}

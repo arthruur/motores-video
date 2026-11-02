@@ -1,0 +1,145 @@
+{
+ "voz": {
+  "provedor": "elevenlabs",
+  "voz": "JBFqnCBsd6RMkjVDRZzb",
+  "nome": "George (voz padrão do ElevenLabs)",
+  "ambiente": {
+   "ELEVENLABS_MODEL": "eleven_v3",
+   "ELEVENLABS_LANGUAGE": "pt"
+  },
+  "permitir_pago": true,
+  "ritmo": 0.92,
+  "_ritmo": "andamento da fala depois de gerada (0,92 = 8% mais lenta, sem mudar o tom)"
+ },
+ "tempos": {
+  "depois_da_fala": 1.0,
+  "final_depois": 2.6
+ },
+ "cenas": [
+  {
+   "id": "arvore",
+   "fala": "Uma árvore cai no meio da Amazônia. Ninguém viu… ou quase ninguém.",
+   "marcas": {
+    "cai": "cai",
+    "quase": "quase"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "zoom",
+    "dur": 1.5
+   },
+   "fala_voz": "Uma árvore cai no meio da Amazônia. [pause] Ninguém viu… [whispers] ou quase ninguém."
+  },
+  {
+   "id": "satelite",
+   "fala": "Lá de cima, satélites do INPE observam a floresta o tempo todo.",
+   "marcas": {
+    "inpe": "INPE"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.8
+   },
+   "fala_voz": "[calm] Lá de cima, satélites do INPE observam a floresta o tempo todo."
+  },
+  {
+   "id": "alerta",
+   "fala": "Quando o verde some de um dia pro outro, o sistema DETER dispara um alerta.",
+   "marcas": {
+    "some": "some",
+    "alerta": "alerta.",
+    "deter": "DETER"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "fala_voz": "Quando o verde some de um dia pro outro, [serious] o sistema DETER dispara um alerta."
+  },
+  {
+   "id": "planejamento",
+   "fala": "O alerta chega ao Ibama. A equipe estuda as imagens e planeja a rota.",
+   "marcas": {
+    "ibama": "Ibama.",
+    "rota": "rota."
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   }
+  },
+  {
+   "id": "caminho",
+   "fala": "Às vezes são dias de estrada, rio e helicóptero até chegar ao ponto.",
+   "marcas": {
+    "estrada": "estrada,",
+    "rio": "rio",
+    "helicoptero": "helicóptero",
+    "ponto": "ponto."
+   },
+   "minimo": 6,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   }
+  },
+  {
+   "id": "campo",
+   "fala": "Em campo, os fiscais confirmam o desmatamento e autuam os responsáveis.",
+   "marcas": {
+    "confirmam": "confirmam",
+    "autuam": "autuam",
+    "fiscais": "fiscais"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   }
+  },
+  {
+   "id": "maquina",
+   "fala": "Se a máquina não pode sair dali, a lei permite inutilizá-la no local.",
+   "marcas": {
+    "lei": "lei",
+    "inutiliza": "inutilizá-la",
+    "maquina": "máquina"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "zoom",
+    "dur": 1.5
+   },
+   "fala_voz": "Se a máquina não pode sair dali, [firmly] a lei permite inutilizá-la no local."
+  },
+  {
+   "id": "volta",
+   "fala": "Do espaço até o chão da floresta: é assim que uma operação começa.",
+   "marcas": {
+    "espaco": "espaço",
+    "chao": "chão"
+   },
+   "minimo": 5,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 1.0
+   },
+   "fala_voz": "[warmly] Do espaço até o chão da floresta: é assim que uma operação começa."
+  },
+  {
+   "id": "serie",
+   "fala": "Quer ver isso de verdade? Operação Guerra Verde, na HBO Max.",
+   "marcas": {
+    "operacao": "Operação",
+    "hbo": "HBO",
+    "verde": "Verde,"
+   },
+   "minimo": 6,
+   "fala_voz": "[curious] Quer ver isso de verdade? [pause] Operação Guerra Verde, na HBO Max."
+  }
+ ],
+ "rotulo": "narração gerada por IA"
+}

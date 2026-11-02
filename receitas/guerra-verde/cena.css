@@ -1,0 +1,29 @@
+@font-face { font-family: 'Mao'; src: url('fontes/CaveatBrush-Regular.ttf'); }
+:root { --tinta: #2b2118; --ferrugem: #9b4523; --creme: #f2e5c9; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #d9c09a; }
+#palco { position: absolute; inset: 0; overflow: hidden; }
+
+/* cada cena é uma folha de kraft inteira; a câmera (zoom da transição) fica por fora do "mundo" (a deriva lenta) */
+.camada { position: absolute; inset: 0; overflow: hidden; background: url('texturas/kraft.jpg'); }
+.camera, .mundo { position: absolute; inset: 0; }
+.mundo > * { position: absolute; }
+.grao { position: absolute; inset: 0; background: url('texturas/grao.png'); opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
+
+.arte { left: 0; top: 0; overflow: visible; }
+.arte > g:first-child { mix-blend-mode: multiply; }
+.folha > * { position: absolute; }
+.folha { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.papel { position: absolute; inset: 0; background: var(--creme); filter: drop-shadow(0 10px 14px rgba(60, 36, 14, .3)); }
+
+/* escrita à mão */
+.mao { font-family: 'Mao'; color: var(--tinta); line-height: 1.05; white-space: nowrap; text-align: center; }
+.carimbo { font-family: 'Mao'; color: var(--ferrugem); font-size: 120px; letter-spacing: 6px; padding: 6px 34px 0;
+  border: 9px solid var(--ferrugem); border-radius: 14px; filter: url(#giz); white-space: nowrap; }
+.titulo span { display: inline-block; transform-origin: 50% 80%; }
+.foto { position: absolute; filter: drop-shadow(0 12px 16px rgba(50, 30, 10, .35)); }
+
+/* legenda da fala e rótulo de IA: por cima de tudo, fora das transições */
+#legenda { position: absolute; left: 90px; width: 900px; top: 1112px; height: 100px; z-index: 500; }
+.bloco { position: absolute; left: 0; width: 900px; top: 0; text-align: center; font-family: 'Mao'; font-size: 66px; color: var(--tinta); white-space: nowrap; }
+.bloco span { display: inline-block; margin: 0 .12em; }
+#rotulo { position: absolute; left: 120px; width: 840px; top: 1206px; z-index: 500; text-align: center; font-family: 'Mao'; font-size: 30px; color: var(--tinta); opacity: .55; }
