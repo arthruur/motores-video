@@ -33,9 +33,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["folhas_caindo"] }
       },
       "marcadores": [
-        { "id": "dona_mandioca", "tipo": "retangulo", "x": 275, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
-        { "id": "umbu", "tipo": "oval", "x": 815, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
       ],
       "falas": [
         {
@@ -125,9 +125,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
       },
       "marcadores": [
-        { "id": "maxixe", "tipo": "oval", "x": 310, "y": 1205, "escala": 0.55, "rotulo": "Maxixe" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 0.95 },
-        { "id": "quiabo", "tipo": "coluna", "x": 790, "y": 1200, "escala": 1.15, "rotulo": "Quiabo" }
+        { "id": "maxixe", "tipo": "oval", "x": 250, "y": 1095, "escala": 0.55, "rotulo": "Maxixe" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.90 },
+        { "id": "quiabo", "tipo": "coluna", "x": 685, "y": 1095, "escala": 1.15, "rotulo": "Quiabo" }
       ],
       "falas": [
         {
@@ -209,9 +209,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
       },
       "marcadores": [
-        { "id": "mangaio", "tipo": "cesto", "x": 270, "y": 1220, "escala": 0.95 },
-        { "id": "realcador", "tipo": "triangulo", "x": 560, "y": 1205, "escala": 1.10, "rotulo": "Realçador" },
-        { "id": "umbu", "tipo": "oval", "x": 830, "y": 1205, "escala": 0.75, "rotulo": "Umbu" }
+        { "id": "mangaio", "tipo": "cesto", "x": 250, "y": 1098, "escala": 0.90 },
+        { "id": "realcador", "tipo": "triangulo", "x": 475, "y": 1095, "escala": 1.10, "rotulo": "Realçador" },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
       ],
       "falas": [
         {
@@ -284,9 +284,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
       },
       "marcadores": [
-        { "id": "mandacaru", "tipo": "coluna", "x": 250, "y": 1195, "escala": 2.20, "rotulo": "Mandacaru" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 0.95 },
-        { "id": "licuri", "tipo": "gota", "x": 790, "y": 1205, "escala": 0.55, "rotulo": "Licuri" }
+        { "id": "mandacaru", "tipo": "coluna", "x": 235, "y": 1095, "escala": 2.20, "rotulo": "Mandacaru" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.90 },
+        { "id": "licuri", "tipo": "gota", "x": 685, "y": 1095, "escala": 0.55, "rotulo": "Licuri" }
       ],
       "falas": [
         {
@@ -361,9 +361,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["chuva"] }
       },
       "marcadores": [
-        { "id": "dona_mandioca", "tipo": "retangulo", "x": 265, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
-        { "id": "umbu", "tipo": "oval", "x": 815, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
       ],
       "falas": [
         {
@@ -456,7 +456,7 @@
           "id": "abertura_vinheta_musical",
           "t": 0.15,
           "camada": "frente",
-          "pos": [455, 620],
+          "pos": [455, 360],
           "efeito": { "id": "confete_bandeirinhas", "dur": 4.20, "escala": 1.0, "semente": 83 },
           "som": { "id": "vinheta_mangaio", "vol": 0.92 }
         },

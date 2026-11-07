@@ -40,10 +40,10 @@ export const NOMES_PERSONAGEM = {
 export const ZONA_LEGENDA = {
   left: 120,
   width: 660,
-  top: 1096,
-  height: 124,
+  top: 1136,
+  height: 98,
   cx: 450, // centro horizontal de [120, 780]
-  cy: 1158,
+  cy: 1185,
 }
 
 const PALAVRAS_LIGACAO = new Set([

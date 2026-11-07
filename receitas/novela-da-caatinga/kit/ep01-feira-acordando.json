@@ -33,9 +33,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["folhas_caindo"] }
       },
       "marcadores": [
-        { "id": "dona_mandioca", "tipo": "retangulo", "x": 270, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
-        { "id": "umbu", "tipo": "oval", "x": 820, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
       ],
       "falas": [
         {
@@ -109,9 +109,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
       },
       "marcadores": [
-        { "id": "maxixe", "tipo": "oval", "x": 300, "y": 1205, "escala": 0.55, "rotulo": "Maxixe" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
-        { "id": "quiabo", "tipo": "coluna", "x": 790, "y": 1200, "escala": 1.15, "rotulo": "Quiabo" }
+        { "id": "maxixe", "tipo": "oval", "x": 250, "y": 1095, "escala": 0.55, "rotulo": "Maxixe" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "quiabo", "tipo": "coluna", "x": 685, "y": 1095, "escala": 1.15, "rotulo": "Quiabo" }
       ],
       "falas": [
         {
@@ -177,9 +177,9 @@
         "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
       },
       "marcadores": [
-        { "id": "dona_mandioca", "tipo": "retangulo", "x": 270, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
-        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
-        { "id": "umbu", "tipo": "oval", "x": 820, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
       ],
       "falas": [
         {

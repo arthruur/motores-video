@@ -873,9 +873,9 @@ export function renderizarMarcador(m, tl = 0, deixasAtivas = [], falas = []) {
   // Etiqueta discreta opcional na base do bloco (somente se m.rotulo for fornecido e m.mostrarRotulo !== false)
   const rotuloTxt = m.rotulo ?? (m.mostrarRotulo ? ficha.rotulo : '')
   const etiquetaSVG = rotuloTxt
-    ? `<g transform="translate(0 28)">` +
-        `<rect x="-64" y="-18" width="128" height="26" rx="10" fill="#F7E8C6" opacity="0.88" />` +
-        `<text x="0" y="1" text-anchor="middle" font-family="CaveatBrush, Mao, cursive" font-size="22" fill="${PALETA.tinta.escuro}">${escaparXML(rotuloTxt)}</text>` +
+    ? `<g transform="translate(0 16)">` +
+        `<rect x="-58" y="-15" width="116" height="22" rx="9" fill="#F7E8C6" opacity="0.90" />` +
+        `<text x="0" y="2" text-anchor="middle" font-family="CaveatBrush, Mao, cursive" font-size="19" fill="${PALETA.tinta.escuro}">${escaparXML(rotuloTxt)}</text>` +
       `</g>`
     : ''
 
