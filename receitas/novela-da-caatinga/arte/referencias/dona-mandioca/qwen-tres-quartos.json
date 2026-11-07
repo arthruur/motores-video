@@ -1,0 +1,13 @@
+{
+ "data": "2026-11-07T19:40:24",
+ "modelo": "Qwen-Image-Edit-2511",
+ "space": "prithivMLmods/Qwen-Image-Edit-2511-LoRAs-Fast",
+ "lora": "Multiple-Angles",
+ "passos": 4,
+ "seed": 1146965705,
+ "refs": [
+  "receitas/novela-da-caatinga/arte/referencias/dona-mandioca-frente.png"
+ ],
+ "segundos": 25.9,
+ "prompt": "将镜头向左旋转45度"
+}
