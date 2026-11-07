@@ -1,0 +1,25 @@
+@font-face { font-family: 'Mao'; src: url('fontes/CaveatBrush-Regular.ttf'); }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #e2c9a0; }
+#palco { position: absolute; inset: 0; overflow: hidden; }
+.camada { position: absolute; inset: 0; overflow: hidden; background: url('texturas/kraft.jpg'); }
+.mundo { position: absolute; inset: 0; }
+.mundo > * { position: absolute; }
+.arte { left: 0; top: 0; overflow: visible; }
+.grao { position: absolute; inset: 0; background: url('texturas/grao.png'); opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
+.cesto { transform-origin: 50% 100%; filter: url(#traco) drop-shadow(0 8px 6px rgba(60, 36, 14, .25)); }
+.cesto svg { width: 100%; height: 100%; overflow: visible; }
+
+.mao { font-family: 'Mao'; color: #2b2118; line-height: 1.05; text-align: center; }
+.titulo { left: 60px; width: 960px; top: 720px; font-size: 150px; }
+.titulo span { display: inline-block; transform-origin: 50% 80%; }
+.subtitulo { left: 60px; width: 960px; top: 1080px; font-size: 64px; color: #9b4523; }
+.assina { top: 560px; font-size: 130px; }
+.assina2 { top: 830px; }
+.logo { left: 340px; top: 960px; width: 400px; }
+.continua { left: 60px; width: 640px; top: 300px; font-size: 110px; color: #9b4523; transform-origin: 50% 50%; }
+
+#legenda { position: absolute; left: 60px; width: 960px; top: 1480px; height: 100px; z-index: 500; }
+.bloco { position: absolute; left: 0; width: 960px; top: 0; text-align: center; font-family: 'Mao'; font-size: 74px; white-space: nowrap;
+  text-shadow: 0 0 12px #f2e5c9, 0 0 4px #f2e5c9; }
+.bloco span { display: inline-block; margin: 0 .12em; }
+#rotulo { position: absolute; left: 120px; width: 840px; top: 1590px; z-index: 500; text-align: center; font-family: 'Mao'; font-size: 30px; color: #2b2118; opacity: .55; }

@@ -1,0 +1,82 @@
+{
+ "_doc": "Cap. 1 no formato legível pelo motor (bíblia, 'Roteiro legível pelo motor'). Cada cena é uma lista ORDENADA de batidas: fala, acao ou som. Texto na forma escrita (a da legenda); a forma falada sai por regra no fim. Ids de expressão, movimento e som vêm dos vocabulários de producao.md.",
+ "serie": "novela-da-caatinga",
+ "capitulo": 1,
+ "titulo": "A Inauguração",
+ "arco": "estiagem",
+ "duracao_alvo": [60, 80],
+ "acude": 0.15,
+ "elenco": ["maxixe", "quiabo", "dona_mandioca", "realcador", "umbu", "licuri", "cesto"],
+ "cenas": [
+  {
+   "id": "gancho_acude",
+   "bloco": "gancho",
+   "lugar": "beira_do_acude",
+   "personagens": [],
+   "batidas": [
+    {"acao": "Close no chão rachado do açude. Algo cai do alto: não é gota, é um sachê.", "camera": "close"},
+    {"som": "plof_sache"},
+    {"som": "trompete_cesto_grave", "nota": "assustada"}
+   ]
+  },
+  {
+   "id": "feira_vazia",
+   "bloco": "conflito",
+   "lugar": "feira_de_sabado",
+   "personagens": ["maxixe", "quiabo", "dona_mandioca"],
+   "batidas": [
+    {"acao": "Maxixe e Quiabo debruçados na banca vazia.", "camera": "plano_medio"},
+    {"fala": {"personagem": "maxixe", "texto": "Tu viu? Tu viu?!", "direcao_voz": "cochicho urgente", "expressao": "olhos_arregalados"}},
+    {"fala": {"personagem": "quiabo", "texto": "Vi o quê, criatura? Não tem nem freguês pra ver.", "direcao_voz": "preguiçoso, arrastado", "expressao": "olhos_semicerrados"}},
+    {"acao": "Feira quase deserta, poeira passando. Dona Mandioca se abana com uma folha.", "movimento": {"quem": "dona_mandioca", "id": "abanar"}},
+    {"som": "vento_poeira"},
+    {"fala": {"personagem": "dona_mandioca", "texto": "Três meses sem chuva e o único movimento aqui é o da poeira.", "direcao_voz": "cansada, irônica", "expressao": "ironica"}}
+   ]
+  },
+  {
+   "id": "neon_acende",
+   "bloco": "conflito",
+   "lugar": "praca_mercadinho",
+   "personagens": ["realcador", "maxixe", "quiabo", "dona_mandioca", "umbu", "cesto"],
+   "batidas": [
+    {"som": "jingle_mercadinho"},
+    {"acao": "Do outro lado da praça, um néon azul acende: MERCADINHO SABOR JÁ.", "texto_tela": "MERCADINHO SABOR JÁ", "paleta": "mercadinho"},
+    {"fala": {"personagem": "realcador", "texto": "Atenção, Serra Pequena! Cansou de descascar? De ralar? De esperar a chuva? Chegou o Realçador! É só abrir e pronto!", "direcao_voz": "locutor de TV, empolgadíssimo, sem respirar, sem sotaque regional", "expressao": "sorriso_propaganda"}},
+    {"acao": "Fila imediata. Maxixe e Quiabo saem correndo pra fila.", "movimento": {"quem": ["maxixe", "quiabo"], "id": "correr"}},
+    {"fala": {"personagem": "dona_mandioca", "texto": "Vocês dois?!", "direcao_voz": "indignada, alto", "expressao": "sobrancelha_levantada"}},
+    {"fala": {"personagem": "quiabo", "texto": "É grátis, Dona Mandioca!", "direcao_voz": "já correndo, voz se afastando", "expressao": "empolgado"}},
+    {"fala": {"personagem": "umbu", "texto": "Grátis hoje, né?", "direcao_voz": "chegando devagar, calmo, sorriso na voz", "expressao": "olhos_semicerrados"}},
+    {"acao": "O Cesto olha para o néon.", "movimento": {"quem": "cesto", "id": "olhar"}},
+    {"som": "trompete_cesto_desconfianca"}
+   ]
+  },
+  {
+   "id": "amostra_licuri",
+   "bloco": "virada",
+   "lugar": "praca_mercadinho",
+   "personagens": ["realcador", "licuri"],
+   "batidas": [
+    {"acao": "O Realçador joga amostras na multidão. Uma cai aos pés do Licuri.", "movimento": {"quem": "realcador", "id": "arremessar"}},
+    {"acao": "Licuri se vê refletido na embalagem brilhante.", "camera": "close", "efeito": "reflexo_brilho"},
+    {"fala": {"personagem": "licuri", "texto": "Brilha...", "direcao_voz": "sussurro encantado", "expressao": "encantado"}}
+   ]
+  },
+  {
+   "id": "sache_no_bolso",
+   "bloco": "gancho_final",
+   "lugar": "praca_mercadinho",
+   "personagens": ["licuri", "cesto"],
+   "batidas": [
+    {"acao": "Licuri olha para os lados e guarda o sachê no bolso.", "movimento": {"quem": "licuri", "id": "olhar_lados"}},
+    {"acao": "O Cesto viu.", "camera": "close", "movimento": {"quem": "cesto", "id": "piscar"}},
+    {"som": "trompete_cesto_suspensa"},
+    {"texto_tela": "continua..."}
+   ]
+  },
+  {
+   "id": "assinatura",
+   "bloco": "assinatura",
+   "batidas": [{"texto_tela": "Novela da Caatinga, uma história do Mangaio", "som": "vinheta"}]
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "_comentario": "Dicionário da série: como cada sigla ou termo é FALADO (vai para a voz) e o que é (o LLM usa para explicar na primeira vez). A legenda continua com a forma escrita. 'como': palavra (lida como palavra) ou letras (soletrada).",
+ "FAO": { "fala": "Fáo", "como": "palavra", "explica": "a agência da ONU para alimentação e agricultura" },
+ "ONU": { "fala": "ONU", "como": "palavra", "explica": "Organização das Nações Unidas" },
+ "IBGE": { "fala": "i bê gê é", "como": "letras", "explica": "o instituto que faz o censo do Brasil" },
+ "CEASA": { "fala": "Ceasa", "como": "palavra", "explica": "a central de abastecimento, o grande mercado atacadista da cidade" },
+ "PAA": { "fala": "pê á á", "como": "letras", "explica": "o Programa de Aquisição de Alimentos, em que o governo compra da agricultura familiar" },
+ "PNAE": { "fala": "pê ene á é", "como": "letras", "explica": "o programa da merenda escolar, que compra da agricultura familiar" },
+ "EUA": { "fala": "Estados Unidos", "como": "palavra", "explica": "Estados Unidos" },
+ "INPE": { "fala": "Inpe", "como": "palavra", "explica": "o instituto que vigia o Brasil por satélite" },
+ "km": { "fala": "quilômetros", "como": "palavra", "explica": "quilômetros" }
+}

@@ -1,0 +1,65 @@
+@font-face { font-family: 'Caveat Brush'; src: url('fontes/CaveatBrush-Regular.ttf'); }
+@font-face { font-family: 'Raleway'; src: url('../promo/fontes/Raleway.ttf'); font-weight: 100 900; }
+@font-face { font-family: 'Barlow Condensed'; src: url('/_fontes/BarlowCondensed-ExtraBold.ttf'); font-weight: 800; }
+@font-face { font-family: 'Fraunces'; src: url('../promo/fontes/Fraunces.ttf'); }
+
+:root { --azul: #005dba; --ciano: #00baf2; --branco: #ffffff; }
+
+html, body { margin: 0; background: #000; }
+#palco { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+
+#filme { position: absolute; inset: 0; transform-origin: 50% 50%; }
+#filme img { width: 1080px; height: 1920px; display: block; }
+
+#palco16 { position: absolute; inset: 0; overflow: hidden; display: none; background: #000; }
+#palco16 img { position: absolute; left: 540px; top: 960px; width: 1920px; height: 1080px; transform-origin: 50% 50%; }
+#palcoFundo { filter: blur(26px) brightness(0.5) saturate(1.2); }
+
+/* Bebop: o campo multiplica o filme; o branco do filme vira a cor, o escuro fica preto */
+#bebop { position: absolute; inset: 0; mix-blend-mode: multiply; display: none; overflow: hidden; }
+#bebop .campo { position: absolute; inset: 0; }
+#bebop .bloco { position: absolute; }
+#bebop .jornal { position: absolute; inset: -40px; font: 26px/1.18 'Fraunces', serif; text-align: justify;
+  word-spacing: 2px; opacity: 0.32; overflow: hidden; }
+#faixas { position: absolute; inset: 0; display: none; }
+#cartao { position: absolute; inset: 0; display: none; }
+#cartao .painel { position: absolute; left: 0; width: 1080px; overflow: hidden; }
+#cartao .painel.cima { top: 0; box-shadow: 0 10px 0 #000; }
+#cartao .painel.baixo { bottom: 0; box-shadow: 0 -10px 0 #000; }
+#cartao .jornal { position: absolute; inset: -20px; font: 26px/1.18 'Fraunces', serif; text-align: justify; opacity: 0.4; }
+#faixas div { position: absolute; top: 0; bottom: 0; background: #000; }
+
+#creditos { position: absolute; left: 130px; width: 760px; display: none; color: #fff; text-transform: uppercase;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800; line-height: 0.92; }
+#creditos .rotulo { font-size: 44px; letter-spacing: 0.06em; margin-bottom: 10px; }
+#creditos .nome { font-size: 150px; letter-spacing: 0.01em; }
+#creditos.grande .nome { font-size: 196px; }
+#creditos .palavra { white-space: nowrap; }
+#creditos span { display: inline-block; }
+
+#tinta { position: absolute; inset: 0; background: #00265a; mix-blend-mode: multiply; opacity: 0; }
+
+#desenhos { position: absolute; inset: 0; overflow: visible; }
+#desenhos path, #desenhos line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+#textos { position: absolute; inset: 0; }
+.txt {
+  position: absolute; white-space: nowrap; transform-origin: 0 50%;
+  font-family: 'Caveat Brush', cursive; color: var(--branco); line-height: 1;
+  -webkit-text-stroke: 0.13em var(--azul); paint-order: stroke fill;
+  text-shadow: 0.05em 0.06em 0 var(--ciano);
+}
+.txt.ciano { color: var(--ciano); text-shadow: 0.04em 0.05em 0 var(--branco); }
+.txt.centro { transform-origin: 50% 50%; }
+.rodape {
+  position: absolute; left: 0; width: 1000px; text-align: center;
+  font: 600 34px/1 'Raleway', sans-serif; letter-spacing: 0.04em; color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 20, 60, 0.8);
+}
+#logo { position: absolute; transform-origin: 50% 50%; }
+
+.grao { position: absolute; inset: -60px; background: url('../promo/marca/grao.png'); background-size: 720px;
+  mix-blend-mode: overlay; opacity: 0.55; pointer-events: none; }
+.vinheta { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 75% 60% at 50% 48%, transparent 55%, rgba(0, 10, 30, 0.55) 100%); }
+#cortina { position: absolute; inset: 0; background: #000; opacity: 0; }

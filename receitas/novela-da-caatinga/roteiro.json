@@ -1,0 +1,418 @@
+{
+ "_doc": "Cap. 1 'A Inauguração' com narração no estilo Peppa Pig: o narrador apresenta cada personagem ('Este é o Umbu. O Umbu nunca tem pressa.'), fala no presente, em frases curtas, com ironia seca; os personagens têm falas curtas. O Cesto não fala: só trompete (som/mixar.py). Cada fala é uma geração de TTS separada (preparar.py), com a ficha do personagem + a direção da fala.",
+ "titulo": "Novela da Caatinga · Cap. 1 · A Inauguração",
+ "saida": "cap01-a-inauguracao.mp4",
+ "rotulo": "Vozes geradas por IA (Gemini TTS) · personagens fictícios",
+ "tts": {
+  "provedor": "gemini",
+  "modelos": [
+   "gemini-3.8-flash-lite-tts"
+  ]
+ },
+ "tempos": {
+  "antes": 0.5,
+  "entre": 0.25,
+  "depois": 0.7,
+  "ritmo": 1.12
+ },
+ "elenco": {
+  "narrador": {
+   "voz": "Charon",
+   "perfil": "Narrador de desenho animado infantil para a família inteira, no estilo dos narradores de série pré-escolar britânica: voz grave e calorosa, frases curtas, sempre no presente, uma ironia seca e contida, como quem conta uma coisa óbvia com toda a seriedade do mundo. Brasileiro, sotaque nordestino leve e natural. Nunca exagerado, nunca teatral.",
+   "ritmo": 1.25
+  },
+  "maxixe": {
+   "voz": "Autonoe",
+   "perfil": "Personagem de desenho animado: Maxixe, vizinha fofoqueira da feira, mulher adulta do interior da Bahia, sotaque do semiárido baiano. Fala rápido, em cochicho urgente, como quem tem uma notícia que não pode esperar."
+  },
+  "quiabo": {
+   "voz": "Umbriel",
+   "perfil": "Personagem de desenho animado: Quiabo, vizinho da feira, homem adulto do interior da Bahia, sotaque do semiárido baiano. Fala arrastado, preguiçoso e desconfiado, comentários secos."
+  },
+  "dona_mandioca": {
+   "voz": "Gacrux",
+   "perfil": "Personagem de desenho animado: Dona Mandioca, matriarca da casa de farinha, mulher madura do interior da Bahia, sotaque do semiárido baiano. Voz encorpada, firme e carinhosa, ironia leve, pausas de quem manda."
+  },
+  "realcador": {
+   "voz": "Sadachbia",
+   "perfil": "Personagem de desenho animado: o Realçador, um sachê de tempero que fala como locutor de comercial de TV. Empolgadíssimo, rápido, quase sem respirar, sorriso de propaganda na voz. Português neutro de comercial, sem nenhum sotaque regional.",
+   "ritmo": 1.18
+  },
+  "umbu": {
+   "voz": "Algieba",
+   "perfil": "Personagem de desenho animado: Umbu, vendedor tranquilo da feira, homem adulto do interior da Bahia, sotaque do semiárido baiano. Voz grave e macia, lenta, um sorriso na voz; nunca levanta o tom.",
+   "ritmo": 1.0
+  },
+  "licuri": {
+   "voz": "Puck",
+   "perfil": "Personagem de desenho animado: Licuri, um coquinho adolescente, inseguro, do interior da Bahia, sotaque do semiárido baiano."
+  }
+ },
+ "cenas": [
+  {
+   "id": "acude",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "Este é o açude de Serra Pequena."
+    },
+    {
+     "quem": "narrador",
+     "texto": "Faz três meses que não chove.",
+     "pausa": 0.6
+    },
+    {
+     "quem": "narrador",
+     "texto": "Isso não é chuva.",
+     "pausa": 1.7,
+     "direcao": "seco, constatando o óbvio"
+    }
+   ],
+   "depois": 1.0,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.5
+   },
+   "sons": [
+    {
+     "id": "vento",
+     "t": 0,
+     "vol": 0.5,
+     "dur": "cena"
+    },
+    {
+     "id": "plof",
+     "fala": 2,
+     "ref": "ini",
+     "d": -0.9
+    },
+    {
+     "id": "trompete_grave",
+     "fala": 2,
+     "ref": "fim",
+     "d": 0.35
+    }
+   ]
+  },
+  {
+   "id": "titulo",
+   "falas": [],
+   "minimo": 2.8,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "vinheta",
+     "t": 0.15
+    }
+   ]
+  },
+  {
+   "id": "feira",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "Esta é a feira de sábado. A feira de sábado é sempre muito barulhenta."
+    },
+    {
+     "quem": "narrador",
+     "texto": "Hoje, não.",
+     "pausa": 1.2
+    },
+    {
+     "quem": "maxixe",
+     "texto": "Tu viu? Tu viu?!",
+     "pausa": 0.5,
+     "direcao": "cochicho urgente, afobada"
+    },
+    {
+     "quem": "quiabo",
+     "texto": "Vi o quê, criatura? Não tem nem freguês pra ver.",
+     "direcao": "preguiçoso, arrastado, sem levantar a cabeça"
+    },
+    {
+     "quem": "narrador",
+     "texto": "Estes são Maxixe e Quiabo. Eles sabem de tudo primeiro.",
+     "pausa": 0.5
+    }
+   ],
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "vento",
+     "t": 0,
+     "vol": 0.35,
+     "dur": "cena"
+    },
+    {
+     "id": "grilo",
+     "fala": 1,
+     "ref": "ini",
+     "d": -1.15
+    },
+    {
+     "id": "grilo",
+     "fala": 1,
+     "ref": "fim",
+     "d": 0.1
+    }
+   ]
+  },
+  {
+   "id": "mandioca",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "Esta é Dona Mandioca. Dona Mandioca é a dona da casa de farinha."
+    },
+    {
+     "quem": "dona_mandioca",
+     "texto": "Três meses sem chuva, e o único movimento aqui é o da poeira.",
+     "direcao": "cansada e irônica, se abanando"
+    }
+   ],
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "vento",
+     "t": 0,
+     "vol": 0.3,
+     "dur": "cena"
+    }
+   ]
+  },
+  {
+   "id": "cesto",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "E este é o Cesto."
+    },
+    {
+     "quem": "narrador",
+     "texto": "O Cesto não fala.",
+     "pausa": 1.1
+    },
+    {
+     "quem": "narrador",
+     "texto": "Mas todo mundo entende o Cesto.",
+     "pausa": 1.6
+    }
+   ],
+   "depois": 1.0,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "pouso",
+     "fala": 0,
+     "ref": "ini",
+     "d": 1.05
+    },
+    {
+     "id": "trompete_oi",
+     "fala": 1,
+     "ref": "fim",
+     "d": 0.2
+    },
+    {
+     "id": "trompete_comedia",
+     "fala": 2,
+     "ref": "fim",
+     "d": 0.3
+    }
+   ]
+  },
+  {
+   "id": "neon",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "De repente, do outro lado da praça, uma coisa acende.",
+     "pausa": 0.3
+    },
+    {
+     "quem": "realcador",
+     "texto": "Atenção, Serra Pequena! Cansou de descascar? De ralar? De esperar a chuva? É só abrir e pronto!",
+     "pausa": 1.3
+    },
+    {
+     "quem": "narrador",
+     "texto": "Este é o Realçador. O Realçador é um sachê de tempero. Ele adora dar amostra grátis.",
+     "pausa": 0.4
+    }
+   ],
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "neon",
+     "fala": 0,
+     "ref": "fim",
+     "d": 0.05
+    },
+    {
+     "id": "jingle",
+     "fala": 0,
+     "ref": "fim",
+     "d": 0.25
+    }
+   ]
+  },
+  {
+   "id": "fila",
+   "falas": [
+    {
+     "quem": "dona_mandioca",
+     "texto": "Vocês dois?!",
+     "pausa": 1.1,
+     "direcao": "indignada, alto, sem acreditar"
+    },
+    {
+     "quem": "quiabo",
+     "texto": "É grátis, Dona Mandioca!",
+     "direcao": "já correndo, animado pela primeira vez na vida"
+    },
+    {
+     "quem": "narrador",
+     "texto": "Todo mundo adora coisa grátis."
+    },
+    {
+     "quem": "umbu",
+     "texto": "Grátis hoje, né?",
+     "pausa": 0.5,
+     "direcao": "chegando devagar, calmo, desconfiado com um sorriso"
+    },
+    {
+     "quem": "narrador",
+     "texto": "Este é o Umbu. O Umbu nunca tem pressa."
+    }
+   ],
+   "depois": 1.6,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "passos",
+     "fala": 0,
+     "ref": "ini",
+     "d": -1.0
+    },
+    {
+     "id": "trompete_desconfianca",
+     "fala": 4,
+     "ref": "fim",
+     "d": 0.45
+    }
+   ]
+  },
+  {
+   "id": "licuri",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "Uma amostra cai bem nos pés do Licuri.",
+     "pausa": 0.8
+    },
+    {
+     "quem": "narrador",
+     "texto": "Licuri é um coquinho pequeno, de casca dura. Ele acha que ninguém repara nele."
+    },
+    {
+     "quem": "licuri",
+     "texto": "Brilha...",
+     "pausa": 0.6,
+     "direcao": "sussurro encantado, quase sem voz"
+    }
+   ],
+   "depois": 0.8,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "plof",
+     "fala": 0,
+     "ref": "ini",
+     "d": 1.5
+    },
+    {
+     "id": "brilho",
+     "fala": 2,
+     "ref": "ini",
+     "d": -0.45
+    }
+   ]
+  },
+  {
+   "id": "bolso",
+   "falas": [
+    {
+     "quem": "narrador",
+     "texto": "Licuri olha para um lado."
+    },
+    {
+     "quem": "narrador",
+     "texto": "Olha para o outro.",
+     "pausa": 0.5
+    },
+    {
+     "quem": "narrador",
+     "texto": "E guarda o sachê no bolso.",
+     "pausa": 0.5
+    },
+    {
+     "quem": "narrador",
+     "texto": "O Cesto viu.",
+     "pausa": 1.4,
+     "direcao": "baixinho, cúmplice"
+    }
+   ],
+   "depois": 2.6,
+   "transicao": {
+    "tipo": "funde",
+    "dur": 0.4
+   },
+   "sons": [
+    {
+     "id": "zip",
+     "fala": 2,
+     "ref": "ini",
+     "d": 1.05
+    },
+    {
+     "id": "trompete_suspensa",
+     "fala": 3,
+     "ref": "fim",
+     "d": 0.45
+    }
+   ]
+  },
+  {
+   "id": "assinatura",
+   "falas": [],
+   "minimo": 3.2,
+   "sons": [
+    {
+     "id": "vinheta",
+     "t": 0.3
+    }
+   ]
+  }
+ ]
+}

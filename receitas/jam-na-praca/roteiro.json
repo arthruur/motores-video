@@ -1,0 +1,411 @@
+{
+ "duracao": 36,
+ "fps": 30,
+ "batida": 0.45,
+ "conga": [
+  14.4,
+  28.8
+ ],
+ "tinta": [
+  29.9,
+  30.6,
+  0.62
+ ],
+ "palco": {
+  "ini": 3.6,
+  "fim": 7.2,
+  "cx": 0.47,
+  "zoom": [
+   3.75,
+   2.7
+  ]
+ },
+ "bebop": {
+  "ini": 14.4,
+  "fim": 28.8,
+  "compasso": 1.8,
+  "jornal": "JAM NA PRAÇA — palco aberto na Praça da Bandeira, Serrinha. Quem chega com o instrumento entra na roda. A banda base segura o groove, o condutor chama o tema e cada um tem a sua vez de solar. Ninguém sabe o que vai acontecer antes de acontecer. Não é show: é conversa. ",
+  "planos": [
+   {
+    "cor": "#1f5fb4",
+    "cor2": "#2b2c8f",
+    "luz": 1.05,
+    "rotulo": "saudade do",
+    "nome": "solo de conga",
+    "lugar": "cima",
+    "grande": true,
+    "contraste": 1.9
+   },
+   {
+    "cor": "#b3121f",
+    "cor2": "#7a0c18",
+    "luz": 1.6,
+    "rotulo": "na bateria",
+    "nome": "o groove",
+    "lugar": "baixo"
+   },
+   {
+    "cor": "#c9bd1c",
+    "cor2": "#8f8a12",
+    "luz": 1.5
+   },
+   {
+    "cor": "#14b39a",
+    "cor2": "#0c7a6a",
+    "luz": 2.2,
+    "rotulo": "no trompete",
+    "nome": "a resposta",
+    "lugar": "cima"
+   },
+   {
+    "cor": "#6b3fb8",
+    "cor2": "#3f2580",
+    "luz": 2.4,
+    "rotulo": "na flauta",
+    "nome": "o improviso",
+    "lugar": "baixo"
+   },
+   {
+    "cor": "#e2551c",
+    "cor2": "#a33a10",
+    "luz": 1.7,
+    "rotulo": "na guitarra",
+    "nome": "o sorriso",
+    "lugar": "cima"
+   },
+   {
+    "cor": "#c0309a",
+    "cor2": "#7e1c66",
+    "luz": 2.6,
+    "rotulo": "no palco",
+    "nome": "todo mundo",
+    "lugar": "cima"
+   },
+   {
+    "cor": "#2b2c8f",
+    "cor2": "#1f5fb4",
+    "luz": 1.9
+   }
+  ],
+  "aproxima": [
+   13.5,
+   0.9
+  ],
+  "cartao": {
+   "entra": [
+    13.95,
+    0.45
+   ],
+   "sai": [
+    15.75,
+    0.45
+   ],
+   "fenda": [
+    830,
+    1390
+   ]
+  },
+  "saida": [
+   27.9,
+   0.6
+  ]
+ },
+ "itens": [
+  {
+   "tipo": "texto",
+   "txt": "quem tá com saudade",
+   "x": 120,
+   "y": 840,
+   "tam": 96,
+   "rot": -4,
+   "ini": 0.35,
+   "dur": 1.05,
+   "fim": 3.6,
+   "som": "lapis",
+   "max": 780
+  },
+  {
+   "tipo": "texto",
+   "txt": "da Jam?",
+   "x": 270,
+   "y": 950,
+   "tam": 170,
+   "rot": -4,
+   "ini": 1.5,
+   "dur": 0.6,
+   "fim": 3.6,
+   "som": "lapis2"
+  },
+  {
+   "tipo": "traco",
+   "d": "M285,1170 C420,1130 600,1150 790,1105",
+   "cor": "ciano",
+   "larg": 14,
+   "ini": 2.15,
+   "dur": 0.3,
+   "fim": 3.6
+  },
+  {
+   "tipo": "nota",
+   "x": 840,
+   "y": 820,
+   "s": 1.1,
+   "ini": 2.7,
+   "fim": 3.6,
+   "som": "carimbo"
+  },
+  {
+   "tipo": "nota",
+   "x": 190,
+   "y": 760,
+   "s": 0.85,
+   "ini": 3.15,
+   "fim": 3.6,
+   "som": "carimbo"
+  },
+  {
+   "tipo": "texto",
+   "txt": "do palco aberto",
+   "x": 130,
+   "y": 330,
+   "tam": 120,
+   "rot": -3,
+   "ini": 3.75,
+   "dur": 0.8,
+   "fim": 7.2,
+   "som": "lapis3",
+   "max": 800
+  },
+  {
+   "tipo": "luzes",
+   "de": [
+    [
+     170,
+     560
+    ],
+    [
+     910,
+     560
+    ]
+   ],
+   "para": [
+    540,
+    1150
+   ],
+   "ini": 5.0,
+   "fim": 7.2,
+   "som": "vento"
+  },
+  {
+   "tipo": "bandeirinhas",
+   "de": [
+    30,
+    640
+   ],
+   "ate": [
+    1050,
+    640
+   ],
+   "flecha": 70,
+   "n": 15,
+   "ini": 4.6,
+   "fim": 7.2,
+   "som": "papel"
+  },
+  {
+   "tipo": "texto",
+   "txt": "saudade…",
+   "x": 140,
+   "y": 320,
+   "tam": 84,
+   "rot": -3,
+   "ini": 7.25,
+   "dur": 0.4,
+   "fim": 14.1,
+   "som": "lapis"
+  },
+  {
+   "tipo": "texto",
+   "txt": "da viola",
+   "x": 150,
+   "y": 410,
+   "tam": 160,
+   "rot": -4,
+   "carimbo": true,
+   "ini": 7.45,
+   "fim": 9.0,
+   "som": "carimbao",
+   "icone": "viola"
+  },
+  {
+   "tipo": "texto",
+   "txt": "do trompete",
+   "x": 150,
+   "y": 410,
+   "tam": 160,
+   "rot": -4,
+   "carimbo": true,
+   "ini": 9.05,
+   "fim": 10.8,
+   "som": "carimbao",
+   "icone": "trompete"
+  },
+  {
+   "tipo": "texto",
+   "txt": "da flauta",
+   "x": 150,
+   "y": 410,
+   "tam": 160,
+   "rot": -4,
+   "carimbo": true,
+   "ini": 10.85,
+   "fim": 12.6,
+   "som": "carimbao",
+   "icone": "flauta"
+  },
+  {
+   "tipo": "texto",
+   "txt": "da praça cheia",
+   "x": 150,
+   "y": 410,
+   "tam": 160,
+   "rot": -4,
+   "carimbo": true,
+   "ini": 12.65,
+   "fim": 14.1,
+   "som": "carimbao",
+   "max": 800
+  },
+  {
+   "tipo": "brilho",
+   "pts": [
+    [
+     315,
+     384
+    ],
+    [
+     480,
+     555
+    ],
+    [
+     600,
+     675
+    ],
+    [
+     705,
+     795
+    ],
+    [
+     800,
+     845
+    ],
+    [
+     905,
+     872
+    ],
+    [
+     995,
+     900
+    ]
+   ],
+   "ini": 12.9,
+   "fim": 14.1,
+   "som": "triangulo"
+  },
+  {
+   "tipo": "som",
+   "ini": 13.85,
+   "fim": 13.9,
+   "som": "ventos"
+  },
+  {
+   "tipo": "som",
+   "ini": 15.7,
+   "fim": 15.75,
+   "som": "vento2"
+  },
+  {
+   "tipo": "som",
+   "ini": 27.85,
+   "fim": 27.9,
+   "som": "ventos"
+  },
+  {
+   "tipo": "texto",
+   "txt": "a gente também.",
+   "x": 540,
+   "y": 880,
+   "tam": 140,
+   "rot": -4,
+   "centro": true,
+   "ini": 28.95,
+   "dur": 0.85,
+   "fim": 30.25,
+   "som": "lapis",
+   "max": 820
+  },
+  {
+   "tipo": "logo",
+   "x": 500,
+   "y": 640,
+   "larg": 720,
+   "ini": 30.3,
+   "fim": 36,
+   "som": "carimbao"
+  },
+  {
+   "tipo": "nota",
+   "x": 170,
+   "y": 360,
+   "s": 1.0,
+   "ini": 30.75,
+   "fim": 36,
+   "som": "carimbo"
+  },
+  {
+   "tipo": "nota",
+   "x": 830,
+   "y": 930,
+   "s": 0.9,
+   "ini": 31.2,
+   "fim": 36,
+   "som": "carimbo"
+  },
+  {
+   "tipo": "texto",
+   "txt": "aguarde a próxima data",
+   "x": 500,
+   "y": 1000,
+   "tam": 92,
+   "rot": -3,
+   "centro": true,
+   "ini": 31.25,
+   "dur": 0.9,
+   "fim": 36,
+   "som": "lapis",
+   "max": 760
+  },
+  {
+   "tipo": "texto",
+   "txt": "Praça da Bandeira · Serrinha-BA",
+   "x": 500,
+   "y": 1095,
+   "tam": 64,
+   "rot": -2,
+   "centro": true,
+   "cor": "ciano",
+   "ini": 32.2,
+   "dur": 0.8,
+   "fim": 36,
+   "som": "lapis2",
+   "max": 700
+  },
+  {
+   "tipo": "rodape",
+   "txt": "Realização: Bistrô 153 · @jammnapraca",
+   "y": 1185,
+   "ini": 33.0,
+   "fim": 36
+  }
+ ]
+}
