@@ -119,6 +119,20 @@ Cada capítulo tem de 60 a 90 segundos, funciona sozinho e termina com gancho, p
 
 Os roteiros abaixo seguem a forma de leitura humana; a conversão para esse formato pode ser o primeiro teste do motor (feito para o cap. 1 em [`cap01-inauguracao.json`](cap01-inauguracao.json)).
 
+## Abertura da série: um episódio por personagem (proposta, 2026-11-07)
+
+> **Nome.** O cesto se chama **Mangaio**. Esta bíblia ainda escreve "Cesto" em vários lugares; em texto novo, legenda e vídeo, use Mangaio. Os ids de arquivo (`cesto`) ficam até uma troca combinada com o motor.
+
+Antes do arco 1, a série se apresenta em episódios curtos, **um por personagem**. Isso cabe no formato de novela curta, porque cada um funciona sozinho:
+
+| Ep. | Quem/o quê | Ideia |
+|---|---|---|
+| 1 | **Serra Pequena e o Mangaio** | A feira de sábado e a cidade se apresentam; o Mangaio quica pela feira e é o fio que liga tudo |
+| 2 | Dona Mandioca | A casa de farinha e a matriarca |
+| 3… | Um por personagem do elenco | Na ordem da fase 3 de `arte/README.md` |
+
+Cada personagem também ganha um **vídeo de demonstração de animação** (fora da série), que condensa o model sheet e mostra o que o rig consegue fazer. Os dois primeiros, do Mangaio e da Dona Mandioca, ficam em [`demos/`](demos/).
+
 ## Temporada 1: "O Sachê Chegou"
 
 São 16 capítulos em 4 arcos que acompanham um ciclo do sertão, da estiagem à festa da colheita. A temporada prova a premissa: Licuri e Seu Caju trocam a feira pelo sachê e descobrem o que perderam.

@@ -1,0 +1,1 @@
+[{"command":"select.all"},{"command":"imageTrace.makeAndExpand","params":{"params":{"mode":"color","palette":"limited","colors":21,"paths":70,"corners":40,"noise":20,"method":"abutting","ignoreWhite":false}}},{"command":"file.saveAs","params":{"path":"trace34.svg"}}]

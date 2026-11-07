@@ -1,4 +1,4 @@
-# O Cesto · bíblia do personagem
+# O Mangaio (o cesto) · bíblia do personagem
 
 **Tipo:** guardião · **Altura:** 1,0 cesto (a unidade da série) · **Rampas:** `palha_cesto`, `folha`, `tomate`, `laranja` · **Arquivo-fonte:** `../../mascote.svg`
 
@@ -36,23 +36,42 @@ Trapézio arredondado (boca mais larga que o fundo) + arco da alça + montanha d
 ## Model sheet pedido
 Folha v0: [`../folhas/cesto-folha.png`](../folhas/cesto-folha.png), gerada por [`../folhas/cesto_folha.py`](../folhas/cesto_folha.py) a partir do `mascote.svg` (fonte editável no VectorCraft: `../fonte/cesto-folha.vectorcraft`, uma prancheta por seção; variações avulsas em `../banco/cesto/`).
 
-- [ ] Turnaround de 5 vistas. Frente ✅ (oficial) · costas: rascunho espelhado · **3/4, perfil e de cima: gerar no GPT** ([`../referencias/cesto/prompts.md`](../referencias/cesto/prompts.md)) e vetorizar no VectorCraft
-- [x] Folha de expressões de **olhos + braços** (v0): desconfiado, assustado, triste, encantado, decidido, rindo, envergonhado, "não vai". Falta aprovar
-- [ ] Poses do repertório: quique (antecipação, ar, pouso) e carregar_tudo na v0; **apontar, dança, pegar dependem do braço levantado** (peça nova, prompt 3)
-- [x] Estados de conteúdo: cheio, pouco, vazio, transbordando (v0). Falta `entrega` e `+ palha_licuri`
-- [ ] Cesto visto **de cima** (cap. 14, estrada) e **de costas** (saindo de cena)
+- [x] Turnaround: frente ✅ (oficial) · **3/4, perfil e costas v2** montados à mão com as peças oficiais em [`cesto_folha.py`](../folhas/cesto_folha.py) (`tres_quartos`, `perfil`, `costas` → `banco/cesto/cesto-*.svg`, raiz `mangaio` com `data-vista`). A v1 rastreada do Qwen reprovou na revisão e ficou como rascunho em `referencias/cesto/teste-qwen/rastreio-v1-*.svg` · falta **de cima** (refazer com câmera levemente de cima, `将镜头向上移动`)
+- [x] Folha de expressões de **olhos + braços** (v1): desconfiado, assustado, triste, encantado, decidido, rindo, envergonhado, "não vai". Falta aprovar
+- [x] Poses do repertório: antecipação, no ar, pouso, carregar_tudo, **apontar**, **dança** (com os braços novos). Falta `pegar`
+- [x] Estados de conteúdo: cheio, pouco, vazio, transbordando. Falta `entrega` e `+ palha_licuri`
+- [x] **Rig para o motor:** [`../banco/cesto/mangaio-rig.svg`](../banco/cesto/mangaio-rig.svg), todas as peças trocáveis com ids estáveis (lista no topo do arquivo). v2: braço gira o grupo `.giro` com (0,0) no ombro; grupo `sombra`
+- [x] **Teste de movimento:** demo [`../../demos/mangaio/`](../../demos/mangaio/) → `saida/novela-da-caatinga/demo-mangaio.mp4` (quique, virada, expressões, conteúdo, xote)
+- [x] Lineup de silhuetas das vistas e das poses com braço novo (seção "Silhuetas" da folha)
+- [ ] Mangaio visto **de cima** (cap. 14, estrada)
 - [ ] Detalhe: close (trançado completo), médio, geral
 
-### Peças novas da v0 (a aprovar)
+Folha v2: [`../folhas/cesto-folha.png`](../folhas/cesto-folha.png), gerada por [`../folhas/cesto_folha.py`](../folhas/cesto_folha.py) (`--vectorcraft` refaz o `.vectorcraft`, uma prancheta por seção, e o PNG). Seções: vistas, expressões, conteúdo, quique e poses, silhuetas, braços.
+
+### Peças novas (a aprovar)
 | Peça | O que é | Usado em |
 |---|---|---|
 | Olho `meia` | Pálpebra reta por cima | desconfiado, antecipação |
 | Olho `triste` / `decidido` | Pálpebra inclinada para fora / para dentro | triste, vazio / decidido |
-| Olho `arco` | `^` fechado feliz | rindo, pouso |
+| Olho `arco` | `^` fechado feliz | rindo, pouso, carregar_tudo, dança |
 | Olho `fechado` | Linha apertada | "não vai" |
+| Olho `grande` / `pequeno` | O oval oficial a 125% / 85% | assustado, encantado / envergonhado |
 | Bocas `o`, `o_pequeno`, `triste`, `firme`, `torta`, `ondulada`, `reta`, `sorriso_fechado` | Formas cheias `#462416`, interior `#C5441E` | expressões |
 | Bochecha | Mancha `tomate.luz` a 55% | encantado, envergonhado |
 | `interior` | Fundo do cesto e borda de trás em `palha_cesto` meio/sombra/profunda | vazio, pouco |
+| Braço `alto` (v2) | Antebraço curto e grosso, luva redonda acima do ombro, aberta para fora, com polegar ([`mangaio_bracos.py`](../folhas/mangaio_bracos.py)) | assustado, encantado, no ar, dança, aceno |
+| Braço `aponta` (v2) | Estica de lado, luva mais estreita com polegar para cima | apontar, "não vai" |
+| Braço `segura` (v2) | Sobe e a luva vira para dentro, palma para cima, na borda | carregar_tudo |
+| Braço `punho` (v2) | Curto, luva fechada e redonda | decidido |
+
+Os braços v2 seguem as medidas do oficial: ombro → luva ≤ 1,2× o oficial, antebraço de ~60 px, luva de ~100 × 90 px (a do oficial tem ~95). Cor: base `#E49340` e borda `#B0581E` do braço oficial (registradas em `paleta.json` como `palha_braco`), a borda como meia-lua do lado de dentro/de baixo. O da esquerda é o espelho do da direita.
+
+### Rig: convenções do Mangaio (exceções ao `animacao.md` §2)
+- **Pivô do braço:** cada peça é `g#braco-LADO-PECA[transform=translate(ombro)] > g.giro > formas`. O motor gira **só o `.giro`** (atributo `transform="rotate(a)"` no dir, `rotate(-a)` no esq); o (0,0) dele é o ombro real (`OMBRO` em `mangaio_bracos.py`: dir 490,446 · esq 46,452). Girar o `braco-*` com `transform-box: fill-box` (como o `cena.js` do cap. 1 faz no `mascote.svg`) solta o braço do corpo quando a peça muda de tamanho: foi a falha da v1.
+- **Formato do pivô:** `data-pivo="x y"` (coords do mascote) no grupo, em vez do círculo `pivo`. Têm pivô: `mangaio`, `sombra`, `rosto`, `boca`, `olho-*`, `braco-*` e cada peça de braço.
+- **Ids com lado:** `olho-esq-oval`, `braco-dir-alto` etc., porque o id tem que ser único no SVG.
+- **Bocas expressivas** (`boca-aberta`, `boca-o`, `boca-torta`…) no lugar dos visemas `boca-A`…: ele não fala.
+- O `cena.js` do cap. 1 continua usando o `mascote.svg` com o pivô antigo (só gira o braço oficial até ~60°, onde funciona). Ao trocar o cap. 1 para o rig, usar o `.giro`.
 
 ## Atuação e movimento
 - **Quica**, não anda. Squash na chegada, stretch na subida. O conteúdo sacode atrasado (*follow-through*).
@@ -84,4 +103,14 @@ same weave, same face, same proportions. Do not redesign it.
 | 2026-11-07 | O Cesto é a âncora de estilo de toda a série | É marca do Mangaio e já tem o acabamento-alvo |
 | 2026-11-07 | Folha v0 por recombinação do `mascote.svg`, sem redesenho | O design é travado; só se acrescentam peças (olhos, bocas, interior) |
 | 2026-11-07 | Braço oficial gira no máximo ~60° | Acima disso a patinha vira "orelha". Pose com braço alto pede peça nova |
+| 2026-11-07 | Nome visível do mascote: **Mangaio** (arquivos e ids `cesto` ficam) | Pedido do dono da marca; o motor depende dos ids |
+| 2026-11-07 | Braço alto = **peça nova** (`alto`, `aponta`, `segura`, `punho`), não o oficial girado | Girado >60° o oficial vira orelha; as peças novas copiam cor e borda do oficial |
+| 2026-11-07 | Vistas 3/4 e perfil: Qwen → VectorCraft → cores travadas na paleta, manchinhas fora, rosto redesenhado com as formas do mascote | O rastreio não separa olho/boca; redesenhar mantém o rosto idêntico à frente |
+| 2026-11-07 | Perfil: o braço de perto é redesenhado (patinha "feijão") | No rastreio ele se fundia ao corpo |
+| 2026-11-07 | Costas: braços passam para trás do corpo | De costas só se vê a curva de fora da patinha; o espelho puro parecia a frente sem rosto |
+| 2026-11-07 | De cima: adiado | Cota diária de GPU do Qwen esgotou antes da geração; a de `俯视` virou 3D realista |
+| 2026-11-07 | Revisão de arte da v1 reprovada: braços novos refeitos (v2) a partir das medidas do oficial; pivô no ombro via `.giro` | `alto`/`aponta`/`segura` eram remo, bastão e bengala; o braço alto soltava do corpo no giro |
+| 2026-11-07 | Vistas 3/4, perfil e costas v2 **montadas à mão** com as peças oficiais (cut-out), não rastreadas | O perfil rastreado mudou as frutas e cortou o rosto; o 3/4 ficou manchado. Recombinar mantém a marca idêntica |
+| 2026-11-07 | Costas: frutas atrás da borda de trás, braços atrás do corpo (só a luva aparece) | Para não parecer a frente sem rosto |
+| 2026-11-07 | Cores do braço oficial registradas como `palha_braco` na paleta | O portão pede rampa registrada; não se trocam as cores da marca |
 | 2026-11-07 | Sobrancelha: o Cesto não usa | Expressões da v0 leram só com pálpebra e boca (ARTE.md §6: então ninguém usa como neutra) |

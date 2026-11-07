@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mangaio · demo de animação</title>
+<style>
+  @font-face { font-family: 'Caveat Brush'; src: url('../../fontes/CaveatBrush-Regular.ttf'); }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #E1C89F; }
+  #fundo { position: absolute; inset: 0; background: url('../../texturas/kraft.jpg'); }
+  /* luz de cena (permitido: gradiente só em luz): sol quente de cima, cantos mais escuros */
+  #luz { position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 55% at 50% 52%, rgba(255, 236, 196, .38), rgba(255, 236, 196, 0) 70%),
+                radial-gradient(ellipse 120% 90% at 50% 50%, rgba(122, 83, 46, 0) 55%, rgba(122, 83, 46, .30) 100%); }
+  #palco { position: absolute; inset: 0; }
+  .letra { position: absolute; font-family: 'Caveat Brush', cursive; color: #462416; white-space: nowrap; }
+  #nome { left: 0; width: 1080px; top: 292px; text-align: center; font-size: 190px; line-height: 1; }
+  #nome .tinta { display: inline-block; }
+  #nome svg { display: block; margin: -10px auto 0; }
+  #sub { left: 0; width: 1080px; top: 522px; text-align: center; font-size: 48px; color: #8F4523; }
+  #rotulo { left: 132px; top: 300px; }
+  #rotulo .sec { font-size: 36px; color: #AF561E; display: block; }
+  #rotulo .item { font-size: 64px; display: block; margin-top: -6px; }
+  #grao { position: absolute; inset: 0; background: url('../../texturas/grao.png'); opacity: .09; mix-blend-mode: multiply; }
+</style>
+</head>
+<body>
+<div id="fundo"></div>
+<div id="luz"></div>
+<div id="rotulo" class="letra"><span class="sec"></span><span class="item"></span></div>
+<svg id="palco" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <g id="poeira"></g>
+  <g id="cam">
+    <g id="sombra-chao"><path d="M-230 0C-230-26 230-26 230 0C230 26-230 26-230 0Z" fill="#7A532E"/></g>
+    <g id="ator"></g>
+    <g id="brilhos"></g>
+  </g>
+</svg>
+<div id="nome" class="letra"><span class="tinta">Mangaio</span>
+  <svg width="560" height="40" viewBox="0 0 560 40"><path d="M8 24C90 10 210 8 300 12C390 15 470 12 552 6C556 14 548 22 540 22C450 26 360 30 270 28C180 27 90 30 18 36C6 37 2 28 8 24Z" fill="#C5441E"/></svg>
+</div>
+<div id="sub" class="letra"></div>
+<div id="grao"></div>
+<script src="cena.js"></script>
+</body>
+</html>
