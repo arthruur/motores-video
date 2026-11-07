@@ -36,7 +36,7 @@ Atualize a cada entrega. Estados: `—` não começou · `explorando` · `design
 
 | Asset | Design | Model sheet | Vetor | Rig | Teste |
 |---|---|---|---|---|---|
-| Cesto | ✅ (marca) | — | ✅ frente | parcial (olhos, braços) | — |
+| Cesto | ✅ (marca) | v0 (expressões, conteúdo, quique; faltam 3/4, perfil, de cima) | ✅ frente | parcial (olhos, braços) | — |
 | Dona Mandioca | — | — | — | — | — |
 | Licuri | — | — | — | — | — |
 | Realçador | — | — | — | — | — |

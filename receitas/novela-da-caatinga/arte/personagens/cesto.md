@@ -34,12 +34,25 @@ Trapézio arredondado (boca mais larga que o fundo) + arco da alça + montanha d
 | `+ palha_licuri` | Do cap. 2 em diante | Um pedacinho de palha sempre visível na lateral |
 
 ## Model sheet pedido
-- [ ] Turnaround de 5 vistas. O 3/4 e o perfil são a peça mais difícil: o trançado precisa seguir a curvatura.
-- [ ] Folha de expressões só de **olhos + braços** (ele não fala): desconfiado, assustado, triste, encantado, decidido, rindo, envergonhado, "não vai".
-- [ ] Poses do repertório (`../animacao.md#repertorio-do-cesto`): quicar (antecipação, ar, pouso), apontar, carregar_tudo, murchar, dança, pegar.
-- [ ] Estados de conteúdo (tabela acima).
-- [ ] Cesto visto **de cima** (cap. 14, estrada) e **de costas** (saindo de cena).
-- [ ] Detalhe: close (trançado completo), médio, geral.
+Folha v0: [`../folhas/cesto-folha.png`](../folhas/cesto-folha.png), gerada por [`../folhas/cesto_folha.py`](../folhas/cesto_folha.py) a partir do `mascote.svg` (fonte editável no VectorCraft: `../fonte/cesto-folha.vectorcraft`, uma prancheta por seção; variações avulsas em `../banco/cesto/`).
+
+- [ ] Turnaround de 5 vistas. Frente ✅ (oficial) · costas: rascunho espelhado · **3/4, perfil e de cima: gerar no GPT** ([`../referencias/cesto/prompts.md`](../referencias/cesto/prompts.md)) e vetorizar no VectorCraft
+- [x] Folha de expressões de **olhos + braços** (v0): desconfiado, assustado, triste, encantado, decidido, rindo, envergonhado, "não vai". Falta aprovar
+- [ ] Poses do repertório: quique (antecipação, ar, pouso) e carregar_tudo na v0; **apontar, dança, pegar dependem do braço levantado** (peça nova, prompt 3)
+- [x] Estados de conteúdo: cheio, pouco, vazio, transbordando (v0). Falta `entrega` e `+ palha_licuri`
+- [ ] Cesto visto **de cima** (cap. 14, estrada) e **de costas** (saindo de cena)
+- [ ] Detalhe: close (trançado completo), médio, geral
+
+### Peças novas da v0 (a aprovar)
+| Peça | O que é | Usado em |
+|---|---|---|
+| Olho `meia` | Pálpebra reta por cima | desconfiado, antecipação |
+| Olho `triste` / `decidido` | Pálpebra inclinada para fora / para dentro | triste, vazio / decidido |
+| Olho `arco` | `^` fechado feliz | rindo, pouso |
+| Olho `fechado` | Linha apertada | "não vai" |
+| Bocas `o`, `o_pequeno`, `triste`, `firme`, `torta`, `ondulada`, `reta`, `sorriso_fechado` | Formas cheias `#462416`, interior `#C5441E` | expressões |
+| Bochecha | Mancha `tomate.luz` a 55% | encantado, envergonhado |
+| `interior` | Fundo do cesto e borda de trás em `palha_cesto` meio/sombra/profunda | vazio, pouco |
 
 ## Atuação e movimento
 - **Quica**, não anda. Squash na chegada, stretch na subida. O conteúdo sacode atrasado (*follow-through*).
@@ -69,3 +82,6 @@ same weave, same face, same proportions. Do not redesign it.
 | Data | Decisão | Por quê |
 |---|---|---|
 | 2026-11-07 | O Cesto é a âncora de estilo de toda a série | É marca do Mangaio e já tem o acabamento-alvo |
+| 2026-11-07 | Folha v0 por recombinação do `mascote.svg`, sem redesenho | O design é travado; só se acrescentam peças (olhos, bocas, interior) |
+| 2026-11-07 | Braço oficial gira no máximo ~60° | Acima disso a patinha vira "orelha". Pose com braço alto pede peça nova |
+| 2026-11-07 | Sobrancelha: o Cesto não usa | Expressões da v0 leram só com pálpebra e boca (ARTE.md §6: então ninguém usa como neutra) |
