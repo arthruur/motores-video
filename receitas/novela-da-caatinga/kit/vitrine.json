@@ -1,0 +1,492 @@
+{
+  "serie": "novela-da-caatinga",
+  "capitulo": 1,
+  "titulo": "Vitrine Oficial do Kit de Animação",
+  "subtitulo": "Cenários em Paralaxe, 11 Efeitos Vetoriais e Áudio Determinístico",
+  "arco": "estiagem",
+  "saida": "vitrine.mp4",
+  "fps": 30,
+  "largura": 1080,
+  "altura": 1920,
+  "duracao": 48.0,
+  "acude": 0.18,
+  "rotulo": "Animação e áudio sintéticos determinísticos · Novela da Caatinga",
+  "cenas": [
+    {
+      "id": "feira_acordando",
+      "titulo_secao": "1. A Feira Acordando",
+      "bloco": "abertura",
+      "lugar": "feira",
+      "luz": "feira_dia",
+      "dur": 8.0,
+      "acude": 0.22,
+      "ambiencia": { "id": "amb_feira", "vol": 0.35 },
+      "camera": [
+        { "tipo": "pan", "t": 0.0, "dur": 4.2, "de": [-95, 0], "para": [0, 0], "zoom": 1.04 },
+        { "tipo": "tremida", "t": 2.1, "dur": 0.35, "intensidade": 12, "semente": 4 },
+        { "tipo": "push_in", "t": 4.2, "dur": 3.8, "zoomDe": 1.04, "zoomPara": 1.12, "foco": [540, 1120] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "sol", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["umbuzeiro", "bancas_feira"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "caixotes"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["folhas_caindo"] }
+      },
+      "marcadores": [
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 275, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
+        { "id": "umbu", "tipo": "oval", "x": 815, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+      ],
+      "falas": [
+        {
+          "quem": "narrador",
+          "texto": "Em Serra Pequena, a feira acorda junto com o sol.",
+          "ini": 0.55,
+          "dur": 3.10
+        },
+        {
+          "quem": "dona_mandioca",
+          "texto": "Bora, meu povo, que o Mangaio já chegou!",
+          "ini": 4.10,
+          "dur": 3.10
+        }
+      ],
+      "deixas": [
+        {
+          "id": "galo_manha",
+          "t": 0.15,
+          "camada": "meio",
+          "pos": [540, 1080],
+          "efeito": { "id": "mormaco", "dur": 3.6, "escala": 1.0, "semente": 2 },
+          "som": { "id": "galo_caatinga", "vol": 0.78 }
+        },
+        {
+          "id": "pouso_mangaio_1",
+          "t": 2.05,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "quicar", "dur": 0.85, "params": { "altura": 195 } },
+          "efeito": { "id": "poeira_pouso", "dur": 0.80, "escala": 1.25, "semente": 5 },
+          "som": { "id": "pouso_cheio", "vol": 0.92 }
+        },
+        {
+          "id": "oi_mangaio_1",
+          "t": 3.05,
+          "camada": "frente",
+          "pos": [540, 1020],
+          "acao": { "alvo": "mangaio", "movimento": "pegar", "dur": 0.85 },
+          "efeito": { "id": "brilho_plim", "dur": 0.75, "escala": 1.15, "semente": 8 },
+          "som": { "id": "trompete_oi", "vol": 0.88 }
+        },
+        {
+          "id": "passo_mandioca_1",
+          "t": 4.25,
+          "camada": "frente",
+          "pos": [275, 1195],
+          "acao": { "alvo": "dona_mandioca", "movimento": "abanar", "dur": 1.2 },
+          "efeito": { "id": "poeira_passo", "dur": 0.65, "escala": 1.1, "semente": 11, "params": { "direcao": -1 } },
+          "som": { "id": "passo_pesado", "vol": 0.82 }
+        },
+        {
+          "id": "brisa_folhas_1",
+          "t": 5.30,
+          "camada": "frente_sobreposta",
+          "pos": [540, 620],
+          "acao": { "alvo": "mangaio", "movimento": "quicar", "dur": 0.70, "params": { "altura": 110 } },
+          "efeito": { "id": "folhas_caindo", "dur": 2.40, "escala": 1.0, "semente": 14 },
+          "som": { "id": "sacolejo_frutas", "vol": 0.80 }
+        },
+        {
+          "id": "whoosh_saida_1",
+          "t": 7.55,
+          "camada": "frente",
+          "pos": [540, 1100],
+          "som": { "id": "whoosh_camera", "vol": 0.85 }
+        }
+      ],
+      "transicao": { "tipo": "chicote", "dur": 0.45, "direcao": "esq" }
+    },
+    {
+      "id": "casa_farinha_fofoca",
+      "titulo_secao": "2. Fumaça e Susto na Casa de Farinha",
+      "bloco": "desenvolvimento",
+      "lugar": "casa_farinha",
+      "luz": "fim_de_tarde",
+      "dur": 8.0,
+      "ambiencia": { "id": "amb_casa_farinha", "vol": 0.36 },
+      "camera": [
+        { "tipo": "pan", "t": 0.0, "dur": 4.5, "de": [75, 0], "para": [-15, 0], "zoom": 1.03 },
+        { "tipo": "tremida", "t": 3.4, "dur": 0.30, "intensidade": 10, "semente": 9 }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "sol"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["forno_barro", "roda_prensa"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "sacos_farinha"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [
+        { "id": "maxixe", "tipo": "oval", "x": 310, "y": 1205, "escala": 0.55, "rotulo": "Maxixe" },
+        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 0.95 },
+        { "id": "quiabo", "tipo": "coluna", "x": 790, "y": 1200, "escala": 1.15, "rotulo": "Quiabo" }
+      ],
+      "falas": [
+        {
+          "quem": "maxixe",
+          "texto": "Tu viu a fumaça subindo lá do forno?!",
+          "ini": 0.65,
+          "dur": 2.85
+        },
+        {
+          "quem": "quiabo",
+          "texto": "Calma, criatura, é farinha torrando no capricho!",
+          "ini": 4.05,
+          "dur": 3.25
+        }
+      ],
+      "deixas": [
+        {
+          "id": "porta_e_fumaca",
+          "t": 0.20,
+          "camada": "meio",
+          "pos": [710, 810],
+          "efeito": { "id": "fumaca_farinha", "dur": 3.80, "escala": 1.2, "semente": 19 },
+          "som": { "id": "porta_madeira", "vol": 0.82 }
+        },
+        {
+          "id": "passinho_maxixe",
+          "t": 1.40,
+          "camada": "frente",
+          "pos": [310, 1205],
+          "acao": { "alvo": "maxixe", "movimento": "saltar", "dur": 0.60, "params": { "altura": 85 } },
+          "efeito": { "id": "poeira_passo", "dur": 0.55, "escala": 0.95, "semente": 21, "params": { "direcao": 1 } },
+          "som": { "id": "passo_leve", "vol": 0.80 }
+        },
+        {
+          "id": "susto_colher",
+          "t": 3.35,
+          "camada": "frente",
+          "pos": [540, 980],
+          "acao": { "alvo": "mangaio", "movimento": "tremer", "dur": 0.75 },
+          "efeito": { "id": "linhas_susto", "dur": 0.65, "escala": 1.15, "semente": 25 },
+          "som": { "id": "toc_colher", "vol": 0.88 }
+        },
+        {
+          "id": "suor_quiabo",
+          "t": 4.45,
+          "camada": "frente",
+          "pos": [790, 960],
+          "efeito": { "id": "gota_nervoso", "dur": 0.85, "escala": 1.1, "semente": 29 },
+          "som": { "id": "gota_suor", "vol": 0.82 }
+        },
+        {
+          "id": "risada_trompete",
+          "t": 5.85,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "quicar", "dur": 0.75, "params": { "altura": 130 } },
+          "efeito": { "id": "poeira_pouso", "dur": 0.70, "escala": 1.0, "semente": 31 },
+          "som": { "id": "trompete_comedia", "vol": 0.88 }
+        }
+      ],
+      "transicao": { "tipo": "corte", "dur": 0 }
+    },
+    {
+      "id": "invasao_mercadinho",
+      "titulo_secao": "3. O Néon Frio do Mercadinho Sabor Já",
+      "bloco": "conflito",
+      "lugar": "mercadinho",
+      "luz": "mercadinho",
+      "dur": 8.0,
+      "ambiencia": { "id": "amb_feira", "vol": 0.25 },
+      "camera": [
+        { "tipo": "chicote", "t": 0.0, "dur": 0.55, "de": [220, 0], "para": [0, 0], "direcao": "esq" },
+        { "tipo": "push_in", "t": 0.6, "dur": 7.0, "zoomDe": 1.0, "zoomPara": 1.14, "foco": [540, 1080] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "serra"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["fachada_mercadinho", "prateleiras_saches"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [
+        { "id": "mangaio", "tipo": "cesto", "x": 270, "y": 1220, "escala": 0.95 },
+        { "id": "realcador", "tipo": "triangulo", "x": 560, "y": 1205, "escala": 1.10, "rotulo": "Realçador" },
+        { "id": "umbu", "tipo": "oval", "x": 830, "y": 1205, "escala": 0.75, "rotulo": "Umbu" }
+      ],
+      "falas": [
+        {
+          "quem": "realcador",
+          "texto": "Chegou o Sabor Já! É só abrir o sachê e pronto!",
+          "ini": 0.70,
+          "dur": 3.30
+        },
+        {
+          "quem": "umbu",
+          "texto": "Brilho de plástico não cria raiz no sertão, visse?",
+          "ini": 4.35,
+          "dur": 3.10
+        }
+      ],
+      "deixas": [
+        {
+          "id": "letreiro_neon_pisca",
+          "t": 0.15,
+          "camada": "meio",
+          "pos": [540, 520],
+          "efeito": { "id": "neon_mercadinho", "dur": 3.60, "escala": 1.0, "semente": 37 },
+          "som": { "id": "zumbido_neon", "vol": 0.84 }
+        },
+        {
+          "id": "olhar_desconfiado_cesto",
+          "t": 2.60,
+          "camada": "frente",
+          "pos": [270, 1020],
+          "acao": { "alvo": "mangaio", "movimento": "olhar", "dur": 1.10, "params": { "direcao": "dir" } },
+          "efeito": { "id": "gota_nervoso", "dur": 0.80, "escala": 1.0, "semente": 41 },
+          "som": { "id": "trompete_desconfianca", "vol": 0.88 }
+        },
+        {
+          "id": "aviso_nao_vai",
+          "t": 5.60,
+          "camada": "frente",
+          "pos": [270, 1040],
+          "acao": { "alvo": "mangaio", "movimento": "apontar", "dur": 1.10, "params": { "direcao": "dir" } },
+          "efeito": { "id": "linhas_susto", "dur": 0.65, "escala": 1.0, "semente": 43 },
+          "som": { "id": "trompete_nao_vai", "vol": 0.88 }
+        },
+        {
+          "id": "whoosh_saida_3",
+          "t": 7.55,
+          "camada": "frente",
+          "pos": [540, 1100],
+          "som": { "id": "whoosh_camera", "vol": 0.85 }
+        }
+      ],
+      "transicao": { "tipo": "chicote", "dur": 0.45, "direcao": "dir" }
+    },
+    {
+      "id": "acude_noite_trovao",
+      "titulo_secao": "4. Vigília Noturna na Beira do Açude",
+      "bloco": "virada",
+      "lugar": "acude",
+      "luz": "acude_noite",
+      "dur": 8.0,
+      "acude": 0.14,
+      "ambiencia": { "id": "amb_acude_noite", "vol": 0.38 },
+      "camera": [
+        { "tipo": "push_in", "t": 0.0, "dur": 7.5, "zoomDe": 1.0, "zoomPara": 1.13, "foco": [540, 1140] },
+        { "tipo": "tremida", "t": 4.2, "dur": 0.45, "intensidade": 14, "semente": 51 }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["mandacarus"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_rachado", "lamina_agua"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [
+        { "id": "mandacaru", "tipo": "coluna", "x": 250, "y": 1195, "escala": 2.20, "rotulo": "Mandacaru" },
+        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 0.95 },
+        { "id": "licuri", "tipo": "gota", "x": 790, "y": 1205, "escala": 0.55, "rotulo": "Licuri" }
+      ],
+      "falas": [
+        {
+          "quem": "licuri",
+          "texto": "A água baixou tanto... será que a chuva vem?",
+          "ini": 0.65,
+          "dur": 3.10
+        },
+        {
+          "quem": "mandacaru",
+          "texto": "Escuta a serra, menino. O sertão sabe esperar.",
+          "ini": 4.30,
+          "dur": 3.15
+        }
+      ],
+      "deixas": [
+        {
+          "id": "pouso_leve_acude",
+          "t": 0.35,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "murchar", "dur": 1.40 },
+          "efeito": { "id": "poeira_pouso", "dur": 0.70, "escala": 0.95, "semente": 53 },
+          "som": { "id": "pouso_vazio", "vol": 0.84 }
+        },
+        {
+          "id": "trompete_alerta_seca",
+          "t": 2.10,
+          "camada": "frente",
+          "pos": [540, 1020],
+          "acao": { "alvo": "mangaio", "movimento": "olhar", "dur": 1.20, "params": { "direcao": "esq" } },
+          "efeito": { "id": "mormaco", "dur": 2.50, "escala": 0.90, "semente": 57 },
+          "som": { "id": "trompete_grave", "vol": 0.86 }
+        },
+        {
+          "id": "trovao_na_serra",
+          "t": 4.15,
+          "camada": "meio",
+          "pos": [250, 740],
+          "acao": { "alvo": "licuri", "movimento": "saltar", "dur": 0.65, "params": { "altura": 90 } },
+          "efeito": { "id": "brilho_plim", "dur": 0.85, "escala": 1.35, "semente": 61 },
+          "som": { "id": "trovao_distante", "vol": 0.90 }
+        },
+        {
+          "id": "vento_anuncio_chuva",
+          "t": 6.10,
+          "camada": "frente_sobreposta",
+          "pos": [540, 700],
+          "efeito": { "id": "folhas_caindo", "dur": 1.80, "escala": 1.1, "semente": 65 },
+          "som": { "id": "vento_seco", "vol": 0.78 }
+        }
+      ],
+      "transicao": { "tipo": "funde", "dur": 0.50 }
+    },
+    {
+      "id": "chuva_festa_gancho",
+      "titulo_secao": "5. Primeira Chuva, Festa e Gancho",
+      "bloco": "gancho_final",
+      "lugar": "feira",
+      "luz": "chuva",
+      "dur": 8.0,
+      "acude": 0.68,
+      "ambiencia": { "id": "amb_feira", "vol": 0.32 },
+      "camera": [
+        { "tipo": "pan", "t": 0.0, "dur": 3.8, "de": [-50, 0], "para": [0, 0], "zoom": 1.02 },
+        { "tipo": "push_in", "t": 3.8, "dur": 4.2, "zoomDe": 1.02, "zoomPara": 1.16, "foco": [540, 1100] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["umbuzeiro", "bancas_feira"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "caixotes"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["chuva"] }
+      },
+      "marcadores": [
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 265, "y": 1195, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 540, "y": 1215, "escala": 1.0 },
+        { "id": "umbu", "tipo": "oval", "x": 815, "y": 1200, "escala": 0.75, "rotulo": "Umbu" }
+      ],
+      "falas": [
+        {
+          "quem": "dona_mandioca",
+          "texto": "Água do céu na terra e festa na nossa feira!",
+          "ini": 0.55,
+          "dur": 3.00
+        },
+        {
+          "quem": "narrador",
+          "texto": "Mas a disputa pelo coração da feira está só começando...",
+          "ini": 3.95,
+          "dur": 3.10
+        }
+      ],
+      "deixas": [
+        {
+          "id": "chuva_chegando",
+          "t": 0.10,
+          "camada": "frente_sobreposta",
+          "pos": [540, 960],
+          "efeito": { "id": "chuva", "dur": 4.50, "escala": 1.0, "semente": 71 },
+          "som": { "id": "chuva", "vol": 0.76 }
+        },
+        {
+          "id": "pulo_duplo_esperanca",
+          "t": 1.50,
+          "camada": "frente",
+          "pos": [540, 740],
+          "acao": { "alvo": "mangaio", "movimento": "pulo_duplo", "dur": 1.35, "params": { "altura": 200 } },
+          "efeito": { "id": "confete_bandeirinhas", "dur": 3.80, "escala": 1.0, "semente": 75 },
+          "som": { "id": "trompete_esperanca", "vol": 0.90 }
+        },
+        {
+          "id": "plim_colheita",
+          "t": 3.20,
+          "camada": "frente",
+          "pos": [540, 980],
+          "acao": { "alvo": "mangaio", "movimento": "danca", "dur": 1.80 },
+          "efeito": { "id": "brilho_plim", "dur": 0.80, "escala": 1.25, "semente": 79 },
+          "som": { "id": "plim_fruta", "vol": 0.85 }
+        },
+        {
+          "id": "gancho_suspenso",
+          "t": 5.30,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "suspenso", "dur": 2.40 },
+          "som": { "id": "trompete_suspensa", "vol": 0.88 }
+        },
+        {
+          "id": "carimbo_continua",
+          "t": 5.65,
+          "camada": "frente",
+          "pos": [450, 430],
+          "som": { "id": "cartela_continua", "vol": 0.86 }
+        }
+      ],
+      "cartela": { "tipo": "continua", "t": 5.65, "texto": "continua..." },
+      "transicao": { "tipo": "iris", "dur": 0.65, "foco": [540, 1100], "modo": "fechar" }
+    },
+    {
+      "id": "assinatura_mangaio",
+      "titulo_secao": "6. Vinheta e Assinatura Oficial do Mangaio",
+      "bloco": "assinatura",
+      "lugar": "feira",
+      "luz": "feira_dia",
+      "dur": 8.0,
+      "ambiencia": { "id": "amb_feira", "vol": 0.28 },
+      "camera": [
+        { "tipo": "push_in", "t": 0.0, "dur": 8.0, "zoomDe": 1.0, "zoomPara": 1.06, "foco": [455, 860] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": [] },
+        "meio": { "paralaxe": 0.7, "elementos": [] },
+        "frente": { "paralaxe": 1.0, "elementos": [] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [],
+      "falas": [
+        {
+          "quem": "narrador",
+          "texto": "Novela da Caatinga, uma história do Mangaio!",
+          "ini": 0.85,
+          "dur": 3.40
+        }
+      ],
+      "deixas": [
+        {
+          "id": "abertura_vinheta_musical",
+          "t": 0.15,
+          "camada": "frente",
+          "pos": [455, 620],
+          "efeito": { "id": "confete_bandeirinhas", "dur": 4.20, "escala": 1.0, "semente": 83 },
+          "som": { "id": "vinheta_mangaio", "vol": 0.92 }
+        },
+        {
+          "id": "fole_festa_final",
+          "t": 2.40,
+          "camada": "frente",
+          "pos": [455, 720],
+          "efeito": { "id": "brilho_plim", "dur": 0.95, "escala": 1.3, "semente": 89 },
+          "som": { "id": "festa_fole", "vol": 0.85 }
+        },
+        {
+          "id": "burburinho_celebracao",
+          "t": 4.20,
+          "camada": "meio",
+          "pos": [455, 900],
+          "efeito": { "id": "folhas_caindo", "dur": 3.20, "escala": 1.0, "semente": 93 },
+          "som": { "id": "burburinho_feira", "vol": 0.72 }
+        },
+        {
+          "id": "despedida_cesto",
+          "t": 5.80,
+          "camada": "frente",
+          "pos": [455, 1085],
+          "efeito": { "id": "poeira_pouso", "dur": 0.80, "escala": 1.05, "semente": 97 },
+          "som": { "id": "pouso_cheio", "vol": 0.86 }
+        }
+      ],
+      "cartela": { "tipo": "assinatura", "t": 0.0 },
+      "transicao": { "tipo": "corte", "dur": 0 }
+    }
+  ]
+}
