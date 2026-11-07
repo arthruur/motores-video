@@ -47,7 +47,9 @@ sys.stdout.reconfigure(encoding="utf-8")
 ARTE_DIR = Path(__file__).resolve().parent
 RECEITA_DIR = ARTE_DIR.parent
 RAIZ = RECEITA_DIR.parents[1]
-VC_CLI = Path(r"C:\Program Files\ArtCraft\VectorCraft\vectorcraft-cli.exe")
+VC_CLI = next((p for p in (Path(r"C:\Program Files\ArtCraft\VectorCraft\vectorcraft-cli.exe"),
+                            Path.home() / "AppData/Local/Programs/ArtCraft/VectorCraft/vectorcraft-cli.exe")
+               if p.exists()), Path("vectorcraft-cli"))
 
 # Escalas oficiais em "cestos" (ARTE.md §3)
 ESCALAS_CESTO: dict[str, dict] = {
