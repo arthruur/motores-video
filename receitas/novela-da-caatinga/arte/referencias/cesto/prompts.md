@@ -39,3 +39,6 @@ straw colors, same edge shading. Body, face and fruits unchanged.
 ## Gerações
 | Data | Arquivo | Prompt | Modelo | Nota |
 |---|---|---|---|---|
+| 2026-11-07 | `teste-qwen/qwen2511-tres-quartos.png` | `将镜头向左旋转45度` (girar câmera 45° à esquerda) + `cesto-frente.png` | Qwen-Image-Edit-2511 + LoRA Multiple-Angles (Space HF `prithivMLmods/Qwen-Image-Edit-2511-LoRAs-Fast`), 4 passos | **Bom.** Estilo e rosto mantidos. Vetorizado no VectorCraft (`-vetor.svg`, 14 cores, 249 formas): precisa limpar o trançado e mapear para a paleta |
+| 2026-11-07 | `teste-qwen/qwen2511-perfil.png` | `将镜头向左旋转90度` | idem | Aproveitável: rosto no canto, alça de lado. Frutas mudaram um pouco |
+| 2026-11-07 | `teste-qwen/qwen2511-de-cima.png` | `将镜头转为俯视` | idem | **Ruim.** Virou 3D realista e perdeu o rosto e os braços. Refazer com inclinação menor |
