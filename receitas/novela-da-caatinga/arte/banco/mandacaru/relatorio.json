@@ -1,0 +1,171 @@
+{
+  "id": "mandacaru",
+  "referencia": "mandacaru-frente.png",
+  "svg": "receitas/novela-da-caatinga/arte/banco/mandacaru/mandacaru-frente.svg",
+  "ai": "receitas/novela-da-caatinga/arte/fonte/mandacaru-frente.ai",
+  "paths": 461,
+  "anchors_antes": 8948,
+  "anchors_depois": 7726,
+  "cores_extraidas": [
+    {
+      "count": 113,
+      "hex": "#fdf0c8",
+      "key": "rgb 253 240 200",
+      "swatch": "R=253 G=240 B=200"
+    },
+    {
+      "count": 43,
+      "hex": "#f8c979",
+      "key": "rgb 248 201 121",
+      "swatch": "R=248 G=201 B=121"
+    },
+    {
+      "count": 34,
+      "hex": "#799b1f",
+      "key": "rgb 121 155 31",
+      "swatch": "R=121 G=155 B=31"
+    },
+    {
+      "count": 33,
+      "hex": "#6d931f",
+      "key": "rgb 109 147 31",
+      "swatch": "R=109 G=147 B=31"
+    },
+    {
+      "count": 33,
+      "hex": "#eebb66",
+      "key": "rgb 238 187 102",
+      "swatch": "R=238 G=187 B=102"
+    },
+    {
+      "count": 31,
+      "hex": "#638b1e",
+      "key": "rgb 99 139 30",
+      "swatch": "R=99 G=139 B=30"
+    },
+    {
+      "count": 28,
+      "hex": "#59831d",
+      "key": "rgb 89 131 29",
+      "swatch": "R=89 G=131 B=29"
+    },
+    {
+      "count": 28,
+      "hex": "#85a31f",
+      "key": "rgb 133 163 31",
+      "swatch": "R=133 G=163 B=31"
+    },
+    {
+      "count": 22,
+      "hex": "#93ac1f",
+      "key": "rgb 147 172 31",
+      "swatch": "R=147 G=172 B=31"
+    },
+    {
+      "count": 21,
+      "hex": "#4f781d",
+      "key": "rgb 79 120 29",
+      "swatch": "R=79 G=120 B=29"
+    },
+    {
+      "count": 20,
+      "hex": "#9fb31f",
+      "key": "rgb 159 179 31",
+      "swatch": "R=159 G=179 B=31"
+    },
+    {
+      "count": 14,
+      "hex": "#fcd892",
+      "key": "rgb 252 216 146",
+      "swatch": "R=252 G=216 B=146"
+    }
+  ],
+  "analise_ia": {
+    "portao_aprovacao": {
+      "estilo_cesto_1s": true,
+      "sem_contorno_preto": true,
+      "ingrediente_reconhecivel": true,
+      "rosto_padrao_kawaii": true,
+      "observacoes": "Design do Mandacaru perfeitamente integrado ao estilo visual da série, com expressividade nas sobrancelhas e braços bem definidos para articulação."
+    },
+    "rampa_medida": {
+      "luz": "#b8c427",
+      "base": "#85a31f",
+      "meio": "#6d931f",
+      "sombra": "#4f781d",
+      "profunda": "#406618"
+    },
+    "pecas_rig": {
+      "rosto": [
+        200,
+        360,
+        340,
+        680
+      ],
+      "olho-esq": [
+        267,
+        422,
+        327,
+        510
+      ],
+      "olho-dir": [
+        252,
+        588,
+        305,
+        660
+      ],
+      "boca": [
+        308,
+        532,
+        330,
+        598
+      ],
+      "sobr-esq": [
+        215,
+        364,
+        290,
+        510
+      ],
+      "sobr-dir": [
+        200,
+        552,
+        245,
+        678
+      ],
+      "braco-esq": [
+        245,
+        35,
+        585,
+        390
+      ],
+      "braco-dir": [
+        335,
+        700,
+        680,
+        975
+      ],
+      "perna-esq": null,
+      "perna-dir": null,
+      "sombra": [
+        920,
+        205,
+        965,
+        810
+      ]
+    }
+  },
+  "rig": {
+    "bounds": [
+      405.2,
+      173.9,
+      1596.2,
+      1822.5
+    ],
+    "contagem_grupos": {
+      "sombra": 3,
+      "corpo": 376,
+      "olho-esq": 1,
+      "olho-dir": 2
+    }
+  }
+}

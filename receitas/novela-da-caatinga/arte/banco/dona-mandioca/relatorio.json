@@ -1,0 +1,184 @@
+{
+  "id": "dona-mandioca",
+  "referencia": "dona-mandioca-frente.png",
+  "svg": "receitas/novela-da-caatinga/arte/banco/dona-mandioca/dona-mandioca-frente.svg",
+  "ai": "receitas/novela-da-caatinga/arte/fonte/dona-mandioca-frente.ai",
+  "paths": 261,
+  "anchors_antes": 8056,
+  "anchors_depois": 6695,
+  "cores_extraidas": [
+    {
+      "count": 31,
+      "hex": "#f5b977",
+      "key": "rgb 245 185 119",
+      "swatch": "R=245 G=185 B=119"
+    },
+    {
+      "count": 25,
+      "hex": "#f7ca93",
+      "key": "rgb 247 202 147",
+      "swatch": "R=247 G=202 B=147"
+    },
+    {
+      "count": 22,
+      "hex": "#af4c1b",
+      "key": "rgb 175 76 27",
+      "swatch": "R=175 G=76 B=27"
+    },
+    {
+      "count": 21,
+      "hex": "#c86223",
+      "key": "rgb 200 98 35",
+      "swatch": "R=200 G=98 B=35"
+    },
+    {
+      "count": 21,
+      "hex": "#f9c587",
+      "key": "rgb 249 197 135",
+      "swatch": "R=249 G=197 B=135"
+    },
+    {
+      "count": 20,
+      "hex": "#bd551e",
+      "key": "rgb 189 85 30",
+      "swatch": "R=189 G=85 B=30"
+    },
+    {
+      "count": 20,
+      "hex": "#eaa968",
+      "key": "rgb 234 169 104",
+      "swatch": "R=234 G=169 B=104"
+    },
+    {
+      "count": 16,
+      "hex": "#d1905b",
+      "key": "rgb 209 144 91",
+      "swatch": "R=209 G=144 B=91"
+    },
+    {
+      "count": 14,
+      "hex": "#9f4218",
+      "key": "rgb 159 66 24",
+      "swatch": "R=159 G=66 B=24"
+    },
+    {
+      "count": 13,
+      "hex": "#fce7bc",
+      "key": "rgb 252 231 188",
+      "swatch": "R=252 G=231 B=188"
+    },
+    {
+      "count": 11,
+      "hex": "#ad301a",
+      "key": "rgb 173 48 26",
+      "swatch": "R=173 G=48 B=26"
+    },
+    {
+      "count": 11,
+      "hex": "#da722a",
+      "key": "rgb 218 114 42",
+      "swatch": "R=218 G=114 B=42"
+    }
+  ],
+  "analise_ia": {
+    "portao_aprovacao": {
+      "estilo_cesto_1s": true,
+      "sem_contorno_preto": true,
+      "ingrediente_reconhecivel": true,
+      "rosto_padrao_kawaii": true,
+      "observacoes": "Design perfeitamente alinhado com o estilo da série, sem contornos pretos e com acessórios bem integrados."
+    },
+    "rampa_medida": {
+      "luz": "#f5b977",
+      "meio": "#d1905b",
+      "base": "#c86223",
+      "sombra": "#af4c1b",
+      "profunda": "#902b16"
+    },
+    "pecas_rig": {
+      "rosto": [
+        270,
+        330,
+        440,
+        760
+      ],
+      "olho-esq": [
+        330,
+        420,
+        393,
+        488
+      ],
+      "olho-dir": [
+        306,
+        640,
+        372,
+        708
+      ],
+      "boca": [
+        350,
+        508,
+        415,
+        632
+      ],
+      "sobr-esq": [
+        285,
+        340,
+        325,
+        490
+      ],
+      "sobr-dir": [
+        270,
+        615,
+        308,
+        698
+      ],
+      "braco-esq": [
+        455,
+        120,
+        605,
+        320
+      ],
+      "braco-dir": [
+        450,
+        785,
+        670,
+        972
+      ],
+      "perna-esq": [
+        840,
+        220,
+        985,
+        525
+      ],
+      "perna-dir": [
+        840,
+        565,
+        985,
+        830
+      ],
+      "sombra": [
+        955,
+        138,
+        995,
+        880
+      ]
+    }
+  },
+  "rig": {
+    "bounds": [
+      468.8,
+      175.1,
+      1538.6,
+      1838.3
+    ],
+    "contagem_grupos": {
+      "sombra": 2,
+      "corpo": 240,
+      "rosto": 1,
+      "olho-esq": 2,
+      "olho-dir": 2,
+      "sobr-esq": 1,
+      "boca": 1
+    }
+  }
+}
