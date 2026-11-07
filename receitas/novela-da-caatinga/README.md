@@ -1,6 +1,6 @@
 # Novela da Caatinga · cap. 1 "A Inauguração" (primeira produção completa)
 
-Série animada do Mangaio. A bíblia está em [`biblia.md`](biblia.md) e as decisões de motor em [`producao.md`](producao.md). Este capítulo testa a produção inteira:
+Série animada do Mangaio. A bíblia está em [`biblia.md`](biblia.md), as decisões de motor em [`producao.md`](producao.md) e a **bíblia de arte e animação** (estilo, personagens, cenários, rig, pipeline de produção) em [`arte/`](arte/README.md). Este capítulo testa a produção inteira:
 - narração no estilo Peppa Pig + elenco, com vozes por TTS (Gemini), uma geração por fala;
 - personagens desenhados em código, com um rig de rosto compartilhado;
 - o Cesto, que é o mascote do Mangaio e não fala, respondendo com trompete;

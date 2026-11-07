@@ -1,0 +1,50 @@
+{
+  "_leia": "Rampas de 5 tons: luz, base, meio, sombra, profunda. 'medido' = tirado do mascote.svg; 'proposta' = a validar no primeiro model sheet. Sombras esquentam (puxam pro vermelho/marrom), nunca acinzentam. Sem preto puro.",
+
+  "tinta": { "status": "medido", "escuro": "#462416", "boca_interior": "#C5441E", "brilho_olho": "#FFF8EA" },
+
+  "materiais": {
+    "palha_cesto": { "status": "medido", "luz": "#F5B058", "base": "#E99C46", "meio": "#D27C32", "sombra": "#C06726", "profunda": "#AF561E" },
+    "folha":       { "status": "medido", "luz": "#669630", "base": "#50812F", "meio": "#3F6925", "sombra": "#2B5627", "profunda": "#1F4020" },
+    "tomate":      { "status": "medido", "luz": "#F2683A", "base": "#EB4B20", "meio": "#D23E1A", "sombra": "#B0331A", "profunda": "#8A2716" },
+    "laranja":     { "status": "medido", "luz": "#FB991D", "base": "#F5831B", "meio": "#E06F14", "sombra": "#C45C10", "profunda": "#9E4A10" },
+
+    "mandioca_casca": { "status": "proposta", "luz": "#A9764A", "base": "#8C5A34", "meio": "#774A2A", "sombra": "#5E3820", "profunda": "#462416" },
+    "mandioca_miolo": { "status": "proposta", "luz": "#FFF6E3", "base": "#F6E7C8", "meio": "#E9D2A6", "sombra": "#D6B886", "profunda": "#B8956A" },
+    "lenco_vermelho": { "status": "proposta", "luz": "#E8573A", "base": "#CF3B27", "meio": "#B52F20", "sombra": "#93261B", "profunda": "#6E1D15" },
+    "umbu":           { "status": "proposta", "luz": "#D8D86A", "base": "#B9C255", "meio": "#9EAA44", "sombra": "#7F8C36", "profunda": "#5F6B2A" },
+    "licuri":         { "status": "proposta", "luz": "#F7B24A", "base": "#EA952E", "meio": "#D27A22", "sombra": "#B0601C", "profunda": "#844516" },
+    "licuri_reembalado": { "status": "proposta", "nota": "arco 1: o Licuri esfria e ganha reflexo de plástico", "luz": "#F4C27A", "base": "#E0A25A", "meio": "#C48552", "sombra": "#9C6A5E", "profunda": "#6E4F5C", "reflexo": "#FFFFFF" },
+    "mandacaru":      { "status": "proposta", "luz": "#7FA35A", "base": "#5F8A4A", "meio": "#4C743D", "sombra": "#3A5D32", "profunda": "#294526" },
+    "flor_mandacaru": { "status": "proposta", "luz": "#FFFFFF", "base": "#F6F1E4", "meio": "#E8DFC8", "sombra": "#D2C3A2", "profunda": "#B09A70" },
+    "caju_fruto":     { "status": "proposta", "luz": "#F25A3A", "base": "#E0402A", "meio": "#C93324", "sombra": "#A3281E", "profunda": "#7C1E18" },
+    "caju_amarelo":   { "status": "proposta", "nota": "variação de cor do pedúnculo, para o topo", "luz": "#FFD15A", "base": "#F7B733", "meio": "#E59A28", "sombra": "#C77C20", "profunda": "#9C5E18" },
+    "castanha":       { "status": "proposta", "luz": "#A88A6A", "base": "#8A6C4E", "meio": "#73583E", "sombra": "#5C4430", "profunda": "#462416" },
+    "maxixe":         { "status": "proposta", "luz": "#B7D98A", "base": "#9CC46E", "meio": "#82AB58", "sombra": "#678E45", "profunda": "#4C6E34" },
+    "quiabo":         { "status": "proposta", "luz": "#8FC25E", "base": "#6FA544", "meio": "#5A8E38", "sombra": "#46742D", "profunda": "#335722" },
+    "jatai":          { "status": "proposta", "luz": "#FFE08A", "base": "#F2C14E", "meio": "#D9A23A", "sombra": "#B5812C", "profunda": "#462416", "asa": "#EAF4F2" },
+
+    "sache_rosa":     { "status": "proposta", "mundo": "vilao", "luz": "#FF7AD0", "base": "#FF2EA6", "meio": "#D81E8C", "sombra": "#A61472", "profunda": "#6E0E52", "reflexo": "#FFFFFF" },
+    "sache_azul":     { "status": "proposta", "mundo": "vilao", "luz": "#5AA8FF", "base": "#1F6BFF", "meio": "#1852D6", "sombra": "#123CA3", "profunda": "#0C276E", "reflexo": "#FFFFFF" },
+    "sacola_plastico":{ "status": "proposta", "mundo": "vilao", "luz": "#FFFFFF", "base": "#EEF1F6", "meio": "#D6DCE6", "sombra": "#AEB8CB", "profunda": "#7E89A3", "reflexo": "#FFFFFF" }
+  },
+
+  "cenario": {
+    "ceu_dia":     { "status": "proposta", "alto": "#F3D9A4", "baixo": "#F7E8C6" },
+    "ceu_tarde":   { "status": "proposta", "alto": "#E9A866", "baixo": "#F6CF8E" },
+    "chao_terra":  { "status": "proposta", "luz": "#E2B97E", "base": "#CF9F63", "meio": "#B9874F", "sombra": "#9C6E3E", "profunda": "#7A532E" },
+    "serra":       { "status": "proposta", "perto": "#C9946A", "longe": "#D9B38E" },
+    "madeira_banca": { "status": "proposta", "luz": "#B57A48", "base": "#9A6238", "meio": "#83512E", "sombra": "#6A4125", "profunda": "#4E2F1B" },
+    "agua_acude":  { "status": "proposta", "luz": "#A9D3D6", "base": "#7FB5BC", "sombra": "#5A8E98" },
+    "neon_mercadinho": { "status": "proposta", "mundo": "vilao", "rosa": "#FF3FB4", "azul": "#3FA0FF", "brilho": "#FFFFFF", "fundo": "#1B1F5E" }
+  },
+
+  "luz_de_cena": {
+    "_leia": "Não redesenha o personagem: aplica por cima (multiplicar para sombra, tela para rim light).",
+    "feira_dia":   { "multiplicar": null, "rim": null },
+    "fim_de_tarde": { "multiplicar": "#F2C79A", "rim": "#FFB45C" },
+    "mercadinho":  { "multiplicar": "#C9C4F2", "rim": "#FF3FB4" },
+    "acude_noite": { "multiplicar": "#7C86B8", "rim": "#BFD4FF" },
+    "chuva":       { "multiplicar": "#B9C4C8", "rim": null }
+  }
+}
