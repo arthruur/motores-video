@@ -1,0 +1,182 @@
+{
+  "id": "umbu",
+  "referencia": "umbu-frente.png",
+  "svg": "receitas/novela-da-caatinga/arte/banco/umbu/umbu-frente.svg",
+  "ai": "receitas/novela-da-caatinga/arte/fonte/umbu-frente.ai",
+  "paths": 172,
+  "anchors_antes": 5797,
+  "anchors_depois": 4832,
+  "cores_extraidas": [
+    {
+      "count": 28,
+      "hex": "#fceecc",
+      "key": "rgb 252 238 204",
+      "swatch": "R=252 G=238 B=204"
+    },
+    {
+      "count": 18,
+      "hex": "#faab42",
+      "key": "rgb 250 171 66",
+      "swatch": "R=250 G=171 B=66"
+    },
+    {
+      "count": 14,
+      "hex": "#753814",
+      "key": "rgb 117 56 20",
+      "swatch": "R=117 G=56 B=20"
+    },
+    {
+      "count": 14,
+      "hex": "#fdb94f",
+      "key": "rgb 253 185 79",
+      "swatch": "R=253 G=185 B=79"
+    },
+    {
+      "count": 12,
+      "hex": "#a37710",
+      "key": "rgb 163 119 16",
+      "swatch": "R=163 G=119 B=16"
+    },
+    {
+      "count": 10,
+      "hex": "#f39b38",
+      "key": "rgb 243 155 56",
+      "swatch": "R=243 G=155 B=56"
+    },
+    {
+      "count": 9,
+      "hex": "#8d3d15",
+      "key": "rgb 141 61 21",
+      "swatch": "R=141 G=61 B=21"
+    },
+    {
+      "count": 9,
+      "hex": "#ba5b1a",
+      "key": "rgb 186 91 26",
+      "swatch": "R=186 G=91 B=26"
+    },
+    {
+      "count": 9,
+      "hex": "#eec629",
+      "key": "rgb 238 198 41",
+      "swatch": "R=238 G=198 B=41"
+    },
+    {
+      "count": 8,
+      "hex": "#c9641e",
+      "key": "rgb 201 100 30",
+      "swatch": "R=201 G=100 B=30"
+    },
+    {
+      "count": 7,
+      "hex": "#a74c18",
+      "key": "rgb 167 76 24",
+      "swatch": "R=167 G=76 B=24"
+    },
+    {
+      "count": 7,
+      "hex": "#ae8b0e",
+      "key": "rgb 174 139 14",
+      "swatch": "R=174 G=139 B=14"
+    }
+  ],
+  "analise_ia": {
+    "portao_aprovacao": {
+      "estilo_cesto_1s": true,
+      "sem_contorno_preto": true,
+      "ingrediente_reconhecivel": true,
+      "rosto_padrao_kawaii": true,
+      "observacoes": "Personagem Umbu aprovado perfeitamente no estilo 1s com chapéu de palha e mala de couro."
+    },
+    "rampa_medida": {
+      "luz": "#EEC629",
+      "base": "#E0BB1C",
+      "meio": "#D3AB14",
+      "sombra": "#AE8B0E",
+      "profunda": "#A37710"
+    },
+    "pecas_rig": {
+      "rosto": [
+        255,
+        245,
+        805,
+        805
+      ],
+      "olho-esq": [
+        377,
+        368,
+        482,
+        490
+      ],
+      "olho-dir": [
+        325,
+        608,
+        426,
+        708
+      ],
+      "boca": [
+        420,
+        507,
+        510,
+        626
+      ],
+      "sobr-esq": [
+        320,
+        355,
+        378,
+        465
+      ],
+      "sobr-dir": [
+        265,
+        598,
+        302,
+        690
+      ],
+      "braco-esq": [
+        513,
+        182,
+        694,
+        378
+      ],
+      "braco-dir": [
+        492,
+        750,
+        736,
+        905
+      ],
+      "perna-esq": [
+        780,
+        300,
+        962,
+        480
+      ],
+      "perna-dir": [
+        780,
+        570,
+        958,
+        780
+      ],
+      "sombra": [
+        905,
+        190,
+        978,
+        850
+      ]
+    }
+  },
+  "rig": {
+    "bounds": [
+      177.4,
+      231.6,
+      1813.5,
+      1766.8
+    ],
+    "contagem_grupos": {
+      "sombra": 3,
+      "corpo": 148,
+      "olho-esq": 2,
+      "olho-dir": 2,
+      "sobr-dir": 1
+    }
+  }
+}

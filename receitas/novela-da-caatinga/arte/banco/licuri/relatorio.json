@@ -1,0 +1,184 @@
+{
+  "id": "licuri",
+  "referencia": "licuri.png",
+  "svg": "receitas/novela-da-caatinga/arte/banco/licuri/licuri-frente.svg",
+  "ai": "receitas/novela-da-caatinga/arte/fonte/licuri-frente.ai",
+  "paths": 78,
+  "anchors_antes": 1583,
+  "anchors_depois": 1466,
+  "cores_extraidas": [
+    {
+      "count": 9,
+      "hex": "#d96716",
+      "key": "rgb 217 103 22",
+      "swatch": "R=217 G=103 B=22"
+    },
+    {
+      "count": 8,
+      "hex": "#f58f1b",
+      "key": "rgb 245 143 27",
+      "swatch": "R=245 G=143 B=27"
+    },
+    {
+      "count": 7,
+      "hex": "#ba5314",
+      "key": "rgb 186 83 20",
+      "swatch": "R=186 G=83 B=20"
+    },
+    {
+      "count": 7,
+      "hex": "#c75816",
+      "key": "rgb 199 88 22",
+      "swatch": "R=199 G=88 B=22"
+    },
+    {
+      "count": 7,
+      "hex": "#eb7e18",
+      "key": "rgb 235 126 24",
+      "swatch": "R=235 G=126 B=24"
+    },
+    {
+      "count": 6,
+      "hex": "#cc6317",
+      "key": "rgb 204 99 23",
+      "swatch": "R=204 G=99 B=23"
+    },
+    {
+      "count": 5,
+      "hex": "#50210f",
+      "key": "rgb 80 33 15",
+      "swatch": "R=80 G=33 B=15"
+    },
+    {
+      "count": 5,
+      "hex": "#a04313",
+      "key": "rgb 160 67 19",
+      "swatch": "R=160 G=67 B=19"
+    },
+    {
+      "count": 5,
+      "hex": "#e27216",
+      "key": "rgb 226 114 22",
+      "swatch": "R=226 G=114 B=22"
+    },
+    {
+      "count": 5,
+      "hex": "#faeed1",
+      "key": "rgb 250 238 209",
+      "swatch": "R=250 G=238 B=209"
+    },
+    {
+      "count": 3,
+      "hex": "#6f2c10",
+      "key": "rgb 111 44 16",
+      "swatch": "R=111 G=44 B=16"
+    },
+    {
+      "count": 3,
+      "hex": "#933c12",
+      "key": "rgb 147 60 18",
+      "swatch": "R=147 G=60 B=18"
+    }
+  ],
+  "analise_ia": {
+    "portao_aprovacao": {
+      "estilo_cesto_1s": true,
+      "sem_contorno_preto": true,
+      "ingrediente_reconhecivel": true,
+      "rosto_padrao_kawaii": true,
+      "observacoes": "Design perfeitamente alinhado com a bíblia, sem contorno preto e pintura digital rica em tons quentes."
+    },
+    "rampa_medida": {
+      "luz": "#FCA321",
+      "base": "#F58F1B",
+      "meio": "#D96716",
+      "sombra": "#BA5314",
+      "profunda": "#50210F"
+    },
+    "pecas_rig": {
+      "rosto": [
+        281,
+        317,
+        571,
+        785
+      ],
+      "olho-esq": [
+        415,
+        370,
+        537,
+        484
+      ],
+      "olho-dir": [
+        363,
+        683,
+        477,
+        785
+      ],
+      "boca": [
+        469,
+        519,
+        571,
+        680
+      ],
+      "sobr-esq": [
+        330,
+        317,
+        410,
+        455
+      ],
+      "sobr-dir": [
+        281,
+        646,
+        339,
+        772
+      ],
+      "braco-esq": [
+        566,
+        70,
+        804,
+        344
+      ],
+      "braco-dir": [
+        548,
+        730,
+        773,
+        931
+      ],
+      "perna-esq": [
+        774,
+        196,
+        930,
+        449
+      ],
+      "perna-dir": [
+        779,
+        535,
+        924,
+        796
+      ],
+      "sombra": [
+        886,
+        78,
+        953,
+        917
+      ]
+    }
+  },
+  "rig": {
+    "bounds": [
+      429.6,
+      239.6,
+      1566.0,
+      1770.0
+    ],
+    "contagem_grupos": {
+      "sombra": 1,
+      "corpo": 68,
+      "olho-esq": 1,
+      "olho-dir": 1,
+      "sobr-esq": 1,
+      "sobr-dir": 1,
+      "boca": 1
+    }
+  }
+}

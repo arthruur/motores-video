@@ -1,0 +1,184 @@
+{
+  "id": "jatai",
+  "referencia": "mandassaia-frente.png",
+  "svg": "receitas/novela-da-caatinga/arte/banco/jatai/jatai-frente.svg",
+  "ai": "receitas/novela-da-caatinga/arte/fonte/jatai-frente.ai",
+  "paths": 390,
+  "anchors_antes": 7851,
+  "anchors_depois": 6655,
+  "cores_extraidas": [
+    {
+      "count": 65,
+      "hex": "#fce7ba",
+      "key": "rgb 252 231 186",
+      "swatch": "R=252 G=231 B=186"
+    },
+    {
+      "count": 35,
+      "hex": "#fbce87",
+      "key": "rgb 251 206 135",
+      "swatch": "R=251 G=206 B=135"
+    },
+    {
+      "count": 30,
+      "hex": "#f7c47e",
+      "key": "rgb 247 196 126",
+      "swatch": "R=247 G=196 B=126"
+    },
+    {
+      "count": 26,
+      "hex": "#702f0a",
+      "key": "rgb 112 47 10",
+      "swatch": "R=112 G=47 B=10"
+    },
+    {
+      "count": 26,
+      "hex": "#faba62",
+      "key": "rgb 250 186 98",
+      "swatch": "R=250 G=186 B=98"
+    },
+    {
+      "count": 25,
+      "hex": "#5e2607",
+      "key": "rgb 94 38 7",
+      "swatch": "R=94 G=38 B=7"
+    },
+    {
+      "count": 25,
+      "hex": "#f9d395",
+      "key": "rgb 249 211 149",
+      "swatch": "R=249 G=211 B=149"
+    },
+    {
+      "count": 20,
+      "hex": "#fa9a16",
+      "key": "rgb 250 154 22",
+      "swatch": "R=250 G=154 B=22"
+    },
+    {
+      "count": 20,
+      "hex": "#fdaa20",
+      "key": "rgb 253 170 32",
+      "swatch": "R=253 G=170 B=32"
+    },
+    {
+      "count": 18,
+      "hex": "#db7108",
+      "key": "rgb 219 113 8",
+      "swatch": "R=219 G=113 B=8"
+    },
+    {
+      "count": 17,
+      "hex": "#ed870d",
+      "key": "rgb 237 135 13",
+      "swatch": "R=237 G=135 B=13"
+    },
+    {
+      "count": 15,
+      "hex": "#843709",
+      "key": "rgb 132 55 9",
+      "swatch": "R=132 G=55 B=9"
+    }
+  ],
+  "analise_ia": {
+    "portao_aprovacao": {
+      "estilo_cesto_1s": true,
+      "sem_contorno_preto": true,
+      "ingrediente_reconhecivel": true,
+      "rosto_padrao_kawaii": true,
+      "observacoes": "Personagem Jataí aprovado: pintura digital sem contorno preto, asas transparentes e proporções expressivas adequadas."
+    },
+    "rampa_medida": {
+      "luz": "#fce7ba",
+      "base": "#fec03b",
+      "meio": "#ed870d",
+      "sombra": "#702f0a",
+      "profunda": "#5e2607"
+    },
+    "pecas_rig": {
+      "rosto": [
+        207,
+        391,
+        515,
+        844
+      ],
+      "olho-esq": [
+        288,
+        428,
+        461,
+        605
+      ],
+      "olho-dir": [
+        270,
+        732,
+        414,
+        833
+      ],
+      "boca": [
+        386,
+        634,
+        461,
+        730
+      ],
+      "sobr-esq": [
+        234,
+        469,
+        281,
+        567
+      ],
+      "sobr-dir": [
+        227,
+        721,
+        263,
+        786
+      ],
+      "braco-esq": [
+        517,
+        430,
+        623,
+        570
+      ],
+      "braco-dir": [
+        490,
+        697,
+        600,
+        845
+      ],
+      "perna-esq": [
+        693,
+        357,
+        854,
+        520
+      ],
+      "perna-dir": [
+        712,
+        491,
+        871,
+        624
+      ],
+      "sombra": [
+        921,
+        235,
+        978,
+        744
+      ]
+    }
+  },
+  "rig": {
+    "bounds": [
+      267.3,
+      180.0,
+      1728.2,
+      1817.1
+    ],
+    "contagem_grupos": {
+      "sombra": 18,
+      "corpo": 312,
+      "rosto": 5,
+      "olho-esq": 6,
+      "olho-dir": 5,
+      "sobr-esq": 2,
+      "boca": 1
+    }
+  }
+}

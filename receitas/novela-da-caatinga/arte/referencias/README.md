@@ -4,8 +4,23 @@
 | Arquivo | O que é |
 |---|---|
 | `cesto-frente.png` | O Cesto renderizado do `mascote.svg` oficial. **Anexar em todo prompt** do gerador de imagem |
+| `dona-mandioca-frente.png` | Dona Mandioca (vista frontal aprovada: lenço vermelho de bolinha, avental FARINHA, colher de pau) |
+| `umbu-frente.png` | Umbu (vista frontal aprovada: chapéu de palha trançada, embornal de couro, meio-sorriso tranquilo) |
+| `licuri.png` | Folha do Licuri (natural, "Lic" de óculos escuros, embalado "Lic Crunchy", 6 expressões e 5 poses) |
+| `mandacaru-frente.png` | Mandacaru (vista frontal aprovada: cacto colunar, sobrancelhas de espinho, flor branca aberta no topo) |
+| `mandassaia-frente.png` | Jataí / Mandaçaia (vista 3/4 voando: olhos compostos com favo, asas translúcidas, pólen nas patas) |
 
 Gerações por personagem vão em `<id>/` (ex.: `dona-mandioca/`), com um `prompts.md` registrando data, prompt e modelo usados.
+
+## Pacotes oficiais de estúdio (Warner Bros. / Cartoon Network) consultados
+
+Localizados em `C:\Users\arthu\Downloads\`:
+
+| Pacote | O que usamos de referência |
+|---|---|
+| **Powerpuff Girls Special (*Dance Pantsed*, Kevin Dart / CN Studios)** | Estética idêntica à regra-mãe de [`../ARTE.md`](../ARTE.md): ilustração vetorial sem contorno (*lineless*), volume em rampas de tom e textura desenhada em faixas (`PPG Characters/` e `PPG Backgrounds/`). |
+| **Scooby-Doo! Mystery Incorporated (WB Animation)** | Estrutura de *Main Model Pack*: `MAIN MODEL SIZE COMPARISON` com linhas horizontais de escala, `CHARACTER NOTES` (*DO / DON'T*), `MOUTHCHART` e `SHADOW / LIGHTING GUIDE (A, B, C, D STYLE LIGHTING)` para chaves de luz por ambiente. |
+| **Duck Dodgers (WB Animation / WBCP Style Guide)** | Folhas de `Color Call Outs` (amostras nomeadas puxadas do personagem), cenários separados em camadas de paralaxe/luz e catálogo visual de assets. |
 
 ## Leituras indicadas pelo Arthur (7 nov. 2026), ainda não lidas
 
