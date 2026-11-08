@@ -1,0 +1,216 @@
+{
+  "serie": "novela-da-caatinga",
+  "capitulo": 1,
+  "titulo": "Serra Pequena e o Mangaio",
+  "subtitulo": "Episódio 1 · A Feira Acordando",
+  "arco": "estiagem",
+  "saida": "ep01-feira-acordando.mp4",
+  "fps": 30,
+  "largura": 1080,
+  "altura": 1920,
+  "duracao": 18.0,
+  "acude": 0.20,
+  "rotulo": "Animação e áudio sintéticos determinísticos · Novela da Caatinga",
+  "cenas": [
+    {
+      "id": "amanhecer_feira_acordando",
+      "titulo_secao": "1. O Sol Subindo em Serra Pequena",
+      "bloco": "abertura",
+      "lugar": "feira",
+      "luz": "feira_dia",
+      "dur": 6.5,
+      "acude": 0.20,
+      "ambiencia": { "id": "amb_feira", "vol": 0.36 },
+      "camera": [
+        { "tipo": "pan", "t": 0.0, "dur": 4.2, "de": [-90, 0], "para": [0, 0], "zoom": 1.04 },
+        { "tipo": "tremida", "t": 2.4, "dur": 0.32, "intensidade": 11, "semente": 3 },
+        { "tipo": "push_in", "t": 4.2, "dur": 2.3, "zoomDe": 1.04, "zoomPara": 1.10, "foco": [540, 1120] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "sol", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["umbuzeiro", "bancas_feira"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "caixotes"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": ["folhas_caindo"] }
+      },
+      "marcadores": [
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
+      ],
+      "falas": [
+        {
+          "quem": "narrador",
+          "texto": "Em Serra Pequena, a feira acorda junto com o sol.",
+          "ini": 0.50,
+          "dur": 2.90
+        },
+        {
+          "quem": "dona_mandioca",
+          "texto": "Arruma a banca, Umbu, que o dia promete!",
+          "ini": 3.70,
+          "dur": 2.35
+        }
+      ],
+      "deixas": [
+        {
+          "id": "galo_e_mormaco",
+          "t": 0.15,
+          "camada": "meio",
+          "pos": [540, 1080],
+          "efeito": { "id": "mormaco", "dur": 3.80, "escala": 1.0, "semente": 3 },
+          "som": { "id": "galo_caatinga", "vol": 0.80 }
+        },
+        {
+          "id": "pouso_chegada_mangaio",
+          "t": 2.35,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "quicar", "dur": 0.85, "params": { "altura": 195 } },
+          "efeito": { "id": "poeira_pouso", "dur": 0.80, "escala": 1.25, "semente": 7 },
+          "som": { "id": "pouso_cheio", "vol": 0.92 }
+        },
+        {
+          "id": "passo_dona_mandioca",
+          "t": 3.85,
+          "camada": "frente",
+          "pos": [270, 1195],
+          "acao": { "alvo": "dona_mandioca", "movimento": "abanar", "dur": 1.20 },
+          "efeito": { "id": "poeira_passo", "dur": 0.65, "escala": 1.05, "semente": 11, "params": { "direcao": -1 } },
+          "som": { "id": "passo_pesado", "vol": 0.82 }
+        },
+        {
+          "id": "folhas_umbuzeiro",
+          "t": 4.60,
+          "camada": "frente_sobreposta",
+          "pos": [540, 620],
+          "efeito": { "id": "folhas_caindo", "dur": 1.80, "escala": 1.0, "semente": 15 },
+          "som": { "id": "vento_seco", "vol": 0.72 }
+        }
+      ],
+      "transicao": { "tipo": "chicote", "dur": 0.45, "direcao": "esq" }
+    },
+    {
+      "id": "banca_maxixe_quiabo",
+      "titulo_secao": "2. Burburinho e Chegada do Mangaio",
+      "bloco": "desenvolvimento",
+      "lugar": "feira",
+      "luz": "feira_dia",
+      "dur": 6.0,
+      "acude": 0.20,
+      "ambiencia": { "id": "amb_feira", "vol": 0.36 },
+      "camera": [
+        { "tipo": "pan", "t": 0.0, "dur": 3.5, "de": [65, 0], "para": [0, 0], "zoom": 1.03 },
+        { "tipo": "push_in", "t": 3.5, "dur": 2.5, "zoomDe": 1.03, "zoomPara": 1.12, "foco": [540, 1110] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "sol", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["umbuzeiro", "bancas_feira"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "caixotes"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [
+        { "id": "maxixe", "tipo": "oval", "x": 250, "y": 1095, "escala": 0.55, "rotulo": "Maxixe" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "quiabo", "tipo": "coluna", "x": 685, "y": 1095, "escala": 1.15, "rotulo": "Quiabo" }
+      ],
+      "falas": [
+        {
+          "quem": "maxixe",
+          "texto": "Olha quem chegou cheio de fruta fresca!",
+          "ini": 0.45,
+          "dur": 2.35
+        },
+        {
+          "quem": "quiabo",
+          "texto": "Dá um alô pra feira, Cesto do Mangaio!",
+          "ini": 3.10,
+          "dur": 2.35
+        }
+      ],
+      "deixas": [
+        {
+          "id": "burburinho_manha",
+          "t": 0.20,
+          "camada": "meio",
+          "pos": [540, 1060],
+          "acao": { "alvo": "maxixe", "movimento": "saltar", "dur": 0.65, "params": { "altura": 80 } },
+          "efeito": { "id": "poeira_passo", "dur": 0.55, "escala": 0.95, "semente": 19, "params": { "direcao": 1 } },
+          "som": { "id": "burburinho_feira", "vol": 0.75 }
+        },
+        {
+          "id": "resposta_trompete_oi",
+          "t": 2.65,
+          "camada": "frente",
+          "pos": [540, 1010],
+          "acao": { "alvo": "mangaio", "movimento": "pulo_duplo", "dur": 1.25, "params": { "altura": 180 } },
+          "efeito": { "id": "brilho_plim", "dur": 0.80, "escala": 1.2, "semente": 23 },
+          "som": { "id": "trompete_oi", "vol": 0.90 }
+        },
+        {
+          "id": "sacolejo_alegria",
+          "t": 4.20,
+          "camada": "frente",
+          "pos": [540, 1215],
+          "acao": { "alvo": "mangaio", "movimento": "danca", "dur": 1.40 },
+          "efeito": { "id": "poeira_pouso", "dur": 0.70, "escala": 1.0, "semente": 27 },
+          "som": { "id": "sacolejo_frutas", "vol": 0.82 }
+        }
+      ],
+      "transicao": { "tipo": "funde", "dur": 0.45 }
+    },
+    {
+      "id": "convite_e_gancho_ep01",
+      "titulo_secao": "3. Festa na Feira e Gancho",
+      "bloco": "gancho_final",
+      "lugar": "feira",
+      "luz": "fim_de_tarde",
+      "dur": 5.5,
+      "acude": 0.20,
+      "ambiencia": { "id": "amb_feira", "vol": 0.34 },
+      "camera": [
+        { "tipo": "push_in", "t": 0.0, "dur": 5.5, "zoomDe": 1.0, "zoomPara": 1.14, "foco": [540, 1100] }
+      ],
+      "camadas": {
+        "fundo": { "paralaxe": 0.3, "elementos": ["ceu", "sol", "serra", "regua_acude"] },
+        "meio": { "paralaxe": 0.7, "elementos": ["umbuzeiro", "bancas_feira"] },
+        "frente": { "paralaxe": 1.0, "elementos": ["chao_terra", "caixotes"] },
+        "frente_sobreposta": { "paralaxe": 1.15, "elementos": [] }
+      },
+      "marcadores": [
+        { "id": "dona_mandioca", "tipo": "retangulo", "x": 240, "y": 1095, "escala": 1.35, "rotulo": "Dona Mandioca" },
+        { "id": "mangaio", "tipo": "cesto", "x": 465, "y": 1098, "escala": 0.92 },
+        { "id": "umbu", "tipo": "oval", "x": 685, "y": 1095, "escala": 0.75, "rotulo": "Umbu" }
+      ],
+      "falas": [
+        {
+          "quem": "umbu",
+          "texto": "Na feira da gente, cada fruta tem história!",
+          "ini": 0.45,
+          "dur": 2.85
+        }
+      ],
+      "deixas": [
+        {
+          "id": "trompete_abertura_feira",
+          "t": 0.30,
+          "camada": "frente",
+          "pos": [540, 740],
+          "acao": { "alvo": "mangaio", "movimento": "danca", "dur": 2.40 },
+          "efeito": { "id": "confete_bandeirinhas", "dur": 3.40, "escala": 1.0, "semente": 33 },
+          "som": { "id": "trompete_esperanca", "vol": 0.90 }
+        },
+        {
+          "id": "gancho_continua_ep01",
+          "t": 3.55,
+          "camada": "frente",
+          "pos": [450, 430],
+          "acao": { "alvo": "mangaio", "movimento": "quicar", "dur": 0.75, "params": { "altura": 140 } },
+          "efeito": { "id": "brilho_plim", "dur": 0.80, "escala": 1.15, "semente": 39 },
+          "som": { "id": "cartela_continua", "vol": 0.86 }
+        }
+      ],
+      "cartela": { "tipo": "continua", "t": 3.55, "texto": "continua..." },
+      "transicao": { "tipo": "iris", "dur": 0.60, "foco": [540, 1100], "modo": "fechar" }
+    }
+  ]
+}
