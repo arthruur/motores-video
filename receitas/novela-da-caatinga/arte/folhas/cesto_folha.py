@@ -333,20 +333,20 @@ EXPRESSOES = [  # (id, rótulo, nome no motor, kwargs)
     ("desconfiado", "desconfiado", "olhos_semicerrados",
      dict(olhos=("meia", "meia"), olho_kw={"esq": {"dx": 9}, "dir": {"dx": 9}}, boca_forma="torta", boca_kw={"dx": 10}, braco=(0, 25))),
     ("assustado", "assustado", "olhos_arregalados",
-     dict(olho_kw={"esq": {"escala": 1.25}, "dir": {"escala": 1.25}}, boca_forma="o", braco=(("alto", 40), ("alto", 40)))),
+     dict(olho_kw={"esq": {"escala": 1.25}, "dir": {"escala": 1.25}}, boca_forma="o", braco=(45, 45))),
     ("triste", "triste", "triste",
      dict(olhos=("triste", "triste"), olho_kw={"esq": {"dy": 6}, "dir": {"dy": 6}}, boca_forma="triste", boca_kw={"dy": 6}, braco=(-12, -12))),
     ("encantado", "encantado", "encantado",
-     dict(olho_kw={"esq": {"escala": 1.18}, "dir": {"escala": 1.18}}, boca_forma="o_pequeno", braco=(("alto", 16), ("alto", 16)), rubor=True)),
+     dict(olho_kw={"esq": {"escala": 1.18}, "dir": {"escala": 1.18}}, boca_forma="o_pequeno", braco=(20, 20), rubor=True)),
     ("decidido", "decidido", "sobrancelha_levantada",
-     dict(olhos=("decidido", "decidido"), boca_forma="firme", braco=(0, "punho"))),
+     dict(olhos=("decidido", "decidido"), boca_forma="firme", braco=(0, 60))),
     ("rindo", "rindo", "empolgado",
      dict(olhos=("arco", "arco"), boca_kw={"escala": 1.18, "dy": 4}, braco=(40, 40))),
     ("envergonhado", "envergonhado", "sorriso",
      dict(olho_kw={"esq": {"escala": 0.85, "dy": 8, "dx": 4}, "dir": {"escala": 0.85, "dy": 8, "dx": -4}},
           boca_forma="ondulada", boca_kw={"dy": 4}, braco=(-28, -28), rubor=True)),
     ("nao-vai", "\"não vai\"", "brava (sem raiva)",
-     dict(olhos=("fechado", "fechado"), boca_forma="reta", braco=(0, ("aponta", -28)))),
+     dict(olhos=("fechado", "fechado"), boca_forma="reta", braco=(0, 55))),
 ]
 CONTEUDOS = [("cheio", "cheio (padrão)"), ("pouco", "pouco (estiagem)"), ("vazio", "vazio (seca)"),
              ("transbordando", "transbordando (safra)")]
@@ -588,7 +588,7 @@ def main():
     secoes.append(("Conteúdo", "o que vai dentro conta a temporada · entrega e palha do licuri ficam para a v2", conts))
     poses = [
         ("antecipacao", cesto(pecas, braco=(-10, -10), olhos=("meia", "meia")), "antecipação", {"transform_extra": "scale(1.14 0.84)"}),
-        ("no-ar", cesto(pecas, braco=(("alto", 30), ("alto", 30)), olho_kw={"esq": {"escala": 1.1}, "dir": {"escala": 1.1}}), "no ar",
+        ("no-ar", cesto(pecas, braco=(50, 50), olho_kw={"esq": {"escala": 1.1}, "dir": {"escala": 1.1}}), "no ar",
          {"transform_extra": "translate(0 -40) scale(0.9 1.1)"}),
         ("pouso", cesto(pecas, braco=(30, 30), olhos=("arco", "arco")), "pouso", {"transform_extra": "scale(1.16 0.82)"}),
         ("carregar-tudo", cesto(pecas, conteudo="transbordando", braco=("segura", "segura"), olhos=("arco", "arco")), "carregar_tudo",

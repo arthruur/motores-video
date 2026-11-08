@@ -70,14 +70,14 @@ class Lote:
         return {"id": None}
 
 
-def montar(vc, nome_personagem="NOME DO PERSONAGEM"):
+def montar(vc, nome_personagem="NOME DO PERSONAGEM", ficha=None, nome_doc="folha-padrao"):
     tops = []
     y = 0
     for nome, alt, _ in PRANCHETAS:
         tops.append(y)
         y += alt + VAO
     altura_total = y - VAO
-    vc("file.new", name="folha-padrao", width=L, height=PRANCHETAS[0][1], units="Pixels")
+    vc("file.new", name=nome_doc, width=L, height=PRANCHETAS[0][1], units="Pixels")
     vc("artboard.setProps", index=0, name=PRANCHETAS[0][0], color=PAPEL)
     for (nome, alt, _), top in list(zip(PRANCHETAS, tops))[1:]:
         vc("artboard.new", x=0, y=top, width=L, height=alt, name=nome, color=PAPEL)
@@ -150,7 +150,7 @@ def montar(vc, nome_personagem="NOME DO PERSONAGEM"):
             caixa(ex + 200 + k * 130, yy, 110, 80)
             if r == 3:
                 rot(ex + 255 + k * 130, yy + 115, tom, 22, GUIA)
-    rot(M, t + 1530, "altura: __ cestos · forma dominante: __ · rampas: __ · nunca: __ (ver a ficha em personagens/)", 28, GUIA, "left")
+    rot(M, t + 1530, ficha or "altura: __ cestos · forma dominante: __ · rampas: __ · nunca: __ (ver a ficha em personagens/)", 28, GUIA, "left")
 
     # 2 · Vistas
     linha_celulas(tops[1], VISTAS, 800, 640)
