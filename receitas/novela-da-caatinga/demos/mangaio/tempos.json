@@ -4,22 +4,24 @@
   "sons": [
     {"id": "ambiente", "t": 0, "dur": 35},
 
-    {"id": "mola", "t": 0.55}, {"id": "pouso", "t": 1.10},
+    {"id": "fiu", "t": 0.0, "vol": 0.7}, {"id": "pouso", "t": 0.60},
     {"id": "mola", "t": 1.75}, {"id": "pouso", "t": 2.25},
     {"id": "mola", "t": 2.85}, {"id": "pouso", "t": 3.45, "vol": 1.2},
 
     {"id": "trompete_oi", "t": 4.3},
     {"id": "risco", "t": 4.5},
+    {"id": "brilho", "t": 5.5, "vol": 0.5},
 
     {"id": "palha", "t": 8.75}, {"id": "palha", "t": 9.45}, {"id": "palha", "t": 10.2},
     {"id": "palha", "t": 10.95}, {"id": "palha", "t": 11.65}, {"id": "palha", "t": 12.35},
     {"id": "mola", "t": 12.9, "vol": 0.8}, {"id": "pouso", "t": 13.35, "vol": 0.9},
 
-    {"id": "trompete_desconfianca", "t": 14.05},
+    {"id": "palha", "t": 14.0, "vol": 0.45}, {"id": "trompete_desconfianca", "t": 14.05},
     {"id": "trompete_comedia", "t": 16.02}, {"id": "pouso", "t": 16.37, "vol": 0.6},
     {"id": "trompete_grave", "t": 18.35},
     {"id": "brilho", "t": 20.55}, {"id": "trompete_suspensa", "t": 20.75, "vol": 0.8},
-    {"id": "trompete_nao_vai", "t": 22.72},
+    {"id": "palha", "t": 22.62, "vol": 0.5}, {"id": "trompete_nao_vai", "t": 22.72},
+    {"id": "palha", "t": 24.55, "vol": 0.5},
 
     {"id": "fiu", "t": 25.1},
     {"id": "vento", "t": 25.6, "dur": 1.6, "vol": 0.6},

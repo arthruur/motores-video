@@ -32,9 +32,9 @@ Padrão. É quem mais usa `sobrancelha_levantada`, e é o caso de teste da sobra
 | Cuia | Cap. 3 | Deixa cair no gancho |
 
 ## Model sheet pedido
-Folha v1: [`../folhas/dona-mandioca-folha.png`](../folhas/dona-mandioca-folha.png), gerada por [`../folhas/dona_mandioca_folha.py`](../folhas/dona_mandioca_folha.py) (fonte editável: `../fonte/dona-mandioca-folha.vectorcraft`, uma prancheta por seção; peças avulsas em `../banco/dona-mandioca/`).
+Folha v2 (rig desenhado à mão em código, nada rastreado): [`../folhas/dona-mandioca-folha.png`](../folhas/dona-mandioca-folha.png), gerada por [`../folhas/dona_mandioca_folha.py`](../folhas/dona_mandioca_folha.py) (fonte editável: `../fonte/dona-mandioca-folha.vectorcraft`, uma prancheta por seção; peças avulsas em `../banco/dona-mandioca/`).
 
-- [~] Turnaround: frente ✅ (rig) · 3/4 ✅ (Qwen, rastreada) · perfil e costas: **rascunho** montado com as peças (Qwen sem cota em 07/11; refazer, ver `../referencias/dona-mandioca/prompts.md`) · de cima: falta
+- [~] Turnaround 🟡 em revisão (portão §6 não passou): frente, 3/4, perfil, 3/4 de costas e costas saem do mesmo rig paramétrico (`dona_mandioca_rig.py`, a vista é o ângulo theta), cada uma com os mesmos ids · de cima: falta · os rascunhos `*-rascunho.svg` da v1 ficam só como registro
 - [x] Expressões: as 11 + "ri segurando o riso", "fingindo pouco caso" (cap. 4)
 - [x] Bocas (8)
 - [x] Poses: mão na cintura, bater a colher (antecipação + batida), se abanar (com a folha do cap. 1), braços cruzados, abraço contido
@@ -42,19 +42,19 @@ Folha v1: [`../folhas/dona-mandioca-folha.png`](../folhas/dona-mandioca-folha.pn
 - [x] Silhueta (e escala ao lado do Mangaio, 1,35×)
 
 ## Peças do rig (frente)
-Arquivo: `../banco/dona-mandioca/dona-mandioca-rig.svg` (ids documentados no topo). Pés no chão em (640, 1195), coordenadas da geração.
+Arquivo: `../banco/dona-mandioca/dona-mandioca-rig.svg` (ids documentados no topo; as outras vistas em `dona-mandioca-tres-quartos.svg`, `-perfil.svg`, `-costas.svg`, mesmos ids). Pés no chão em (640, 1195). Pivô: atributo `data-pivo="x y"` no próprio grupo (a mesma convenção do `mangaio-rig.svg`). Estado padrão do arquivo: olhos `oval`, sobrancelhas ocultas, `boca-repouso`, braço esq. reto com a colher, braço dir. na cintura.
 
 | Grupo | O que é | Pivô |
 |---|---|---|
 | `dona-mandioca` | ela inteira | meio dos pés |
-| `perna-esq`, `perna-dir` | a casca abaixo do quadril (recorte), pés-toco | quadril (500 / 780, 1068) |
+| `perna-esq`, `perna-dir` | tocos próprios em `mandioca_casca` com a pontinha de miolo; o topo entra ~70 px no tronco, escondido sob a barra | quadril de cada perna |
 | `tronco` | tudo acima do quadril: squash, stretch, inclinação | quadril |
-| `corpo` | base lisa + casca e miolo rastreados + faixas de casca desenhadas | quadril |
-| `acess-avental` | avental rastreado, laço desenhado, letreiro "FARINHA" de pincel | cintura |
+| `corpo` | tons empilhados (sombra, base, banda de luz alta à esquerda, meio, profunda embaixo à direita), miolo no topo, faixas de casca e 8 lascas de miolo longe do rosto | quadril |
+| `acess-avental` | alças, peitilho, cós, saia, bolso com "FARINHA" de pincel, X nas costas, laço | cintura |
 | `acess-lenco` | lenço de bolinhas (follow-through: ±3°, chega atrasado) | nó |
 | `rosto` | rosto padrão do Mangaio: `olho-*` (oval, arco, meia-lua, fechado, grande, triste, decidido), `sobr-*` (some por padrão), `boca` (8 de sincronia + 6 de expressão), `bochechas` | meio dos olhos |
-| `braco-esq`, `braco-dir` | patinhas de luva sem dedos; variantes reto(ângulo), cintura, cruzado | ombro |
-| `prop-colher` / `prop-abano` | colher de pau (`madeira_banca`) / folha de abano (`folha`), entre o braço e a mão | pega |
+| `braco-esq`, `braco-dir` | patinhas de luva (afinam do ombro à mão); subgrupos `braco-*-reto` (gira o `.giro`), `-cintura`, `-cruzado` | ombro |
+| `prop-colher-<lado>` / `prop-abano-<lado>` | colher de pau (`madeira_banca`) / folha de abano (`folha`), dentro do `.giro` do braço reto | pega |
 
 Combinações de cada expressão e pose: `EXPRESSOES` e `POSES` em `dona_mandioca_folha.py`.
 
@@ -86,4 +86,7 @@ caring matriarch. Expression: one eyebrow raised, holding back a smile.
 | 2026-11-07 | Sobrancelha = forma curta cheia em `#462416`, some na neutra; marca dela é a sobrancelha do lado esquerdo da tela levantada | Caso de teste da ARTE.md §6 |
 | 2026-11-07 | Avental com laço desenhado à mão; letreiro "FARINHA" em lettering de pincel (Caveat Brush tremida letra a letra) em `algodao_cru.sombra` | O laço rastreado virava borrão; o carimbo apagado não pode ser marca |
 | 2026-11-07 | Pernas = recorte da própria casca abaixo do quadril | Pés-toco: o andar dela é passo curto, sobe e desce, não balança de perna |
-
+| 2026-11-07 | **Rig v2**: tudo desenhado à mão em código (`dona_mandioca_rig.py`), sem rastreamento; a vista é parâmetro (corpo = cilindro torto, peças da superfície projetadas) | Revisão de arte reprovou a v1 (casca de raster posterizado, emenda do quadril abrindo, 3/4 achatado, braços de régua). Substitui as linhas acima sobre rastreamento e pernas-recorte |
+| 2026-11-07 | Pernas = tocos próprios com o topo escondido no tronco | A emenda da v1 abria no stretch; testado com tronco `translate(0,-30) scale(1,1.08)` e pernas a ±25° |
+| 2026-11-07 | Rosto a 1,18 px/unidade (≈ 0,58 do absoluto do Mangaio), bocas mais 1,15× | Recomendação da revisão. **Ainda proposta**: a ARTE.md §3 pede o mesmo tamanho absoluto; aprovar ou recusar a exceção |
+| 2026-11-07 | Bochecha em `lenco_vermelho.meio` a 30% (igual à ficha) | Rig v1 usava 38% |

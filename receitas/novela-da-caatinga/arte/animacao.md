@@ -28,6 +28,8 @@ Toda arte entregue para o motor segue esta lista de grupos. Os nomes são os `id
 
 **O pivô é marcado no Illustrator** com um círculo minúsculo chamado `pivo` dentro de cada grupo. O motor lê a posição e apaga o círculo.
 
+> **Exceção do Mangaio** (`banco/cesto/mangaio-rig.svg`): subgrupos com o lado no id (`olho-esq-oval`, `braco-dir-alto`), bocas expressivas no lugar dos visemas (ele não fala), pivô em `data-pivo="x y"` em vez do círculo `pivo`, e cada peça de braço gira só o filho `.giro`, cujo (0,0) é o ombro. Detalhes em [`personagens/cesto.md`](personagens/cesto.md#rig-convenções-do-mangaio-exceções-ao-animacaomd-2).
+
 **Ordem das camadas** (de trás para frente): `sombra` → `perna-*` e `braco-*` de trás → `corpo` → `rosto` → `acess-*` → `braco-*` da frente → `prop-*`.
 
 **Vistas:** cada vista do turnaround (frente, 3/4, perfil, costas) é um rig separado, com os mesmos nomes. O motor troca de vista; não existe interpolação 3D.

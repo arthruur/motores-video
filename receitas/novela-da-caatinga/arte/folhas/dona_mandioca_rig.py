@@ -656,7 +656,10 @@ def braco(lado, v, seed, rig_completo=False, estado=None):
                 pg.set("data-pivo", f"{hx:.1f} {hy:.1f}")
                 if not vis or (rig_completo and not (prop and prop[0] == nome)):
                     pg.set("display", "none")
-                pg.append(colher() if nome == "colher" else folha_abano())
+                desenho = colher() if nome == "colher" else folha_abano()
+                if rig_completo:          # ids únicos no rig (há uma colher/abano em cada braço)
+                    desenho.set("id", f"{desenho.get('id')}-{lado}")
+                pg.append(desenho)
                 giro.append(pg)
             for e in mao(hx, hy, ang_b, seed + 20, polegar=-sent):
                 giro.append(e)

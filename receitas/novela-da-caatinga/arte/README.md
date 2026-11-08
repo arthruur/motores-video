@@ -40,7 +40,7 @@ Atualize a cada entrega. Estados: `—` não começou · `explorando` · `design
 | Asset | Design | Model sheet | Vetor (`banco/`) | Rig | Teste |
 |---|---|---|---|---|---|
 | Cesto (Mangaio) | ✅ (marca) | v2 🟡 aguardando portão (`folhas/cesto-folha.png`: vistas, expressões, conteúdo, poses, silhuetas, braços v2; **falta de cima**) | ✅ frente · 🟡 3/4 · 🟡 perfil · 🟡 costas (v2 montadas à mão com peças oficiais; a v1 rastreada reprovou) | 🟡 `banco/cesto/mangaio-rig.svg` (pivô no ombro via `.giro`; refeito após a falha do braço alto) | 🟡 demo `demos/mangaio` (giro 0/40/-28° nas peças: ok); v1 falhou: braço soltava no giro |
-| Dona Mandioca | design ok (`referencias/dona-mandioca-frente.png`) | v1 `folhas/dona-mandioca-folha.png` (frente, 3/4, 13 expressões, 8 bocas, 6 poses, escala; perfil e costas em rascunho) | ✅ frente e 3/4 (`banco/dona-mandioca/`) | rig da frente (`dona-mandioca-rig.svg`: rosto padrão, sobrancelhas, bocas, braços, colher, pernas, pivôs) | — (aguarda aprovação da folha) |
+| Dona Mandioca | design ok (`referencias/dona-mandioca-frente.png`) | v2 `folhas/dona-mandioca-folha.png` (rig paramétrico desenhado à mão: frente, 3/4, perfil, 3/4 de costas, costas; 13 expressões, 8 bocas, 8 poses, escala) | 🟡 em revisão (`banco/dona-mandioca/`; falta a vista de cima) | rig v2 em toda vista (`dona-mandioca-rig.svg` e vistas, `data-pivo`); testado no motor na demo `demos/dona-mandioca/` | — (aguarda aprovação: rosto 0,58, rampas `mandioca_casca` v1 e `algodao_cru`) |
 | Licuri | ✅ `referencias/licuri.png` | parcial (expressões + poses em `licuri.png`) | ✅ `banco/licuri/licuri-frente.svg` | ✅ grupos + pivô | lineup ok |
 | Realçador | — | — | — | — | — |
 | Maxixe | — | — | — | — | — |

@@ -12,7 +12,7 @@
 
 const BANCO = '../../arte/banco/cesto/'
 const W = 534, H = 627                    // coordenadas do mascote.svg
-const CHAO = 1236, CX = 540, K = 1.2      // pé do Mangaio no quadro e escala (1 = 627 px de altura)
+const CHAO = 1250, CX = 540, K = 1.12      // pé do Mangaio no quadro e escala (1 = 627 px de altura)
 const DURACAO = 35
 
 // ---------------------------------------------------------------- utilidades
@@ -30,9 +30,9 @@ const T = {
   entrada: 0, nome: 4.1, giro: 8.1, expr: 13.8, cont: 25.0, fecho: 31.4,
   // pulos: t0 = decolagem, d = tempo no ar, h = altura, xa → xb, ant = antecipação, peso = quanto achata
   pulos: [
-    { t0: 0.55, d: 0.55, h: 240, xa: -420, xb: 300, ant: 0.2, peso: 1 },
+    { t0: -0.15, d: 0.75, h: 300, xa: -760, xb: 300, ant: 0.2, peso: 1 },   // já entra no ar, de fora do quadro
     { t0: 1.75, d: 0.50, h: 190, xa: 300, xb: 430, ant: 0.18, peso: 1 },
-    { t0: 2.85, d: 0.60, h: 260, xa: 430, xb: 540, ant: 0.24, peso: 1.1 },
+    { t0: 2.85, d: 0.60, h: 210, xa: 430, xb: 540, ant: 0.24, peso: 1.1 },
     { t0: 12.9, d: 0.45, h: 150, xa: 540, xb: 540, ant: 0.18, peso: 0.9 },
     { t0: 16.05, d: 0.32, h: 70, xa: 540, xb: 540, ant: 0.0, peso: 0.6 },     // o susto tira do chão
     { t0: 30.55, d: 0.42, h: 60, xa: 540, xb: 540, ant: 0.26, peso: 1.6 },    // carregar_tudo: baixo e pesado
@@ -180,7 +180,8 @@ function personagem(t) {
   const S = neutro()
   // respiração (±1,5% a cada ~3,5 s) e piscadas irregulares de fundo
   S.sy *= 1 + 0.015 * Math.sin(2 * Math.PI * t / 3.4)
-  S.pisca = Math.max(piscar(t, 3.95, 0.5), piscar(t, 7.2), piscar(t, 13.55), piscar(t, 26.2), piscar(t, 33.0))
+  S.pisca = Math.max(piscar(t, 3.95, 0.5), piscar(t, 7.2), piscar(t, 13.55), piscar(t, 26.2), piscar(t, 33.0),
+    piscar(t, 18.08, 0.26), piscar(t, 20.28, 0.26))   // piscada na troca: esconde o corte de expressão
 
   // ----- 1. entrada aos pulos
   if (t < T.nome) {
@@ -205,7 +206,11 @@ function personagem(t) {
     if (atual[0] > T.giro) { S.sy *= 1 - 0.06 * mola(dt, 3.2, 9); S.sx *= 1 + 0.05 * mola(dt, 3.2, 9); S.rot = 3 * S.flip * mola(dt, 2, 6) }
     // a próxima troca chama: leve antecipação
     const prox = T.vistas.find(v => v[0] > t)
-    if (prox) { const a = faixa(t, prox[0] - 0.12, prox[0]); S.sy *= 1 - 0.04 * a; S.sx *= 1 + 0.03 * a }
+    if (prox) { const a = suave(faixa(t, prox[0] - 0.14, prox[0])); S.sx *= 1 - 0.2 * a; S.sy *= 1 + 0.03 * a }
+    // e chega ainda estreito, abrindo: lê como giro, não como troca de slide
+    if (atual[0] > T.giro) S.sx *= 1 - 0.2 * (1 - suave(faixa(dt, 0, 0.16)))
+    // pulinho de apoio em cada troca
+    for (const v of T.vistas.slice(1)) S.y -= 22 * Math.sin(Math.PI * faixa(t, v[0] - 0.14, v[0] + 0.18))
   }
   // ----- 4. olhos e braços (expressões com micro-atuação)
   if (dentro(t, T.expr, T.cont)) {
@@ -231,17 +236,20 @@ function personagem(t) {
         break
       }
       case 'triste': {                      // murchar: achata, braços caem, olhar para baixo
-        const m = suave(faixa(u, 0.1, 0.8))
-        S.olho = 'triste'; S.boca = 'triste'; S.sy *= 1 - 0.13 * m; S.sx *= 1 + 0.05 * m
-        S.olhar = [0, 0.9 * m]; S.bE = ['oficial', 14 * m]; S.bD = ['oficial', 14 * m]
-        S.rot = 1.5 * Math.sin(u * 1.2) * m
+        const inspira = Math.sin(Math.PI * faixa(u, 0.0, 0.7))      // suspiro: enche...
+        const m = suave(faixa(u, 0.5, 1.4))                          // ...e murcha devagar
+        S.olho = 'triste'; S.boca = 'triste'
+        S.sy *= (1 + 0.06 * inspira) * (1 - 0.15 * m); S.sx *= (1 - 0.02 * inspira) * (1 + 0.06 * m)
+        S.olhar = [-0.7 * suave(faixa(u, 1.5, 1.9)), -0.4 * inspira + 0.9 * m]
+        S.bE = ['oficial', -8 * inspira + 18 * m]; S.bD = ['oficial', -8 * inspira + 18 * m]
+        S.rot = -2 * suave(faixa(u, 1.5, 1.9)) * m
         break
       }
       case 'encantado': {                   // flutua, rubor, brilhos, piscada lenta
         S.olho = 'grande'; S.boca = 'o_pequeno'; S.rubor = suave(faixa(u, 0, 0.4))
         const b = Math.sin(u * 2.6)
         S.bE = ['alto', -6 + 6 * b]; S.bD = ['alto', -6 - 6 * b]
-        S.y = -14 * suave(faixa(u, 0, 0.5)) - 8 * Math.sin(u * 2.6); S.sy *= 1.03
+        S.y = -14 * suave(faixa(u, 0, 0.5)) - 8 * Math.sin(u * 2.6); S.sy *= 1.03 + 0.07 * Math.sin(Math.PI * faixa(u, 0, 0.3))
         S.olhar = [0.2 * b, -0.5]; S.pisca = Math.max(S.pisca, piscar(u, 1.25, 0.6))
         break
       }
@@ -252,7 +260,8 @@ function personagem(t) {
         S.bE = ['aponta', lerp(34, -16, ap)]
         S.sy *= (1 - 0.06 * pre) * (1 + 0.05 * ap); S.sx *= (1 + 0.04 * pre) * (1 - 0.02 * ap)
         const nao = u > 0.6 && u < 1.9 ? Math.sin((u - 0.6) * 14) * (1 - (u - 0.6) / 1.3) : 0
-        S.olhar = [nao * 1.4, -0.35 * ap]; S.rot = -4 * ap + 3 * nao; S.x += 8 * nao
+        S.olhar = [nao * 1.4, -0.35 * ap]; S.rot = -4 * ap + 5 * nao; S.x += 14 * nao
+        S.x += 40 * (suave(faixa(u, 0, 0.3)) - suave(faixa(u, 2.05, 2.4)))
         if (u > 1.95) S.bE = ['aponta', -16 + 6 * Math.sin((u - 1.95) * 9) * Math.exp(-(u - 1.95) * 3)]   // reafirma
         break
       }
@@ -341,7 +350,7 @@ function quedaFruta(t, t0, d = T.queda) {
 function camera(t) {
   // push-in nas expressões (plano médio -> close) e volta
   // (em volta do meio do corpo, para a alça não subir até o rótulo)
-  const z = 1 + 0.14 * (suave(faixa(t, T.expr - 0.2, T.expr + 0.7)) - suave(faixa(t, T.cont - 0.4, T.cont + 0.4)))
+  const z = 1 + 0.18 * (suave(faixa(t, T.expr - 0.2, T.expr + 0.7)) - suave(faixa(t, T.cont - 0.4, T.cont + 0.4)))
   // entrada: plano aberto para os pousos caberem no quadro; fecha no último pulo
   const ze = lerp(0.8, 1, suave(faixa(t, 2.7, 3.75)))
   // abre um pouco enquanto o nome está escrito (em volta do pé)
@@ -372,7 +381,7 @@ function textos(t) {
     L.sec = sec; L.item = item; L.rotOp = Math.min(faixa(t, t0, t0 + 0.2), 1 - faixa(t, t1 - 0.15, t1))
   }
   const nomes = { frente: 'frente', 'tres-quartos': '3/4', perfil: 'perfil', costas: 'costas' }
-  rot('1 · quique', 'antecipação, pulo e pouso', 0.4, T.nome - 0.1)
+  rot('1 · quique', 'antecipação, pulo e pouso', 0.4, 2.75)
   T.vistas.forEach((v, i) => rot('2 · virada', nomes[v[1]], v[0] + (i ? 0 : 0.2), (T.vistas[i + 1] || [T.giro + 5.5])[0]))
   T.exprs.forEach((e, i) => rot('3 · olhos e braços', e[1], e[0] + 0.1, (T.exprs[i + 1] || [T.cont])[0]))
   rot('4 · o que vai dentro', 'vazio', T.sai + 0.4, T.cai[0])
@@ -390,7 +399,7 @@ function aplicar(S, C, L, t) {
   for (const [v, g] of Object.entries(VISTAS)) mostra(g, v === S.vista)
   ator.setAttribute('transform',
     `translate(${r(S.x)} ${r(CHAO + S.y)}) rotate(${r(S.rot, 2)}) scale(${r(K * S.sx * S.flip, 3)} ${r(K * S.sy, 3)}) translate(${-W / 2} ${-H})`)
-  $('#cam').setAttribute('transform', `translate(${CX} ${r(900 + C.dy)}) scale(${r(C.z, 3)}) translate(${-CX} -900) `
+  $('#cam').setAttribute('transform', `translate(${CX} ${r(980 + C.dy)}) scale(${r(C.z, 3)}) translate(${-CX} -980) `
     + `translate(${CX} ${CHAO}) scale(${r(C.zn, 3)}) translate(${-CX} ${-CHAO})`)
   $('#sombra-chao').setAttribute('transform', `translate(${r(S.x)} ${CHAO}) scale(${r(K * 0.98 * S.sombra * (0.85 + 0.15 * S.sx), 3)} ${r(K * 0.98 * S.sombra, 3)})`)
   $('#sombra-chao').setAttribute('opacity', r(0.4 * (0.5 + 0.5 * S.sombra), 3))
@@ -439,9 +448,9 @@ function aplicar(S, C, L, t) {
     const lado = i % 2 ? 1 : -1, n = Math.floor(i / 2)
     const px = xBase(ult + 0.01) + lado * K * (170 + 60 * n + 120 * pu * (1 + n * 0.3))
     const py = CHAO - 8 - 28 * pu * (1 + n * 0.4) - n * 6
-    const s = (0.6 + 0.25 * n) * (0.6 + 0.8 * pu)
+    const s = 1.7 * (0.6 + 0.25 * n) * (0.6 + 0.8 * pu)
     c.setAttribute('transform', `translate(${r(px)} ${r(py)}) scale(${r(s, 2)})`)
-    c.setAttribute('opacity', r(0.75 * (1 - pu), 2))
+    c.setAttribute('opacity', r(0.85 * (1 - pu * pu), 2))
   })
   // brilhos do encanto
   const enc = T.exprs[3][0], encFim = T.exprs[4][0]

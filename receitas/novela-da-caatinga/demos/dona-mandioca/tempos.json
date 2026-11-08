@@ -1,0 +1,34 @@
+{
+  "_leia": "Deixas de som da demo da Dona Mandioca, em segundos. Casam com T, GIRO e REG em cena.js (andar, vira, marca, nome, giro, regente, exprs, fala, fecho): mexeu num, confira o outro. vol multiplica o nível padrão do efeito.",
+  "duracao": 39.5,
+  "sons": [
+    {"id": "ambiente", "t": 0, "dur": 39.5},
+
+    {"id": "passo", "t": 0.83}, {"id": "passo", "t": 1.41}, {"id": "passo", "t": 1.99}, {"id": "passo", "t": 2.57},
+    {"id": "passo", "t": 3.15}, {"id": "passo", "t": 3.73}, {"id": "passo", "t": 4.31}, {"id": "passo", "t": 4.89, "vol": 1.25},
+
+    {"id": "tecido", "t": 5.3, "dur": 1.2},
+    {"id": "tic", "t": 6.85, "nota": 79},
+    {"id": "risco", "t": 7.75},
+
+    {"id": "tecido", "t": 11.65, "dur": 0.35, "vol": 0.7}, {"id": "tecido", "t": 12.45, "dur": 0.35, "vol": 0.7},
+    {"id": "tecido", "t": 13.2, "dur": 0.6, "vol": 0.8}, {"id": "tecido", "t": 14.2, "dur": 0.6, "vol": 0.8},
+    {"id": "tecido", "t": 15.25, "dur": 0.35, "vol": 0.7}, {"id": "tecido", "t": 15.75, "dur": 0.35, "vol": 0.7},
+
+    {"id": "zum", "t": 16.86}, {"id": "toc", "t": 16.95},
+    {"id": "zum", "t": 17.61}, {"id": "toc", "t": 17.7, "vol": 1.1},
+    {"id": "zum", "t": 18.2, "vol": 0.7}, {"id": "tic", "t": 18.45, "nota": 74},
+    {"id": "xote", "t": 19.4, "dur": 2.15},
+    {"id": "toc", "t": 21.55, "vol": 1.2},
+
+    {"id": "tic", "t": 23.0, "nota": 76}, {"id": "tic", "t": 23.85, "nota": 79}, {"id": "tic", "t": 24.7, "nota": 74},
+    {"id": "tic", "t": 25.55, "nota": 71}, {"id": "tic", "t": 26.4, "nota": 81}, {"id": "brilho", "t": 27.3},
+
+    {"id": "fala", "t": 28.55},
+
+    {"id": "sanfona", "t": 33.7, "dur": 5.8},
+    {"id": "tecido", "t": 34.1, "dur": 0.5, "vol": 0.7}, {"id": "tecido", "t": 34.6, "dur": 0.5, "vol": 0.9},
+    {"id": "tic", "t": 36.15, "nota": 79},
+    {"id": "risco", "t": 36.55}
+  ]
+}

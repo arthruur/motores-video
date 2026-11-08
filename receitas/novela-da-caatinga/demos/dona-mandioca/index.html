@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Dona Mandioca · demo de animação</title>
+<style>
+  @font-face { font-family: 'Caveat Brush'; src: url('../../fontes/CaveatBrush-Regular.ttf'); }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #E1C89F; }
+  #fundo { position: absolute; inset: 0; background: url('../../texturas/kraft.jpg'); }
+  /* luz de cena (gradiente só em luz): calor do forno da casa de farinha vindo de cima, cantos mais escuros */
+  #luz { position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 55% at 50% 50%, rgba(255, 228, 182, .40), rgba(255, 228, 182, 0) 70%),
+                radial-gradient(ellipse 120% 90% at 50% 50%, rgba(122, 70, 40, 0) 55%, rgba(122, 70, 40, .32) 100%); }
+  #palco { position: absolute; inset: 0; }
+  .letra { position: absolute; font-family: 'Caveat Brush', cursive; color: #462416; white-space: nowrap; }
+  #nome { left: 0; width: 1080px; top: 300px; text-align: center; font-size: 150px; line-height: 1; }
+  #nome .tinta { display: inline-block; }
+  #nome svg { display: block; margin: -6px auto 0; }
+  #sub { left: 0; width: 1080px; top: 486px; text-align: center; font-size: 50px; color: #8F4523; }
+  #rotulo { left: 132px; top: 300px; }
+  #rotulo .sec { font-size: 36px; color: #AF561E; display: block; }
+  #rotulo .item { font-size: 62px; display: block; margin-top: -6px; }
+  #fala { left: 120px; width: 840px; top: 300px; text-align: center; font-size: 60px; line-height: 1.08; white-space: normal; }
+  #fala span { display: inline-block; }
+  #grao { position: absolute; inset: 0; background: url('../../texturas/grao.png'); opacity: .09; mix-blend-mode: multiply; }
+</style>
+</head>
+<body>
+<div id="fundo"></div>
+<div id="luz"></div>
+<svg id="palco" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <g id="cam">
+    <g id="poeira"></g>
+    <g id="ator"></g>
+    <g id="notas"></g>
+  </g>
+</svg>
+<div id="rotulo" class="letra"><span class="sec"></span><span class="item"></span></div>
+<div id="nome" class="letra"><span class="tinta">Dona Mandioca</span>
+  <svg width="700" height="40" viewBox="0 0 700 40"><path d="M8 24C110 10 260 8 380 12C490 15 590 12 692 6C696 14 688 22 680 22C570 26 450 30 340 28C230 27 110 30 18 36C6 37 2 28 8 24Z" fill="#C5441E"/></svg>
+</div>
+<div id="sub" class="letra"></div>
+<div id="fala" class="letra"></div>
+<div id="grao"></div>
+<script src="vistas.js"></script>
+<script src="cena.js"></script>
+</body>
+</html>
