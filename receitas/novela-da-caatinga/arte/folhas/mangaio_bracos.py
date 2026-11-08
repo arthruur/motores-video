@@ -1,4 +1,4 @@
-"""Braços novos do Mangaio (peças de rig), v3 (2026-11-08: sem polegar, ponta só redonda):
+"""Braços novos do Mangaio (peças de rig), v4 (2026-11-08: peça única, sem luva nem polegar; sem a peça "punho"):
 
 v2: derivados das medidas do braço oficial.
 
@@ -37,16 +37,14 @@ OMBRO = {"dir": (490.0, 446.0), "esq": (46.0, 452.0)}
 # polegar opcional (posição relativa à luva em coords da luva: u ao longo, v de lado, raio).
 PECAS = {
     # alto: luva acima do ombro, aberta para fora (susto, encanto, no ar, dança)
-    "alto":   dict(esp=[(0, 0), (46, -14), (54, -84)], r=(33, 29), luva=(84, 80, 12), polegar=None),
+    "alto":   dict(esp=[(0, 0), (46, -14), (54, -96)], r=(34, 32), luva=None, polegar=None),
     # aponta: estica para o lado, luva mais estreita com polegar para cima (apontar, "não vai")
-    "aponta": dict(esp=[(0, 0), (52, 10), (100, -2)], r=(32, 28), luva=(80, 74, 10), polegar=None),
+    "aponta": dict(esp=[(0, 0), (56, 10), (112, -2)], r=(34, 31), luva=None, polegar=None),
     # segura: sobe e a luva vira para dentro, palma para cima, encostada na borda (carregar_tudo)
-    "segura": dict(esp=[(0, 0), (46, -36), (16, -88)], r=(33, 29), luva=(80, 84, 10), polegar=None),
-    # punho: curto, luva fechada e redonda (decidido)
-    "punho":  dict(esp=[(0, 0), (34, -10), (38, -58)], r=(33, 30), luva=(84, 82, 12), polegar=None),
+    "segura": dict(esp=[(0, 0), (46, -36), (16, -98)], r=(34, 32), luva=None, polegar=None),
 }
 # giro padrão de cada peça (graus, para fora), quando usada como pose
-GIRO = {"alto": 0, "aponta": -6, "segura": 0, "punho": 0}
+GIRO = {"alto": 0, "aponta": -6, "segura": 0}
 
 
 def _bez(p, s):
@@ -115,11 +113,12 @@ def formas(nome):
     """(sombra, base): duas listas de paths, em coords locais do braço da direita."""
     p = PECAS[nome]
     esp, (r0, r1) = p["esp"], p["r"]
-    comp, larg, avanco = p["luva"]
     tx, ty = _tan(esp, 1)
     px, py = esp[2]
-    cx, cy = px + tx * avanco, py + ty * avanco
     ang = math.atan2(ty, tx)
+    # peça única (2026-11-08): sem luva; a ponta é uma tampa redonda do mesmo raio do braço
+    comp, larg, avanco = p["luva"] or (2 * r1, 2 * r1, 0)
+    cx, cy = px + tx * avanco, py + ty * avanco
     sombra, base = [], []
     for alvo, enc, desl in ((sombra, 0.0, (0.0, 0.0)), (base, ENCOLHE, LUZ)):
         alvo.append(_suave(_antebraco(esp, r0, r1, enc, desl, semente=len(nome))))

@@ -206,7 +206,7 @@ def cesto(pecas, *, olhos=("oval", "oval"), olho_kw=None, boca_forma="aberta", b
 
     # braços por último: levantados, passam na frente das frutas.
     # cada braço é um ângulo (gira o oficial, até ~60°) ou o nome de uma peça nova
-    # de mangaio_bracos ("alto", "aponta", "segura", "punho"), ou (nome, giro).
+    # de mangaio_bracos ("alto", "aponta", "segura"), ou (nome, giro).
     for lado, ang in zip(("esq", "dir"), braco):
         if isinstance(ang, (str, tuple)):
             nome, giro = (ang, None) if isinstance(ang, str) else ang
@@ -339,7 +339,7 @@ EXPRESSOES = [  # (id, rótulo, nome no motor, kwargs)
     ("encantado", "encantado", "encantado",
      dict(olho_kw={"esq": {"escala": 1.18}, "dir": {"escala": 1.18}}, boca_forma="o_pequeno", braco=(("alto", 16), ("alto", 16)), rubor=True)),
     ("decidido", "decidido", "sobrancelha_levantada",
-     dict(olhos=("decidido", "decidido"), boca_forma="firme", braco=(0, "punho"))),
+     dict(olhos=("decidido", "decidido"), boca_forma="firme", braco=(0, ("alto", -14)))),
     ("rindo", "rindo", "empolgado",
      dict(olhos=("arco", "arco"), boca_kw={"escala": 1.18, "dy": 4}, braco=(40, 40))),
     ("envergonhado", "envergonhado", "sorriso",
@@ -412,7 +412,7 @@ def secao(pai, y, titulo, nota, itens):
 # ---------------------------------------------------------------- rig
 OLHO_FORMAS = ["oval", "grande", "pequeno", "meia", "triste", "decidido", "arco", "fechado"]
 BOCA_FORMAS = ["aberta", "aberta_grande", "sorriso_fechado", "firme", "triste", "o", "o_pequeno", "torta", "ondulada", "reta"]
-BRACO_PECAS = ["oficial", "alto", "aponta", "segura", "punho"]
+BRACO_PECAS = ["oficial", "alto", "aponta", "segura"]
 
 RIG_DOC = """
   Mangaio · rig para o motor (gerado por arte/folhas/cesto_folha.py; não editar à mão)
@@ -432,7 +432,7 @@ RIG_DOC = """
   alca               a alça trançada
   frutas-extra       pilha acima da borda (oculto; transbordando = frutas-cheio + frutas-extra)
   frutas-cheio       fruta-tomate, fruta-laranja e folhas (padrão)
-  braco-esq/-dir     braco-LADO-oficial (padrão; gira até ~60°) | -alto | -aponta | -segura | -punho
+  braco-esq/-dir     braco-LADO-oficial (padrão; gira até ~60°) | -alto | -aponta | -segura
                      esq/dir = lado de quem olha. PIVÔ (v2): cada peça é
                        g#braco-LADO-PECA [data-pivo="x y", transform="translate(x y)"]
                            g.giro [transform="rotate(a)"] > formas
@@ -455,7 +455,7 @@ RIG_DOC = """
     assustado     grande, alto (giro 40), o
     triste        triste (desce 6), oficial -12°, triste
     encantado     grande, alto (giro 8), o_pequeno, bochechas
-    decidido      decidido, oficial / punho, firme
+    decidido      decidido, oficial / alto, firme
     rindo         arco, oficial 40°, aberta_grande
     envergonhado  pequeno, oficial -28°, ondulada, bochechas
     nao-vai       fechado, oficial / aponta (giro -28), reta
@@ -612,7 +612,7 @@ def main():
     sil.append((silhueta(pose_g["apontar"][1]), "apontar", {"transform_extra": "rotate(3)"}))
     sil.append((silhueta(pose_g["danca"][1]), "dança", {"transform_extra": "rotate(-6)"}))
     secoes.append(("Silhuetas", "em #462416: cada vista e cada pose com braço novo tem que se ler só pela sombra, no tamanho de celular", sil))
-    nomes = {"oficial": "oficial (abraça)", "alto": "alto", "aponta": "aponta", "segura": "segura", "punho": "punho"}
+    nomes = {"oficial": "oficial (abraça)", "alto": "alto", "aponta": "aponta", "segura": "segura"}
     secoes.append(("Braços", "peças do rig, trocáveis · mesma base #E49340 e borda #B0581E do braço oficial · ● = pivô no ombro · o da esquerda é o espelho",
                    [(peca_braco(n), nomes[n], {"sombra": False}) for n in BRACO_PECAS]))
 

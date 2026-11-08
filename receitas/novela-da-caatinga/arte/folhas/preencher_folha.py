@@ -64,7 +64,7 @@ PERSONAGENS = {
         rampas=["palha_cesto", "folha", "tomate", "laranja"],
         bracos_svg=ARTE.parent / "mascote.svg",
         bracos=[("braco-esq", "0 430 125 160"), ("braco-dir", "420 422 120 164")],
-        bracos_novos=["alto", "aponta", "segura", "punho"],
+        bracos_novos=["alto", "aponta", "segura"],
     ),
 }
 
@@ -212,7 +212,7 @@ def preencher(vc, cfg):
             vc("select.none")
             vc("text.create", x=cx, y=cy + 110, text=rot_, size=22, font=fp.FONTE, color=fp.GUIA, justify="center")
     vc("select.none")
-    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text="braços: ponta só redonda, sem polegar · ● = pivô no ombro\n(o oficial gira até ~60°; acima disso, troca pela peça)",
+    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text="braços: peça única, ponta redonda · ● = pivô no ombro\n(o oficial gira até ~60°; acima disso, troca pela peça)",
        size=24, font=fp.FONTE, color=fp.ESCURO, justify="left")
     vc("select.none")
     vc("text.create", x=fp.M + 3 * (zw + 40) + 30, y=t6 + 420, text="frutas (tomate, laranja, folhas):\nestados do conteúdo — pendente (outro PC)",
