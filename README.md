@@ -130,9 +130,10 @@ Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (
 | Caminho | O que é |
 |---|---|
 | [`motores/render/`](motores/render) | Cena HTML → MP4: N processos Chrome, captura JPEG por CDP, ffmpeg por stdin, pulo de quadros, cor BT.709. [Contrato da cena](motores/render/CONTRATO.md) |
-| [`motores/voz/`](motores/voz) | Provedores trocáveis (edge, Kokoro, Piper, Azure, ElevenLabs, gravação), alinhador pelo Whisper, QA, pronúncia por motor |
+| [`motores/voz/`](motores/voz) | Provedores trocáveis (edge, Kokoro, Piper, Azure, ElevenLabs, Gemini TTS, gravação), alinhador pelo Whisper, QA, pronúncia por motor |
 | [`motores/legenda/`](motores/legenda) | Blocos medidos com a fonte, destaque da palavra, zona segura, calibração do libass, .srt/.vtt, QC |
 | [`motores/colagem/`](motores/colagem) | Fragmentos de falas reais por tema: download só do trecho (yt-dlp), índice (Whisper + EmbeddingGemma 2), sugestão com MMR e corte entre frases, montagem 9:16 com a fonte em cada fragmento e ficha |
+| [`motores/imagem/`](motores/imagem) | Geração de imagem para a produção de arte (Gemini, com imagens de referência; Qwen local), gravando prompt e metadados ao lado |
 | [`exemplos/ola-mundo/`](exemplos/ola-mundo) | A cena mínima (6 s) |
 | [`exemplos/voz/`](exemplos/voz), [`exemplos/legenda/`](exemplos/legenda) | Entradas de teste dos motores |
 | [`exemplos/explicativo/`](exemplos/explicativo) | O exemplo de ponta a ponta: roteiro → voz → cena → render → legenda → mixagem |
@@ -141,6 +142,9 @@ Todos os comandos têm `--help`, e cada motor também funciona como biblioteca (
 | [`exemplos/colagem-democracia/`](exemplos/colagem-democracia) | Colagem de quatro falas com o motor de colagem; vídeos baixados em `entrada/` |
 | [`app/`](app) | **Prensa**: o app no navegador (mediabunny + transformers.js), tudo no aparelho. [README](app/README.md) |
 | [`ferramentas/acervo/`](ferramentas/acervo) | Coletor do acervo de vídeos de retenção (Wikimedia Commons, licença livre, revisão humana) |
+| [`receitas/`](receitas) | Peças de verdade feitas com os motores, cada uma com seu README (ex.: [`guerra-verde`](receitas/guerra-verde): animação desenhada à mão sincronizada à narração por palavras-gatilho) |
+| [`laboratorio/`](laboratorio) | Experimentos curtos antes de virar motor (A1: narração dirigida com Gemini TTS; A2: roteiro falado) |
+| [`ferramentas/limpar.py`](ferramentas/limpar.py) | Limpeza dos intermediários por grupo de risco (relatório por padrão; `--apagar` para valer) |
 | [`docs/`](docs) | [Fundamentos](docs/fundamentos.md), [arquitetura](docs/arquitetura.md), [render](docs/render.md), [voz](docs/voz.md), [legenda](docs/legenda.md), [colagem](docs/colagem.md), [direções](docs/direcoes.md), [plataformas](docs/plataformas.md), [receitas](docs/receitas.md), [acervo](docs/acervo.md) |
 | `fontes/` | Barlow Condensed ExtraBold (OFL), servida às cenas em `/_fontes/` e usada pela legenda |
 

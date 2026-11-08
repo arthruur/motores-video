@@ -198,6 +198,43 @@ def _elevenlabs(texto: str, voz: str, wav: Path, op: dict) -> list[dict]:
     return [m for m in marcas if not m.get("tag")]
 
 
+def _gemini(texto: str, voz: str, wav: Path, op: dict) -> None:
+    """Gemini TTS (lab A1). `texto` pode ser só a fala ou um prompt dirigido (perfil, cena, notas e,
+    por último, a transcrição): o modelo segue a direção e lê só a transcrição. Sem tempos nativos:
+    as palavras saem do alinhador. Modelo em GEMINI_TTS_MODEL. Devolve PCM s16le 24 kHz."""
+    modelo = os.environ.get("GEMINI_TTS_MODEL", "gemini-3.1-flash-tts-preview")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent"
+    corpo = json.dumps({"contents": [{"parts": [{"text": texto}]}],
+                        "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {
+                            "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voz}}}}}).encode()
+    espera, ultimo = 15, ""
+    for _ in range(6):
+        req = urllib.request.Request(url, data=corpo, headers={
+            "x-goog-api-key": os.environ["GEMINI_API_KEY"], "Content-Type": "application/json"})
+        try:
+            r = json.load(urllib.request.urlopen(req, timeout=300))
+        except urllib.error.HTTPError as e:
+            erro = e.read().decode("utf-8", "replace")
+            # cota do dia acabou: não adianta esperar; quem chama pode trocar de modelo
+            ultimo = f"{e.code}{' (cota PerDay)' if 'PerDay' in erro else ''}: {erro[:300]}"
+            if e.code in (429, 500, 503) and "PerDay" not in ultimo:
+                time.sleep(espera)
+                espera = min(espera * 2, 120)
+                continue
+            raise RuntimeError(f"gemini {modelo} respondeu {ultimo}") from e
+        partes = r["candidates"][0].get("content", {}).get("parts", [])
+        if partes and "inlineData" in partes[0]:   # às vezes volta sem áudio (finishReason OTHER/SAFETY)
+            pcm = base64.b64decode(partes[0]["inlineData"]["data"])
+            with tempfile.TemporaryDirectory() as d:
+                bruto = Path(d) / "g.wav"
+                with wave.open(str(bruto), "wb") as w:
+                    w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000); w.writeframes(pcm)
+                para_wav(bruto, wav, op["taxa"], aparar=True)
+            return None
+        ultimo = f"sem áudio ({r['candidates'][0].get('finishReason')})"
+    raise RuntimeError(f"gemini {modelo}: {ultimo}")
+
+
 def _gravacao(texto: str, voz: str, wav: Path, op: dict) -> None:
     """A própria voz, gravada (celular, WAV, M4A, MP3...). `limpar` tira ronco e ruído constante."""
     arquivo = op.get("arquivo")
@@ -262,6 +299,10 @@ PROVEDORES: dict[str, Provedor] = {p.id: p for p in [
     Provedor("elevenlabs", "ElevenLabs", _elevenlabs, os.environ.get("ELEVENLABS_VOICE_ID", ""), [],
              "nuvem", "pago", "termos da ElevenLabs (uso comercial nos planos pagos)", True,
              pode_cobrar=True, chaves=["ELEVENLABS_API_KEY"]),
+    Provedor("gemini", "Gemini TTS (Google)", _gemini, "Charon",
+             ["Charon", "Puck", "Kore", "Gacrux", "Leda", "Algieba", "Algenib", "Fenrir", "Sadachbia", "Autonoe", "Umbriel"],
+             "nuvem", "cota grátis diária; depois pago (barato)", "termos da Gemini API (Google)", False,
+             chaves=["GEMINI_API_KEY"]),
     Provedor("gravacao", "Gravação da própria voz", _gravacao, "", [], "local", "grátis",
              "do próprio autor", False, sintetica=False),
 ]}

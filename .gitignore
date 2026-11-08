@@ -17,7 +17,7 @@ app/public/acervo/folha.png
 *.partes/
 
 # mídia de terceiros dos exemplos: baixada por quem roda, nunca versionada
-exemplos/*/entrada/
+entrada/
 
 # sistema
 .DS_Store
