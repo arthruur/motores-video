@@ -51,10 +51,11 @@ VIEWBOX = (170, 0, 920, 1254)
 
 # rosto: tamanho (px por unidade do mascote). 1,18 = ~0,58 do tamanho absoluto do Mangaio
 # (1,0 Mangaio = 2,05 px/unidade aqui). PROPOSTA pendente de aprovação: ver ficha, Decisões.
-ROSTO_K = 1.18
-ROSTO_Y = 432.0                     # altura dos olhos
+ROSTO_K = 1.55                      # tamanho das peças (olhos, boca, sobrancelha) em unidades do mascote
+ESPACO_K = 1.02                     # espaçamento entre as peças: rosto proporcional à cabeça (decisão 2026-11-07)
+ROSTO_Y = 404.0                     # altura dos olhos
 ROSTO_INCL = -2.0
-BOCA_K = 1.15                       # as bocas sobem um pouco mais que o rosto (legíveis no celular)
+BOCA_K = 1.0                       # as bocas sobem um pouco mais que o rosto (legíveis no celular)
 OMBRO_Y = 618.0
 
 
@@ -498,8 +499,7 @@ def avental(v):
     bol = peca_avental(v, BOLSO, 55, tons=("meio", "base", "luz"), luz=False, enc=0.93, desloc=(-3, -4))
     for e in bol:
         grp.append(e)
-    if bol:
-        grp.append(letreiro(v))
+    # sem o letreiro "FARINHA" no bolso (decisão 2026-11-07): o avental fala por si; letreiro() fica para props
     # X das alças nas costas
     for i, a in enumerate(COSTAS_X):
         for e in peca_avental(v, a, 57 + i, tons=("sombra", "meio", "base"), luz=False, enc=0.8, desloc=(-2, -2)):
@@ -549,7 +549,7 @@ def perna(lado, v, seed):
 
 
 # ================================================================ braços (patinhas)
-BR_R0, BR_R1, MAO_R = 50.0, 42.0, 56.0
+BR_R0, BR_R1, MAO_R = 48.0, 44.0, 56.0   # MAO_R: legado (sem mão desde 2026-11-07)
 
 
 def mao(cx, cy, ang, seed, polegar=1):
@@ -571,7 +571,7 @@ def braco_formas(curva, seed, polegar=1):
     out.append(path(suave(tremer(luz, 0.6, seed + 1)), C["luz"]))
     fim, antes = P[-1], P[-2]
     ang = math.degrees(math.atan2(fim[1] - antes[1], fim[0] - antes[0]))
-    hx, hy = fim + (fim - antes) / (np.linalg.norm(fim - antes) or 1) * 18
+    hx, hy = fim - (fim - antes) / (np.linalg.norm(fim - antes) or 1) * 6   # pega da colher: dentro da ponta
     return out, (float(hx), float(hy)), ang
 
 
@@ -605,15 +605,15 @@ def folha_abano(seed=95):
 
 # curvas dos braços (locais; s = sentido de "para fora" na tela: -1 = para a esquerda)
 def curva_reto(s):
-    return [(0, 0), (-4 * s, 60), (-2 * s, 128)]
+    return [(0, 0), (-4 * s, 70), (-2 * s, 165)]
 
 
 def curva_cintura(s):
-    return [(0, 0), (-60 * s, 52), (-96 * s, 104), (-64 * s, 150), (-12 * s, 160)]
+    return [(0, 0), (40 * s, 60), (74 * s, 122), (46 * s, 172), (6 * s, 186)]
 
 
 def curva_cruzado(s):
-    return [(0, 0), (8 * s, 70), (40 * s, 120), (110 * s, 128), (160 * s, 112)]
+    return [(0, 0), (-6 * s, 70), (-40 * s, 122), (-110 * s, 132), (-170 * s, 118)]
 
 
 def braco(lado, v, seed, rig_completo=False, estado=None):
@@ -642,8 +642,6 @@ def braco(lado, v, seed, rig_completo=False, estado=None):
             ang = pose[1] if pose[0] == "reto" and len(pose) > 1 else 20
             giro = g(None, f"rotate({-ang * sent:.1f})", **{"class": "giro"})
             formas, (hx, hy), ang_b = braco_formas(curva_reto(sent), seed, polegar=-sent)
-            for e in formas:
-                giro.append(e)
             props = []
             if rig_completo:
                 props = [("colher", lado == "esq"), ("abano", False)]
@@ -661,7 +659,7 @@ def braco(lado, v, seed, rig_completo=False, estado=None):
                     desenho.set("id", f"{desenho.get('id')}-{lado}")
                 pg.append(desenho)
                 giro.append(pg)
-            for e in mao(hx, hy, ang_b, seed + 20, polegar=-sent):
+            for e in formas:              # sem mão: a ponta redonda do braço cobre o cabo
                 giro.append(e)
             sub.append(giro)
         else:
@@ -669,16 +667,14 @@ def braco(lado, v, seed, rig_completo=False, estado=None):
             formas, (hx, hy), ang_b = braco_formas(curva, seed + (30 if var == "cintura" else 50))
             for e in formas:
                 sub.append(e)
-            for e in mao(hx, hy, ang_b, seed + 40, polegar=sent):
-                sub.append(e)
         grp.append(sub)
     return grp, prof
 
 
 # ================================================================ rosto
 SOBR_MODOS = {   # (rotação, dy, escala)
-    "neutra": (0, 0, 1.0), "levantada": (-12, -26, 1.06), "baixa": (6, 10, 1.0), "brava": (24, 10, 1.06),
-    "triste": (-24, -4, 1.0), "alta": (-5, -22, 1.0),
+    "neutra": (0, 0, 1.0), "levantada": (-12, -16, 1.06), "baixa": (6, 10, 1.0), "brava": (24, 10, 1.06),
+    "triste": (-24, -4, 1.0), "alta": (-5, -14, 1.0),
 }
 OLHO_FORMAS = ("oval", "arco", "meia-lua", "fechado", "grande", "triste", "decidido")
 BOCAS_EXPR = ("aberta", "triste", "torta", "ondulada", "firme", "reta")
@@ -696,7 +692,7 @@ def _pos_rosto(v, u, y, minimo=0.45):
 
 
 def olho_peca(v, lado, forma, escala=1.0, dx=0.0, dy=0.0):
-    u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ROSTO_K
+    u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ESPACO_K
     oy = (rp.OLHO[lado][1] - rp.MEIO_OLHOS[1]) * ROSTO_K
     x, sq, p = _pos_rosto(v, u, ROSTO_Y + oy)
     k = ROSTO_K * escala
@@ -712,19 +708,19 @@ def olho_peca(v, lado, forma, escala=1.0, dx=0.0, dy=0.0):
 
 
 def sobr_peca(v, lado, modo):
-    u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ROSTO_K
+    u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ESPACO_K
     oy = (rp.OLHO[lado][1] - rp.MEIO_OLHOS[1]) * ROSTO_K
-    y = ROSTO_Y + oy - 74
+    y = ROSTO_Y + oy - 60 * ROSTO_K / 1.18
     x, sq, p = _pos_rosto(v, u, y)
     esp = 1 if lado == "esq" else -1
     rot, dy, esc = SOBR_MODOS[modo]
-    k = ROSTO_K * 1.18 * esc
+    k = ROSTO_K * esc
     return g(None, f"translate({x:.1f} {y + dy:.1f}) rotate({ROSTO_INCL}) scale({esp * sq:.3f} 1) rotate({rot}) scale({k:.3f})",
              path(rp.SOBR, ESCURO)), p
 
 
 def boca_peca(v, forma, escala=1.0, dx=0.0, dy=0.0):
-    ou = (rp.BOCA[0] - rp.MEIO_OLHOS[0]) * ROSTO_K
+    ou = (rp.BOCA[0] - rp.MEIO_OLHOS[0]) * ESPACO_K
     oy = (rp.BOCA[1] - rp.MEIO_OLHOS[1]) * ROSTO_K + 8
     x, sq, p = _pos_rosto(v, ou, ROSTO_Y + oy, minimo=0.5)
     k = ROSTO_K * BOCA_K * escala
@@ -745,10 +741,11 @@ def boca_peca(v, forma, escala=1.0, dx=0.0, dy=0.0):
 def bochechas(v, escala=1.0, op=0.30):
     out = g("bochechas")
     for lado, su in (("esq", -1), ("dir", 1)):
-        x, sq, p = _pos_rosto(v, su * 128, ROSTO_Y + 52)
+        by = ROSTO_Y + 40 * ROSTO_K
+        x, sq, p = _pos_rosto(v, su * (92 * ESPACO_K + 26 * ROSTO_K), by)
         if p < 0.1:
             continue
-        pts = oval(x, ROSTO_Y + 52, 27 * escala * sq, 15 * escala, rot=ROSTO_INCL, n=12)
+        pts = oval(x, by, 20 * ROSTO_K * escala * sq, 11 * ROSTO_K * escala, rot=ROSTO_INCL, n=12)
         out.append(path(suave(tremer(pts, 1, 80 if lado == "esq" else 81)), L["meio"], opacity=f"{op:.2f}"))
     return out
 
@@ -779,13 +776,13 @@ def rosto(v, estado, rig_completo=False):
         p, _ = boca_peca(v, estado.get("boca", "boca-repouso"), **estado.get("boca_kw", {}))
         bo.append(p)
     _, by, _ = (0, ROSTO_Y + (rp.BOCA[1] - rp.MEIO_OLHOS[1]) * ROSTO_K + 8, 0)
-    bx, _, _ = _pos_rosto(v, (rp.BOCA[0] - rp.MEIO_OLHOS[0]) * ROSTO_K, by)
+    bx, _, _ = _pos_rosto(v, (rp.BOCA[0] - rp.MEIO_OLHOS[0]) * ESPACO_K, by)
     bo.set("data-pivo", f"{bx:.1f} {by:.1f}")
     r.append(bo)
     okw = estado.get("olho_kw", {})
     for lado, forma in zip(("esq", "dir"), estado.get("olhos", ("oval", "oval"))):
         o = g(f"olho-{lado}")
-        u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ROSTO_K
+        u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ESPACO_K
         oyy = ROSTO_Y + (rp.OLHO[lado][1] - rp.MEIO_OLHOS[1]) * ROSTO_K
         xo, _, po = _pos_rosto(v, u, oyy)
         o.set("data-pivo", f"{xo:.1f} {oyy:.1f}")
@@ -803,8 +800,8 @@ def rosto(v, estado, rig_completo=False):
         r.append(o)
     for lado, modo in zip(("esq", "dir"), estado.get("sobr", (None, None))):
         s = g(f"sobr-{lado}")
-        u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ROSTO_K
-        sy = ROSTO_Y + (rp.OLHO[lado][1] - rp.MEIO_OLHOS[1]) * ROSTO_K - 74
+        u = (rp.OLHO[lado][0] - rp.MEIO_OLHOS[0]) * ESPACO_K
+        sy = ROSTO_Y + (rp.OLHO[lado][1] - rp.MEIO_OLHOS[1]) * ROSTO_K - 60 * ROSTO_K / 1.18
         xs, _, ps = _pos_rosto(v, u, sy)
         s.set("data-pivo", f"{xs + (22 if lado == 'esq' else -22):.1f} {sy:.1f}")   # ponta de dentro
         if rig_completo:

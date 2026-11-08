@@ -114,3 +114,4 @@ same weave, same face, same proportions. Do not redesign it.
 | 2026-11-07 | Costas: frutas atrás da borda de trás, braços atrás do corpo (só a luva aparece) | Para não parecer a frente sem rosto |
 | 2026-11-07 | Cores do braço oficial registradas como `palha_braco` na paleta | O portão pede rampa registrada; não se trocam as cores da marca |
 | 2026-11-07 | Sobrancelha: o Cesto não usa | Expressões da v0 leram só com pálpebra e boca (ARTE.md §6: então ninguém usa como neutra) |
+| 2026-11-07 | **Pendente (aguardando a versão do outro PC):** (1) braços novos (alto, aponta, segura, punho) passam a ser SEM mão, ponta redonda (ARTE.md §2); (2) alça no 3/4 e no perfil; (3) frutas nos estados vazio/transbordando | Revisão do Arthur. Alça e conteúdo já foram resolvidos em outro PC; não refazer aqui antes de puxar essa versão |

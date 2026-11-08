@@ -29,7 +29,7 @@ O que isso quer dizer, medido no `mascote.svg`:
 
 - **Silhueta legível em preto.** Cada personagem precisa ser reconhecido só pela silhueta, no tamanho de um celular. Toda aprovação começa pelo lineup de silhuetas.
 - **Peso para baixo.** Todos têm base no chão (exceto Jataí, que voa). Squash and stretch acontece em volta dos pés.
-- **Membros.** Como os do Cesto: **curtos, grossos e arredondados, em forma de patinha (luva sem dedos)**, na rampa do próprio corpo, com a borda em `sombra`. Nada de braço de palito. Pernas (quem anda) seguem a mesma lógica: tocos curtos e redondos. Exceções em ficha: Realçador e Sacolão (plástico dobrado), Jataí (patas de inseto estilizadas).
+- **Membros.** Como os do Mangaio: **curtos, grossos e arredondados, terminando numa ponta redonda, SEM mão** (nada de bola de mão, polegar ou luva na ponta: a mão separada deixa o gesto estranho; decisão de 2026-11-07). Na rampa do próprio corpo, com a borda em `sombra`. Nada de braço de palito. Objeto na mão (colher, folha) fica preso **dentro da ponta do braço**: a ponta cobre o cabo. Braço dobrado (mão na cintura) tem o **cotovelo para fora** do corpo; braços cruzados atravessam o peito para dentro. Pernas (quem anda) seguem a mesma lógica: tocos curtos e redondos. Exceções em ficha: Realçador e Sacolão (plástico dobrado), Jataí (patas de inseto estilizadas).
 
 ## 3. Proporção: tudo medido em "cestos"
 
@@ -49,7 +49,7 @@ O Cesto vale **1,0** (altura do fundo até a borda, sem alça e sem frutas). A t
 | Quiabo | 1,15 | 0,3 | Comprido, contraste com Maxixe |
 | Jataí | 0,2 | 0,3 com asas | Voa à altura dos olhos de quem fala com ela |
 
-**Tamanho do rosto.** Olhos e boca têm **o mesmo tamanho absoluto em todos**, igual ao rosto do Cesto. Personagem pequeno fica com "rosto grande" (fofo), grande fica com "rosto pequeno" (imponente). Isso unifica o elenco e permite um rig de rosto só.
+**Tamanho do rosto** (revisto em 2026-11-07). Todos usam **as mesmas formas** de olho e boca do Mangaio, mas o tamanho é **proporcional à cabeça**, não absoluto: com o tamanho absoluto, num personagem alto e estreito como a Dona Mandioca o rosto ficava minúsculo e as expressões não liam. Regra prática: o rosto fica no **terço de cima da cabeça**, logo abaixo do acessório de cabeça; os olhos são **grandes e próximos** (distância entre os centros ≈ 45–50% da largura da cabeça; altura do olho ≈ 20–25% da largura); a boca fica perto dos olhos. Teste: a expressão tem que ler com o personagem a 150 px de altura. O rig de rosto continua um só: muda só a escala.
 
 ## 4. Cor
 
@@ -110,3 +110,4 @@ Um rosto só para todo o elenco, **o rosto do Cesto** (ver `referencias/cesto-fr
 - Sexualização: cintura marcada, cílios de "sedução", pose de pin-up. A bíblia proíbe, e a "novela das frutas" é exatamente o que a série não é.
 - Marca real, logotipo real, embalagem que lembre produto existente.
 - Asset gerado por IA que entra no motor **sem** passar pelo Illustrator e pelo portão de aprovação.
+- Texto, letreiro ou carimbo em figurino (ex.: "FARINHA" no avental). O figurino conta pela forma e pela cor; texto pesa na leitura e briga com a legenda.

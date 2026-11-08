@@ -17,7 +17,7 @@ Raiz de mandioca: comprida, levemente cônica e torta, **casca marrom fina e rug
 Coluna larga, um pouco mais estreita embaixo, levemente torta (nenhuma mandioca é reta). Rosto no terço superior, logo abaixo do lenço. As pontinhas de raiz embaixo funcionam como "pés" e "barra de saia". A silhueta se reconhece pelo **lenço amarrado com as pontas para cima**.
 
 ## Cores
-Casca `mandioca_casca`, com lascas descascadas mostrando `mandioca_miolo`. Lenço `lenco_vermelho` com bolinhas brancas (`mandioca_miolo.luz`). Avental de saco de algodão cru com carimbo apagado "FARINHA" (lettering à mão, nunca marca).
+Casca `mandioca_casca`, com lascas descascadas mostrando `mandioca_miolo`. Lenço `lenco_vermelho` com bolinhas brancas (`mandioca_miolo.luz`). Avental de saco de algodão cru, liso, com bolso (sem letreiro: decisão 2026-11-07).
 
 ## Rosto
 Padrão. É quem mais usa `sobrancelha_levantada`, e é o caso de teste da sobrancelha que aparece e some (ARTE.md §6). Bochechas: duas manchas de `lenco_vermelho.meio` a 30%, sem contorno.
@@ -50,7 +50,7 @@ Arquivo: `../banco/dona-mandioca/dona-mandioca-rig.svg` (ids documentados no top
 | `perna-esq`, `perna-dir` | tocos próprios em `mandioca_casca` com a pontinha de miolo; o topo entra ~70 px no tronco, escondido sob a barra | quadril de cada perna |
 | `tronco` | tudo acima do quadril: squash, stretch, inclinação | quadril |
 | `corpo` | tons empilhados (sombra, base, banda de luz alta à esquerda, meio, profunda embaixo à direita), miolo no topo, faixas de casca e 8 lascas de miolo longe do rosto | quadril |
-| `acess-avental` | alças, peitilho, cós, saia, bolso com "FARINHA" de pincel, X nas costas, laço | cintura |
+| `acess-avental` | alças, peitilho, cós, saia, bolso (sem letreiro), X nas costas, laço | cintura |
 | `acess-lenco` | lenço de bolinhas (follow-through: ±3°, chega atrasado) | nó |
 | `rosto` | rosto padrão do Mangaio: `olho-*` (oval, arco, meia-lua, fechado, grande, triste, decidido), `sobr-*` (some por padrão), `boca` (8 de sincronia + 6 de expressão), `bochechas` | meio dos olhos |
 | `braco-esq`, `braco-dir` | patinhas de luva (afinam do ombro à mão); subgrupos `braco-*-reto` (gira o `.giro`), `-cintura`, `-cruzado` | ombro |
@@ -90,3 +90,4 @@ caring matriarch. Expression: one eyebrow raised, holding back a smile.
 | 2026-11-07 | Pernas = tocos próprios com o topo escondido no tronco | A emenda da v1 abria no stretch; testado com tronco `translate(0,-30) scale(1,1.08)` e pernas a ±25° |
 | 2026-11-07 | Rosto a 1,18 px/unidade (≈ 0,58 do absoluto do Mangaio), bocas mais 1,15× | Recomendação da revisão. **Ainda proposta**: a ARTE.md §3 pede o mesmo tamanho absoluto; aprovar ou recusar a exceção |
 | 2026-11-07 | Bochecha em `lenco_vermelho.meio` a 30% (igual à ficha) | Rig v1 usava 38% |
+| 2026-11-07 | **Ajustes finos (revisão do Arthur):** braços sem mão (ponta redonda segura a colher); curvas de "mão na cintura" e "braços cruzados" corrigidas (o braço direito estava invertido, cotovelo para dentro); rosto proporcional à cabeça (`ROSTO_K` 1,55 para o tamanho das peças, `ESPACO_K` 1,02 para o espaçamento, olhos subiram para y=404); sobrancelhas mais baixas para não entrar no lenço; avental sem o letreiro "FARINHA" | Mão separada e braço invertido deixavam os gestos estranhos; com o rosto no tamanho absoluto do Mangaio as expressões não liam numa cabeça alta e estreita; texto no figurino pesa na leitura. Regras levadas para ARTE.md §2, §3 e Nunca |

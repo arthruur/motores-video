@@ -11,7 +11,7 @@
 const DURACAO = 39.5            // 1,5 s de respiro no letreiro final
 const CHAO = 1380, CX = 540, K = 0.82            // pés no quadro e escala do rig (quadro de 1254 px)
 const RIG_CHAO = 1195, RIG_MEIO = 640
-const ROSTO_TELA = CHAO - (RIG_CHAO - 432) * K    // altura dos olhos na tela (câmera em 1)
+const ROSTO_TELA = CHAO - (RIG_CHAO - (window.DM_META ? DM_META.rosto_y : 404)) * K    // altura dos olhos na tela (câmera em 1)
 
 // ---------------------------------------------------------------- utilidades
 const cl = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
