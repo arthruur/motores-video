@@ -19,6 +19,20 @@ O Cesto **é o `mascote.svg`** do site, que já vira marionete no canvas (`app/s
 
 **Regra:** no máximo **um movimento novo por capítulo**. O movimento vai para o banco e fica disponível para os seguintes.
 
+### 1.1. Referências canônicas de animação do Cesto: `mangaio-loop` e `mangaio-danca`
+
+Os vídeos [`saida/mangaio-loop.mp4`](../../saida/mangaio-loop.mp4) (`app/src/mangaio/aventura.ts` + `marionete.ts`) e [`saida/mangaio-danca.mp4`](../../saida/mangaio-danca.mp4) (`app/src/mangaio/danca.ts` + `cesto.ts` + `frutas.svg`) definem o padrão de qualidade de animação do Cesto e devem guiar os ajustes em qualquer vídeo de demonstração (`mangaio-demo`, `vitrine.mp4`, `ep01-feira-acordando.mp4`) e nos episódios da série:
+
+1. **Animação individualizada das frutas com física de onda (`cesto.ts` + `frutas.svg`):**
+   - Substituir o deslocamento rígido de `#frutas` pelas **11 peças vetoriais separadas** (`laranja`, `tomate-grande`, `tomate-1`, `tomate-2`, `banana-1`, `banana-2`, `morango-1`, `morango-2`, `folhas-3`, `folha-1`, `folha-2`) posicionadas atrás da borda frontal da boca do cesto.
+   - Simular o monte no referencial acelerado do Cesto com cama elástica unilateral (`wCama = 22`, permitindo voo livre no topo do salto), gravidade acentuada (`G_FRUTA = 14`), **onda viajante da esquerda para a direita** (`atraso = 0.20 s`), inclinação na crista da onda, amplitude modulada pelo `peso` de cada fruta (folhas leves pulam mais que a laranja pesada) e squash individual no fundo ao pousar (ver detalhes e equações em [`arte/animacao.md` §2.1 e §5.1](arte/animacao.md)).
+2. **Física balística cravada no BPM e molas em forma fechada (`aventura.ts` / `danca.ts`):**
+   - Pulos parametrizados exatamente pela duração em batidas $D$ e altura $h$ ($g = 8h/D^2, v_0 = 4h/D$), pulo duplo com corte no ar (`corta = 0.6`) e pirueta 2D via escala horizontal em cosseno (`sx = cos(2π · voltas · suave(fase)) / s`).
+   - Pouso com mola amortecida analítica `amortece(τ, a, k, c)` para o squash & stretch do corpo (`k=180, c=11`), chicote da alça (`k=140, c=8`), engolir fruta (`k=240, c=14`) e brotamento elástico `pop(τ, k=420, c=14)` das frutas apanhadas no ar.
+3. **Vocabulário de dança em 4 partes e câmera no compasso (`danca.ts`):**
+   - Sub-movimentos de dança a 116 BPM com controle independente dos dois braços (`braco` e `bracoDir`): **`soquinho`** (quique + ginga + soquinhos alternados), **`rodopio`** (antecipação agachada + piruetas esquerda/direita), **`colado`** (close + dengo lateral + olhos em arco feliz `◡` + braços abanando) e **`arretado`** (4 pulinhos rápidos + salto duplo de 2 voltas).
+   - **Linguagem de edição musical:** cortes secos na batida alternando o palco da **`feira`** (sol pulsante com raios de xilogravura girando, bandeirinhas em catenária, tábuas em perspectiva) com o fundo gráfico de **`raios`** (cunhas radiais em xilogravura que invertem paleta a cada 4 batidas + chuva de confetes), mais **zoom-soco (`soco`)** da câmera no impacto de cada pouso e abertura/fechamento em **íris circular (`iris`)**.
+
 ## 2. Um rosto para todo o elenco
 
 São dez personagens, e desenhar dez marionetes completas é o maior custo da série. A saída é um **rig de rosto único**, reaproveitado sobre **corpos diferentes**:

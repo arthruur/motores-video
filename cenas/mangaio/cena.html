@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Aventura do Mangaio</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 1080px; height: 806px; overflow: hidden; background: #000; }
+  canvas { width: 1080px; height: 806px; display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="806"></canvas>
+<script src="mangaio_bundle.js"></script>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 1080, H = 806;
+
+function seek(t) {
+  ctx.clearRect(0, 0, W, H);
+  Mangaio.desenharAventura(ctx, t, 0, 0, W, H);
+  return t.toFixed(2);
+}
+
+window.DURACAO = 33.1; // 2 ciclos completos de 16.55s (32 batidas cada)
+window.seek = seek;
+seek(0);
+window.pronto = true;
+</script>
+</body>
+</html>

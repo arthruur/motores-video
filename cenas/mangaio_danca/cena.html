@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Dança do Mangaio</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  canvas { width: 1080px; height: 1920px; display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script src="mangaio_bundle.js"></script>
+<script>
+// tamanho pelo endereço (?w=1080&h=806 para a metade de baixo da tela dividida); padrão: 9:16 inteiro
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 1080), H = +(q.get('h') || 1920);
+const canvas = document.getElementById('c');
+canvas.width = W; canvas.height = H;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+document.body.style.width = W + 'px'; document.body.style.height = H + 'px';
+const ctx = canvas.getContext('2d');
+
+function seek(t) {
+  ctx.clearRect(0, 0, W, H);
+  Mangaio.desenharDanca(ctx, t, 0, 0, W, H);
+  return t.toFixed(3);
+}
+
+window.DURACAO = 2 * 32 * 60 / Mangaio.BPM; // 2 ciclos de 32 batidas (16,55 s cada)
+window.seek = seek;
+seek(0);
+window.pronto = true;
+</script>
+</body>
+</html>
