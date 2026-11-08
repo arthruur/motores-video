@@ -157,8 +157,8 @@ def main():
         tam = ndi.sum(np.ones_like(lab_l), lab_l, index=np.arange(1, nl + 1))
         lenco = np.isin(lab_l, np.nonzero(tam > 3000)[0] + 1)
     # avental: o creme da região do avental, com os furos internos preenchidos (o creme claro é quase o fundo)
-    avental = ndi.binary_closing(fg & avental_reg & creme & ~braco_d, iterations=6)
-    avental = ndi.binary_fill_holes(avental) & avental_reg & ~braco_d
+    avental = ndi.binary_closing(fg & avental_reg & creme, iterations=6)              # creme nunca é braço
+    avental = ndi.binary_fill_holes(avental) & avental_reg
     avental = ndi.binary_opening(avental, iterations=3)
     # colher: só a madeira clara (o braço é marrom mais escuro); a bola do braço fica inteira
     punho_e = (xx - 365) ** 2 + (yy - 665) ** 2 < 74 ** 2
@@ -168,7 +168,7 @@ def main():
     sup_e = np.zeros_like(fg)
     cv2.fillPoly(sup_e.view(np.uint8), [np.array([(398, 612), (470, 572), (545, 588), (548, 650), (478, 724), (408, 724)], np.int32)], 1)
     braco_e = punho_e | (sup_e.astype(bool) & ~creme & ~madeira)     # o trecho até o ombro, qualquer tom de casca
-    bracos = fg & (braco_e | braco_d) & ~avental & ~colher
+    bracos = fg & (braco_e | braco_d) & ~avental & ~colher & ~creme
     bracos = ndi.binary_opening(bracos, iterations=2)
     corpo_px = fg & ~lenco & ~colher & ~avental & ~bracos
 
@@ -187,7 +187,10 @@ def main():
         tam = ndi.sum(np.ones_like(lab_s), lab_s, index=np.arange(1, ns_ + 1))
         sil = lab_s == (int(np.argmax(tam)) + 1)
     # tons do corpo: casca; onde não é casca (rosto, avental, lenço, braços), herda a casca vizinha
-    casca_ok = corpo_px & sil & ~rosto_reg | (corpo_px & rosto_reg & ~escuro & ~vermelho & ~creme)
+    # o rosto da imagem sai do corpo com folga (olhos, boca, bochechas, risquinho do queixo): o rosto padrão vai por cima
+    tracos = rosto_reg & (escuro | (a > 24) | (Lc < 40))
+    tracos = ndi.binary_dilation(tracos, iterations=9)
+    casca_ok = corpo_px & sil & ~tracos
     idx_c = quantizar(L, casca_ok, RAMPAS["casca"])
     idx_c = r3.preencher_vizinho(idx_c, sil & ~casca_ok, casca_ok)
     idx_c = votar(idx_c, sil, len(RAMPAS["casca"]))

@@ -69,6 +69,33 @@ PERSONAGENS = {
         bracos=[("braco-esq", "0 430 125 160"), ("braco-dir", "420 422 120 164")],
         bracos_novos=["alto", "aponta", "segura"],
     ),
+    "dona-mandioca": dict(
+        nome="DONA MANDIOCA",
+        banco=ARTE / "banco" / "dona-mandioca",
+        ficha="altura: 1,35 cesto · forma dominante: coluna de base larga (raiz torta) · rampas: mandioca_casca, mandioca_miolo, "
+              "lenco_vermelho, algodao_cru · nunca: cintura marcada, avó caricata, ar de vítima, letreiro no avental",
+        corpo_unid=1010 / 1.35,      # altura (pés até o topo da cabeça, sem o nó) / 1,35 cesto, em unidades do SVG
+        esc=dict(frente=0.9, silhueta=0.74, vistas=0.5, expr=0.42, rep=0.52, bocas=0.8),
+        frente="dm6-expr-neutra.svg",
+        vistas=["dm6-expr-neutra.svg", None, None, None],
+        pendente_vistas="frente primeiro (ARTE.md §2): outras vistas só se a cena pedir",
+        rotulo_vistas={},
+        expressoes=["neutra", "desconfiado", "assustado", "triste", "encantado", "decidido", "rindo", "envergonhado", "nao-vai"],
+        expr_arq="dm6-expr-{}.svg",
+        bocas_nota=None,
+        bocas_itens=[f"dm6-boca-{b}.svg" for b in ("repouso", "MBP", "A", "E", "I", "O", "U", "FV")],
+        repertorio=[("dm6-pose-bater-colher-antes.svg", None), ("dm6-pose-bater-colher.svg", None),
+                    ("dm6-pose-apontar.svg", None), ("dm6-pose-chamar.svg", None), None, None],
+        repertorio_rotulos=["bater a colher (antecipação)", "bater a colher (batida)", "aponta com a colher", "chama (vem cá)",
+                            "se abanar (folha)", "comovida (ajeita o lenço)"],
+        pendente_repertorio="a fazer",
+        rampas=["mandioca_casca", "mandioca_miolo", "lenco_vermelho", "algodao_cru"],
+        pecas_bracos=[("braco-esq (pivô no ombro 500,600)", ARTE / "banco" / "dona-mandioca" / "dm6-peca-braco-esq.svg"),
+                      ("braco-dir (pivô no ombro 872,590)", ARTE / "banco" / "dona-mandioca" / "dm6-peca-braco-dir.svg")],
+        pecas_objetos=[("colher (gira com o braço esquerdo)", ARTE / "banco" / "dona-mandioca" / "dm6-peca-colher.svg")],
+        nota_bracos="braços: peça única, ponta redonda, giram no ombro\n(a colher gira junto com o braço esquerdo)",
+        nota_objetos="a colher de pau: sempre na mão esquerda",
+    ),
 }
 
 
@@ -95,6 +122,8 @@ def pecas_svgs():
 def preencher(vc, cfg):
     T = tops()
     banco = cfg["banco"]
+    E = dict(frente=1.6, silhueta=1.0, vistas=0.8, expr=0.6, p4=0.45, rep=0.8, bocas=0.85)
+    E.update(cfg.get("esc", {}))
 
     def nota(x, y, w, h, txt):
         vc("select.none")
@@ -118,12 +147,12 @@ def preencher(vc, cfg):
     # 1 · Identidade
     t = T[0]
     x0, y0 = fp.M, t + 240
-    por(cfg["frente"], x0 + 550, y0 + 1240 - 90, 1.6)
+    por(cfg["frente"], x0 + 550, y0 + 1240 - 90, E["frente"])
     sil = banco / "_silhueta.svg"
     txt = (banco / cfg["frente"]).read_text(encoding="utf-8")
     txt = re.sub(r'fill="#[0-9A-Fa-f]{6}"', 'fill="#462416"', txt)
     sil.write_text(txt, encoding="utf-8")
-    por("_silhueta.svg", x0 + 1140 + 350, y0 + 1240 - 90, 1.0, com_sombra=False)
+    por("_silhueta.svg", x0 + 1140 + 350, y0 + 1240 - 90, E["silhueta"], com_sombra=False)
     ex = fp.M + 1880
     chao = t + 240 + 760
     esc = fp.CESTO / cfg["corpo_unid"]
@@ -145,13 +174,13 @@ def preencher(vc, cfg):
             vc("text.setText", ids=[m["id"] for m in ach], text=novo)
     for (x, y, w, h), arq in zip(celulas(4, 800, 640, T[1]), cfg["vistas"]):
         if arq:
-            por(arq, x + w / 2, y + h - 90, 0.8)
+            por(arq, x + w / 2, y + h - 90, E["vistas"])
         else:
             nota(x, y, w, h, cfg["pendente_vistas"])
 
     # 3 · Expressões (célula 370x580, escala 0.6)
     for (x, y, w, h), e in zip(celulas(9, 370, 580, T[2]), cfg["expressoes"]):
-        por(cfg["expr_arq"].format(e), x + w / 2, y + h - 90, 0.6)
+        por(cfg["expr_arq"].format(e), x + w / 2, y + h - 90, E["expr"])
 
     # 4 · Bocas (ou outra coisa, para quem não fala)
     p4 = cfg.get("prancheta4")
@@ -165,7 +194,7 @@ def preencher(vc, cfg):
             vc("text.setText", ids=[m["id"] for m in ach], text=p4["sub"])
         for (x, y, w, h), (arq, rot_) in zip(celulas(8, 400, 420, T[3]), p4["itens"] + [(None, None)] * 8):
             if arq:
-                por(arq, x + w / 2, y + h - 90, 0.45)
+                por(arq, x + w / 2, y + h - 90, E["p4"])
         for i, (_, rot_) in enumerate(p4["itens"]):
             velho = fp.BOCAS[i]
             ach = [m for m in vc("document.find", kind="Type", text=velho)["matches"] if m["name"] == velho]
@@ -176,6 +205,8 @@ def preencher(vc, cfg):
             if ach:
                 vc("text.setText", ids=[ach[0]["id"]], text="—")
     cs = celulas(8, 400, 420, T[3])
+    for (x, y, w, h), arq in zip(cs, cfg.get("bocas_itens", [])):     # bocas de sincronia (close do rosto)
+        por(arq, x + w / 2, y + h - 100, E["bocas"], com_sombra=False)
     if cfg.get("bocas_nota"):
         x, y, w, h = cs[0]
         vc("select.none")
@@ -189,7 +220,7 @@ def preencher(vc, cfg):
     for (x, y, w, h), item in zip(celulas(6, 540, 680, T[4]), cfg["repertorio"]):
         if item:
             arq, sobe = item
-            por(arq, x + w / 2, y + h - 90, 0.8, sobe=sobe or 0)
+            por(arq, x + w / 2, y + h - 90, E["rep"], sobe=sobe or 0)
         else:
             nota(x, y, w, h, cfg["pendente_repertorio"])
 
@@ -235,11 +266,22 @@ def preencher(vc, cfg):
             vc("file.place", path=str(p), link=False, rect=[cx - w * k / 2, cy - h * k / 2, w * k, h * k])
             vc("select.none")
             vc("text.create", x=cx, y=cy + 110, text=rot_, size=22, font=fp.FONTE, color=fp.GUIA, justify="center")
+    for zona_i, chave in ((2, "pecas_bracos"), (3, "pecas_objetos")):
+        zx = fp.M + zona_i * (zw + 40)
+        for i, (rot_, p) in enumerate(cfg.get(chave, [])):
+            w, h = viewbox(p)
+            k = 300 / max(w, h)
+            cx, cy = zx + 200 + (i % 2) * 400, t6 + 650
+            vc("select.none")
+            vc("file.place", path=str(p), link=False, crop="crop", rect=[cx - w * k / 2, cy - h * k / 2, w * k, h * k])
+            vc("select.none")
+            vc("text.create", x=cx, y=cy + 200, text=rot_, size=24, font=fp.FONTE, color=fp.GUIA, justify="center")
     vc("select.none")
-    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text="braços: peça única, ponta redonda · ● = pivô no ombro\n(o oficial gira até ~60°; acima disso, troca pela peça)",
+    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text=cfg.get("nota_bracos", "braços: peça única, ponta redonda · ● = pivô no ombro\n(o oficial gira até ~60°; acima disso, troca pela peça)"),
        size=24, font=fp.FONTE, color=fp.ESCURO, justify="left")
     vc("select.none")
-    vc("text.create", x=fp.M + 3 * (zw + 40) + 30, y=t6 + 420, text="frutas (tomate, laranja, folhas):\nestados do conteúdo — pendente (outro PC)",
+    vc("text.create", x=fp.M + 3 * (zw + 40) + 30, y=t6 + 420,
+       text=cfg.get("nota_objetos", "frutas: as 11 peças de app/src/mangaio/frutas.svg\n(arrumação e peso em app/src/mangaio/cesto.ts)"),
        size=24, font=fp.FONTE, color=fp.GUIA, justify="left")
 
 
