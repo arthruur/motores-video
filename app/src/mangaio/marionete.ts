@@ -10,6 +10,7 @@ export type Pose = {
   sx: number;
   sy: number;
   braco: number; // graus; o direito gira ao contrário
+  bracoDir?: number; // graus, só o direito (no mesmo sentido de `braco` espelhado); sem ele, o direito espelha o esquerdo
   alca: number; // escala Y da alça (follow-through)
   frutasY: number; // deslocamento das frutas, em % da altura delas
   boca: FormaBoca;
@@ -32,8 +33,12 @@ export type Marionete = {
   caixa: Caixa;
   /** quantos pedaços de fruta cabem no cesto */
   pedacos: number;
-  /** desenha com a base (meio de baixo) em (x, y) e `altura` px de alto */
-  desenhar: (ctx: CanvasRenderingContext2D, pose: Pose, x: number, y: number, altura: number) => void;
+  /**
+   * desenha com a base (meio de baixo) em (x, y) e `altura` px de alto. Com `cesto`, as frutas do SVG
+   * saem e quem desenha o que vai dentro é ele: é chamado no espaço do SVG, antes do corpo (a borda da
+   * frente do cesto cobre o fundo do que estiver lá dentro)
+   */
+  desenhar: (ctx: CanvasRenderingContext2D, pose: Pose, x: number, y: number, altura: number, cesto?: (ctx: CanvasRenderingContext2D) => void) => void;
 };
 
 // Pivôs, em fração da caixa de cada peça: os mesmos do mascote.css do site.
@@ -139,7 +144,7 @@ function montar(): Marionete {
     const c = caixaDe(id);
     ctx.save();
     if (id === 'braco-esq') emVolta(ctx, c, PIVO[id], () => ctx.rotate((pose.braco * Math.PI) / 180));
-    else if (id === 'braco-dir') emVolta(ctx, c, PIVO[id], () => ctx.rotate((-pose.braco * Math.PI) / 180));
+    else if (id === 'braco-dir') emVolta(ctx, c, PIVO[id], () => ctx.rotate((-(pose.bracoDir ?? pose.braco) * Math.PI) / 180));
     else if (id === 'alca') emVolta(ctx, c, PIVO[id], () => ctx.scale(1, pose.alca));
     else if (id === 'frutas') ctx.translate(0, (pose.frutasY / 100) * c.h);
     n.filhos.forEach((f) => noh(ctx, f, pose));
@@ -169,7 +174,7 @@ function montar(): Marionete {
   return {
     caixa,
     pedacos: ordem.length,
-    desenhar(ctx, pose, x, y, altura) {
+    desenhar(ctx, pose, x, y, altura, cesto) {
       const k = altura / caixa.h;
       ctx.save();
       ctx.translate(x, y);
@@ -178,7 +183,11 @@ function montar(): Marionete {
       ctx.rotate((pose.giro * Math.PI) / 180);
       ctx.scale(pose.sx, pose.sy);
       ctx.translate(-(caixa.x + caixa.w / 2), -(caixa.y + caixa.h));
-      raiz.filhos.forEach((f) => noh(ctx, f, pose));
+      if (!cesto) raiz.filhos.forEach((f) => noh(ctx, f, pose));
+      else {
+        cesto(ctx);
+        raiz.filhos.forEach((f) => { if (!(f.tipo === 'g' && f.id === 'frutas')) noh(ctx, f, pose); });
+      }
       ctx.restore();
     },
   };

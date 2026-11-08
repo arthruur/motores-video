@@ -9,6 +9,7 @@ Ficam nas bancas, no Cesto e na multidão. São desenhados **no mesmo nível do 
 | Item | Onde | Nota |
 |---|---|---|
 | Tomate, laranja, folhas | Cesto, bancas | **Já existem** no `mascote.svg`: reaproveitar as formas |
+| Kit de 11 frutas individuais do Cesto (`frutas.svg`) | Interior do Cesto (`cesto.ts`) e bancas | Extraídas de `arturo.ai` em peças separadas (`laranja`, `tomate-grande`, `tomate-1`, `tomate-2`, `banana-1`, `banana-2`, `morango-1`, `morango-2`, `folhas-3`, `folha-1`, `folha-2`) com pesos graduados (`0.05` a `1.0`) para animação em onda |
 | Umbus soltos, em cacho de banca | Banca do Umbu | Mesma rampa do personagem |
 | Cachos de licuri | Ambiente, cap. 2 e 16 | Cacho pendurado da palmeira |
 | Mandioca descascada, farinha, beiju, tapioca | Casa de farinha | Arco 3 |
@@ -40,6 +41,7 @@ Sachês (amostra, pilha, chuva de sachês), prateleiras, néon, capa de chuva de
 | Gotas de suor, sustos, "!" | Props de expressão em `tinta.escuro` | Sem contorno |
 | Granulado de papel | Textura sobre o **quadro inteiro**, a 4–6% | Nunca por personagem |
 | Xilogravura (cap. 4) | Filtro de gravura + papel; preto e branco | Exceção de estilo (ARTE.md §9) |
+| Fundo de raios de xilogravura + confetes (`fundoRaios`, `mangaio-danca`) | 16 cunhas radiais girando em 2 tons que invertem paleta a cada 4 batidas (laranja/mostarda ↔ verde-folha) + chuva de confetes retangulares girando | Usado em cortes de close/ação musical e momentos de euforia do Cesto |
 
 ## Lettering da série
 Logo "Novela da Caatinga", cartela "continua...", legendas, placas e lettering de cenário: **tudo à mão** (fonte da série: Caveat Brush, em `../fontes/`), na cor `tinta.escuro`, nunca preto. Placas de cenário têm o lettering levemente torto, como pintado por quem é da feira. O Mercadinho é a exceção: tipografia "de computador", sem serifa e perfeita.
