@@ -37,7 +37,7 @@ M = PAL["materiais"]
 ESCURO = PAL["tinta"]["escuro"]
 
 # ---- medidas da referência (px da imagem 1254 x 1254)
-OMBRO = {"esq": (478.0, 600.0), "dir": (850.0, 585.0)}
+OMBRO = {"esq": (482.0, 600.0), "dir": (872.0, 590.0)}
 OLHO_REF = {"esq": (573.0, 440.0), "dir": (757.0, 418.0)}
 BOCA_REF = (670.0, 462.0)
 BOCHECHA_REF = {"esq": (528.0, 488.0), "dir": (810.0, 456.0)}
@@ -83,17 +83,23 @@ def preencher_vizinho(cls, buraco, fonte):
     return out
 
 
-def bordas_interpoladas(mask, y0, y1):
-    """completa as laterais do corpo entre y0 e y1, ligando a borda de cima à de baixo em reta."""
+def bordas_interpoladas(mask, y0, y1, ref=None):
+    """entre y0 e y1 o corpo é EXATAMENTE a faixa entre as bordas de cima e de baixo, ligadas em reta
+    (tira os restos do braço antigo que ficavam grudados na lateral). `ref`: máscara de onde medir as bordas."""
     def borda(y):
         xs = np.nonzero(mask[y])[0]
         return (xs.min(), xs.max()) if len(xs) else None
-    a, b = borda(y0), borda(y1)
+    fonte_bordas = mask if ref is None else ref
+    def borda_ref(y):
+        xs = np.nonzero(fonte_bordas[y])[0]
+        return (xs.min(), xs.max()) if len(xs) else None
+    a, b = borda_ref(y0), borda_ref(y1)
     out = mask.copy()
     for y in range(y0, y1 + 1):
         u = (y - y0) / (y1 - y0)
         xl = int(a[0] + (b[0] - a[0]) * u)
         xr = int(a[1] + (b[1] - a[1]) * u)
+        out[y, :] = False
         out[y, xl:xr + 1] = True
     return out
 
@@ -183,14 +189,16 @@ def main():
     rosto_px = np.isin(fam_px, ["tinta"]) | ((fam_px == "lenco_vermelho") & (yy > 420))  # olhos, boca, sobrancelhas, bochechas
 
     # braços e colher da referência (o que não é avental, fora do corpo)
-    braco_e = (xx < 470) & (yy > 320) & (yy < 845) & ~avental
+    braco_e = (xx < 505) & (yy > 320) & (yy < 845) & ~avental      # largo: leva a sombra do braço junto
     braco_d = (xx > 858) & (yy > 545) & (yy < 835) & ~avental
     fora = braco_e | braco_d
 
     # silhueta do corpo: tudo que não é fundo, menos braços/colher; lenço e avental contam (o corpo passa por baixo)
     corpo_sil = alfa & ~fora
     corpo_sil = ndi.binary_opening(corpo_sil, iterations=3)
-    corpo_sil = bordas_interpoladas(corpo_sil, 535, 860)        # laterais onde estavam os braços
+    # laterais onde estavam os braços: bordas medidas sem o laço do avental, de y=535 (acima) a y=980 (abaixo)
+    ref_bordas = corpo_sil & ~(avental & (xx < 470))
+    corpo_sil = bordas_interpoladas(corpo_sil, 535, 980, ref=ref_bordas)
     corpo_sil = ndi.binary_fill_holes(corpo_sil)
     # o laço do avental e as pontas do lenço saem da silhueta do corpo
     corpo_sil &= ~(avental & (xx < 470)) & ~(lenco & (yy < 200))
@@ -230,7 +238,7 @@ def main():
         f'<g id="acess-avental">{svg["acess-avental"]}</g>'
         f'<g id="acess-lenco">{svg["acess-lenco"]}</g>'
         f'{rosto_svg()}'
-        f'{braco_svg("esq", 58, "colher")}{braco_svg("dir", 14)}'
+        f'{braco_svg("esq", 58, "colher")}{braco_svg("dir", 24)}'
         f'</g></g></svg>')
     out = V3 / "rig-frente.svg"
     out.write_text(rig, encoding="utf-8")
