@@ -51,11 +51,11 @@ VIEWBOX = (170, 0, 920, 1254)
 
 # rosto: tamanho (px por unidade do mascote). 1,18 = ~0,58 do tamanho absoluto do Mangaio
 # (1,0 Mangaio = 2,05 px/unidade aqui). PROPOSTA pendente de aprovação: ver ficha, Decisões.
-ROSTO_K = 1.55                      # tamanho das peças (olhos, boca, sobrancelha) em unidades do mascote
-ESPACO_K = 1.02                     # espaçamento entre as peças: rosto proporcional à cabeça (decisão 2026-11-07)
+ROSTO_K = 1.10                      # tamanho das peças (olhos, boca, sobrancelha) em unidades do mascote
+ESPACO_K = 1.06                     # espaçamento entre as peças: rosto proporcional à cabeça (decisão 2026-11-07)
 ROSTO_Y = 404.0                     # altura dos olhos
 ROSTO_INCL = -2.0
-BOCA_K = 1.0                       # as bocas sobem um pouco mais que o rosto (legíveis no celular)
+BOCA_K = 0.97                       # as bocas sobem um pouco mais que o rosto (legíveis no celular)
 OMBRO_Y = 618.0
 
 
@@ -742,10 +742,10 @@ def bochechas(v, escala=1.0, op=0.30):
     out = g("bochechas")
     for lado, su in (("esq", -1), ("dir", 1)):
         by = ROSTO_Y + 40 * ROSTO_K
-        x, sq, p = _pos_rosto(v, su * (92 * ESPACO_K + 26 * ROSTO_K), by)
+        x, sq, p = _pos_rosto(v, su * (92 * ESPACO_K + 40 * ROSTO_K), by)
         if p < 0.1:
             continue
-        pts = oval(x, by, 20 * ROSTO_K * escala * sq, 11 * ROSTO_K * escala, rot=ROSTO_INCL, n=12)
+        pts = oval(x, by, 22 * ROSTO_K * escala * sq, 14 * ROSTO_K * escala, rot=ROSTO_INCL, n=12)
         out.append(path(suave(tremer(pts, 1, 80 if lado == "esq" else 81)), L["meio"], opacity=f"{op:.2f}"))
     return out
 

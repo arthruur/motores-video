@@ -2,7 +2,7 @@
 
     python receitas/novela-da-caatinga/demos/dona-mandioca/montar.py   -> demos/dona-mandioca/vistas.js
 
-O rig é paramétrico na vista (theta). Aqui ele sai como 24 rigs completos, de 15 em 15 graus
+O rig é paramétrico na vista (theta). Aqui ele sai só nas vistas-chave do 2D (frente, 3/4, perfil, costas e os espelhos)
 (0 = frente, 90 = perfil olhando para a direita da tela, 180 = costas), todos com os mesmos ids e
 todas as peças trocáveis (olho-*-<forma>, sobr-*-<modo>, boca-*, braco-*-reto/cintura/cruzado,
 prop-colher-*/prop-abano-*). A cena (cena.js) põe UMA vista por vez no palco e anima o rig por
@@ -18,17 +18,17 @@ SERIE = AQUI.parents[1]
 sys.path.insert(0, str(SERIE / "arte" / "folhas"))
 import dona_mandioca_rig as dm  # noqa: E402
 
-PASSO = 15
+VISTAS = (0, 45, 90, 180, 270, 315)   # 2D: só os desenhos-chave (decisão 2026-11-07)
 
 
 def main():
     vistas = {}
-    for th in range(0, 360, PASSO):
+    for th in VISTAS:
         no = dm.dona_mandioca(theta=th, rig_completo=True)
         s = ET.tostring(no, encoding="unicode").replace(' xmlns="http://www.w3.org/2000/svg"', "")
         s = s.replace("ns0:", "").replace(' xmlns:ns0="http://www.w3.org/2000/svg"', "")
         vistas[th] = s
-    meta = {"passo": PASSO, "chao": dm.CHAO, "meio": dm.MEIO, "quadril": dm.QUADRIL_Y,
+    meta = {"vistas": list(VISTAS), "chao": dm.CHAO, "meio": dm.MEIO, "quadril": dm.QUADRIL_Y,
             "topo": dm.TOPO_CABECA, "rosto_y": dm.ROSTO_Y}
     out = AQUI / "vistas.js"
     out.write_text("// gerado por montar.py (não editar à mão)\nwindow.DM_META = " + json.dumps(meta) +

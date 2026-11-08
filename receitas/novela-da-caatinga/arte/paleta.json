@@ -10,10 +10,10 @@
     "tomate":      { "status": "medido", "luz": "#F2683A", "base": "#EB4B20", "meio": "#D23E1A", "sombra": "#B0331A", "profunda": "#8A2716" },
     "laranja":     { "status": "medido", "luz": "#FB991D", "base": "#F5831B", "meio": "#E06F14", "sombra": "#C45C10", "profunda": "#9E4A10" },
 
-    "mandioca_casca": { "status": "proposta", "nota": "v1 (2026-11-07, folha da Dona Mandioca): esquentada a partir da frente aprovada; a v0 (#8C5A34) apagava o rosto e a profunda era igual ao olho", "luz": "#D98A4E", "base": "#C46C36", "meio": "#AC582B", "sombra": "#8F4523", "profunda": "#6C321A" },
+    "mandioca_casca": { "status": "aprovado", "nota": "v1 (2026-11-07, folha da Dona Mandioca): esquentada a partir da frente aprovada; a v0 (#8C5A34) apagava o rosto e a profunda era igual ao olho", "luz": "#D98A4E", "base": "#C46C36", "meio": "#AC582B", "sombra": "#8F4523", "profunda": "#6C321A" },
     "mandioca_miolo": { "status": "proposta", "luz": "#FFF6E3", "base": "#F6E7C8", "meio": "#E9D2A6", "sombra": "#D6B886", "profunda": "#B8956A" },
     "lenco_vermelho": { "status": "proposta", "luz": "#E8573A", "base": "#CF3B27", "meio": "#B52F20", "sombra": "#93261B", "profunda": "#6E1D15" },
-    "algodao_cru":    { "status": "proposta", "nota": "saco de farinha (avental da Dona Mandioca); mais amarelado e mais escuro que o mandioca_miolo para não se confundir com o corte da raiz", "luz": "#F6E6C0", "base": "#EBD3A0", "meio": "#DDBE85", "sombra": "#C6A06A", "profunda": "#A07C4E" },
+    "algodao_cru":    { "status": "aprovado", "nota": "saco de farinha (avental da Dona Mandioca); mais amarelado e mais escuro que o mandioca_miolo para não se confundir com o corte da raiz", "luz": "#F6E6C0", "base": "#EBD3A0", "meio": "#DDBE85", "sombra": "#C6A06A", "profunda": "#A07C4E" },
     "umbu":           { "status": "proposta", "luz": "#D8D86A", "base": "#B9C255", "meio": "#9EAA44", "sombra": "#7F8C36", "profunda": "#5F6B2A" },
     "licuri":         { "status": "proposta", "luz": "#F7B24A", "base": "#EA952E", "meio": "#D27A22", "sombra": "#B0601C", "profunda": "#844516" },
     "licuri_reembalado": { "status": "proposta", "nota": "arco 1: o Licuri esfria e ganha reflexo de plástico", "luz": "#F4C27A", "base": "#E0A25A", "meio": "#C48552", "sombra": "#9C6A5E", "profunda": "#6E4F5C", "reflexo": "#FFFFFF" },

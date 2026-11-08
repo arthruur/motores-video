@@ -34,6 +34,10 @@ Toda arte entregue para o motor segue esta lista de grupos. Os nomes são os `id
 
 **Vistas:** cada vista do turnaround (frente, 3/4, perfil, costas) é um rig separado, com os mesmos nomes. O motor troca de vista; não existe interpolação 3D.
 
+## 2b. Vistas: 2D, não 360 (decisão 2026-11-07)
+
+Os personagens são **2D**. Cada um tem um conjunto pequeno de **desenhos-chave** (frente, 3/4, perfil, costas; espelhar dá o outro lado), cada um com o rig de peças (olhos, boca, braços…). **Virar é trocar de desenho**, segurando cada um alguns quadros, como na animação 2D tradicional; nada de giro contínuo de 15 em 15° por projeção 3D. O rig "360" da Dona Mandioca foi testado e atrapalhou: rosto e acessórios deformavam nas vistas intermediárias.
+
 ## 3. Expressões {#expressoes}
 
 Vocabulário fixo, igual para todos (o motor já usa estes nomes):

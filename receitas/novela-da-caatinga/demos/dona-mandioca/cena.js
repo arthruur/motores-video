@@ -28,13 +28,13 @@ const piscar = (t, t0, d = 0.3) => { const u = faixa(t, t0, t0 + d); return u > 
 const T = {
   andar: { t0: 0.25, passo: 0.58, n: 8, xa: -30, xb: 540 },     // entra em perfil, passos curtos e pesados
   para: 4.89,                                                     // = t0 + n*passo: último contato
-  vira: [[5.35, 75], [5.62, 60], [5.82, 45], [5.98, 30], [6.16, 15], [6.42, 0]],   // devagar, slow-in/out
+  vira: [[5.35, 90], [5.75, 45], [6.25, 0]],   // 2D: troca de desenho (perfil → 3/4 → frente), segura em cada um
   marca: 6.85,                                                    // a sobrancelha dela aparece
   nome: 7.5, giro: 11.0, regente: 16.4, expr: 22.2, fala: 28.3, fecho: 33.6,
   exprs: [[22.2, 'neutra'], [23.0, 'sobrancelha levantada'], [23.85, 'irônica'], [24.7, 'desconfiada'],
           [25.55, 'brava'], [26.4, 'ri segurando o riso'], [27.25, 'empolgada']],
 }
-// turnaround: chaves [t, theta, rótulo]; entre elas, as vistas intermediárias a 1 vista por pose
+// turnaround 2D: só os desenhos-chave (frente, 3/4, perfil, costas), um corte para cada, sem vistas intermediárias
 const GIRO = (() => {
   const chaves = [[11.0, 0, 'frente'], [11.95, 45, '3/4'], [12.75, 90, 'perfil'], [13.75, 180, 'costas'],
                   [14.75, 270, 'perfil'], [15.55, 315, '3/4'], [16.05, 360, 'frente']]
@@ -44,7 +44,7 @@ const GIRO = (() => {
     passos.push([t, th % 360])
     const prox = chaves[i + 1]
     if (!prox) break
-    const n = (prox[1] - th) / 15 - 1
+    const n = 0          // 2D: sem intermediárias (decisão 2026-11-07)
     for (let k = 1; k <= n; k++) passos.push([prox[0] - (n - k + 1) * (2 / 15), (th + 15 * k) % 360])
   }
   passos.sort((a, b) => a[0] - b[0])
