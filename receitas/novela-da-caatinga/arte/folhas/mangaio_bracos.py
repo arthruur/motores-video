@@ -1,4 +1,6 @@
-"""Braços novos do Mangaio (peças de rig), v2: derivados das medidas do braço oficial.
+"""Braços novos do Mangaio (peças de rig), v3 (2026-11-08: sem polegar, ponta só redonda):
+
+v2: derivados das medidas do braço oficial.
 
 Revisão de arte (2026-11-07) reprovou a v1 (remo comprido, bastão, bengala). A v2
 segue o braço oficial do mascote.svg, que é um bracinho curto e grosso com uma luva
@@ -35,13 +37,13 @@ OMBRO = {"dir": (490.0, 446.0), "esq": (46.0, 452.0)}
 # polegar opcional (posição relativa à luva em coords da luva: u ao longo, v de lado, raio).
 PECAS = {
     # alto: luva acima do ombro, aberta para fora (susto, encanto, no ar, dança)
-    "alto":   dict(esp=[(0, 0), (46, -14), (54, -84)], r=(33, 29), luva=(100, 90, 16), polegar=(-4, -44, 17)),
+    "alto":   dict(esp=[(0, 0), (46, -14), (54, -84)], r=(33, 29), luva=(84, 80, 12), polegar=None),
     # aponta: estica para o lado, luva mais estreita com polegar para cima (apontar, "não vai")
-    "aponta": dict(esp=[(0, 0), (52, 10), (100, -2)], r=(32, 28), luva=(98, 72, 16), polegar=(-14, -40, 16)),
+    "aponta": dict(esp=[(0, 0), (52, 10), (100, -2)], r=(32, 28), luva=(80, 74, 10), polegar=None),
     # segura: sobe e a luva vira para dentro, palma para cima, encostada na borda (carregar_tudo)
-    "segura": dict(esp=[(0, 0), (46, -36), (16, -88)], r=(33, 29), luva=(84, 100, 12), polegar=(6, 48, 16)),
+    "segura": dict(esp=[(0, 0), (46, -36), (16, -88)], r=(33, 29), luva=(80, 84, 10), polegar=None),
     # punho: curto, luva fechada e redonda (decidido)
-    "punho":  dict(esp=[(0, 0), (34, -10), (38, -58)], r=(33, 30), luva=(90, 88, 14), polegar=None),
+    "punho":  dict(esp=[(0, 0), (34, -10), (38, -58)], r=(33, 30), luva=(84, 82, 12), polegar=None),
 }
 # giro padrão de cada peça (graus, para fora), quando usada como pose
 GIRO = {"alto": 0, "aponta": -6, "segura": 0, "punho": 0}

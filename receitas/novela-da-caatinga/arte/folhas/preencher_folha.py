@@ -51,18 +51,20 @@ PERSONAGENS = {
               "rampas: palha_cesto, folha, tomate, laranja · nunca: fala, ganha pernas, fica bravo de verdade",
         corpo_unid=372.0,           # altura do corpo (fundo à borda, sem alça e frutas) em unidades do SVG
         frente="cesto-expr-neutra.svg",
-        vistas=["cesto-expr-neutra.svg", None, None, None],
+        vistas=["cesto-expr-neutra.svg", "cesto-tres-quartos.svg", None, None],
         pendente_vistas="aguarda a versão do outro PC (alça)",
+        rotulo_vistas={"3/4": "3/4 (rascunho: alça a revisar)"},
         expressoes=["neutra", "desconfiado", "assustado", "triste", "encantado", "decidido", "rindo", "envergonhado", "nao-vai"],
         expr_arq="cesto-expr-{}.svg",
         bocas_nota="o Mangaio não fala: aqui entram os gestos do trompete (a definir)",
         repertorio=[("cesto-pose-antecipacao.svg", None), ("cesto-pose-no-ar.svg", -60), ("cesto-pose-pouso.svg", None),
-                    None, None, None],
-        repertorio_rotulos=["antecipação (quique)", "no ar (quique)", "pouso (quique)", "carregar_tudo", "estados do conteúdo", "dança"],
+                    ("cesto-pose-apontar.svg", None), ("cesto-pose-danca.svg", None), None],
+        repertorio_rotulos=["antecipação (quique)", "no ar (quique)", "pouso (quique)", "apontar", "dança", "carregar_tudo"],
         pendente_repertorio="aguarda a versão do outro PC (conteúdo)",
         rampas=["palha_cesto", "folha", "tomate", "laranja"],
         bracos_svg=ARTE.parent / "mascote.svg",
         bracos=[("braco-esq", "0 430 125 160"), ("braco-dir", "420 422 120 164")],
+        bracos_novos=["alto", "aponta", "segura", "punho"],
     ),
 }
 
@@ -106,7 +108,8 @@ def preencher(vc, cfg):
         if com_sombra:
             sombra(cx, chao, w * esc * 0.78)
         vc("select.none")
-        r = vc("file.place", path=str(p), link=False, rect=[cx - w * esc / 2, chao - h * esc + sobe, w * esc, h * esc])
+        r = vc("file.place", path=str(p), link=False, crop="crop",       # encaixa pelo quadro (viewBox), não pelo desenho
+               rect=[cx - w * esc / 2, chao - h * esc + sobe, w * esc, h * esc])
         return r
 
     # 1 · Identidade
@@ -133,6 +136,10 @@ def preencher(vc, cfg):
         vc("text.create", x=ex + 870, y=yy + 55, text=nome, size=28, font=fp.FONTE, color=fp.ESCURO, justify="left")
 
     # 2 · Vistas (célula 800x640, escala 0.8)
+    for velho, novo in cfg.get("rotulo_vistas", {}).items():
+        ach = [m for m in vc("document.find", kind="Type", text=velho)["matches"] if m["name"] == velho]
+        if ach:
+            vc("text.setText", ids=[m["id"] for m in ach], text=novo)
     for (x, y, w, h), arq in zip(celulas(4, 800, 640, T[1]), cfg["vistas"]):
         if arq:
             por(arq, x + w / 2, y + h - 90, 0.8)
@@ -180,19 +187,32 @@ def preencher(vc, cfg):
     if cfg.get("bracos_svg"):
         import xml.etree.ElementTree as ET
         raiz = ET.parse(cfg["bracos_svg"]).getroot()
-        for i, (gid, bb) in enumerate(cfg["bracos"]):
+        itens = []
+        for gid, bb in cfg["bracos"]:
             g = next(e for e in raiz.iter() if e.get("id") == gid)
             corpo = ET.tostring(g, encoding="unicode").replace(' xmlns:ns0="http://www.w3.org/2000/svg"', "").replace("ns0:", "")
             p = TMP / f"{gid}.svg"
             p.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{bb}">{corpo}</svg>', encoding="utf-8")
+            itens.append((f"{gid} (oficial)", p))
+        if cfg.get("bracos_novos"):
+            import mangaio_bracos as mb
+            for n in cfg["bracos_novos"]:
+                p = TMP / f"braco-{n}.svg"
+                p.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-60 -170 230 230">'
+                             f'{mb.peca_svg(n, "dir", x=0, y=0)}<circle r="6" fill="{fp.GUIA}"/></svg>', encoding="utf-8")
+                itens.append((n, p))
+        zx = fp.M + 2 * (zw + 40)
+        for i, (rot_, p) in enumerate(itens):
+            col, lin = i % 3, i // 3
+            cx, cy = zx + 140 + col * 270, t6 + 560 + lin * 250
             w, h = viewbox(p)
-            cx, cy = fp.M + 2 * (zw + 40) + 200 + i * 380, t6 + 700
+            k = 160 / max(w, h)
             vc("select.none")
-            vc("file.place", path=str(p), link=False, rect=[cx - w * 1.6 / 2, cy - h * 1.6 / 2, w * 1.6, h * 1.6])
+            vc("file.place", path=str(p), link=False, rect=[cx - w * k / 2, cy - h * k / 2, w * k, h * k])
             vc("select.none")
-            vc("text.create", x=cx, y=cy + 170, text=gid, size=24, font=fp.FONTE, color=fp.GUIA, justify="center")
+            vc("text.create", x=cx, y=cy + 110, text=rot_, size=22, font=fp.FONTE, color=fp.GUIA, justify="center")
     vc("select.none")
-    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text="braço oficial do mascote: gira no ombro, até ~60°\n(o pivô fica no ombro: 80%/20% da largura, 10% da altura)",
+    vc("text.create", x=fp.M + 2 * (zw + 40) + 30, y=t6 + 420, text="braços: ponta só redonda, sem polegar · ● = pivô no ombro\n(o oficial gira até ~60°; acima disso, troca pela peça)",
        size=24, font=fp.FONTE, color=fp.ESCURO, justify="left")
     vc("select.none")
     vc("text.create", x=fp.M + 3 * (zw + 40) + 30, y=t6 + 420, text="frutas (tomate, laranja, folhas):\nestados do conteúdo — pendente (outro PC)",
