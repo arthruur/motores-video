@@ -31,8 +31,8 @@ const T = {
   vira: [[5.35, 90], [5.75, 45], [6.25, 0]],   // 2D: troca de desenho (perfil → 3/4 → frente), segura em cada um
   marca: 6.85,                                                    // a sobrancelha dela aparece
   nome: 7.5, giro: 11.0, regente: 16.4, expr: 22.2, fala: 28.3, fecho: 33.6,
-  exprs: [[22.2, 'neutra'], [23.0, 'sobrancelha levantada'], [23.85, 'irônica'], [24.7, 'desconfiada'],
-          [25.55, 'brava'], [26.4, 'ri segurando o riso'], [27.25, 'empolgada']],
+  exprs: [[22.2, 'neutra'], [22.85, 'desconfiada'], [23.5, 'assustada'], [24.15, 'triste'], [24.8, 'encantada'],
+          [25.45, 'decidida'], [26.1, 'rindo'], [26.75, 'envergonhada'], [27.4, 'não vai']],   // as 9 do Mangaio, adaptadas
 }
 // turnaround 2D: só os desenhos-chave (frente, 3/4, perfil, costas), um corte para cada, sem vistas intermediárias
 const GIRO = (() => {
@@ -176,7 +176,7 @@ function personagem(t) {
   // ----- 1. entra andando (perfil, olhando para a direita): passo curto, pesado e decidido
   if (t < T.vira[0][0]) {
     S.th = 90
-    S.olhos = ['decidido', 'decidido']; S.boca = 'boca-firme'; S.sobr = ['baixa', 'baixa']
+    S.olhos = ['decidido', 'decidido']; S.boca = 'boca-firme'; S.sobr = [null, null]
     S.bD = ['reto', 10, null]
     const p = passo(t)
     const L = (A.xb - A.xa) / A.n / K                                  // passada no quadro do rig = o quanto ela anda (pé não escorrega)
@@ -223,8 +223,8 @@ function personagem(t) {
     S.lenco = 2 * mola(t - tv - 0.03, 2, 6)
     if (t >= T.marca) {                                // a marca dela: a sobrancelha sobe e o olho fecha um tico
       const u = t - T.marca
-      S.sobr = ['levantada', null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 0, 0.2))), 1]
-      S.olhos = ['oval', 'meia-lua']; S.boca = 'boca-firme'
+      S.sobr = [null, null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 0, 0.2))), 1]
+      S.olhos = ['meia-lua', 'meia-lua']; S.boca = 'boca-firme'
       S.tr.rot = -1.5 * suave(faixa(u, 0, 0.3))
     }
   }
@@ -238,7 +238,7 @@ function personagem(t) {
     S.boca = cet > 0.5 ? 'boca-aberta' : 'boca-repouso'
     S.tr.rot = -2 * cet; S.tr.sy *= 1 + 0.03 * cet
     S.pontas = 7 * mola(u - 0.42, 1.8, 4)
-    if (u < 0.25) { S.sobr = ['levantada', null]; S.sobrK = [1 - suave(faixa(u, 0, 0.25)) * 0.6, 1] }   // some
+    if (u < 0.25) { S.sobr = [null, null]; S.sobrK = [1 - suave(faixa(u, 0, 0.25)) * 0.6, 1] }   // some
     if (u > 3.2) { S.tr.rot += 2.2 * Math.sin((u - 3.2) * 9) * Math.exp(-(u - 3.2) * 2) }             // assente
   }
   // ----- 4. turnaround
@@ -255,7 +255,7 @@ function personagem(t) {
   // ----- 5. regente: bate a colher, aponta, rege o xote
   if (dentro(t, T.regente, T.expr)) {
     S.th = 0
-    S.olhos = ['decidido', 'decidido']; S.sobr = ['brava', 'brava']
+    S.olhos = ['decidido', 'decidido']; S.sobr = [null, null]
     const golpe = (ta, tb) => {           // antecipação (ta→tb) e batida em tb
       if (t < ta) return null
       if (t < tb) {
@@ -278,7 +278,7 @@ function personagem(t) {
       const u = t - REG.aponta
       const ap = voltaBack(faixa(u, 0, 0.3)), re = Math.max(0, u - 0.6)
       S.bE = ['reto', lerp(40, 92, ap) + 5 * Math.sin(re * 11) * Math.exp(-re * 3.5), ['colher', lerp(-145, -88, ap)]]
-      S.sobr = ['brava', 'levantada']; S.olhos = ['decidido', 'oval']; S.boca = 'boca-firme'
+      S.sobr = [null, null]; S.olhos = ['decidido', 'decidido']; S.boca = 'boca-firme'
       S.tr.rot = -3 * ap; S.pontas = 9 * mola(u - 0.08, 1.8, 4)
     }
     if (t >= REG.xote && t < REG.corte) {           // rege o xote: a colher marca o 2/4
@@ -294,7 +294,7 @@ function personagem(t) {
     if (t >= REG.corte) {                           // corta a música: colher para baixo, segura
       const d = t - REG.corte
       S.bE = ['reto', lerp(140, 30, cl(d / 0.08)) + 5 * mola(d - 0.08, 2.5, 6), ['colher', lerp(-30, -150, cl(d / 0.08))]]
-      S.olhos = ['oval', 'meia-lua']; S.sobr = ['levantada', null]; S.boca = 'boca-firme'
+      S.olhos = ['meia-lua', 'meia-lua']; S.sobr = [null, null]; S.boca = 'boca-firme'
       S.tr.rot = 2 * mola(d, 1.5, 4); S.pontas = -10 * mola(d - 0.05, 1.8, 4)
     }
   }
@@ -308,41 +308,46 @@ function personagem(t) {
     S.tr.sy *= pop; S.tr.sx *= 2 - pop
     const sk = lerp(0.4, 1, voltaBack(faixa(u, 0.02, 0.2)))          // sobrancelha nova entra crescendo
     S.bE = ['reto', 20, ['colher', -6]]
+    // as 9 expressões do Mangaio, só adaptadas: mesmas peças de olho e boca, sem sobrancelha
+    S.sobr = [null, null]; S.rubor = 0; S.boca = 'boca-aberta'; S.olhos = ['oval', 'oval']
+    const sobe = voltaBack(faixa(u, 0.02, 0.22))
     switch (e[1]) {
       case 'neutra': {                                                  // vem do corte do xote: a colher sobe sem estalo
         const k = suave(faixa(u, 0.05, 0.45))
-        S.bE = ['reto', lerp(30, 20, k), ['colher', lerp(-150, -6, k)]]; S.boca = 'boca-repouso'; break
+        S.bE = ['reto', lerp(30, 20, k), ['colher', lerp(-150, -6, k)]]; break
       }
-      case 'sobrancelha levantada':
-        S.olhos = ['meia-lua', 'oval']; S.sobr = ['baixa', 'levantada']; S.sobrK = [sk, sk]; S.boca = 'boca-firme'
-        S.rr = -2; S.rubor = 0; break
-      case 'irônica':
-        S.olhos = ['meia-lua', 'oval']; S.sobr = [null, 'levantada']; S.boca = 'boca-torta'
-        S.olhar = [lerp(0, 12, suave(faixa(u, 0.1, 0.35))), 0]; S.rr = -3; S.rubor = 0; break
       case 'desconfiada':
-        S.olhos = ['meia-lua', 'meia-lua']; S.sobr = ['baixa', 'baixa']; S.sobrK = [sk, sk]; S.boca = 'boca-reta'
-        S.olhar = [-10 * Math.sin(Math.PI * faixa(u, 0.15, 0.75)), 0]; S.rubor = 0
-        S.bE = ['reto', 14, ['colher', -6]]; S.tr.rot = -1.5; break
-      case 'brava':
-        S.olhos = ['decidido', 'decidido']; S.sobr = ['brava', 'brava']; S.sobrK = [sk, sk]; S.boca = u < 0.3 ? 'boca-O' : 'boca-triste'; S.rubor = 0
-        S.bE = ['reto', lerp(20, 100, voltaBack(faixa(u, 0, 0.25))), ['colher', -70]]
-        S.tr.rot = -3; S.tr.tx = 3 * Math.sin(u * 60) * Math.exp(-u * 6); break
-      case 'ri segurando o riso': {
-        S.olhos = ['arco', 'arco']; S.boca = 'boca-ondulada'; S.rubor = 1.6
+        S.olhos = ['meia-lua', 'meia-lua']; S.boca = 'boca-torta'
+        S.olhar = [lerp(0, 10, suave(faixa(u, 0.1, 0.35))), 0]; S.tr.rot = -1.5; break
+      case 'assustada':
+        S.olhos = ['grande', 'grande']; S.boca = 'boca-o'
+        S.bE = ['reto', lerp(20, 140, sobe), ['colher', -40]]; S.bD = ['reto', lerp(0, 140, sobe), null]
+        S.tr.ty = -18 * sobe; S.tr.sy *= 1 + 0.04 * sobe; S.tr.sx *= 1 - 0.02 * sobe
+        S.tr.tx = 3 * Math.sin(u * 60) * Math.exp(-u * 6); break
+      case 'triste':
+        S.olhos = ['triste', 'triste']; S.boca = 'boca-triste'; S.olhar = [0, 6]
+        S.bE = ['reto', 4, ['colher', 178]]; S.bD = ['reto', 4, null]
+        S.tr.ty = 8 * suave(faixa(u, 0, 0.3)); S.tr.sy *= 1 - 0.04 * suave(faixa(u, 0, 0.3)); break
+      case 'encantada':
+        S.olhos = ['grande', 'grande']; S.boca = 'boca-o_pequeno'; S.rubor = 1.2
+        S.bE = ['reto', lerp(4, 34, sobe), ['colher', -12]]; S.bD = ['reto', lerp(4, 34, sobe), null]; S.rr = -3; break
+      case 'decidida':
+        S.olhos = ['decidido', 'decidido']; S.boca = 'boca-firme'
+        S.bD = ['reto', lerp(34, 150, sobe), null]; S.tr.rot = -2; break
+      case 'rindo': {
+        S.olhos = ['arco', 'arco']; S.boca = 'boca-aberta'; S.rubor = 1
         const ri = Math.sin(u * 38) * (0.6 + 0.4 * Math.sin(u * 5))
-        S.tr.sy *= 1 + 0.012 * ri; S.tr.ty = -2 * ri; S.rr = 2
-        S.bD = ['reto', -100, null]; S.bE = ['reto', 10, ['colher', -6]]; break
+        S.tr.sy *= 1 + 0.015 * ri; S.tr.ty = -2 * ri
+        S.bE = ['reto', 60, ['colher', -14]]; S.bD = ['reto', 60, null]; break
       }
-      case 'empolgada': {
-        const up = voltaBack(faixa(u, 0.08, 0.35))
-        S.olhos = ['arco', 'arco']; S.boca = 'boca-A'
-        S.bE = ['reto', lerp(20, 150, up), ['colher', -10]]; S.bD = ['reto', lerp(0, 150, up), null]
-        S.tr.ty = -26 * up + 8 * Math.sin(Math.PI * faixa(u, 0, 0.08))
-        S.tr.sy *= 1 + 0.07 * up - 0.05 * Math.sin(Math.PI * faixa(u, 0, 0.1)); S.tr.sx *= 1 - 0.03 * up
-        S.pontas = -12 * mola(u - 0.3, 2, 4); S.rubor = 1.3
-        const vol = suave(faixa(u, 0.75, 1.0))                        // volta à compostura (base larga, não se curva)
-        S.tr.ty *= 1 - vol; S.tr.sy = lerp(S.tr.sy, 1, vol); S.tr.sx = lerp(S.tr.sx, 1, vol)
-        if (vol > 0.5) { S.bE = ['reto', 58, ['colher', -8]]; S.bD = ['cintura', 0, null]; S.olhos = ['oval', 'oval']; S.boca = 'boca-repouso' }
+      case 'envergonhada':
+        S.olhos = ['oval', 'oval']; S.boca = 'boca-ondulada'; S.olhar = [0, 8]; S.rubor = 1.6
+        S.bE = ['reto', -10, ['colher', 178]]; S.bD = ['reto', -10, null]; S.rr = 3; break
+      case 'não vai': {
+        S.olhos = ['fechado', 'fechado']; S.boca = 'boca-reta'
+        S.bD = ['reto', lerp(0, 92, sobe), null]; S.tr.rot = 4 * sobe
+        const vol = suave(faixa(u, 0.6, 0.9))                         // volta à pose dela antes da fala
+        if (vol > 0.5) { S.bE = ['reto', 58, ['colher', -8]]; S.bD = ['cintura', 0, null]; S.olhos = ['oval', 'oval']; S.boca = 'boca-aberta'; S.tr.rot = 0 }
         break
       }
     }
@@ -353,7 +358,7 @@ function personagem(t) {
     const u = t - T.fala, tf = u - 0.25
     const w = FALA ? FALA.palavras : []
     const ti = i => w[i] ? w[i].inicio : 99
-    S.olhos = ['decidido', 'oval']; S.sobr = ['baixa', 'levantada']; S.boca = 'boca-firme'; S.rubor = 0.6
+    S.olhos = ['decidido', 'decidido']; S.sobr = [null, null]; S.boca = 'boca-firme'; S.rubor = 0.6
     // "Aqui": a colher aponta o chão da casa de farinha
     const aqui = suave(faixa(tf, -0.2, 0.15)) - suave(faixa(tf, ti(4), ti(5)))
     S.bE = ['reto', lerp(58, 34, aqui), ['colher', lerp(-8, -150, aqui)]]
@@ -383,8 +388,8 @@ function personagem(t) {
     S.th = 0
     const u = t - T.fecho
     const des = suave(faixa(u, 0.1, 0.45))
-    S.olhos = ['triste', 'fechado']; S.olhar = [-20 * des, 6 * des]; S.rr = 4 * des; S.rubor = 1 + 0.7 * des
-    S.sobr = ['triste', null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 0.1, 0.3))), 1]
+    S.olhos = ['triste', 'triste']; S.olhar = [-20 * des, 6 * des]; S.rr = 4 * des; S.rubor = 1 + 0.7 * des
+    S.sobr = [null, null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 0.1, 0.3))), 1]
     S.boca = 'boca-repouso'; S.tr.rot = 3 * des
     // sai do convite da fala sem estalo: braço convidando desce, colher continua de pé
     S.bE = ['reto', lerp(38, 22, des), ['colher', -8]]
@@ -405,7 +410,7 @@ function personagem(t) {
     if (u > 2.5) {
       const v = suave(faixa(u, 2.5, 2.8))
       S.olhar = [-20 * (1 - v), 6 * (1 - v)]; S.rr = 4 * (1 - v); S.tr.rot = 3 * (1 - v)
-      S.olhos = ['oval', 'meia-lua']; S.sobr = ['levantada', null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 2.55, 2.75))), 1]
+      S.olhos = ['meia-lua', 'meia-lua']; S.sobr = [null, null]; S.sobrK = [lerp(0.4, 1, voltaBack(faixa(u, 2.55, 2.75))), 1]
       S.boca = 'boca-firme'; S.rubor = 1.3
       S.bE = ['reto', lerp(22, 58, v), ['colher', -8]]
     }

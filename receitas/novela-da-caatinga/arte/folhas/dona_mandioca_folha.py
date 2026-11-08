@@ -80,66 +80,56 @@ def silhueta(no):
 # ---------------------------------------------------------------- catálogo
 BRACOS_PADRAO = dict(braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("cintura",))
 Q = (dm.MEIO, dm.QUADRIL_Y)
-EXPRESSOES = [  # (id, rótulo, estado) — nomes do motor (animacao.md §3) + 2 da ficha
-    ("neutra", "neutra", dict(sobr=(None, None), boca="boca-repouso")),
-    ("sorriso", "sorriso", dict(sobr=(None, None), boca="aberta")),
-    ("sorriso_propaganda", "sorriso_propaganda", dict(olhos=("grande", "grande"), sobr=("alta", "alta"),
-        boca="boca-E", boca_kw={"escala": 1.2}, braco_esq=("reto", 125), prop_esq=("colher", -20),
-        braco_dir=("reto", 125), bochechas=False)),
-    ("ironica", "irônica", dict(olhos=("meia-lua", "oval"), sobr=(None, "levantada"), boca="torta",
-        olhar=(12, 0), braco_esq=("reto", 14), prop_esq=("colher", 176), bochechas=False)),
-    ("sobrancelha_levantada", "sobrancelha_levantada", dict(olhos=("meia-lua", "oval"),
-        olho_kw={"dir": {"escala": 1.08}}, sobr=("baixa", "levantada"), boca="firme", bochechas=False)),
-    ("olhos_semicerrados", "olhos_semicerrados", dict(olhos=("meia-lua", "meia-lua"), sobr=("baixa", "baixa"),
-        boca="reta", braco_esq=("cruzado",), prop_esq=None, braco_dir=("cruzado",), ordem_bracos=("esq", "dir"),
-        bochechas=False)),
-    ("olhos_arregalados", "olhos_arregalados", dict(olhos=("grande", "grande"), sobr=("alta", "alta"),
-        boca="boca-O", braco_esq=("reto", 140), prop_esq=("colher", -40), braco_dir=("reto", 140),
-        bochechas=False, tronco_tf=f"translate(0 -26) scale(1 1.06)")),
-    ("encantado", "encantado", dict(olhos=("grande", "grande"), sobr=("alta", "alta"),
-        boca="boca-U", bochechas=True, bochechas_esc=1.2, braco_esq=("reto", -6), prop_esq=None,
-        braco_dir=("reto", -6), rosto_rot=-4)),
-    ("empolgado", "empolgado", dict(olhos=("arco", "arco"), sobr=(None, None), boca="boca-A",
-        braco_esq=("reto", 150), prop_esq=("colher", -10), braco_dir=("reto", 150),
-        tronco_tf="translate(0 -30) scale(1 1.08)")),
-    ("triste", "triste", dict(olhos=("triste", "triste"), olho_kw={"esq": {"dy": 6}, "dir": {"dy": 6}},
-        sobr=("triste", "triste"), boca="triste", boca_kw={"dy": 4}, bochechas=False,
-        braco_esq=("reto", 4), prop_esq=("colher", 178), braco_dir=("reto", 4),
-        tronco_tf=f"rotate(3 {Q[0]} {Q[1]}) translate(0 8) scale(1 0.97)")),
-    ("brava", "brava", dict(olhos=("decidido", "decidido"), sobr=("brava", "brava"), boca="boca-E",
-        braco_esq=("reto", 100), prop_esq=("colher", -70), bochechas=False,
-        tronco_tf=f"rotate(-3 {Q[0]} {Q[1]})")),
-    ("ri_segurando_riso", "ri segurando o riso", dict(olhos=("arco", "arco"), sobr=(None, None), boca="ondulada",
-        bochechas=True, bochechas_esc=1.3, braco_dir=("reto", -100), braco_esq=("reto", 10), prop_esq=("colher", 178))),
-    ("fingindo_pouco_caso", "fingindo pouco caso", dict(olhos=("fechado", "fechado"), sobr=("levantada", "levantada"),
-        boca="torta", rosto_rot=-6, olhar=(16, -6), braco_esq=("cruzado",), prop_esq=None, braco_dir=("cruzado",),
-        ordem_bracos=("esq", "dir"), bochechas=False, tronco_tf=f"rotate(-4 {Q[0]} {Q[1]})")),
+# As 9 expressões do Mangaio (cesto_folha.py), peça por peça, só adaptadas (decisão 2026-11-07):
+# mesmas formas de olho e boca, mesmos deslocamentos (unidades do mascote x ROSTO_K), sem sobrancelha,
+# braços traduzidos para os dela (a colher fica na mão esquerda da tela).
+_K = dm.ROSTO_K
+EXPRESSOES = [  # (id, rótulo, estado)
+    ("neutra", "neutra (= Mangaio)", dict(boca="aberta")),
+    ("desconfiado", "desconfiada", dict(olhos=("meia-lua", "meia-lua"),
+        olho_kw={"esq": {"dx": 9 * _K}, "dir": {"dx": 9 * _K}}, boca="torta", boca_kw={"dx": 10 * _K})),
+    ("assustado", "assustada", dict(olho_kw={"esq": {"escala": 1.25}, "dir": {"escala": 1.25}}, boca="o",
+        braco_esq=("reto", 140), prop_esq=("colher", -40), braco_dir=("reto", 140),
+        tronco_tf="translate(0 -20) scale(0.97 1.05)")),
+    ("triste", "triste", dict(olhos=("triste", "triste"), olho_kw={"esq": {"dy": 6 * _K}, "dir": {"dy": 6 * _K}},
+        boca="triste", boca_kw={"dy": 6 * _K}, braco_esq=("reto", 4), prop_esq=("colher", 178), braco_dir=("reto", 4),
+        tronco_tf=f"translate(0 10) scale(1.03 0.95)")),
+    ("encantado", "encantada", dict(olho_kw={"esq": {"escala": 1.18}, "dir": {"escala": 1.18}}, boca="o_pequeno",
+        bochechas=True, braco_esq=("reto", 34), prop_esq=("colher", -12), braco_dir=("reto", 34))),
+    ("decidido", "decidida", dict(olhos=("decidido", "decidido"), boca="firme", braco_dir=("reto", 150))),
+    ("rindo", "rindo", dict(olhos=("arco", "arco"), boca="aberta", boca_kw={"escala": 1.18, "dy": 4 * _K},
+        braco_esq=("reto", 60), prop_esq=("colher", -14), braco_dir=("reto", 60))),
+    ("envergonhado", "envergonhada", dict(olho_kw={"esq": {"escala": 0.85, "dy": 8 * _K, "dx": 4 * _K},
+        "dir": {"escala": 0.85, "dy": 8 * _K, "dx": -4 * _K}}, boca="ondulada", boca_kw={"dy": 4 * _K},
+        bochechas=True, braco_esq=("reto", -10), prop_esq=("colher", 178), braco_dir=("reto", -10))),
+    ("nao-vai", "\"não vai\"", dict(olhos=("fechado", "fechado"), boca="reta", braco_dir=("reto", 92),
+        tronco_tf=f"rotate(4 {Q[0]} {Q[1]})")),
 ]
 BOCAS = [("boca-repouso", "repouso"), ("boca-MBP", "M B P"), ("boca-A", "A"), ("boca-E", "E"),
          ("boca-I", "I S Z CH"), ("boca-O", "O"), ("boca-U", "U Ô"), ("boca-FV", "F V")]
 POSES = [
     ("mao-na-cintura", "mão na cintura", dict(braco_esq=("cintura",), prop_esq=None, braco_dir=("cintura",),
-        olhos=("decidido", "oval"), sobr=("baixa", "levantada"), boca="firme", bochechas=False)),
+        olhos=("decidido", "decidido"), sobr=(None, None), boca="firme", bochechas=False)),
     ("bater-colher-antes", "bater a colher (antecipação)", dict(braco_esq=("reto", 165), prop_esq=("colher", -35),
-        olhos=("decidido", "decidido"), sobr=("brava", "brava"), boca="boca-MBP", bochechas=False,
+        olhos=("decidido", "decidido"), sobr=(None, None), boca="boca-MBP", bochechas=False,
         tronco_tf=f"rotate(-5 {Q[0]} {Q[1]}) translate(0 6) scale(1 0.97)")),
     ("bater-colher", "bater a colher (batida)", dict(braco_esq=("reto", 40), prop_esq=("colher", -112),
-        olhos=("fechado", "fechado"), sobr=("brava", "brava"), boca="boca-A", bochechas=False,
+        olhos=("fechado", "fechado"), sobr=(None, None), boca="boca-A", bochechas=False,
         tronco_tf=f"rotate(4 {Q[0]} {Q[1]}) translate(0 12) scale(1.02 0.95)")),
     ("se-abanar", "se abanar (folha, cap. 1)", dict(braco_dir=("reto", 150), prop_dir=("abano", -24),
-        braco_esq=("reto", 8), prop_esq=("colher", 178), olhos=("meia-lua", "meia-lua"), sobr=("triste", "triste"),
+        braco_esq=("reto", 8), prop_esq=("colher", 178), olhos=("meia-lua", "meia-lua"), sobr=(None, None),
         boca="boca-O", bochechas=True)),
     ("apontar", "apontar com a colher", dict(braco_esq=("reto", 92), prop_esq=("colher", -88),
-        olhos=("decidido", "oval"), sobr=("brava", "levantada"), boca="firme", bochechas=False,
+        olhos=("decidido", "decidido"), sobr=(None, None), boca="firme", bochechas=False,
         tronco_tf=f"rotate(-3 {Q[0]} {Q[1]})")),
     ("bracos-cruzados", "braços cruzados", dict(braco_esq=("cruzado",), prop_esq=None, braco_dir=("cruzado",),
-        ordem_bracos=("esq", "dir"), olhos=("meia-lua", "oval"), sobr=("baixa", "levantada"), boca="reta",
+        ordem_bracos=("esq", "dir"), olhos=("meia-lua", "meia-lua"), sobr=(None, None), boca="reta",
         bochechas=False)),
     ("abraco-contido", "abraço contido", dict(braco_esq=("reto", 48), prop_esq=None, braco_dir=("reto", 48),
         olhos=("arco", "arco"), sobr=(None, None), boca="boca-repouso", bochechas=True, rosto_rot=5, olhar=(-12, 4),
         tronco_tf=f"rotate(2 {Q[0]} {Q[1]})")),
     ("comovida", "comovida (ajeita o lenço)", dict(braco_dir=("reto", 168), prop_dir=None, braco_esq=("reto", 10),
-        prop_esq=("colher", 178), olhos=("triste", "fechado"), sobr=("triste", None), boca="boca-repouso",
+        prop_esq=("colher", 178), olhos=("triste", "triste"), sobr=(None, None), boca="boca-repouso",
         bochechas=True, bochechas_esc=1.25, olhar=(-22, 6), rosto_rot=4, tronco_tf=f"rotate(3 {Q[0]} {Q[1]})")),
 ]
 VISTAS = [(0, "frente"), (45, "3/4"), (90, "perfil"), (135, "3/4 de costas"), (180, "costas")]
@@ -270,7 +260,7 @@ def main():
         e = dict(BRACOS_PADRAO); e.update(est)
         gravar(dm.dona_mandioca(e), f"dona-mandioca-expr-{id_.replace('_', '-')}.svg")
         exprs.append((dm.dona_mandioca(e), rot))
-    secoes.append(("Expressões", "as 11 do elenco + 2 da ficha (cap. 4) · troca de peça: olho, sobrancelha (aparece e some), boca, bochecha, braços", exprs))
+    secoes.append(("Expressões", "as 9 do Mangaio, só adaptadas: mesmas formas de olho e boca, sem sobrancelha · troca de peça, o corpo não muda", exprs))
     bocas = []
     for id_, rot in BOCAS:
         e = dict(BRACOS_PADRAO, boca=id_, sobr=(None, None))

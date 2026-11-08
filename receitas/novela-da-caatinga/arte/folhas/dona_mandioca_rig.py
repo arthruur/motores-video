@@ -52,7 +52,7 @@ VIEWBOX = (170, 0, 920, 1254)
 # rosto: tamanho (px por unidade do mascote). 1,18 = ~0,58 do tamanho absoluto do Mangaio
 # (1,0 Mangaio = 2,05 px/unidade aqui). PROPOSTA pendente de aprovação: ver ficha, Decisões.
 ROSTO_K = 1.10                      # tamanho das peças (olhos, boca, sobrancelha) em unidades do mascote
-ESPACO_K = 1.06                     # espaçamento entre as peças: rosto proporcional à cabeça (decisão 2026-11-07)
+ESPACO_K = 1.10                     # espaçamento entre as peças: rosto proporcional à cabeça (decisão 2026-11-07)
 ROSTO_Y = 404.0                     # altura dos olhos
 ROSTO_INCL = -2.0
 BOCA_K = 0.97                       # as bocas sobem um pouco mais que o rosto (legíveis no celular)
@@ -677,7 +677,7 @@ SOBR_MODOS = {   # (rotação, dy, escala)
     "triste": (-24, -4, 1.0), "alta": (-5, -14, 1.0),
 }
 OLHO_FORMAS = ("oval", "arco", "meia-lua", "fechado", "grande", "triste", "decidido")
-BOCAS_EXPR = ("aberta", "triste", "torta", "ondulada", "firme", "reta")
+BOCAS_EXPR = ("aberta", "triste", "torta", "ondulada", "firme", "reta", "o", "o_pequeno")
 BOCAS_SINC = ("boca-repouso", "boca-MBP", "boca-A", "boca-E", "boca-I", "boca-O", "boca-U", "boca-FV")
 
 
@@ -823,7 +823,7 @@ def rosto(v, estado, rig_completo=False):
 
 # ================================================================ personagem
 ESTADO_PADRAO = dict(
-    olhos=("oval", "oval"), sobr=(None, None), boca="boca-repouso", bochechas=True,
+    olhos=("oval", "oval"), sobr=(None, None), boca="aberta", bochechas=False,
     braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("cintura",), prop_dir=None,
 )
 

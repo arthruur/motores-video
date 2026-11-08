@@ -75,9 +75,10 @@ Um rosto só para todo o elenco, **o rosto do Cesto** (ver `referencias/cesto-fr
 - **Olhos: dois ovais verticais cheios em `#462416`.** Sem branco do olho, sem pupila separada e sem brilho. É o rosto "kawaii" da marca, e ele é o maior fator de unidade do elenco.
 - **Boca: forma cheia em `#462416` com interior `#C5441E`.** Larga e aberta no sorriso, como a do Cesto.
 - **Sem nariz e sem sobrancelha por padrão.** A expressão sai da **forma do olho** (oval, arco `^ ^`, meia-lua, linha fechada, oval grande) e da boca.
-- **Sobrancelha só quando a expressão exige** (`brava`, `sobrancelha_levantada`, `triste`): uma forma curta e cheia em `#462416`, que aparece e some. *A validar no model sheet do Cesto (fase 1): se o Cesto não usar, ninguém usa como neutra.*
+- **Sem sobrancelha** (decidido em 2026-11-07). O Mangaio não usa, e na Dona Mandioca as sobrancelhas deixaram as expressões estranhas. A expressão sai só da forma do olho e da boca. Exceção de ficha: o Mandacaru (sobrancelhas de espinho fazem parte do corpo dele).
+- **As expressões do elenco são as do Mangaio** (folha em `folhas/cesto-folha.png`; peças em `folhas/rosto_padrao.py`): neutra (boca aberta), desconfiado, assustado, triste, encantado, decidido, rindo, envergonhado e "não vai". Para outro personagem, **só adapta**: mesmas formas de olho e boca, mesmos deslocamentos na escala do rosto dele, braços traduzidos para o corpo dele. Nada de olhos assimétricos nem de boca de fala (A, E, U…) usada como expressão.
 - **Bochecha:** opcional, uma mancha cheia um tom acima da `base`, sem contorno.
-- 11 expressões fixas (lista em [`animacao.md`](animacao.md#expressoes)). Expressão nova só entra aprovada e para o banco.
+- Os nomes do motor (lista em [`animacao.md`](animacao.md#expressoes)) apontam para essas 9: ver a tabela de correspondência em `folhas/cesto_folha.py` (`EXPRESSOES`). Expressão nova só entra aprovada e vai para o banco.
 - **Exceções que a ficha justifica:** o Realçador tem sorriso de propaganda com dentes brancos demais; o Mandacaru tem sobrancelhas grossas de espinho; a Jataí tem olhos compostos estilizados.
 
 ## 7. Detalhe e textura

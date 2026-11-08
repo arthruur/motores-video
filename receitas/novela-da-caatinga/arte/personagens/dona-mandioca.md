@@ -20,7 +20,7 @@ Coluna larga, um pouco mais estreita embaixo, levemente torta (nenhuma mandioca 
 Casca `mandioca_casca`, com lascas descascadas mostrando `mandioca_miolo`. Lenço `lenco_vermelho` com bolinhas brancas (`mandioca_miolo.luz`). Avental de saco de algodão cru, liso, com bolso (sem letreiro: decisão 2026-11-07).
 
 ## Rosto
-Padrão. É quem mais usa `sobrancelha_levantada`, e é o caso de teste da sobrancelha que aparece e some (ARTE.md §6). Bochechas: duas manchas de `lenco_vermelho.meio` a 30%, sem contorno.
+Padrão, igual ao do Mangaio, sem sobrancelha (ARTE.md §6). O jeito mandão dela sai do olho `decidido` com a boca `firme` e do gesto com a colher. Bochechas: duas manchas de `lenco_vermelho.meio` a 30%, sem contorno.
 
 ## Figurino e acessórios
 | Peça | Fixa? | Uso |
@@ -92,3 +92,4 @@ caring matriarch. Expression: one eyebrow raised, holding back a smile.
 | 2026-11-07 | Bochecha em `lenco_vermelho.meio` a 30% (igual à ficha) | Rig v1 usava 38% |
 | 2026-11-07 | **Ajustes finos (revisão do Arthur):** braços sem mão (ponta redonda segura a colher); curvas de "mão na cintura" e "braços cruzados" corrigidas (o braço direito estava invertido, cotovelo para dentro); rosto proporcional à cabeça (`ROSTO_K` 1,55 para o tamanho das peças, `ESPACO_K` 1,02 para o espaçamento, olhos subiram para y=404); sobrancelhas mais baixas para não entrar no lenço; avental sem o letreiro "FARINHA" | Mão separada e braço invertido deixavam os gestos estranhos; com o rosto no tamanho absoluto do Mangaio as expressões não liam numa cabeça alta e estreita; texto no figurino pesa na leitura. Regras levadas para ARTE.md §2, §3 e Nunca |
 | 2026-11-07 | **Rosto refeito pela referência** (`referencias/dona-mandioca-frente.png`): olho ≈ 16% da largura da cabeça (`ROSTO_K` 1,10), centros a ≈ 48% (`ESPACO_K` 1,06), boca entre os olhos (`BOCA_K` 0,97), bochechas mais para fora. Corpo e paleta (`mandioca_casca` v1, `algodao_cru`) **aprovados** pelo Arthur. Demo em 2D: só vistas-chave (0/45/90/180/270/315), virada por troca de desenho | A versão anterior (olho 23%, olhos juntos) fazia a boca disputar espaço com os olhos; o giro de 15 em 15° complicava sem ganho (a série é 2D) |
+| 2026-11-07 | **Expressões = as 9 do Mangaio, só adaptadas** (neutra com boca aberta, desconfiada, assustada, triste, encantada, decidida, rindo, envergonhada, "não vai"); sem sobrancelha; olhos sempre iguais; `ESPACO_K` = `ROSTO_K` = 1,10 (o rosto do Mangaio em escala uniforme). Folha e demo refeitas | As 13 expressões próprias (sobrancelhas, olhos assimétricos, bocas de fala como expressão) ficaram estranhas; as do Mangaio funcionam |
