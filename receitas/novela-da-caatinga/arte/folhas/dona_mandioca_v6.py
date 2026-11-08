@@ -113,7 +113,13 @@ def main():
     # fundo (cor dos cantos, ligado à borda) + a sombra no chão (vai ser redesenhada)
     canto = np.median(np.vstack([rgb[:12, :12].reshape(-1, 3), rgb[:12, -12:].reshape(-1, 3)]), 0)
     dif = np.abs(rgb.astype(int) - canto).max(2)
-    lab_f, _ = ndi.label(dif < 11)                 # estrito: o peitilho do avental é quase da cor do fundo
+    # barreira na borda direita/de baixo do avental: ali o creme encosta no fundo e é quase da mesma cor;
+    # sem ela, a remoção do fundo "vaza" para dentro do avental
+    barreira = np.zeros((N, N), np.uint8)
+    cv2.polylines(barreira, [np.array([(474, 540), (545, 536), (700, 530), (862, 528), (864, 700), (905, 830),
+                                       (935, 975), (928, 1008), (880, 1042), (760, 1066), (600, 1062), (500, 1040),
+                                       (466, 960), (450, 800), (466, 640)], np.int32)], True, 1, 4)   # contorno fechado
+    lab_f, _ = ndi.label((dif < 11) & (barreira == 0))   # estrito: o peitilho do avental é quase da cor do fundo
     borda = set(np.unique(np.concatenate([lab_f[0], lab_f[-1], lab_f[:, 0], lab_f[:, -1]]))) - {0}
     fundo = np.isin(lab_f, list(borda))
     sombra_cor = rgb[1200, 640].astype(int)                          # entre os pés: só sombra
@@ -138,19 +144,48 @@ def main():
     peitilho = ndi.binary_fill_holes(ndi.binary_closing(peitilho, iterations=4)) & (yy > 548) & (yy < 748) & (xx > 470) & (xx < 860)
     fg = fg | peitilho
     creme = creme | peitilho
-    lenco = fg & cab & (vermelho | creme)
-    lenco = ndi.binary_fill_holes(ndi.binary_closing(lenco, iterations=3)) & cab & fg
-    colher = fg & colher_reg & ~punho_e & ~creme
-    avental = fg & avental_reg & creme & ~braco_d
-    avental = ndi.binary_opening(ndi.binary_closing(avental, iterations=3), iterations=3)
+    # lenço: só os vermelhos da cabeça; furos pequenos (as bolinhas) preenchidos, furos grandes (a cabeça) não
+    lenco_v = ndi.binary_closing(fg & cab & vermelho, iterations=2)
+    furos = ndi.binary_fill_holes(lenco_v) & ~lenco_v
+    lab_h, nh = ndi.label(furos)
+    if nh:
+        tam = ndi.sum(np.ones_like(lab_h), lab_h, index=np.arange(1, nh + 1))
+        furos = np.isin(lab_h, np.nonzero(tam < 1500)[0] + 1)
+    lenco = ndi.binary_opening(lenco_v | furos, iterations=1)
+    lab_l, nl = ndi.label(lenco)                       # só as partes grandes (some o vermelho da boca/bochecha)
+    if nl:
+        tam = ndi.sum(np.ones_like(lab_l), lab_l, index=np.arange(1, nl + 1))
+        lenco = np.isin(lab_l, np.nonzero(tam > 3000)[0] + 1)
+    # avental: o creme da região do avental, com os furos internos preenchidos (o creme claro é quase o fundo)
+    avental = ndi.binary_closing(fg & avental_reg & creme & ~braco_d, iterations=6)
+    avental = ndi.binary_fill_holes(avental) & avental_reg & ~braco_d
+    avental = ndi.binary_opening(avental, iterations=3)
+    # colher: só a madeira clara (o braço é marrom mais escuro); a bola do braço fica inteira
+    punho_e = (xx - 365) ** 2 + (yy - 665) ** 2 < 74 ** 2
+    madeira = (Lc > 47) & (b > 30)
+    colher = ndi.binary_opening(fg & colher_reg & ~punho_e & madeira & ~creme, iterations=2)
+    # braço esquerdo: a bola + o trecho até o ombro (por baixo da alça do avental)
+    sup_e = np.zeros_like(fg)
+    cv2.fillPoly(sup_e.view(np.uint8), [np.array([(398, 612), (470, 572), (545, 588), (548, 650), (478, 724), (408, 724)], np.int32)], 1)
+    braco_e = punho_e | (sup_e.astype(bool) & (Lc < 50))
     bracos = fg & (braco_e | braco_d) & ~avental & ~colher
+    bracos = ndi.binary_opening(bracos, iterations=2)
     corpo_px = fg & ~lenco & ~colher & ~avental & ~bracos
 
-    # corpo inteiro: silhueta sem braços/colher/laço; completa a lateral esquerda atrás do braço
-    sil = fg & ~bracos & ~colher & ~(avental & (xx < 470)) & ~(lenco & (yy < 230))
+    # corpo inteiro: cabeça até a borda de dentro do lenço; continua por baixo de TODO o avental
+    laco = avental & (xx < 470)
+    sil = (fg & ~lenco & ~bracos & ~colher & ~laco) | (avental & ~laco)
     sil = ndi.binary_opening(sil, iterations=3)
-    sil = r3.bordas_interpoladas(sil, 545, 790, ref=sil)
-    sil = ndi.binary_fill_holes(sil) & ~(avental & (xx < 470)) & ~(lenco & (yy < 230))
+    sil = r3.bordas_interpoladas(sil, 520, 800, ref=sil)
+    sil = ndi.binary_fill_holes(ndi.binary_closing(sil, iterations=4)) & ~laco
+    # o pedaço do corpo debaixo do lenço (a cabeça continua por baixo dele, para o lenço poder balançar)
+    cabeca = ndi.binary_fill_holes(ndi.binary_closing(sil | lenco, iterations=8)) & ~ndi.binary_dilation(lenco & ~ndi.binary_erosion(lenco, iterations=18), iterations=0)
+    sil = sil | (cabeca & (yy > 200) & ndi.binary_erosion(lenco | sil, iterations=22))
+    sil = ndi.binary_opening(sil, iterations=2)
+    lab_s, ns_ = ndi.label(sil)                         # só a peça maior (some com as sujeirinhas soltas)
+    if ns_ > 1:
+        tam = ndi.sum(np.ones_like(lab_s), lab_s, index=np.arange(1, ns_ + 1))
+        sil = lab_s == (int(np.argmax(tam)) + 1)
     # tons do corpo: casca; onde não é casca (rosto, avental, lenço, braços), herda a casca vizinha
     casca_ok = corpo_px & sil & ~rosto_reg | (corpo_px & rosto_reg & ~escuro & ~vermelho & ~creme)
     idx_c = quantizar(L, casca_ok, RAMPAS["casca"])
