@@ -167,7 +167,7 @@ def main():
     # braço esquerdo: a bola + o trecho até o ombro (por baixo da alça do avental)
     sup_e = np.zeros_like(fg)
     cv2.fillPoly(sup_e.view(np.uint8), [np.array([(398, 612), (470, 572), (545, 588), (548, 650), (478, 724), (408, 724)], np.int32)], 1)
-    braco_e = punho_e | (sup_e.astype(bool) & (Lc < 50))
+    braco_e = punho_e | (sup_e.astype(bool) & ~creme & ~madeira)     # o trecho até o ombro, qualquer tom de casca
     bracos = fg & (braco_e | braco_d) & ~avental & ~colher
     bracos = ndi.binary_opening(bracos, iterations=2)
     corpo_px = fg & ~lenco & ~colher & ~avental & ~bracos
