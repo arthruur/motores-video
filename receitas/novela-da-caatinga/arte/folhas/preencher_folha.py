@@ -52,13 +52,16 @@ PERSONAGENS = {
         corpo_unid=372.0,           # altura do corpo (fundo à borda, sem alça e frutas) em unidades do SVG
         frente="cesto-expr-neutra.svg",
         vistas=["cesto-expr-neutra.svg", "cesto-tres-quartos.svg", None, None],
-        pendente_vistas="aguarda a versão do outro PC (alça)",
-        rotulo_vistas={"3/4": "3/4 (rascunho: alça a revisar)"},
+        pendente_vistas="não usa: gira em 2D, como recorte (animacao.md §2c)",
+        rotulo_vistas={},
         expressoes=["neutra", "desconfiado", "assustado", "triste", "encantado", "decidido", "rindo", "envergonhado", "nao-vai"],
         expr_arq="cesto-expr-{}.svg",
-        bocas_nota="o Mangaio não fala: aqui entram os gestos do trompete (a definir)",
+        bocas_nota=None,
+        prancheta4=dict(titulo="4 · Conteúdo", sub="o Mangaio não fala: esta prancheta mostra o que vai dentro dele · as 11 frutas do arturo.ai (app/src/mangaio/frutas.svg), atrás da borda",
+                        itens=[("cesto-conteudo-cheio.svg", "cheio (padrão)"), ("cesto-conteudo-pouco.svg", "pouco (estiagem)"),
+                               ("cesto-conteudo-vazio.svg", "vazio (seca)"), ("cesto-conteudo-transbordando.svg", "transbordando (safra)")]),
         repertorio=[("cesto-pose-antecipacao.svg", None), ("cesto-pose-no-ar.svg", -60), ("cesto-pose-pouso.svg", None),
-                    ("cesto-pose-apontar.svg", None), ("cesto-pose-danca.svg", None), None],
+                    ("cesto-pose-apontar.svg", None), ("cesto-pose-danca.svg", None), ("cesto-pose-carregar-tudo.svg", None)],
         repertorio_rotulos=["antecipação (quique)", "no ar (quique)", "pouso (quique)", "apontar", "dança", "carregar_tudo"],
         pendente_repertorio="aguarda a versão do outro PC (conteúdo)",
         rampas=["palha_cesto", "folha", "tomate", "laranja"],
@@ -150,7 +153,28 @@ def preencher(vc, cfg):
     for (x, y, w, h), e in zip(celulas(9, 370, 580, T[2]), cfg["expressoes"]):
         por(cfg["expr_arq"].format(e), x + w / 2, y + h - 90, 0.6)
 
-    # 4 · Bocas
+    # 4 · Bocas (ou outra coisa, para quem não fala)
+    p4 = cfg.get("prancheta4")
+    if p4:
+        for velho, novo in (("4 · Bocas", p4["titulo"]),):
+            ach = [m for m in vc("document.find", kind="Type", text=velho)["matches"] if m["name"] == velho]
+            if ach:
+                vc("text.setText", ids=[m["id"] for m in ach], text=novo)
+        ach = vc("document.find", kind="Type", text="sincronia labial")["matches"]
+        if ach:
+            vc("text.setText", ids=[m["id"] for m in ach], text=p4["sub"])
+        for (x, y, w, h), (arq, rot_) in zip(celulas(8, 400, 420, T[3]), p4["itens"] + [(None, None)] * 8):
+            if arq:
+                por(arq, x + w / 2, y + h - 90, 0.45)
+        for i, (_, rot_) in enumerate(p4["itens"]):
+            velho = fp.BOCAS[i]
+            ach = [m for m in vc("document.find", kind="Type", text=velho)["matches"] if m["name"] == velho]
+            if ach:
+                vc("text.setText", ids=[ach[0]["id"]], text=rot_)
+        for velho in fp.BOCAS[len(p4["itens"]):]:
+            ach = [m for m in vc("document.find", kind="Type", text=velho)["matches"] if m["name"] == velho]
+            if ach:
+                vc("text.setText", ids=[ach[0]["id"]], text="—")
     cs = celulas(8, 400, 420, T[3])
     if cfg.get("bocas_nota"):
         x, y, w, h = cs[0]

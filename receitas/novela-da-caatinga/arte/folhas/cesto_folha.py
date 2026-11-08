@@ -164,8 +164,46 @@ def recolor(no, mapa):
             e.set("fill", mapa[f])
 
 
+# ---------------------------------------------------------------- o monte de 11 frutas (outro PC, 2026-11-08)
+# As 11 peças de app/src/mangaio/frutas.svg (extraídas do arturo.ai) na MESMA arrumação de
+# app/src/mangaio/cesto.ts (ARRUMACAO): cx, base, escala, giro. Ficam ATRÁS do corpo; a borda da frente
+# cobre a base delas. Caixas medidas no VectorCraft (frutas_caixas.json).
+FRUTAS_SVG = SERIE.parents[1] / "app" / "src" / "mangaio" / "frutas.svg"
+ARRUMACAO = [  # (id, cx, base, escala, giro) — copiado de cesto.ts
+    ("folhas-3", 300, 380, 0.62, 12), ("folha-1", 150, 372, 0.6, -28), ("folha-2", 420, 368, 0.55, 38),
+    ("banana-1", 360, 345, 0.55, -18), ("banana-2", 120, 350, 0.5, 24), ("tomate-grande", 395, 362, 0.6, 6),
+    ("laranja", 205, 365, 0.72, 0), ("tomate-1", 300, 352, 0.6, -8), ("morango-1", 100, 345, 0.55, -20),
+    ("tomate-2", 455, 345, 0.48, 14), ("morango-2", 255, 340, 0.55, 10),
+]
+MONTE = {  # estado do conteúdo -> lista de (id, cx, base, escala, giro)
+    "cheio": ARRUMACAO,
+    "pouco": [("folha-1", 170, 392, 0.5, -40), ("laranja", 250, 392, 0.62, 8), ("morango-2", 330, 380, 0.5, 18)],
+    "vazio": [],
+    "transbordando": [("folha-2", 250, 250, 0.5, -24), ("banana-1", 380, 270, 0.5, 18), ("laranja", 300, 285, 0.62, -6),
+                      ("tomate-grande", 175, 292, 0.5, 10), ("morango-1", 240, 270, 0.45, -12)] + ARRUMACAO,
+}
+_FRUTAS = None
+
+
+def monte_frutas(estado):
+    """<g id="frutas"> com as peças do estado, prontas para ir ATRÁS do corpo."""
+    global _FRUTAS
+    if _FRUTAS is None:
+        raiz = ET.parse(FRUTAS_SVG).getroot()
+        caixas = json.loads((AQUI / "frutas_caixas.json").read_text(encoding="utf-8"))
+        _FRUTAS = {e.get("id"): (e, caixas[e.get("id")]) for e in raiz if e.get("id") in caixas}
+    g = grupo("frutas")
+    for i, (fid, cx, base, k, giro) in enumerate(MONTE[estado]):
+        el, (bx, by, bw, bh) = _FRUTAS[fid]
+        peca = copy.deepcopy(el)
+        peca.set("id", f"{fid}-{i}" if estado == "transbordando" and i < 5 else fid)
+        g.append(grupo(None, f"translate({cx} {base - bh * k / 2:.1f}) rotate({giro}) scale({k}) "
+                             f"translate({-(bx + bw / 2):.1f} {-(by + bh / 2):.1f})", peca))
+    return g
+
+
 def cesto(pecas, *, olhos=("oval", "oval"), olho_kw=None, boca_forma="aberta", boca_kw=None,
-          braco=(0, 0), conteudo="cheio", rubor=False, sem_rosto=False):
+          braco=(0, 0), conteudo="cheio", rubor=False, sem_rosto=False, frutas_monte=False):
     """Um Cesto completo (grupo), nas coordenadas do mascote.svg."""
     olho_kw = olho_kw or {}
     boca_kw = boca_kw or {}
@@ -174,7 +212,9 @@ def cesto(pecas, *, olhos=("oval", "oval"), olho_kw=None, boca_forma="aberta", b
 
     if conteudo in ("vazio", "pouco"):
         g.append(interior())
-    if conteudo == "pouco":
+    if frutas_monte:                       # as 11 frutas, atrás do corpo (como em app/src/mangaio)
+        g.append(monte_frutas(conteudo))
+    if conteudo == "pouco" and not frutas_monte:
         murcha = copy.deepcopy(por_id(frutas, "laranja"))
         murcha.attrib.pop("id")
         recolor(murcha, {LARANJA[0]: LARANJA[2], LARANJA[1]: LARANJA[3], "#F3AD56": LARANJA[1]})
@@ -194,14 +234,14 @@ def cesto(pecas, *, olhos=("oval", "oval"), olho_kw=None, boca_forma="aberta", b
 
     g.append(copy.deepcopy(pecas["alca"]))
 
-    if conteudo == "transbordando":
+    if conteudo == "transbordando" and not frutas_monte:
         lar = copy.deepcopy(por_id(frutas, "laranja")); lar.attrib.pop("id")
         tom = copy.deepcopy(por_id(frutas, "tomate")); tom.attrib.pop("id")
         g.append(grupo("extra-tomate", "translate(170 150) rotate(-14) scale(0.85) translate(-380 -257)", tom))
         g.append(grupo("extra-laranja", "translate(330 130) rotate(10) scale(0.9) translate(-197 -283)", lar))
         lar2 = copy.deepcopy(lar)
         g.append(grupo("extra-laranja-2", "translate(250 70) rotate(-6) scale(0.7) translate(-197 -283)", lar2))
-    if conteudo in ("cheio", "transbordando"):
+    if conteudo in ("cheio", "transbordando") and not frutas_monte:
         g.append(frutas)
 
     # braços por último: levantados, passam na frente das frutas.
@@ -559,6 +599,12 @@ def main():
     padrao = cesto(pecas)
     de_costas = costas(pecas)
     vistas = {"tres-quartos": tres_quartos(pecas), "perfil": perfil(pecas), "costas": de_costas}
+    # ajuste do Arthur no VectorCraft (2026-11-08): na 3/4, alça e frutas mais largas, presas pela direita
+    for e in vistas["tres-quartos"].iter():
+        ajuste = {"alca": (306.98, 1.1848), "frutas": (469.0, 1.0536)}.get(e.get("id"))
+        if ajuste:
+            ax, k = ajuste
+            e.set("transform", f"translate({ax} 0) scale({k} 1) translate({-ax} 0) " + (e.get("transform") or ""))
     for nome, g in vistas.items():
         avulso(nome, copy.deepcopy(g))
 
@@ -585,7 +631,8 @@ def main():
     secoes.append(("Expressões", "ele não fala: olhos + braços (+ boca de apoio) · cada uma é troca de peça, o corpo não muda", exprs))
     conts = []
     for id_, rot in CONTEUDOS:
-        g = cesto(pecas, conteudo=id_, **({"olhos": ("triste", "triste"), "boca_forma": "triste", "braco": (-12, -12)} if id_ == "vazio" else {}))
+        g = cesto(pecas, conteudo=id_, frutas_monte=True,
+                  **({"olhos": ("triste", "triste"), "boca_forma": "triste", "braco": (-12, -12)} if id_ == "vazio" else {}))
         avulso(f"conteudo-{id_}", copy.deepcopy(g))
         conts.append((g, rot))
     secoes.append(("Conteúdo", "o que vai dentro conta a temporada · entrega e palha do licuri ficam para a v2", conts))
@@ -594,7 +641,7 @@ def main():
         ("no-ar", cesto(pecas, braco=(("alto", 30), ("alto", 30)), olho_kw={"esq": {"escala": 1.1}, "dir": {"escala": 1.1}}), "no ar",
          {"transform_extra": "translate(0 -40) scale(0.9 1.1)"}),
         ("pouso", cesto(pecas, braco=(30, 30), olhos=("arco", "arco")), "pouso", {"transform_extra": "scale(1.16 0.82)"}),
-        ("carregar-tudo", cesto(pecas, conteudo="transbordando", braco=("segura", "segura"), olhos=("arco", "arco")), "carregar_tudo",
+        ("carregar-tudo", cesto(pecas, conteudo="transbordando", frutas_monte=True, braco=("segura", "segura"), olhos=("arco", "arco")), "carregar_tudo",
          {"transform_extra": "scale(1.08 0.9)"}),
         ("apontar", cesto(pecas, braco=(0, "aponta"), olho_kw={"esq": {"dx": 10}, "dir": {"dx": 10}}, boca_forma="o_pequeno", boca_kw={"dx": 8}),
          "apontar", {"transform_extra": "rotate(3)"}),
