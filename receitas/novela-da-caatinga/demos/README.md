@@ -66,10 +66,10 @@ Roteiro (39,5 s):
 
 | Tempo | Beat | O que mostra | Som |
 |---|---|---|---|
-| 0–5,3 | andar | entra em perfil, 8 passos curtos e pesados: pé-toco sobe e assenta, tronco afunda no contato e inclina para a frente, braços ao contrário das pernas, pontas do lenço atrasadas; para com arrasto | passo em cada contato, poeira |
+| 0–5,3 | andar | entra DE FRENTE, deslizando de lado, 8 passos curtos e pesados, colher deitada: pé-toco sobe e assenta, tronco afunda no contato e inclina para a frente, braços ao contrário das pernas, pontas do lenço atrasadas; para com arrasto | passo em cada contato, poeira |
 | 5,3–7,5 | vira devagar | perfil → frente em 6 vistas com slow-in/out; assenta em cada uma; a sobrancelha dela aparece | tecido, tic |
 | 7,5–11 | nome | "Dona Mandioca" escrito à mão + "a dona da casa de farinha"; a colher sobe como cetro, ela assente | risco |
-| 11–16,4 | virada | volta inteira de 15 em 15°, segurando em frente, 3/4, perfil, costas, perfil, 3/4 | tecido a cada rodada |
+| 11–16,4 | calor | se abana com a folha (calor da seca), fecha os olhos no ventinho | tecido |
 | 16,4–22 | regente | antecipação e batida da colher (2x, câmera treme), aponta para quem vê e reafirma, rege o xote no 2/4 com notinhas, corta a música | zum + toc, xote, toc |
 | 22–28 | expressões | close: neutra, sobrancelha levantada, irônica, desconfiada, brava, ri segurando o riso, empolgada (stretch e volta à compostura) | tic afinado em cada troca, brilho |
 | 28,3–33,6 | fala | "Aqui na casa de farinha quem manda sou eu... mas pode entrar." Sincronia por forma (A E I O U MBP FV a partir das letras de cada palavra, fechada nos silêncios pelo envelope); a colher aponta o chão, vira cetro; pausa com olhar de lado; amolece e convida com a mão | a fala |

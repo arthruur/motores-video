@@ -31,6 +31,8 @@ O que isso quer dizer, medido no `mascote.svg`:
 - **Peso para baixo.** Todos têm base no chão (exceto Jataí, que voa). Squash and stretch acontece em volta dos pés.
 - **Membros.** Como os do Mangaio: **curtos, grossos e arredondados, terminando numa ponta redonda, SEM mão** (nada de bola de mão, polegar ou luva na ponta: a mão separada deixa o gesto estranho; decisão de 2026-11-07). Na rampa do próprio corpo, com a borda em `sombra`. Nada de braço de palito. Objeto na mão (colher, folha) fica preso **dentro da ponta do braço**: a ponta cobre o cabo. Braço dobrado (mão na cintura) tem o **cotovelo para fora** do corpo; braços cruzados atravessam o peito para dentro. Pernas (quem anda) seguem a mesma lógica: tocos curtos e redondos. Exceções em ficha: Realçador e Sacolão (plástico dobrado), Jataí (patas de inseto estilizadas).
 
+- **Minimalismo e frente primeiro** (2026-11-08). A forma e a silhueta comunicam; detalhe de superfície é pouco (algumas faixas de casca nas laterais, nada no meio do corpo). A **vista de frente** é a principal: a maior parte da animação acontece nela. Virar, braço dobrado (mão na cintura, braços cruzados) e poses elaboradas são "invenções" que geraram a maioria dos bugs; ficam para quando a cena realmente pedir. Braços retos que giram no ombro bastam. Objeto comprido na mão (colher) vai **deitado** quando o braço balança, para não atravessar o braço.
+
 ## 3. Proporção: tudo medido em "cestos"
 
 O Cesto vale **1,0** (altura do fundo até a borda, sem alça e sem frutas). A tabela é proposta e será validada no lineup de silhuetas.

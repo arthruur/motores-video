@@ -36,7 +36,7 @@ Toda arte entregue para o motor segue esta lista de grupos. Os nomes são os `id
 
 ## 2b. Vistas: 2D, não 360 (decisão 2026-11-07)
 
-Os personagens são **2D**. Cada um tem um conjunto pequeno de **desenhos-chave** (frente, 3/4, perfil, costas; espelhar dá o outro lado), cada um com o rig de peças (olhos, boca, braços…). **Virar é trocar de desenho**, segurando cada um alguns quadros, como na animação 2D tradicional; nada de giro contínuo de 15 em 15° por projeção 3D. O rig "360" da Dona Mandioca foi testado e atrapalhou: rosto e acessórios deformavam nas vistas intermediárias.
+Os personagens são **2D** e atuam **de frente** quase o tempo todo; andar é deslizar de lado com a vista de frente (o pé sobe e assenta no lugar), como no 2D clássico. Cada um tem um conjunto pequeno de **desenhos-chave** (frente, 3/4, perfil, costas; espelhar dá o outro lado), cada um com o rig de peças (olhos, boca, braços…). **Virar é trocar de desenho**, segurando cada um alguns quadros, como na animação 2D tradicional; nada de giro contínuo de 15 em 15° por projeção 3D. O rig "360" da Dona Mandioca foi testado e atrapalhou: rosto e acessórios deformavam nas vistas intermediárias. Nas vistas que existem, o **rosto é rígido**: é o rosto de frente, que só desliza e achata como um bloco (no perfil, o olho de trás some).
 
 ## 3. Expressões {#expressoes}
 

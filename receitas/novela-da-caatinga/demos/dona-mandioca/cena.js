@@ -28,7 +28,7 @@ const piscar = (t, t0, d = 0.3) => { const u = faixa(t, t0, t0 + d); return u > 
 const T = {
   andar: { t0: 0.25, passo: 0.58, n: 8, xa: -30, xb: 540 },     // entra em perfil, passos curtos e pesados
   para: 4.89,                                                     // = t0 + n*passo: último contato
-  vira: [[5.35, 90], [5.75, 45], [6.25, 0]],   // 2D: troca de desenho (perfil → 3/4 → frente), segura em cada um
+  vira: [[5.35, 0]],   // frontal o tempo todo (2026-11-08): ela já chega de frente, só assenta
   marca: 6.85,                                                    // a sobrancelha dela aparece
   nome: 7.5, giro: 11.0, regente: 16.4, expr: 22.2, fala: 28.3, fecho: 33.6,
   exprs: [[22.2, 'neutra'], [22.85, 'desconfiada'], [23.5, 'assustada'], [24.15, 'triste'], [24.8, 'encantada'],
@@ -36,8 +36,7 @@ const T = {
 }
 // turnaround 2D: só os desenhos-chave (frente, 3/4, perfil, costas), um corte para cada, sem vistas intermediárias
 const GIRO = (() => {
-  const chaves = [[11.0, 0, 'frente'], [11.95, 45, '3/4'], [12.75, 90, 'perfil'], [13.75, 180, 'costas'],
-                  [14.75, 270, 'perfil'], [15.55, 315, '3/4'], [16.05, 360, 'frente']]
+  const chaves = [[11.0, 0, 'se abana (calor da seca)']]   // frontal: sem turnaround (2026-11-08)
   const passos = []
   for (let i = 0; i < chaves.length; i++) {
     const [t, th] = chaves[i]
@@ -154,7 +153,7 @@ function neutro() {
     olhos: ['oval', 'oval'], pisca: 0, olhar: [0, 0], rr: 0,
     sobr: [null, null], sobrK: [1, 1],
     boca: 'boca-repouso', rubor: 1,
-    bE: ['reto', 58, ['colher', -8]], bD: ['cintura', 0, null],
+    bE: ['reto', 58, ['colher', -8]], bD: ['reto', 14, null],
   }
 }
 // braço dobrado (cintura/cruzado) só existe de frente e 3/4
@@ -173,9 +172,9 @@ function personagem(t) {
   S.pisca = Math.max(...[4.95, 8.9, 10.6, 16.25, 20.6, 27.9, 31.05, 35.3, 38.55].map(x => piscar(t, x)))
   const A = T.andar
 
-  // ----- 1. entra andando (perfil, olhando para a direita): passo curto, pesado e decidido
+  // ----- 1. entra andando DE FRENTE (desliza de lado, como no 2D clássico): passo curto, pesado e decidido
   if (t < T.vira[0][0]) {
-    S.th = 90
+    S.th = 0
     S.olhos = ['decidido', 'decidido']; S.boca = 'boca-firme'; S.sobr = [null, null]
     S.bD = ['reto', 10, null]
     const p = passo(t)
@@ -187,15 +186,15 @@ function personagem(t) {
       const ult = p.n === A.n - 1                                       // último passo: junta os pés
       const sw = suave(p.f)
       const ergue = Math.sin(Math.PI * cl(p.f / 0.8))
-      S.pernas[ida] = [lerp(-L / 2 * ini, ult ? 0 : L / 2, sw), -26 * ergue, 7 * ergue]
-      S.pernas[fica] = [lerp(p.n === 0 ? 0 : L / 2, ult ? 0 : -L / 2, p.f), 0, 0]
+      S.pernas[ida] = [0, -26 * ergue, (ida === 'esq' ? -4 : 4) * ergue]   // de frente: o pé sobe e assenta no lugar
+      S.pernas[fica] = [0, 0, 0]
       // contato (f=0): afunda e achata; passagem (f=.5): sobe
       const bob = Math.cos(2 * Math.PI * p.f)
       S.tr.ty = 9 * bob; S.tr.sy *= 1 - 0.025 * Math.max(bob, 0); S.tr.sx *= 1 + 0.015 * Math.max(bob, 0)
-      S.tr.rot = 3.5 + 1.2 * Math.sin(2 * Math.PI * p.f)               // inclina para a frente, decidida
+      S.tr.rot = 2.2 * Math.sin(Math.PI * p.fi)                          // balança de um lado para o outro, pesada
       // braços balançam ao contrário das pernas; a colher marca o passo
       const bal = Math.sin(Math.PI * p.fi)
-      S.bE = ['reto', 26 * bal, ['colher', -8 - 10 * bal]]; S.bD = ['reto', -22 * bal, null]
+      S.bE = ['reto', 16 + 8 * bal, ['colher', -90]]; S.bD = ['reto', 14 - 8 * bal, null]   // colher DEITADA: não cruza o braço
       // follow-through: pontas do lenço chegam atrasadas
       S.pontas = -7 * Math.cos(2 * Math.PI * (p.f - 0.18)); S.lenco = 1.5 * Math.cos(2 * Math.PI * (p.f - 0.12))
     } else if (t < A.t0) {
@@ -206,14 +205,16 @@ function personagem(t) {
       S.tr.rot = 3.5 * mola(d, 1.6, 4.5) + 2.5 * Math.exp(-d * 6) * Math.sin(d * 14)
       S.tr.ty = 10 * mola(d, 2.2, 7); S.tr.sy *= 1 - 0.04 * Math.max(mola(d, 2.2, 7), 0)
       S.pontas = 14 * mola(d - 0.06, 1.7, 3.5); S.lenco = 3 * mola(d - 0.04, 1.7, 4)
-      S.bE = ['reto', 10 * mola(d, 1.4, 4), ['colher', -8]]; S.bD = ['reto', -8 * mola(d, 1.4, 4), null]
+      const ergue = suave(faixa(d, 0.2, 0.6))                            // a colher volta a ficar de pé
+      S.bE = ['reto', lerp(16, 58, ergue), ['colher', lerp(-90, -8, ergue)]]; S.bD = ['reto', 14 - 6 * mola(d, 1.4, 4), null]
+      S.tr.rot = 2 * Math.exp(-d * 6) * Math.sin(d * 14)
       S.boca = 'boca-repouso'; S.sobr = [null, null]; S.olhos = ['oval', 'oval']
     }
   }
   // ----- 2. vira devagar para a câmera; a sobrancelha dela aparece
   if (dentro(t, T.vira[0][0], T.nome)) {
     S.x = A.xb
-    let th = 90
+    let th = 0
     for (const [tv, v] of T.vira) if (t >= tv) th = v
     S.th = th
     if (ladoDir(th)) S.bD = ['reto', 8, null]
@@ -241,16 +242,18 @@ function personagem(t) {
     if (u < 0.25) { S.sobr = [null, null]; S.sobrK = [1 - suave(faixa(u, 0, 0.25)) * 0.6, 1] }   // some
     if (u > 3.2) { S.tr.rot += 2.2 * Math.sin((u - 3.2) * 9) * Math.exp(-(u - 3.2) * 2) }             // assente
   }
-  // ----- 4. turnaround
+  // ----- 4. se abana com a folha (calor da seca, cap. 1): gesto frontal, sem virar
   if (dentro(t, T.giro, T.regente)) {
-    let th = 0, tv = T.giro
-    for (const [tp, v] of GIRO.passos) if (t >= tp) { th = v; tv = tp }
-    S.th = th
-    if (ladoDir(th)) S.bD = ['reto', 10, null]
-    S.bE = ['reto', 26, ['colher', -6]]
-    const chave = GIRO.chaves.some(c => Math.abs(c[0] - tv) < 0.01)
-    S.pontas = (chave ? 11 : 4) * mola(t - tv - 0.05, 1.9, 4.5)
-    S.tr.rot = 1.2 * mola(t - tv, 2.2, 7)
+    const u = t - T.giro
+    S.th = 0
+    const entra = voltaBack(faixa(u, 0.1, 0.5)), sai = suave(faixa(u, 4.6, 5.2))
+    const abana = Math.sin(u * 11) * entra * (1 - sai)
+    S.bD = ['reto', lerp(14, 128, entra * (1 - sai)) + 10 * abana, ['abano', -10 + 28 * abana]]
+    S.bE = ['reto', 58, ['colher', -8]]
+    S.olhos = ['meia-lua', 'meia-lua']; S.boca = 'boca-aberta'
+    S.pontas = 6 * abana; S.lenco = 1.5 * abana
+    if (u > 2.4 && u < 3.4) { S.olhos = ['fechado', 'fechado'] }        // fecha os olhos: o ventinho é bom
+    S.tr.sy *= 1 - 0.02 * Math.sin(Math.PI * faixa(u, 2.4, 3.4))
   }
   // ----- 5. regente: bate a colher, aponta, rege o xote
   if (dentro(t, T.regente, T.expr)) {
@@ -347,7 +350,7 @@ function personagem(t) {
         S.olhos = ['fechado', 'fechado']; S.boca = 'boca-reta'
         S.bD = ['reto', lerp(0, 92, sobe), null]; S.tr.rot = 4 * sobe
         const vol = suave(faixa(u, 0.6, 0.9))                         // volta à pose dela antes da fala
-        if (vol > 0.5) { S.bE = ['reto', 58, ['colher', -8]]; S.bD = ['cintura', 0, null]; S.olhos = ['oval', 'oval']; S.boca = 'boca-aberta'; S.tr.rot = 0 }
+        if (vol > 0.5) { S.bE = ['reto', 58, ['colher', -8]]; S.bD = ['reto', 14, null]; S.olhos = ['oval', 'oval']; S.boca = 'boca-aberta'; S.tr.rot = 0 }
         break
       }
     }
@@ -374,7 +377,7 @@ function personagem(t) {
     const conv = suave(faixa(tf, ti(9), ti(10)))
     if (conv > 0) {
       S.sobr = [null, null]; S.olhos = conv > 0.5 ? ['arco', 'arco'] : ['oval', 'oval']; S.rubor = 1 + 0.4 * conv
-      S.bD = conv > 0.15 ? ['reto', lerp(10, 66, voltaBack(faixa(tf, ti(9), ti(10) + 0.2))), null] : ['cintura', 0, null]
+      S.bD = conv > 0.15 ? ['reto', lerp(10, 66, voltaBack(faixa(tf, ti(9), ti(10) + 0.2))), null] : ['reto', 14, null]
       S.bE = ['reto', 58 - 20 * conv, ['colher', -8]]
       S.tr.rot = 2.5 * conv; S.rr = 3 * conv
     }
@@ -404,7 +407,7 @@ function personagem(t) {
       S.tr.rot = 3 * des + 2.5 * al                  // a cabeça vai ao encontro da mão
     } else if (u >= 2.2) {
       S.bD = ['reto', lerp(12, 0, suave(faixa(u, 2.2, 2.5))), null]
-      if (u >= 2.5) S.bD = ['cintura', 0, null]
+      if (u >= 2.5) S.bD = ['reto', 14, null]
       S.pontas = 4 * mola(u - 2.2, 1.6, 3)
     }
     if (u > 2.5) {
@@ -451,8 +454,8 @@ function textos(t) {
     L.sec = sec; L.item = item; L.rotOp = Math.min(faixa(t, t0, t0 + 0.2), 1 - faixa(t, t1 - 0.15, t1))
   }
   rot('1 · andar', 'passo curto e pesado', 0.5, T.vira[0][0] - 0.1)
-  rot('1 · andar', 'vira devagar', T.vira[0][0], T.nome - 0.1)
-  GIRO.chaves.forEach((c, i) => rot('2 · virada', c[2], c[0] + (i ? -0.1 : 0.15), (GIRO.chaves[i + 1] || [T.regente])[0] - 0.1))
+  rot('1 · andar', 'chega e assenta', T.vira[0][0], T.nome - 0.1)
+  GIRO.chaves.forEach((c, i) => rot('2 · calor', c[2], c[0] + (i ? -0.1 : 0.15), (GIRO.chaves[i + 1] || [T.regente])[0] - 0.1))
   rot('3 · regente', 'bate a colher', REG.ant1 - 0.1, REG.aponta)
   rot('3 · regente', 'aponta', REG.aponta, REG.xote)
   rot('3 · regente', 'rege o xote', REG.xote, T.expr - 0.2)

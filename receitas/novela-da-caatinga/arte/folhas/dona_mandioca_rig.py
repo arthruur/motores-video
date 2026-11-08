@@ -189,7 +189,7 @@ def tubo(curva, r0, r1, n=16):
 
 # ================================================================ corpo: o cilindro torto
 _YS = [104, 112, 130, 160, 200, 250, 310, 420, 560, 720, 880, 980, 1050, 1090, 1110]
-_RS = [0, 52, 92, 128, 154, 174, 188, 197, 204, 208, 205, 197, 188, 172, 140]
+_RS = [0, 66, 112, 148, 172, 188, 198, 206, 210, 206, 196, 184, 172, 156, 124]   # raiz: topo redondo, base afinando (2026-11-08)
 
 
 def raio(y):
@@ -198,7 +198,7 @@ def raio(y):
 
 def eixo(y):
     """x do eixo da raiz: levemente torta (nenhuma mandioca é reta)."""
-    return MEIO + 9 * math.sin(math.pi * (y - 140) / 970) - 0.014 * (y - 640)
+    return MEIO + 16 * math.sin(math.pi * (y - 140) / 970) - 0.022 * (y - 640)
 
 
 class Vista:
@@ -271,11 +271,10 @@ def corpo_tons(v):
 
 # casca rugosa em faixas: anéis curtos que abraçam o cilindro (u0, comprimento, y, espessura, tom)
 FAIXAS = [
-    (-250, 120, 345, 10, "meio"), (190, 140, 352, 9, "meio"), (-40, 90, 525, 8, "meio"),
-    (-205, 70, 392, 8, "meio"), (210, 64, 410, 8, "sombra"), (-190, 80, 532, 9, "sombra"), (176, 70, 516, 8, "meio"),
-    (-300, 140, 560, 11, "sombra"), (250, 160, 540, 10, "sombra"), (60, 110, 600, 8, "meio"),
-    (-330, 150, 720, 10, "meio"), (300, 170, 700, 11, "sombra"), (-280, 120, 880, 9, "meio"),
-    (290, 140, 900, 10, "sombra"), (-260, 160, 1030, 10, "sombra"), (260, 150, 1050, 9, "meio"),
+    # frente: poucas faixas, só nas laterais (minimalismo, 2026-11-08)
+    (-250, 120, 345, 10, "meio"), (210, 110, 365, 9, "sombra"),
+    (-300, 140, 560, 11, "sombra"), (290, 150, 545, 10, "sombra"),
+    (-300, 140, 880, 9, "meio"), (300, 140, 900, 10, "sombra"),
     # costas
     (560, 170, 380, 11, "meio"), (650, 150, 470, 10, "sombra"), (520, 160, 650, 11, "meio"),
     (680, 140, 760, 10, "sombra"), (560, 180, 880, 11, "meio"), (650, 150, 990, 10, "sombra"),
@@ -283,7 +282,7 @@ FAIXAS = [
     (-650, 140, 960, 10, "meio"),
 ]
 # lascas descascadas mostrando o miolo (u, y, largura, altura, rot) — longe do rosto
-LASCAS = [(-275, 600, 46, 24, -12), (300, 470, 40, 20, 14), (-300, 960, 50, 26, 8), (320, 820, 38, 22, -10),
+LASCAS = [(-285, 640, 46, 24, -12), (305, 470, 40, 20, 14),
           (600, 560, 52, 26, -6), (-610, 520, 46, 22, 10), (660, 900, 44, 22, 12), (-600, 1000, 40, 20, -8)]
 
 
@@ -751,7 +750,30 @@ def bochechas(v, escala=1.0, op=0.30):
 
 
 def rosto(v, estado, rig_completo=False):
-    """rosto: bochechas, boca (8 de sincronia + 6 de expressão), olho-esq/dir (7 formas), sobr-esq/dir."""
+    """Rosto rígido (2026-11-08): é montado de frente e, nas outras vistas, o grupo inteiro só desliza e
+    achata; as peças nunca se projetam uma a uma (era isso que fazia a boca invadir os olhos ao virar)."""
+    cx, _, pc = _pos_rosto(v, 0, ROSTO_Y)
+    r = _rosto_frente(Vista(0), estado, rig_completo)
+    if pc < -0.15:
+        r.set("display", "none")
+        return r
+    if v.theta % 360:
+        x0 = eixo(ROSTO_Y)
+        sn = math.sin(v.th)
+        sq = 0.6 + 0.4 * max(pc, 0.0)                 # achata pouco: o rosto continua sendo o rosto de frente
+        dx = sn * raio(ROSTO_Y) * 0.42                # desliza pouco: fica dentro do corpo
+        if abs(sn) > 0.85:                            # perfil: o olho de trás some
+            for el_ in r.iter():
+                if el_.get("id") == ("olho-esq" if sn > 0 else "olho-dir"):
+                    el_.set("display", "none")
+        base = r.get("transform") or ""
+        r.set("transform", f"translate({x0 + dx:.1f} 0) scale({sq:.3f} 1) translate({-x0:.1f} 0) {base}".strip())
+        r.set("data-pivo", f"{cx:.1f} {ROSTO_Y}")
+    return r
+
+
+def _rosto_frente(v, estado, rig_completo=False):
+    """rosto de frente: bochechas, boca (8 de sincronia + expressões), olho-esq/dir, sobr-esq/dir (sem uso)."""
     cx, _, pc = _pos_rosto(v, 0, ROSTO_Y)
     ox, oy = estado.get("olhar", (0, 0))
     rr = estado.get("rosto_rot", 0)
@@ -824,7 +846,7 @@ def rosto(v, estado, rig_completo=False):
 # ================================================================ personagem
 ESTADO_PADRAO = dict(
     olhos=("oval", "oval"), sobr=(None, None), boca="aberta", bochechas=False,
-    braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("cintura",), prop_dir=None,
+    braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("reto", 14), prop_dir=None,
 )
 
 

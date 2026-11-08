@@ -78,7 +78,7 @@ def silhueta(no):
 
 
 # ---------------------------------------------------------------- catálogo
-BRACOS_PADRAO = dict(braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("cintura",))
+BRACOS_PADRAO = dict(braco_esq=("reto", 58), prop_esq=("colher", -8), braco_dir=("reto", 14))
 Q = (dm.MEIO, dm.QUADRIL_Y)
 # As 9 expressões do Mangaio (cesto_folha.py), peça por peça, só adaptadas (decisão 2026-11-07):
 # mesmas formas de olho e boca, mesmos deslocamentos (unidades do mascote x ROSTO_K), sem sobrancelha,
@@ -108,8 +108,6 @@ EXPRESSOES = [  # (id, rótulo, estado)
 BOCAS = [("boca-repouso", "repouso"), ("boca-MBP", "M B P"), ("boca-A", "A"), ("boca-E", "E"),
          ("boca-I", "I S Z CH"), ("boca-O", "O"), ("boca-U", "U Ô"), ("boca-FV", "F V")]
 POSES = [
-    ("mao-na-cintura", "mão na cintura", dict(braco_esq=("cintura",), prop_esq=None, braco_dir=("cintura",),
-        olhos=("decidido", "decidido"), sobr=(None, None), boca="firme", bochechas=False)),
     ("bater-colher-antes", "bater a colher (antecipação)", dict(braco_esq=("reto", 165), prop_esq=("colher", -35),
         olhos=("decidido", "decidido"), sobr=(None, None), boca="boca-MBP", bochechas=False,
         tronco_tf=f"rotate(-5 {Q[0]} {Q[1]}) translate(0 6) scale(1 0.97)")),
@@ -122,9 +120,6 @@ POSES = [
     ("apontar", "apontar com a colher", dict(braco_esq=("reto", 92), prop_esq=("colher", -88),
         olhos=("decidido", "decidido"), sobr=(None, None), boca="firme", bochechas=False,
         tronco_tf=f"rotate(-3 {Q[0]} {Q[1]})")),
-    ("bracos-cruzados", "braços cruzados", dict(braco_esq=("cruzado",), prop_esq=None, braco_dir=("cruzado",),
-        ordem_bracos=("esq", "dir"), olhos=("meia-lua", "meia-lua"), sobr=(None, None), boca="reta",
-        bochechas=False)),
     ("abraco-contido", "abraço contido", dict(braco_esq=("reto", 48), prop_esq=None, braco_dir=("reto", 48),
         olhos=("arco", "arco"), sobr=(None, None), boca="boca-repouso", bochechas=True, rosto_rot=5, olhar=(-12, 4),
         tronco_tf=f"rotate(2 {Q[0]} {Q[1]})")),
