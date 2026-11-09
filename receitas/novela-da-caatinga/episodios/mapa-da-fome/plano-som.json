@@ -1,0 +1,203 @@
+{
+ "duracao": 66.36,
+ "cenas": [
+  {
+   "id": "trilha",
+   "ini": 0,
+   "dur": 66.36,
+   "falas": [
+    {
+     "quem": "narrador",
+     "wav": "C:\\LIA - UEFS\\motores-video\\receitas\\novela-da-caatinga\\episodios\\mapa-da-fome\\narracao.wav",
+     "ini": 0.6,
+     "dur": 60.958
+    }
+   ],
+   "sons": [
+    {
+     "id": "pouso_cheio",
+     "t": 0.35,
+     "vol": 0.55
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 6.689,
+     "vol": 0.35
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 7.618,
+     "vol": 0.35
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 9.321,
+     "vol": 0.6
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 11.814,
+     "vol": 0.4
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 12.164,
+     "vol": 0.4
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 12.514,
+     "vol": 0.4
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 12.864,
+     "vol": 0.4
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 13.214,
+     "vol": 0.4
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 14.761,
+     "vol": 0.5
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 18.318,
+     "vol": 0.6
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 31.55,
+     "vol": 0.6
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 43.175,
+     "vol": 0.6
+    },
+    {
+     "id": "chuva",
+     "t": 18.418,
+     "vol": 0.35,
+     "dur": 4.0
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 19.218,
+     "vol": 0.5
+    },
+    {
+     "id": "porta_madeira",
+     "t": 23.6,
+     "vol": 0.4
+    },
+    {
+     "id": "trompete_comedia",
+     "t": 26.618,
+     "vol": 0.5
+    },
+    {
+     "id": "trompete_grave",
+     "t": 30.511,
+     "vol": 0.55
+    },
+    {
+     "id": "galo_caatinga",
+     "t": 31.75,
+     "vol": 0.4
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 32.3,
+     "vol": 0.6
+    },
+    {
+     "id": "plim_fruta",
+     "t": 35.046,
+     "vol": 0.55
+    },
+    {
+     "id": "plim_fruta",
+     "t": 35.404,
+     "vol": 0.55
+    },
+    {
+     "id": "plim_fruta",
+     "t": 36.154,
+     "vol": 0.55
+    },
+    {
+     "id": "vento_seco",
+     "t": 38.693,
+     "vol": 0.5,
+     "dur": 2.4
+    },
+    {
+     "id": "chuva",
+     "t": 40.375,
+     "vol": 0.45,
+     "dur": 2.4
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 43.175,
+     "vol": 0.5
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 48.921,
+     "vol": 0.45
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 50.279,
+     "vol": 0.5
+    },
+    {
+     "id": "trompete_esperanca",
+     "t": 53.439,
+     "vol": 0.6
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 53.739,
+     "vol": 0.5
+    },
+    {
+     "id": "trompete_suspensa",
+     "t": 61.758,
+     "vol": 0.7
+    },
+    {
+     "id": "vinheta_mangaio",
+     "t": 63.558,
+     "vol": 0.65
+    }
+   ]
+  },
+  {
+   "id": "amb-canavial",
+   "ini": 18.318,
+   "dur": 13.232,
+   "ambiencia": {
+    "id": "amb_feira",
+    "vol": 0.12
+   },
+   "falas": []
+  },
+  {
+   "id": "amb-sertao",
+   "ini": 31.55,
+   "dur": 11.624999999999996,
+   "ambiencia": {
+    "id": "amb_feira",
+    "vol": 0.16
+   },
+   "falas": []
+  }
+ ]
+}
