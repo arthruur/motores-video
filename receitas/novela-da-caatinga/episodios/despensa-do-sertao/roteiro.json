@@ -1,0 +1,35 @@
+{
+ "_leia": "Piloto 'A Despensa do Sertão' (formato explicativo: um cenário fixo, narrador em 2ª pessoa, o Mangaio é o 'você' que faz cada passo). A narração é UMA tomada (beats em sequência); a Dona Mandioca fala uma vez. cena.js acha o início de cada beat pela contagem de palavras: mexeu no texto, rode voz.py de novo. Fatos conferidos em fatos.md.",
+ "titulo": "A Despensa do Sertão",
+ "tts": {"provedor": "gemini", "modelos": ["gemini-3.1-flash-tts-preview", "gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"]},
+ "narrador": {
+  "voz": "Charon", "ritmo": 1.15,
+  "direcao": "Narrador de vídeo curto explicativo para a família inteira: voz grave e calorosa, brasileiro, fala natural e neutra (não imite sotaque), ritmo ágil de quem conta um segredo bom. Fala com quem assiste, em segunda pessoa. Pausas curtas entre as frases. Na última frase, um orgulho sorridente."
+ },
+ "beats": [
+  {"id": "terra",      "rotulo": "",            "texto": "Debaixo da terra, a mandioca espera até dois anos."},
+  {"id": "arranca",    "rotulo": "",            "texto": "Arrancou, ela estraga em três dias."},
+  {"id": "roca",       "rotulo": "",            "texto": "E agora a roça inteira tá pronta pra colher."},
+  {"id": "rala",       "rotulo": "RALAR",       "texto": "Então você descasca, lava e rala tudo."},
+  {"id": "massa",      "rotulo": "",            "texto": "Vira uma massa branca, encharcada."},
+  {"id": "manipueira", "rotulo": "MANIPUEIRA",  "texto": "E a mandioca brava tem um caldo venenoso: a manipueira."},
+  {"id": "tipiti",     "rotulo": "TIPITI",      "texto": "Aí entra o tipiti."},
+  {"id": "espreme",    "rotulo": "TIPITI",      "texto": "Você enche, puxa, ele estica e espreme o caldo pra fora."},
+  {"id": "dona",       "rotulo": "",            "texto": "", "fala": "dona"},
+  {"id": "goma",       "rotulo": "GOMA",        "texto": "Deixa o caldo descansar, e no fundo assenta a goma."},
+  {"id": "tapioca",    "rotulo": "GOMA",        "texto": "A mesma da tapioca."},
+  {"id": "forno",      "rotulo": "FORNO",       "texto": "A massa espremida vai pro forno."},
+  {"id": "mexe",       "rotulo": "FORNO",       "texto": "E você mexe, mexe, mexe, até ficar sequinha."},
+  {"id": "fogo",       "rotulo": "FORNO",       "texto": "O fogo tira a água que sobrou, e o resto do veneno vai embora no calor."},
+  {"id": "seca",       "rotulo": "SEM ÁGUA",    "texto": "Sem água, mofo e bactéria não têm do que viver."},
+  {"id": "meses",      "rotulo": "MESES",       "texto": "A raiz que estragava em três dias agora dura meses no saco."},
+  {"id": "farinha",    "rotulo": "FARINHA",     "texto": "Isso é a farinha."},
+  {"id": "parabens",   "rotulo": "",            "texto": "Parabéns! Você encheu a despensa do sertão com terra, braço e fogo."}
+ ],
+ "dona": {
+  "voz": "Gacrux",
+  "perfil": "Personagem de desenho animado: Dona Mandioca, matriarca da casa de farinha, mulher madura do interior da Bahia. Fala natural, sem forçar sotaque. Voz encorpada, firme e carinhosa, ironia leve, pausas de quem manda.",
+  "direcao": "Ela chega bravinha, quase um grito do outro lado da casa de farinha no 'Ei!', e depois ensina com gosto, firme e carinhosa.",
+  "texto": "Ei! Esse caldo não vai pro chão, não. Aqui nada se perde, minha filha."
+ }
+}

@@ -1,0 +1,4 @@
+# áudios regenerados pelos scripts (som.py corta a narração; voz.py guarda o bruto do TTS antes do atempo)
+*.bruto.wav
+narracao-a.wav
+narracao-b.wav

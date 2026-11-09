@@ -1,0 +1,231 @@
+{
+ "duracao": 61.64,
+ "cenas": [
+  {
+   "id": "casa_de_farinha",
+   "ini": 0,
+   "dur": 61.64,
+   "ambiencia": {
+    "id": "amb_casa_farinha",
+    "vol": 0.3
+   },
+   "falas": [
+    {
+     "quem": "narrador",
+     "wav": "C:\\LIA - UEFS\\motores-video\\receitas\\novela-da-caatinga\\episodios\\despensa-do-sertao\\narracao-a.wav",
+     "ini": 0.5,
+     "dur": 23.153
+    },
+    {
+     "quem": "dona_mandioca",
+     "wav": "C:\\LIA - UEFS\\motores-video\\receitas\\novela-da-caatinga\\episodios\\despensa-do-sertao\\dona.wav",
+     "ini": 24.203,
+     "dur": 4.877
+    },
+    {
+     "quem": "narrador",
+     "wav": "C:\\LIA - UEFS\\motores-video\\receitas\\novela-da-caatinga\\episodios\\despensa-do-sertao\\narracao-b.wav",
+     "ini": 29.53,
+     "dur": 26.513999999999996
+    }
+   ],
+   "sons": [
+    {
+     "id": "pouso_vazio",
+     "t": 0.55,
+     "vol": 0.45
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 4.241,
+     "vol": 0.7
+    },
+    {
+     "id": "trompete_comedia",
+     "t": 4.743,
+     "vol": 0.55
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 6.459,
+     "vol": 0.42
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 6.639,
+     "vol": 0.42
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 6.819,
+     "vol": 0.42
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 6.999,
+     "vol": 0.42
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 7.179,
+     "vol": 0.42
+    },
+    {
+     "id": "gota_suor",
+     "t": 10.691,
+     "vol": 0.6
+    },
+    {
+     "id": "sacolejo_frutas",
+     "t": 11.161,
+     "vol": 0.5
+    },
+    {
+     "id": "gota_suor",
+     "t": 12.804,
+     "vol": 0.5
+    },
+    {
+     "id": "gota_suor",
+     "t": 13.404,
+     "vol": 0.45
+    },
+    {
+     "id": "trompete_grave",
+     "t": 17.004,
+     "vol": 0.55
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 18.322,
+     "vol": 0.55
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 20.783,
+     "vol": 0.5
+    },
+    {
+     "id": "gota_suor",
+     "t": 21.857,
+     "vol": 0.55
+    },
+    {
+     "id": "gota_suor",
+     "t": 22.107,
+     "vol": 0.55
+    },
+    {
+     "id": "gota_suor",
+     "t": 22.357,
+     "vol": 0.55
+    },
+    {
+     "id": "gota_suor",
+     "t": 22.607,
+     "vol": 0.55
+    },
+    {
+     "id": "passo_pesado",
+     "t": 23.753,
+     "vol": 0.6
+    },
+    {
+     "id": "passo_pesado",
+     "t": 23.923,
+     "vol": 0.6
+    },
+    {
+     "id": "passo_pesado",
+     "t": 24.093,
+     "vol": 0.6
+    },
+    {
+     "id": "toc_colher",
+     "t": 24.253,
+     "vol": 0.9
+    },
+    {
+     "id": "toc_colher",
+     "t": 28.031,
+     "vol": 0.85
+    },
+    {
+     "id": "trompete_oi",
+     "t": 29.205,
+     "vol": 0.5
+    },
+    {
+     "id": "plim_fruta",
+     "t": 33.177,
+     "vol": 0.7
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 34.066,
+     "vol": 0.6
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 34.416,
+     "vol": 0.55
+    },
+    {
+     "id": "sacolejo_frutas",
+     "t": 36.307,
+     "vol": 0.45
+    },
+    {
+     "id": "sacolejo_frutas",
+     "t": 36.951,
+     "vol": 0.45
+    },
+    {
+     "id": "sacolejo_frutas",
+     "t": 37.42,
+     "vol": 0.45
+    },
+    {
+     "id": "whoosh_camera",
+     "t": 43.197,
+     "vol": 0.5
+    },
+    {
+     "id": "pouso_vazio",
+     "t": 46.647,
+     "vol": 0.5
+    },
+    {
+     "id": "plim_fruta",
+     "t": 50.725,
+     "vol": 0.7
+    },
+    {
+     "id": "festa_fole",
+     "t": 51.194,
+     "vol": 0.55
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 51.644,
+     "vol": 0.6
+    },
+    {
+     "id": "pouso_cheio",
+     "t": 52.344,
+     "vol": 0.5
+    },
+    {
+     "id": "trompete_esperanca",
+     "t": 56.294,
+     "vol": 0.75
+    },
+    {
+     "id": "vinheta_mangaio",
+     "t": 58.244,
+     "vol": 0.7
+    }
+   ]
+  }
+ ]
+}
