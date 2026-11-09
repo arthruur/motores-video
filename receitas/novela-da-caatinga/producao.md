@@ -62,7 +62,7 @@ Lábios: a boca segue o envelope da voz de cada fala, alternando aberta, meia e 
   | Maxixe | Autonoe |
   | Quiabo | Umbriel ou Zubenelgenubi |
 
-- **Maior risco: o sotaque do semiárido baiano.** O TTS pode soar genérico ou, pior, caricato, e a bíblia proíbe humilhar quem fala "errado". O sotaque é pedido na direção e decidido no ouvido. Se não convencer, a bíblia já prevê vozes reais da região; dá para começar por uma ou duas personagens.
+- **Sotaque (confirmado em 2026-11-09):** pedir sotaque ao TTS soou forçado e caricato no piloto. Direção de voz pede fala natural, sem imitar sotaque; sotaque só com vozes reais da região.
 - **O Cesto:** trompete gravado por você. São seis frases, que entram no banco **como gravação própria** e nunca passam por IA. Ids: `trompete_cesto_desconfianca`, `_nao_vai`, `_comedia`, `_grave`, `_suspensa`, `_esperanca`.
 
 ## 4. IA, procedural ou banco: cada peça da série

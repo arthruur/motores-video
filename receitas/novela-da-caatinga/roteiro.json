@@ -18,20 +18,20 @@
  "elenco": {
   "narrador": {
    "voz": "Charon",
-   "perfil": "Narrador de desenho animado infantil para a família inteira, no estilo dos narradores de série pré-escolar britânica: voz grave e calorosa, frases curtas, sempre no presente, uma ironia seca e contida, como quem conta uma coisa óbvia com toda a seriedade do mundo. Brasileiro, sotaque nordestino leve e natural. Nunca exagerado, nunca teatral.",
+   "perfil": "Narrador de desenho animado infantil para a família inteira, no estilo dos narradores de série pré-escolar britânica: voz grave e calorosa, frases curtas, sempre no presente, uma ironia seca e contida, como quem conta uma coisa óbvia com toda a seriedade do mundo. Brasileiro, fala natural, sem imitar sotaque. Nunca exagerado, nunca teatral.",
    "ritmo": 1.25
   },
   "maxixe": {
    "voz": "Autonoe",
-   "perfil": "Personagem de desenho animado: Maxixe, vizinha fofoqueira da feira, mulher adulta do interior da Bahia, sotaque do semiárido baiano. Fala rápido, em cochicho urgente, como quem tem uma notícia que não pode esperar."
+   "perfil": "Personagem de desenho animado: Maxixe, vizinha fofoqueira da feira, mulher adulta do interior da Bahia. Fala natural, sem forçar sotaque. Fala rápido, em cochicho urgente, como quem tem uma notícia que não pode esperar."
   },
   "quiabo": {
    "voz": "Umbriel",
-   "perfil": "Personagem de desenho animado: Quiabo, vizinho da feira, homem adulto do interior da Bahia, sotaque do semiárido baiano. Fala arrastado, preguiçoso e desconfiado, comentários secos."
+   "perfil": "Personagem de desenho animado: Quiabo, vizinho da feira, homem adulto do interior da Bahia. Fala natural, sem forçar sotaque. Fala arrastado, preguiçoso e desconfiado, comentários secos."
   },
   "dona_mandioca": {
    "voz": "Gacrux",
-   "perfil": "Personagem de desenho animado: Dona Mandioca, matriarca da casa de farinha, mulher madura do interior da Bahia, sotaque do semiárido baiano. Voz encorpada, firme e carinhosa, ironia leve, pausas de quem manda."
+   "perfil": "Personagem de desenho animado: Dona Mandioca, matriarca da casa de farinha, mulher madura do interior da Bahia. Fala natural, sem forçar sotaque. Voz encorpada, firme e carinhosa, ironia leve, pausas de quem manda."
   },
   "realcador": {
    "voz": "Sadachbia",
@@ -40,12 +40,12 @@
   },
   "umbu": {
    "voz": "Algieba",
-   "perfil": "Personagem de desenho animado: Umbu, vendedor tranquilo da feira, homem adulto do interior da Bahia, sotaque do semiárido baiano. Voz grave e macia, lenta, um sorriso na voz; nunca levanta o tom.",
+   "perfil": "Personagem de desenho animado: Umbu, vendedor tranquilo da feira, homem adulto do interior da Bahia. Fala natural, sem forçar sotaque. Voz grave e macia, lenta, um sorriso na voz; nunca levanta o tom.",
    "ritmo": 1.0
   },
   "licuri": {
    "voz": "Puck",
-   "perfil": "Personagem de desenho animado: Licuri, um coquinho adolescente, inseguro, do interior da Bahia, sotaque do semiárido baiano."
+   "perfil": "Personagem de desenho animado: Licuri, um coquinho adolescente, inseguro, do interior da Bahia. Fala natural, sem forçar sotaque."
   }
  },
  "cenas": [

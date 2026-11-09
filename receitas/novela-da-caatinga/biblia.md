@@ -74,7 +74,7 @@ O tom é de novela das seis com humor de causo: drama exagerado, coração no lu
 **A série sempre:**
 - Faz o tema nascer do conflito. Ninguém explica o que é cadeia curta; a lanchonete do Seu Caju fica sem caju e a gente entende.
 - Tem uma piada visual ou uma fala engraçada a cada 15 segundos, no máximo.
-- Usa o sotaque e as expressões do semiárido com orgulho: "oxe", "arretado", "vixe", "mainha", "rapaz".
+- Usa as expressões do semiárido com orgulho, no texto (a voz não força sotaque): "oxe", "arretado", "vixe", "mainha", "rapaz".
 - Termina com gancho, mesmo quando o arco fecha (uma pergunta, um olhar, um sachê suspeito no chão).
 - Respeita o saber popular, mas não o transforma em ciência. O Mandacaru pode prever a chuva; a série não afirma que flor de mandacaru é previsão do tempo.
 
@@ -111,7 +111,7 @@ Cada capítulo tem de 60 a 90 segundos, funciona sozinho e termina com gancho, p
   fala:
     personagem: dona_mandioca
     texto: "Oxe, menino, que óculos é esse?"
-    direcao_voz: "Desconfiada, segurando o riso, sotaque baiano do interior"
+    direcao_voz: "Desconfiada, segurando o riso"
     expressao: sobrancelha_levantada
   acao: "Licuri tira os óculos devagar"
   som: trompete_cesto_risada
@@ -132,6 +132,10 @@ Antes do arco 1, a série se apresenta em episódios curtos, **um por personagem
 | 3… | Um por personagem do elenco | Na ordem da fase 3 de `arte/README.md` |
 
 Cada personagem também ganha um **vídeo de demonstração de animação** (fora da série), que condensa o model sheet e mostra o que o rig consegue fazer. Os dois primeiros, do Mangaio e da Dona Mandioca, ficam em [`demos/`](demos/).
+
+## Formato explicativo (2026-11-09)
+
+Além da novela, a série ganhou um **formato explicativo**: 60 a 70 s, narrador em 2ª pessoa e o **Mangaio como o "você"** que faz cada passo de um saber do sertão. Dois episódios prontos: "A Despensa do Sertão" e "O Mapa da Fome" (em [`episodios/`](episodios/)). A receita, a linha entre IA e feito à mão, e o banco de próximos temas em quatro blocos (despensas do sertão, geografia do prato, valor e preconceito, a terra que dá) estão em [`proximos-episodios.md`](proximos-episodios.md).
 
 ## Temporada 1: "O Sachê Chegou"
 
@@ -302,7 +306,7 @@ O elenco falado pode usar TTS dirigido; o Cesto e a trilha são feitos à mão, 
 | Maxixe | Feminina, adulta | Rápido | Fofoqueira, cochicho urgente |
 | Quiabo | Masculina, adulta | Arrastado | Preguiçoso, desconfiado, comentários secos |
 
-**Uma escolha de sotaque que conta história.** Todos falam com sotaque do semiárido baiano, menos o Realçador, que fala o "português de comercial". Licuri vai perdendo o sotaque no arco 1 e recupera no fim da temporada. O público sente a mudança sem que ninguém diga nada.
+**Sotaque: não pedir ao TTS (decisão de 2026-11-09).** No piloto "A Despensa do Sertão", pedir sotaque na direção da voz deixou a narração forçada e caricata. As vozes sintéticas recebem **fala natural, sem imitar sotaque**. A cor regional vem das palavras e expressões do texto, não da pronúncia. Sotaque de verdade só entra com vozes reais de gente da região. O Realçador continua com o "português de comercial", que é tom de locutor, não sotaque.
 
 **O trompete do Cesto.** O Cesto tem um pequeno vocabulário de frases musicais, gravadas por você, que se repetem como palavras:
 
